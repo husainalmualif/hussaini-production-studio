@@ -43,13 +43,23 @@ When asked to write or complete Hussaini lyrics, select the poetic form and mete
 5. **الأبوذية العراقية (Abudhiyah)**: Four hemistichs where the first three share a homophonous rhyming word with three distinct meanings (جناس لفظي), and the fourth ends with the signature `-يَّه` (`يه`) suffix in Maqam Lami or Saba (Tor Fartousi / A'raji).
 6. **الموال الحسيني (Mawal Hussaini)**: 5-line or 7-line colloquial or Fusha stanza (Sab'awi / Nu'mani) designed for 0 BPM Rubato vocal melisma (Oroub) across 2 to 3 Maqamat.
 
-Apply the **MODE M Structural Blueprint** when composing verses:
+Apply the **MODE M & MODE C Structural Blueprint (Hussaini Prompt Constitution V5.5)** when composing verses:
 
-- **المستهل (Mustahal / Opening Refrain)**: Open with an agonized call (`يا حسين`, `يبو السجاد`, `يا خويه`), a broken question (`ليش غايب؟`, `شلون عفتوني؟`), or a vivid tragic image.
-- **لسان الحال (Lisan Al-Hal)**: Personify the tragedy directly through the voice of the Ahlulbayt.
-- **ألفاظ الشجن وحروف المد**: Saturate line endings with long vowels (`ا، و، ي`) and resonant nasals (`ام، ان، اه، ون`) so the reciter can execute `Tarjee'` (trembling elongation) and the final `Wanna` (`مَظْلُووومْ، حُسَيْييينْ`).
-- **اللازمة الموحدة (Fixed 4th-Line Raddadiya)**: In narrative Latmiya and Zanjeel, make the 4th line of every 4-line stanza identical word-for-word to anchor the crowd's melodic response.
-- **Performance and Pause Tags**: Insert `[pause: 0.4s]` before sacred names, `[pause: 0.6s]` after peak-pain hemistichs, and human vocal cues: `(deep heavy sigh)`, `(weep crack)`, `(vocal fry)`, `(sharp rhythmic inhale)`, `(exhausted heavy breath)`.
+- **المستهل (Mustahal / Opening Refrain)**: Open with an agonized call (`يا حسين`, `يبو السجاد`, `يا خويه`), a broken question (`ليش غايب؟`, `شلون عفتوني؟`), or a vivid tragic image, preceded by a sung throat-melisma vocalization line (`آه يَا حُسَيْنَا... آه يَا حَبِيبِي`).
+- **قاعدة الـ 4 أشطر لكل مقطع (Rule B2 — 4-Line Stanza Lock)**: Structure every verse into **4 hemistich lines of balanced syllable count** (never stack 10–14 lines in a single section, which causes AI engines to lose melodic memory and drift into prose reading).
+- **اللازمة الموحدة في الشطر الرابع (Rule B4 — Identical 4th-Line Anchor Refrain)**: Make the **4th line of every 4-line stanza identical word-for-word** (followed by the choral response `(يَا حُسَيْنْ... آه يَا حُسَيْنْ)`). This forces the audio generator to resolve every stanza back to the same memorable melodic cadence.
+- **قوس الطبقات الصوتية (Rule B3 — Register Arc Across Sections)**:
+  1. `المستهل`: **القرار (`Qarar`)** — deep, calm, velvety chest voice.
+  2. `المقطع الأول`: **الوسط / الجواب الأول (`Mayan / Jawab`)** — rising sorrow and throat articulations (`تقاطيع حنجرية`).
+  3. `المقطع الثاني (ذروة الشجن)`: **جواب الجواب (`Jawab-al-Jawab`)** — soaring melodic cry with a brief pivot into `Maqam Saba` (`مقام الانكسار الفايزي`).
+  4. `المقطع الختامي (القفلة)`: Returning gradually to **القرار (`Qarar`)** with the classic Iraqi `Wanna` groan (`ونة حسينية`).
+- **دمج المقامات الإبداعي (Module 31 — Creative Maqam Fusion)**: Use the 4 named hybrid Maqam archetypes from `references/atwar_maqamat_and_poetry_guide.md`:
+  1. **مقام الانكسار الفايزي (`Faizi Inflection`)**: Lower `Bayati` + Upper `Saba` (pivot at 4th degree) — the gold standard for Iraqi-Bahrani classic fusion.
+  2. **مقام الجلال الكربلائي (`Karbalai Majesty`)**: Lower `Hijaz` + Upper `Rast` (pivot at 5th degree).
+  3. **مقام اللوعة المركبة (`Compound Grief`)**: Lower `Saba` + Upper `Kurd` (pivot at 4th degree).
+  4. **مقام الشوق الهزامي (`Hizami Longing`)**: Lower `Sikah` + Upper `Hijaz`, resolving to `Bayati`.
+- **لسان الحال وألفاظ الشجن وحروف المد**: Personify the tragedy directly through the voice of the Ahlulbayt, and saturate line endings with long vowels (`ا، و، ي`) and resonant nasals (`ام، ان، اه، ون`) so the reciter can execute `Tarjee'` (trembling elongation) and the final `Wanna` (`مَظْلُووومْ، حُسَيْييينْ`).
+- **Performance and Pause Tags (Platform-Aware)**: For Suno/Udio, insert `[pause: 0.4s]` and `(deep heavy sigh)`. For **Google Flow Music (`Lyria`)**, keep the `Lyrics` box **100% pure Arabic** (`[المُسْتَهَلّ]`, `[المَقْطَع الأَوَّل]`) with zero Latin characters so no English tags are read aloud.
 
 ### Workflow 2: Regional and Form-Specific Audio Production Prompts
 
@@ -100,7 +110,13 @@ python3 hussaini_dsp_montage.py \
 
 ## Gotchas
 
-- **Never put English structural comments inside the sung lines**: Any English text not enclosed in square brackets `[...]` or recognized vocal FX parentheses `(weep crack)` may be sung aloud by the AI generator. Always include `Strictly 100% Arabic vocal execution: no English words, phrases or vocalizations at any point` in both Style and Negative Prompt.
-- **Avoid song-production buzzwords**: Words like `hook`, `drop`, `build`, `upbeat`, or `club` trigger pop/EDM priors in audio models. Use `Mustahal`, `Gireez`, `Qafla`, `Qarar`, `Jawab`, `Somatic Chest-Slap`, and `Mawkib Procession`.
-- **Prevent Dialect Drift on Long Generations**: Audio generators tend to drift from Iraqi/Bahrani dialect toward Fusha after 25-30 seconds (QC11/QC12). Re-inject `[colloquial_spoken_singing]` at the top of every stanza and wrap dialect consonants (`[dialect:چ]`, `[dialect:گ]`) explicitly.
-- **Keep Rubato and Rhythmic Grids Separated**: Never specify a numeric BPM on a pure Mawal or Na'i (`0 BPM Rubato` + `--no steady tempo, no click-track feel, no percussion bed`).
+- **Prevent "Spoken Recitation / Poem Reading" vs. True Throat-Driven Melodic Singing (`مهارات إخراج اللحن من الحنجرة`) in AI Engines (Flow Music / Lyria)**:
+  1. Never use the words `reciter`, `spoken`, `recitation`, `narrow range`, or `ultra-calm muffled` in Flow Music's `Sound description`, and keep the tempo at `56-62 BPM` (never drop below `55 BPM` for a classic epic Latmiya). Always start `Sound description` with: `"Slow, deeply melodic, classic epic Arabic Maqam vocal elegy and studio Hussaini Latmiya, 56 BPM, acapella studio masterpiece. Lead Vocal & Throat Mastery: Golden-throated, resonant Jawhari baritone-tenor singer performing a rich, poetic, tearful SUNG melody (100% melodic singing and chanting with clear musical pitch contours, never spoken word or dry poem reading). Extraordinary throat-driven vocal creativity (ikhraj al-lahn min al-hanjara) featuring long drawn-out sorrowful vowel stretches (maddat sawtiya), expressive guttural microtonal throat articulations and melismatic turns (taqatee' hanjariya sawtiya and Bahrani tarjee')..."`
+  2. **Enforce the Melodic-Phonetic Lock (Module 33)**: Always include in `Sound description`: `"Melodic-Phonetic Lock: When a syllable is held over a long note or melisma, preserve its exact open vowel quality without drifting, and treat multi-note throat passages on one syllable as a SINGLE fluid phonetic unit without re-articulating the consonant on each pitch change."`
+  3. In `Lyrics`, **never put trailing ellipses (`...`) at the end of every hemistich line** and **never use classical Fusha Tanween (`ٌ` / `ٍ`)** (such as `مَحْرُوقَةٌ، طِفْلَةٌ، نَائِمٌ`), because trailing `...` and Fusha Tanween trigger **Classical Arabic Poem Reading (`قراءة وإلقاء قصيدة`)** instead of melodic Hussaini chanting!
+  4. Apply **`MODE M / MODE C` (4-Line Stanzas + Identical 4th-Line Anchor Refrain)**: Format every stanza into **4 short single-hemistich lines** without trailing `...`, ending on open long vowels (`ـا، ـي، ـو، ـه`), make the **4th line of every stanza identical word-for-word** to lock the melodic resolution, and **open each section with a sung throat-melisma vocalization line** (`آه يَا حُسَيْنَا... آه يَا حَبِيبِي`) followed by a choral refrain `(يَا حُسَيْنْ... آه يَا حُسَيْنْ)` at the end of the stanza.
+- **Prevent Harsh Screams & Background Clutter**: Never use the word `wailing` or `tear-choked` in Flow Music's `Sound description`, as it triggers shrill, unpleasant screaming. Instead, specify `melodically composed heartfelt weeping cries, warm velvet chest-to-head voice transitions, silky microtonal vibrato — smooth and musical, never shrill or harsh`, paired with a **Clean High-Fidelity Studio Mix** (`crystal-clear lead vocal in the foreground, soft lush harmonically tuned male Ahaat choir pads in the background, and a calm, steady, deep chest-latm pulse with zero clutter`).
+- **Zero English Characters in Flow Music's `Lyrics` Box**: In Google Flow Music (`Lyria 3.5`), any English/Latin characters inside the `Lyrics` box (such as `[colloquial_spoken_singing]`, `(deep heavy sigh)`, `[pause: 0.4s]`, or `[Section 1...]`) may be pronounced aloud as English words. Keep the `Lyrics` box 100% pure Arabic (`[المُسْتَهَلّ]`, `[المَقْطَع الأَوَّل]`, `آه يَا حُسَيْنَا...`).
+- **Never Put `--no <instruments>` Inside Flow Music's Positive `Sound description` Box**: Flow Music's `Sound description` field does not parse `--no` flags; listing `piano, guitar, strings, synth, drums, EDM, pop` inside `Sound description` causes Lyria to generate those instruments and turn the Latmiya into a pop song. State only positive acoustic cues (`acapella, human voice, soft Ahaat vocal pads, organic chest-slap latm, no melodic instruments`).
+- **Avoid song-production buzzwords**: Words like `hook`, `drop`, `build`, `upbeat`, `chorus`, or `club` trigger pop/EDM priors in audio models.
+- **Keep Rubato and Rhythmic Grids Separated**: Never specify a numeric BPM on a pure Mawal or Na'i (`0 BPM Rubato`).
