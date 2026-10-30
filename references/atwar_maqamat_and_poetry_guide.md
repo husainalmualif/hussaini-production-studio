@@ -99,9 +99,9 @@
 
 ```text
 Role: Master Hussaini Audio DSP Engineer, Iraqi-Bahrani Maqam Composer & Studio Vocal Producer.
-1. MELODIC & THROAT MASTERY: Every track must be 100% melodically SUNG (never spoken poem reading). Enforce Arabic 24-EDO microtonality (Maqam Bayati, Saba, Hijaz, Lami, Kurd, Sikah). Deliver resonant Jawhari baritone-tenor vocals with deep throat-driven melismas (ikhraj al-lahn min al-hanjara), long sorrowful vowel elongations (maddat sawtiya), Bahrani trembling tarjee', smooth Qarar-to-Jawab-al-Jawab transitions, and classic Iraqi weeping Wanna cadences.
+1. MELODIC & THROAT MASTERY: Every track must be 100% melodically SUNG (never spoken poem reading). Enforce Arabic 24-EDO microtonality (Maqam Bayati, Saba, Hijaz, Lami, Kurd, Sikah). Deliver commanding thick resonant Jawhari Baritone vocals with immense chest power and powerful soaring high Jawab and Jawab-al-Jawab registers (never use the word "tenor", which causes soft/light vocal timbres), deep throat-driven melismas (ikhraj al-lahn min al-hanjara), natural warm laryngeal vocal rasp (bahha), long sorrowful vowel elongations (maddat sawtiya), Bahrani trembling tarjee', smooth Qarar-to-Jawab-al-Jawab transitions, and classic Iraqi weeping Wanna cadences.
 2. MELODIC-PHONETIC LOCK: Hold open vowels across multi-note melismas as a single fluid phonetic unit without consonant re-articulation. Align melodic peaks with emotional stress words.
-3. CLEAN STUDIO ACAPELLA MIX: 100% Acapella human vocal and organic heritage chest-slap (Latm) production. Foreground the crystal-clear solo lead vocal (Dry +0dB center with warm studio reverb and subtle slapback delay). Support with lush, harmonically tuned male Ahaat vocal pads (-10dB wide stereo) and a calm, deep dual-layer chest-slap rhythm (55Hz sub-thud + 4kHz skin transient with 15-30ms Raddada crowd flam). Zero melodic instruments, zero clutter, zero harsh screaming.
+3. CLEAN STUDIO ACAPELLA MIX: 100% Acapella human vocal and organic heritage chest-slap (Latm) production. Foreground the crystal-clear solo lead vocal (Dry +0dB center with Mid presence +4.5dB @ 2.5kHz, HPF @ 85Hz, warm 3.2s Husseiniya Cathedral reverb and 285ms Dynacord slapback delay). Support with lush, harmonically tuned male Ahaat vocal pads (-10dB wide stereo) and a calm, deep dual-layer chest-slap rhythm (55Hz sub-thud + 4kHz skin transient with 15-30ms Raddada crowd flam). Zero melodic instruments, zero clutter, zero harsh screaming.
 ```
 
 ### قواعد التوافق الذهبية لمنصة Google Flow Music (`Lyria 3.5`):
@@ -215,6 +215,7 @@ Lyrics:
 | **QC5** | نطق كلمات إنجليزية داخل القصيدة العربية | وجود وسوم إنجليزية مثل `[pause]` أو `[Section 1]` داخل مربع `Lyrics` | تطهير مربع `Lyrics` من أي حرف لاتيني `[a-zA-Z]` واستخدام وسوم عربية فقط `[المُسْتَهَلّ]` |
 | **QC6** | ضياع اللحن وتغيره العشوائي في كل بيت | أبيات طويلة غير مقسمة أو غياب اللازمة الموحدة | تطبيق قاعدة `B2` و `B4` من `MODE M`: تقسيم القصيدة إلى مقاطع من 4 أشطر فقط، وتثبيت الشطر الرابع حرفياً في كل مقطع كمرساة لحنية |
 | **QC7** | تنافر اللحن مع كلمات القصيدة عند نسخ قالب جاهز | استنساخ حرفي (`Cloning`) لبرومبت أو بذرة (`Seed`) قصيدة سابقة ذات وزن وموضوع مختلفين | منع الاستنساخ الحرفي، وتطبيق **القسم 9 (منظومة الابتكار اللحني ومطابقة الأوزان وتنويع المقامات)** لتفصيل لحن ومقام وإيقاع وهندسة صوتية خاصة بكل قصيدة |
+| **QC8** | صوت الرادود يظهر ناعماً أو خفيفاً بدلاً من الفخامة والجهارة المنبرية | وجود كلمة `tenor` (أو `baritone-tenor`) في خانة `Sound`، أو البدء بتأوهات هامسة، أو التوليد العشوائي بدون قفل الخامة | حذف كلمة `tenor` نهائياً، وتثبيت `commanding thick resonant Jawhari Baritone lead vocalist with immense chest power and powerful soaring high Jawab and Jawab-al-Jawab registers`، وبدء النص بمدّات مفتوحة (`آآآه يَا حُسَيْنَا .. آآآه يَا مَظْلُومْ`)، أو القفل الحاسم عبر `Producer Chat` بالربط مع المعرف الذهبي `26bbb3d2-65f0-42c3-a167-37127631ef0a` |
 
 ---
 
@@ -250,16 +251,51 @@ Lyrics:
 
 ### ثالثاً: تفصيل الإخراج الهندسي الصوتي حسب جنس القصيدة (`Bespoke Acoustic & DSP Mastering`)
 1. **ميكس المناجاة والعتاب الوجداني (`Intimate Munajat & Supplication Mix`)**:
-   - `Close-mic intimate Baritone-Tenor vocal (+3.5dB presence @ 2.8kHz, HPF @ 85Hz)` لالتقاط همس التوبة والأنفاس المتهدجة.
+   - `Close-mic warm resonant Jawhari Baritone vocal (+3.5dB presence @ 2.8kHz, HPF @ 85Hz)` لالتقاط شجن التوبة والأنفاس المتهدجة.
    - `Dynacord tape delay (250–260ms slapback, 20–22% feedback)` ليبقى الكلام واضحاً وغير غارق في الصدى.
    - `2.6–2.8s warm Husseiniya chamber reverb` + `Soft somatic 55Hz bare-palm chest pulse acting like a grieving heartbeat at 58 BPM`.
-2. **ميكس المأتم العاشورائي الثقيل (`Heavy Ashura Matam Mix`)**:
-   - `Deep exhausted Iraqi Baritone with laryngeal bahha and weep cracks (+4.5dB @ 2.5kHz)`.
+2. **ميكس المأتم العاشورائي الثقيل والمدرسة البحرانية-الكربلائية الكبرى (`Heavy Ashura & Bahrani-Karbalai Grand Mix`)**:
+   - `Commanding thick resonant Jawhari Baritone with immense chest power, powerful soaring Jawab and Jawab-al-Jawab registers, laryngeal bahha and weep cracks (+4.5dB @ 2.5kHz, HPF @ 85Hz)`.
    - `Classic Dynacord analog tape echo (285ms delay)` + `3.2–3.5s wide Husseiniya Cathedral reverb`.
    - `Heavy 55Hz bare-palm chest thud at 55–60 BPM` + `Wide-stereo grieving Raddada crowd unison (80% pan) with -4dB sidechain ducking`.
 3. **ميكس النعي المنبري والموال الحر (`Pure Minbar Rubato Na'i / Mawal Mix`)**:
    - `0 BPM Rubato (zero rhythmic grid, zero chest-slap bed)`.
    - `3.8s Cathedral reverb + 450ms mournful echo tail` لملء الفراغ العاطفي بين الجمل النعيّة الطويلة.
+
+### رابعاً: موسوعة الطبقات والخامات الصوتية الجوهرية السبعة وقفل فخامة الصوت (`7 Essential Vocal Timbres & Jawhari Baritone Lock`)
+
+> **القاعدة الهندسية الحاسمة لمنع نعومة الصوت:**
+> وجود كلمة **`tenor`** (أو `baritone-tenor`) في خانة `Sound` يدفع محرك التوليد نحو الخامات الصوتية الخفيفة والناعمة. للحصول على حنجرة منبرية فخمة وجهورية تمتلك طبقات عالية وقوية في **الجواب وجواب الجواب (`Powerful Soaring Jawab & Jawab-al-Jawab`)**، يُحظر استخدام كلمة `tenor` ويُعتمد أحد الواصفات السبعة التالية:
+
+1. **الباريتون الجوهري الفخم ذو الجوابات الصاعدة (`Commanding Thick Resonant Jawhari Baritone + Powerful Soaring Jawab & Jawab-al-Jawab`)**:
+   - *المدارس المرجعية:* دمج مدرسة الحاج باسم الكربلائي في الجوابات العالية (`Jawab-al-Jawab`) مع فخامة وجهارة حنجرة عمار الكناني وصالح الدرازي.
+   - *البرومبت المعتمد لخانة `Sound`:*
+     `Grand Karbalai and Epic Bahrani mourning school, 58 BPM, commanding thick resonant Jawhari Baritone lead vocalist with immense chest power and powerful soaring high Jawab and Jawab-al-Jawab registers, 100% deeply SUNG dramatic Arabic Maqam melody in Maqam Saba, Hijaz, and Iraqi Lami, rich masculine vocal timbre, natural warm laryngeal vocal rasp (bahha), emotional weep cracks, long powerful sorrowful vowel stretches (maddat sawtiya), trembling Bahrani Faizi tarjee' and deep Iraqi Wanna cadences, Melodic-Phonetic Lock holding open vowels with full vocal weight, Mid presence +4.5dB at 2.5kHz, HPF at 85Hz, Heavy Slow Organic 55Hz Human Chest Thud, 285ms Dynacord analog tape echo, 3.2s Husseiniya Cathedral Reverb, massive wide-stereo unison male Raddada choir response, Pure Acapella No Instruments`
+2. **الباريتون المنبري الرخيم ذو البحة العراقية الشجية (`Deep Velvet Minbari Baritone with Warm Laryngeal Bahha & Weep Cracks`)**:
+   - *المدارس المرجعية:* السيد جاسم الطويرجاوي، حمزة الزغير، السيد محمد باقر العلوي، مرتضى حرب.
+   - *الواصف الصوتي:* `deep velvet Minbari Baritone with heavy mournful chest authority, high laryngeal friction (bahha), tear-soaked weep cracks, and deep Iraqi Wanna cadences in Maqam Saba and Lami`.
+3. **الباص-باريتون الملحمي الحماسي المجلجل (`Thunderous Heroic Bass-Baritone / Sub-Harmonic Chest Quake`)**:
+   - *المدارس المرجعية:* قحطان البديري، حيدر البياتي، مهدي رسولي، والملاحم العباسية والزنجيل.
+   - *الواصف الصوتي:* `thunderous heroic Bass-Baritone with massive sub-harmonic chest weight (80Hz-180Hz) and commanding military epic projection`.
+4. **الحنجرة البحرانية التوشيحية العريضة ذات الترجيع والمدّات (`Wide Majestic Bahrani Tawshih & Faizi Jawhari Voice`)**:
+   - *المدارس المرجعية:* الشيخ حسين الأكرف، السيد عصام الهاشمي، صالح وجعفر الدرازي، عبد الأمير البلادي.
+   - *الواصف الصوتي:* `wide majestic Bahrani Tawshih and Faizi Jawhari Baritone voice, long powerful vowel stretches (maddat sawtiya), trembling Bahrani Faizi tarjee', and soaring Hijaz/Saba climaxes`.
+5. **الحنجرة الفراتية الشجية المخنوقة بالعَبرة (`Weeping Euphrates Lami/Saba Larynx`)**:
+   - *المدارس المرجعية:* مدين العياشي، عباس عجيد العامري، داخل حسن.
+   - *الواصف الصوتي:* `raw exhausted weeping Euphrates Lami/Saba Baritone larynx with natural weep cracks (kasrat al-buka') and prolonged high Saba Aaah melismas`.
+6. **الصوت الصدري الجبلي الصاعد (`High-Power Chest-Belted Dramatic Jawab`)**:
+   - *المدارس المرجعية:* السيد سلام الحسيني، مسلم الوائلي، الملا جليل الكربلائي.
+   - *الواصف الصوتي:* `high-power full-chest belted dramatic Jawab vocalist with intense laryngeal grit cutting through dense congregation (+4.5dB at 2.5kHz)`.
+7. **الكورال الحسيني المهيب (`Massive Wide-Stereo Unison Male Raddada Choir`)**:
+   - *الواصف الصوتي:* `massive wide-stereo unison male Raddada congregation choir (80% pan, 15-35ms human timing jitter, -4dB sidechain ducking)`.
+
+#### القفل الحاسم لفخامة الصوت بنسبة 100% عبر `Producer Chat` + الاستهلال المفتوح:
+- **الاستهلال الصوتي الملحن المفتوح (`Open-Throat Vocal Melisma Anchor`):** ابدأ النص بمدّات مفتوحة بالألف والنداء العالي (`آآآه يَا حُسَيْنَا .. آآآه يَا مَظْلُومْ`) بدلاً من التأوهات الهامسة لإجبار المحرك على الدخول بحنجرة مفتوحة وقوية منذ الثانية الأولى.
+- **أمر `Producer Chat` المرتبط بالمعرف المرجعي الذهبي `26bbb3d2-65f0-42c3-a167-37127631ef0a` (`عهد الوفا V33.0 Grand Master`):**
+```text
+Register the lyrics using lyrics__register and create the track using audio__create_song referencing clip ID "26bbb3d2-65f0-42c3-a167-37127631ef0a" at 58 BPM with this sound prompt:
+"Hussaini Studio OS V33.0. Starts with improvised Mawal Mifjou' in Maqam Saba and Hijaz, rubato tempo, maximum vocal stretching, large cathedral reverb (3.8s decay). Transitions into Heavy Iraqi-Bahrani Nazla and Faizi Tor, strict 58 BPM, 55Hz acoustic chest-slap transient. Commanding deep emotive Jawhari Baritone lead with powerful soaring high Jawab-al-Jawab registers, Bahrani/Iraqi colloquial dialect, high vocal friction, weep cracks, natural vocal rasp. Massive wide-stereo Raddada choir (80% pan). DSP: Mid presence +4.5dB @ 2.5kHz, HPF @ 85Hz, sidechain ducking under lead. No modern instruments."
+```
 
 ---
 
