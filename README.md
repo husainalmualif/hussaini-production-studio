@@ -93,6 +93,40 @@ npx skills add husainalmualif/hussaini-production-studio
 
 ---
 
+### السيناريو 3.5: هندسة الطبقات والخامات الصوتية الجوهرية وقفل فخامة الصوت (`7 Essential Vocal Timbres & Jawhari Baritone Lock`)
+
+> **تنبيه هندسي حاسم (لماذا يظهر الصوت ناعماً أحياناً وكيف تجعله فخماً وجهورياً وعالي الطبقات؟):**
+> وجود كلمة **`tenor`** (أو `baritone-tenor`) في وصف الصوت (`Sound`) يدفع محرك الذكاء الاصطناعي نحو الخامات الصوتية الخفيفة والناعمة بدلاً من الحنجرة المنبرية الفخمة والجهورية. للحصول على **حنجرة جوهرية فخمة وعميقة (`Commanding Thick Resonant Jawhari Baritone`)** تمتلك **طبقات صوتية عالية وقوية في الجواب وجواب الجواب (`Powerful Soaring Jawab & Jawab-al-Jawab`)** مع البحة العراقية الشجية والمدّات البحرانية المهيبة، اعتمد المصفوفة والخطوات الثلاث التالية:
+
+#### أولاً: مصفوفة الخامات والطبقات الصوتية الجوهرية السبعة (`7 Essential Hussaini Vocal Timbres`)
+
+| رقم الخامة | اسم الطبقة والخامة الصوتية | الواصف الهندسي الإنجليزي المعتمد (`Sound Prompt Descriptor`) | المدارس المرجعية ومتى تُستخدم؟ |
+| :-: | :--- | :--- | :--- |
+| **1** | **الباريتون الجوهري الفخم ذو الجوابات الصاعدة** | `commanding thick resonant Jawhari Baritone lead vocalist with immense chest power and powerful soaring high Jawab and Jawab-al-Jawab registers, rich masculine vocal timbre, natural warm laryngeal vocal rasp (bahha)` | دمج مدرسة الحاج باسم الكربلائي في الجوابات العالية مع فخامة وجهارة حنجرة عمار الكناني وصالح الدرازي (للملاحم، التوشيح، واللطميات الكبرى) |
+| **2** | **الباريتون المنبري الرخيم ذو البحة العراقية الشجية** | `deep velvet Minbari Baritone with heavy mournful chest authority, high laryngeal friction (bahha), tear-soaked weep cracks, and deep Iraqi Wanna cadences` | مدرسة السيد جاسم الطويرجاوي، حمزة الزغير، السيد محمد باقر العلوي، ومرتضى حرب (للنعي المنبري، العاشورائي، وبحر النصاري) |
+| **3** | **الباص-باريتون الملحمي الحماسي المجلجل** | `thunderous heroic Bass-Baritone with massive sub-harmonic chest weight (80Hz-180Hz) and commanding military epic projection` | للملاحم العباسية، مسير الزنجيل، والقصائد الحماسية العقائدية (قحطان البديري، حيدر البياتي، مهدي رسولي) |
+| **4** | **الحنجرة البحرانية التوشيحية العريضة ذات الترجيع والمدّات** | `wide majestic Bahrani Tawshih and Faizi Jawhari Baritone voice, long powerful vowel stretches (maddat sawtiya), trembling Bahrani Faizi tarjee', and soaring Hijaz/Saba climaxes` | مدرسة الشيخ حسين الأكرف، السيد عصام الهاشمي، وصالح وجعفر الدرازي (للموشحات البحرانية والطور الفايزي) |
+| **5** | **الحنجرة الفراتية الشجية المخنوقة بالعَبرة** | `raw exhausted weeping Euphrates Lami/Saba Baritone larynx with natural weep cracks (kasrat al-buka') and prolonged high Saba Aaah melismas` | مدرسة مدين العياشي، عباس عجيد العامري، وداخل حسن (لطور التجليب، الشوق الرضوي، والنعي الفراتي) |
+| **6** | **الصوت الصدري الجبلي الصاعد (`Chest-Belted Jawab`)** | `high-power full-chest belted dramatic Jawab vocalist with intense laryngeal grit cutting through dense congregation (+4.5dB at 2.5kHz)` | مدرسة السيد سلام الحسيني، مسلم الوائلي، والملا جليل الكربلائي (للمجالس المتعددة الحركات والقصائد التفاعلية) |
+| **7** | **الكورال الحسيني المهيب (`Unison Raddada Choir`)** | `massive wide-stereo unison male Raddada congregation choir (80% pan, 15-35ms human timing jitter, -4dB sidechain ducking)` | لتثبيت طبقة القرار والردّة الجماعية المهيبة في المستهل والقفلات |
+
+#### ثانياً: الخطوات الثلاث الحاسمة لقفل فخامة الصوت والـ `Jawab-al-Jawab` بنسبة 100%
+
+1. **الخطوة الأولى (برومبت خانة `Sound` الفخم وعالي الطبقات — بدون أي إشارة لـ `tenor`):**
+```text
+Grand Karbalai and Epic Bahrani mourning school, 58 BPM, commanding thick resonant Jawhari Baritone lead vocalist with immense chest power and powerful soaring high Jawab and Jawab-al-Jawab registers, 100% deeply SUNG dramatic Arabic Maqam melody in Maqam Saba, Hijaz, and Iraqi Lami, rich masculine vocal timbre, natural warm laryngeal vocal rasp (bahha), emotional weep cracks, long powerful sorrowful vowel stretches (maddat sawtiya), trembling Bahrani Faizi tarjee' and deep Iraqi Wanna cadences, Melodic-Phonetic Lock holding open vowels with full vocal weight, Mid presence +4.5dB at 2.5kHz, HPF at 85Hz, Heavy Slow Organic 55Hz Human Chest Thud, 285ms Dynacord analog tape echo, 3.2s Husseiniya Cathedral Reverb, massive wide-stereo unison male Raddada choir response, Pure Acapella No Instruments
+```
+2. **الخطوة الثانية (قاعدة الاستهلال الصوتي الملحن بالحنجرة المفتوحة — `Open-Throat Vocal Melisma Anchor`):**
+   - ابدأ النص في `[المُسْتَهَلّ]` وبدايات الأدوار بمدّات مفتوحة بالألف والنداء العالي (**`آآآه يَا حُسَيْنَا .. آآآه يَا مَظْلُومْ`** / **`آآآه يَا ذَبِيحَا .. بِالطَّفِّ قَدْ هَوَى`**) بدلاً من التأوهات الهامسة؛ هذا يجبر المحرك الصوتي على الدخول بحنجرة مفتوحة وجهورية منذ الثانية الأولى.
+3. **الخطوة الثالثة (الحل الحاسم عبر محادثة المنتج `Producer Chat` بالربط مع المعرف الذهبي `26bbb3d2-65f0-42c3-a167-37127631ef0a`):**
+   - عند التوليد من لوحة `Compose` اليمنى وحدها يختار المحرك خامة الصوت عشوائياً؛ أما عند إرسال الأمر التالي في **محادثة المنتج اليسرى (`Producer Chat`)** مع ربط المعرف المرجعي الذهبي **`26bbb3d2-65f0-42c3-a167-37127631ef0a`** (`عهد الوفا V33.0 Grand Master`)، فإنه يقفل الصوت 100% على حنجرة باريتون عراقية-بحرانية فخمة وجهورية جداً مع بحة شجية وطبقات عالية:
+```text
+Register the lyrics using lyrics__register and create the track using audio__create_song referencing clip ID "26bbb3d2-65f0-42c3-a167-37127631ef0a" at 58 BPM with this sound prompt:
+"Hussaini Studio OS V33.0. Starts with improvised Mawal Mifjou' in Maqam Saba and Hijaz, rubato tempo, maximum vocal stretching, large cathedral reverb (3.8s decay). Transitions into Heavy Iraqi-Bahrani Nazla and Faizi Tor, strict 58 BPM, 55Hz acoustic chest-slap transient. Commanding deep emotive Jawhari Baritone lead with powerful soaring high Jawab-al-Jawab registers, Bahrani/Iraqi colloquial dialect, high vocal friction, weep cracks, natural vocal rasp. Massive wide-stereo Raddada choir (80% pan). DSP: Mid presence +4.5dB @ 2.5kHz, HPF @ 85Hz, sidechain ducking under lead. No modern instruments."
+```
+
+---
+
 ### السيناريو 4: المونتاج والهندسة الصوتية لتسجيل صوتي خام بصوتك (`Audio DSP Montage`)
 إذا كان لديك تسجيل صوتي خام بصوتك (أو بصوت رادود/خطيب) بصيغة `.ogg` أو `.wav` أو `.mp3` وتريد إضافة لطم صدر بشري، أو دمام، أو زنجيل، أو آهات، أو صدى دايناكورد وريفيرب حسينية:
 
@@ -126,18 +160,19 @@ python3 scripts/hussaini_dsp_montage.py \
 
 ---
 
-## ثالثاً: القواعد الذهبية العشر لضمان أعلى جودة إنتاج (`10 Golden Rules`)
+## ثالثاً: القواعد الذهبية الأحد عشر لضمان أعلى جودة إنتاج (`11 Golden Rules`)
 
 1. **لا للاستنساخ الحرفي (`Zero Blind Cloning`):** لا تنسخ برومبت أو بذرة (`Seed`) قصيدة سابقة على قصيدة جديدة مختلفة الوزن والموضوع؛ بل فصّل لكل قصيدة رحلتها المقامية وسرعتها الإيقاعية الخاصة.
 2. **اللطمة البشرية الخالصة والابتعاد عن الموسيقى (`100% Non-Musical Pure Chest-Slap`):** في اللطميات المنبرية، اعتمد حصرياً على الصوت البشري ولطمة الكف على الصدر (`55Hz bare-palm chest thud`)، ولا تكتب أسماء آلات موسيقية (`piano, guitar, synth`) حتى في صيغة النفي داخل مربع `Sound description` في Flow Music.
 3. **صفر حروف إنجليزية في مربع الكلمات (`Zero English in Lyrics Box`):** اكتب الكلمات والوسوم بالعربية الصرفة فقط، أو بدون أقواس معقوفة نهائياً.
 4. **حذف النقاط الثلاث المتتالية (`...`) والتنوين الفصيح (`ٌ / ٍ`):** لأنها تدفع المحرك لقراءة القصيدة قراءة إلقائية جافة بدلاً من إنشادها بلحن شجي؛ واستخدم بدلاً منها نقطتين (`..`) للوقفة التنفسية الوسطية والوقف بالسكون في أواخر الأشطر.
 5. **تثبيت الشطر الرابع أو اللازمة الختامية (`Identical Anchor Refrain`):** اجعل نهاية كل دور تعود إلى نفس الشطر الرابط أو اللازمة الموحدة ليحفظ المحرك والمستمع قرار اللحن.
-6. **قوس الطبقات الصوتية (`Qarar ⟵ Mayan ⟵ Jawab ⟵ Wanna`):** ابدأ المستهل في طبقة القرار الدافئة، واصعد تدريجياً في الأبيات إلى الجواب، ثم اختم كل دور بالانكسار والونة الحسينية.
-7. **إدخال جسر الـ `آآآه ..` الحنجري قبل مقاطع الذروة:** لإجبار المحرك على إخراج المدّات الصوتية الحنجرية الباكية في مقام الصبا والحجاز.
+6. **قوس الطبقات الصوتية (`Qarar ⟵ Mayan ⟵ Jawab ⟵ Jawab-al-Jawab ⟵ Wanna`):** ابدأ المستهل في طبقة القرار الدافئة، واصعد تدريجياً في الأبيات إلى الجواب وجواب الجواب، ثم اختم كل دور بالانكسار والونة الحسينية.
+7. **إدخال جسر الـ `آآآه يَا حُسَيْنَا .. آآآه يَا مَظْلُومْ` الحنجري المفتوح:** لإجبار المحرك منذ الثانية الأولى على الدخول بحنجرة مفتوحة وجهورية وإخراج المدّات الصوتية الباكية في مقامي الصبا والحجاز.
 8. **التشكيل الفونيمي الكامل (`Full Arabic Tashkeel`):** شكّل جميع الحروف، وخاصة حروف المدّ والحروف الحلقية (`ع، ح، خ، غ، ق`) والمفردات الشعبية (`گ، چ`).
 9. **تخصيص الفضاء الصوتي (`Bespoke DSP Space`):** استخدم دايناكورد ناعماً (`260ms, 22% feedback`) وريفيرب حجرة (`2.8s`) في قصائد المناجاة والعتاب، ودايناكورد كلاسيكياً (`285ms`) وريفيرب قاعة حسينية واسعة (`3.2–3.5s`) في قصائد الفاجعة العاشورائية.
 10. **استخدام `New session` لتوليد المقاطع الصوتية، و`Spaces` لبناء الأدوات التفاعلية فقط:** لتوليد قصيدة أو لطمية مباشرة مع التحكم في `Lyrics` و`Sound` والتمديد (`Remix/Extend`)، افتح دائماً **`New session` (جلسة جديدة)**؛ ولا تستخدم `Spaces` إلا عندما ترغب في برمجة أداة تفاعلية مخصصة (`Mini-DAW` أو موزع إيقاعات لطم/دمام تفاعلي عبر `Vibe-coding`).
+11. **حظر كلمة `tenor` وقفل الصوت على الباريتون الجوهري الفخم عالي الطبقات (`Commanding Jawhari Baritone + Soaring Jawab-al-Jawab`):** لا تكتب كلمة `tenor` في خانة `Sound` لأنها تجعل صوت الرادود ناعماً وخفيفاً؛ واستخدم دائماً `commanding thick resonant Jawhari Baritone lead vocalist with immense chest power and powerful soaring high Jawab and Jawab-al-Jawab registers` مع إمكانية قفل الصوت 100% عبر `Producer Chat` بالربط مع المعرف المرجعي الذهبي `26bbb3d2-65f0-42c3-a167-37127631ef0a`.
 
 ---
 
