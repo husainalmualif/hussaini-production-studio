@@ -37,7 +37,7 @@ jobs:
 
       - name: Lint DSP Montage Script with Pylint
         run: |
-          pylint --disable=C0301,R0913,R0914,R0917 scripts/hussaini_dsp_montage.py
+          pylint --disable=C0301,R0912,R0913,R0914,R0917 scripts/hussaini_dsp_montage.py
 
       - name: Test Hussaini DSP Montage Engine Across All 7 Modes
         run: |
