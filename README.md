@@ -1,40 +1,145 @@
-# Hussaini Production Studio (V37.0 GRAND-MASTER & Constitution V5.5+)
+# استوديو الإنتاج الحسيني الشامل — Hussaini Production Studio (V37.0 GRAND-MASTER)
 
-Comprehensive Hussaini audio production, poetic composition, Maqam and Tor architecture, AI studio prompt engineering (**Google Flow Music / Lyria 3.5, Suno, Udio**), and DSP vocal montage engine.
+مهارة متكاملة للتأليف الشعري الحسيني، وهندسة الألحان والمقامات والأطوار المنبرية، وتوليد القصائد واللطميات بالذكاء الاصطناعي (**Google Flow Music / Lyria 3.5, Suno, Udio**)، والمونتاج الصوتي الاحترافي (**DSP Vocal Montage**) للتسجيلات الصوتية.
 
-Integrates the **Unified Hussaini Audio Encyclopedia (V26.0 – V37.0 GRAND-MASTER)**, the **Hussaini Prompt Constitution (V5.5+ — `MODE M` & `MODE C`)**, the **Bespoke Multi-Maqam & Polymetric Composition Engine (Anti-Cloning Law)**, the **23 Legendary Compositional Archetypes (`ثلاثية وجود لوجودي` + `سباعية قل ما تشاء` + `روائع اليوتيوب الثلاث عشرة المليونية`)**, and the **Encyclopedia of 13+ Radoods & 8 Minbar Khutaba**.
+تدمج هذه المهارة:
+- **الموسوعة الصوتية الحسينية الموحدة (`V26.0 – V37.0 GRAND-MASTER`)**
+- **دستور البرومبت الحسيني (`Constitution V5.5+ — MODE M & MODE C`)**
+- **منظومة الابتكار اللحني والتنويع المقامي ومطابقة الأوزان (`Polymetric & Multi-Maqam Synthesis Engine — منع الاستنساخ الحرفي`)**
+- **المدارس التلحينية والعروضية الثلاث والعشرون الأسطورية (`23 Legendary Compositional Archetypes`: ثلاثية «وجود لوجودي» + سباعية «قل ما تشاء» + روائع اليوتيوب الثلاث عشرة المليونية)**
+- **موسوعة مدارس 13+ رادوداً و8 من كبار خطباء المنبر الحسيني في النعي**
 
-## Installation
+---
 
-To add this skill to your workspace, run:
+## أولاً: طريقة التثبيت والتفعيل (Installation & Setup)
 
+### 1. التثبيت السريع عبر سطر الأوامر (CLI):
 ```bash
 npx skills add husainalmualif/hussaini-production-studio
 ```
 
-## Key Features & Architecture
+### 2. التثبيت اليدوي في بيئة الوكيل (Antigravity / Gemini / Claude Code):
+انسخ مجلد المهارة إلى مسار المهارات العام في جهازك:
+- **Windows:** `C:\Users\<Username>\.gemini\config\skills\hussaini-production-studio`
+- **macOS / Linux:** `~/.gemini/config/skills/hussaini-production-studio`
 
-- **Bespoke Melodic, Prosodic & Multi-Maqam Engineering (`Workflow 1.5` & Anti-Cloning Law)**:
-  - Diagnoses every poem's prosodic anatomy (`Polymetric Stanza Mapping` across `Mustahal`, `Long Flowing Triplet`, `Short-Hemistich Quatrain / Nazla`, `Double Ahaat Melisma Bridge`, and `Rubato Closing Qafla`).
-  - Dynamic **3-to-5 Movement Maqam Modulation** (`Bayati-Shuri & Sikah` for Munajat/longing -> `Hijaz` for ascending supplication -> `Saba` for tragic peak -> `Lami` for estrangement/captivity -> `Rast & Kurd/Nahawand` for epic & reflective elegies).
-  - **Syllable-to-Tempo & Chest-Slap Physics**: Matches hemistich syllable count to exact BPM (`0 BPM Rubato`, `54–58 BPM` heartbeat Munajat, `60–66 BPM` classic Thaqeel/Nassari, `68–78 BPM` Keadia/Muwashah, `76–84 BPM` Zanjeel, `108–145 BPM` Bandari & Shoor).
-- **23 Legendary Compositional Archetypes (`Sections 10, 11 & 12`)**:
-  - **Trilogy of `وجود لوجودي` (1428 AH)**: `أين أنت يا جابر` (2-Movement Karbalai Musabba' with Internal Melodic Gireez), `أم البنين` (Bahrani Fayzi Quatrain `AAAB` fused with heavy Latm), and `وجود لوجودي` (Bilingual Fusha-Colloquial Alternating Muwashah with identical philosophical 4th-line anchor).
-  - **Heptad of `قل ما تشاء` (1432 AH)**: `حلم مذبوح` (3-Act Dramatic Narrative on `-يتي`), `أقول اسمك` (Pentastich + Couplet Lock & interjected choral call), `علامات الحزن` (Double-Word Echo Cadence), `ألم وعتاب` (Internal Double-Rhyme Syncopation & Question Refrain), `يا حبيبي يا حسين` (Compact 3:32 Fusha Chant), `يا أكبر جبل` (Youth Farewell Triplets), and `لسان الوحي` (Classical `Bahr Al-Wafir` Fatimiya-Ashura Epic).
-  - **13 Multi-Million-View Contemporary & Heritage Masterpieces**: Works by Sayed Salam Al-Husseini (`الذكريات`, `مو انه يا حزن`, `سلام وعن بعد`, `بندرية عرس بارض الطفوف`), Basim Al-Karbalaei (`إن شاء الله`, `شاب وطفل`, `أوتار التكبير`, `بعيونك حزن ينشاف`), Sayed Essam Al-Hashemi (`نوح الراعبية — دمع ودمه وجروح`), Sheikh Hussain Al-Akraf (`صلاة الليل`), Madeen Al-Ayashi (`يمه اكعديلي`), Abbas Ajeed Al-Amiri (`مشهد حلم`), and Hussain Khairuddin (`في درب فاطمة`).
-- **Poetic Composition (`MODE M` & `MODE C` Blueprint — Constitution V5.5)**:
-  - Authored poetry across forms including `Bahr Al-Nassari`, `Muwashah`, `Fayzi`, `Tajleeb`, `Abudhiyah`, and `Mawal`.
-  - **4-Line Stanza Lock (`Rule B2`)** & **Identical 4th-Line Anchor Refrain (`Rule B4`)** to lock AI audio engines into unforgettable recurring melodic cadences instead of prose reading.
-  - **Register Arc (`Rule B3`)**: `Qarar (Mustahal)` -> `Mayan / Jawab (Verse 1)` -> `Jawab-al-Jawab + Saba Peak (Verse 2)` -> `Qarar + Iraqi Wanna (Final Qafla)`.
-- **Creative Maqam Fusion (`Module 31` — 24-EDO Microtonal System)**:
-  - **مقام الانكسار الفايزي (`Faizi Inflection`)**: Lower `Bayati` + Upper `Saba` (pivot at 4th degree) for classic Iraqi-Bahrani fusion.
-  - **مقام الجلال الكربلائي (`Karbalai Majesty`)**: Lower `Hijaz` + Upper `Rast` (pivot at 5th degree).
-  - **مقام اللوعة المركبة (`Compound Grief`)**: Lower `Saba` + Upper `Kurd` (pivot at 4th degree).
-  - **مقام الشوق الهزامي (`Hizami Longing`)**: Lower `Sikah` + Upper `Hijaz`, resolving to `Bayati`.
-- **Throat Mastery & Melodic-Phonetic Lock (`Module 33 & 34`)**:
-  - Enforces golden-throated `Jawhari` vocal delivery (`إخراج اللحن من الحنجرة`), sorrowful vowel elongations (`مدات صوتية`), guttural microtonal articulations (`تقاطيع حنجرية`), Bahrani `Tarjee'`, and Iraqi `Wanna`.
-  - Platform-specific rules for **Google Flow Music (`Lyria 3.5`)**: 100% pure Arabic `Lyrics` block (zero Latin tags) and positive-only `100% Acapella Studio Mix` in `Sound description`.
-- **Encyclopedia of 13+ Radoods & 8 Minbar Khutaba**:
-  - Detailed acoustic, melodic, Maqam, and DSP engineering profiles for Iraqi, Bahrani, Ahsa/Gulf, Ahwazi, Bandari, and Iranian mourning schools.
-- **Audio Montage & DSP Processing (`scripts/hussaini_dsp_montage.py`)**:
-  - Executable DSP script for processing raw voice recordings with dual-layer Chest-Latm (`55Hz thud + 4kHz smack + 110Hz/220Hz harmonics`), Dammam, Zanjeel, wide-stereo Ahaat pads (`-4dB sidechain ducking`), Dynacord echo, and Husseiniya spatial reverb.
+---
+
+## ثانياً: تعليمات الاستخدام العملية (How to Use This Skill)
+
+تعمل المهارة تلقائياً بمجرد طلبك كتابة أو تلحين أو إنتاج قصيدة حسينية، أو مونتاج تسجيل صوتي. للحصول على أفضل نتيجة احترافية، اتبع الأنماط الخمسة التالية:
+
+---
+
+### السيناريو 1: تلحين وإنتاج قصيدة جاهزة لديك (على أوزانها ومقاماتها المناسبة)
+عندما تكون لديك قصيدة مكتوبة وتريد تحويلها إلى لطمية أو نعي أو مناجاة متقنة اللحن والمقام والإيقاع:
+
+**مثال للأمر (Prompt) الذي تكتبه للوكيل:**
+> «إليك هذه القصيدة الحسينية، طبّق ما تعلمته في مهارة `hussaini-production-studio` لتشريح أوزانها وتعدد حركاتها، واختيار الرحلة المقامية والطور الرثائي الحزين والإخراج الهندسي المناسب لكلماتها، ثم أنتجها في مساحة جديدة على `https://www.flowmusic.app/library/spaces` عبر `/browser`»
+
+**ما الذي ستقوم به المهارة تلقائياً؟**
+1. **تشريح البنية العروضية (`Polymetric Mapping`):** تفصل بين حركة المستهل، والأبيات السردية الطويلة، والرباعيات القصيرة (النزلة/الموشح)، وقفلة النداء المرسلة (`Rubato`).
+2. **تصميم الرحلة المقامية (`Multi-Maqam Journey`):** تختار المقام الأنسب لكل مقطع (مثلاً: **البياتي الشوري والسيكاه** للمناجاة ⟵ **الحجاز** للاستغاثة والأشطر الطويلة ⟵ **الصبا** لذروة الفاجعة ⟵ **اللامي** لقفلة الغربة والدمعة).
+3. **ضبط الإيقاع واللطم على الصدر فقط (`Pure Chest-Slap Latm`):** تضبط سرعة الـ `BPM` حسب عدد تفعيلات الشطر (`56–60 BPM` للثقيل والمناجاة، `68–76 BPM` للموشح والگعدية، `0 BPM` للنعي والموال) مع حظر أي آلات موسيقية.
+4. **التشكيل الفونيمي الكامل (`Tashkeel & Pause Syntax`):** تضبط الكلمات بالتشكيل الكامل والوقفات التنفسية (`..`) والمدّات الحنجرية (`آآآه ..`) وتزيل أي حروف لاتينية من مربع الكلمات.
+
+---
+
+### السيناريو 2: التأليف والتلحين على إحدى المدارس الـ 23 الأسطورية
+يمكنك طلب تأليف قصيدة جديدة أو صياغة قصيدتك على هندسة إحدى الروائع الـ 23 الموثقة في المهارة:
+
+| رقم المدرسة | اسم المدرسة والنموذج المرجعي | متى تطلبها؟ |
+| :-: | :--- | :--- |
+| **1** | **مدرسة «أين أنت يا جابر»** *(المسبّع الكربلائي ذو الگريز الداخلي)* | عندما تريد قصيدة كربلائية تبدأ بسرد متمهل ثم تقفز في 3 أشطر قصيرة متلاحقة القوافي قبل الهبوط لرويّ المستهل |
+| **2** | **مدرسة «أم البنين»** *(المربوع البحراني الفايزي المدمج باللطم)* | عندما تريد دمج مدّات النعي البحراني الفايزي (`AAAB`) مع لطمة الصدر الثقيلة |
+| **3** | **مدرسة «وجود لوجودي»** *(الموشح الثنائي اللغة: فصيح + شعبي)* | عندما تريد التناوب بين المستهل الفصيح والرباعية الشعبية العراقية مع قفل الشطر الرابع الموحد |
+| **4** | **مدرسة «حلم مذبوح»** *(السرد المسرحي ذو الفصول الثلاثة على رويّ `-يتي`)* | لقصائد الحوار والعتاب الطويل مع السيدة زينب (ع) والكفيل (ع) |
+| **5** | **مدرسة «أقول اسمك»** *(المخمّس الوجداني + بيت القفل والنداء الاعتراضي)* | لقصائد العشق الحسيني والشوق الوجداني |
+| **6** | **مدرسة «علامات الحزن»** *(التصعيد التراجيدي وتضعيف الكلمة الأخيرة)* | لقصائد السيدة رقية (ع) والأيتام مع تكرار الكلمة الأخيرة (`يا يوم يا يوم` / `يعباس يعباس`) |
+| **7** | **مدرسة «ألم وعتاب»** *(ازدواج القافية الداخلية واللازمة السؤالية)* | لقصائد اللهفة والركض نحو الشريعة مع سؤال ختامي ثابت في كل دور |
+| **8** | **مدرسة «يا حبيبي يا حسين»** *(التوشيح الفصيح القصير 3:32 دقائق)* | لتوليد قصيدة فصيحة قصيرة كاملة بتناوب سريع بين الرادود والكورال |
+| **9** | **مدرسة «يا أكبر جبل»** *(ثلاثيات وداع الشباب `AAB CCCB`)* | لوداع علي الأكبر (ع) والقاسم (ع) |
+| **10** | **مدرسة «لسان الوحي»** *(الملحمة الفصيحة على بحر الوافر التام)* | للقصائد العمودية الفصيحة العقائدية والفاطمية الكبرى |
+| **11–14** | **مدارس السيد سلام الحسيني** *(«الذكريات»، «مو انه يا حزن»، «سلام وعن بعد»، «بندرية عرس بارض الطفوف»)* | للمجالس ذات الحركات الخمس المتدرجة، والمونولوج الطفولي، والبندرية الحماسية-الرثائية (`6/8`) |
+| **15–18** | **مدارس باسم الكربلائي الحديثة** *(«إن شاء الله»، «شاب وطفل»، «أوتار التكبير»، «بعيونك حزن ينشاف»)* | للمفارقة الدرامية مع الكلمة المعلقة، وحوار الأجيال، والثلاثيات المقطّعة مع ثنائية `آه` الثابتة |
+| **19–20** | **المدرسة البحرانية الكبرى** *(«نوح الراعبية» للسيد عصام الهاشمي، و«صلاة الليل» للشيخ حسين الأكرف)* | للعزاء البحراني التراثي المدمج (مخمّس + نزلة 16 شطراً)، أو التوشيح الأكاديمي ذي الحركات الخمس |
+| **21–23** | **مدرسة الفرات الأوسط والشوق الرضوي والنشيد المقاوم** *(«يمه اكعديلي»، «مشهد حلم»، «في درب فاطمة»)* | للنعي اللطمي الفراتي الدافئ، أو جسر الـ `آآآه …` المزدوج في جواب الصبا، أو النشيد اللطمي المقاوم الفصيح |
+
+**مثال للأمر (Prompt):**
+> «ألّف ولحّن لي لطمية جديدة في رثاء أبي الفضل العباس (ع) مبنية على دمج هندسة مدرسة "أوتار التكبير" ومدرسة "ألم وعتاب" و"مشهد حلم"، ثم أنتجها في Flow Music»
+
+---
+
+### السيناريو 3: التوليد المباشر داخل Google Flow Music (`https://www.flowmusic.app/`)
+عند استخدام `/browser` للتوليد في منصة **Google Flow Music**:
+1. **افتح دائماً مساحة محادثة جديدة (`New Space`)** من الرابط:
+   `https://www.flowmusic.app/library/spaces`
+   وذلك لضمان سياق نقي غير متأثر ببذور (`Seeds`) أو مقاطع سابقة.
+2. **استخدم وكيل المحادثة الأيسر (`Producer Chat Agent`)** بدلاً من الاكتفاء بالنموذج اليدوي الأيمن، لأنه يتيح:
+   - تسجيل الكلمات المشكّلة عبر `lyrics__register` وتوليد العمل عبر `audio__create_song`.
+   - تمديد الخاتمة الرثائية المتباطئة (`60s Extended Outro` تتباطأ من `60 BPM` إلى `48 BPM` مع ريفيرب حسينية `3.2s`) عبر `audio__plan_edit` + `audio__render_edit`.
+   - فصل المسارات الصوتية (`Vocals` و`Instrumental` لطم الصدر) عبر `audio__split_stems`.
+   - تطبيق الفلاتر الهندسية (`HighPass 85Hz` ⟵ `AdvancedEqualizer` ⟵ `Compressor` ⟵ `Reverb` ⟵ `Limiter`) عبر `audio__apply_effect`.
+
+---
+
+### السيناريو 4: المونتاج والهندسة الصوتية لتسجيل صوتي خام بصوتك (`Audio DSP Montage`)
+إذا كان لديك تسجيل صوتي خام بصوتك (أو بصوت رادود/خطيب) بصيغة `.ogg` أو `.wav` أو `.mp3` وتريد إضافة لطم صدر بشري، أو دمام، أو زنجيل، أو آهات، أو صدى دايناكورد وريفيرب حسينية:
+
+**1. عبر إرفاق الملف الصوتي في المحادثة:**
+أرفق ملفك الصوتي واكتب:
+> «أرفقتُ لك تسجيلي الصوتي لهذه القصيدة، طبّق عليه مونتاجاً صوتياً حسينياً احترافياً (لطمة صدر بشرية `55Hz`، صدى دايناكورد `285ms`، وريفيرب حسينية `3.2s` مع موازنة الصوت) وأعطني ملف الـ WAV الجاهز»
+
+**2. عبر تشغيل سكربت الهندسة الصوتية المدمج مباشرة من سطر الأوامر:**
+```bash
+python3 scripts/hussaini_dsp_montage.py \
+  --input "raw_voice.wav" \
+  --output "mastered_latmiya.wav" \
+  --mode "latm" \
+  --bpm 60 \
+  --maqam-drone "saba"
+```
+- **الأطوار المدعومة في `--mode`:**
+  - `latm`: لطمة صدر بشرية مزدوجة الطبقات (`55Hz thud + 4kHz skin smack + 110Hz harmonics`) + دايناكورد + ريفيرب حسينية.
+  - `zanjeel_iraqi`: زنجيل عراقي مسير (`76–84 BPM`) مع دمام وسلاسل حديدية ستيريو.
+  - `zanjeel_bahrani`: زنجيل بحراني ثلاثي الضربات (`boom... boom... boom` + طاسة).
+  - `shoor`: شور حسيني سريع (`125–145 BPM`) مع ذكر منخفض التردد (`حُسَيْنْ.. حُسَيْنْ`).
+  - `bandari`: إيقاع بندري (`6/8`) متسارع.
+  - `mawal` / `nai`: معالجة منبرية حرة (`0 BPM Rubato`) بصدى كاتدرائي (`3.8s`) ودايناكورد (`480ms`).
+
+---
+
+### السيناريو 5: محاكاة مدارس الرواديد والخطباء أخلاقياً (`13+ Radoods & 8 Khutaba`)
+يمكنك طلب صياغة اللحن والمقام والتوزيع الصوتي على مدرسة أيٍّ من الرواديد أو الخطباء الموثقين في `references/radoods_and_khutaba_encyclopedia.md` (دون استنساخ غير أخلاقي للبصمة الشخصية، بل بترجمة مدرستهم إلى واصفات مقامية ولحنية وهندسية دقيقة):
+- **الرواديد:** الحاج باسم الكربلائي، الشيخ حسين الأكرف، السيد سلام الحسيني، الحاج عمار الكناني، الملا محمد باقر الخاقاني، السيد عصام الهاشمي، السيد هاني الوداعي، الرادود صالح الدرازي، الملا محمد بوجبارة، الرادود مدين العياشي، أمير المحياوي، نوح المحمداوي، أمجد الشغانبي، عباس عجيد العامري، حسين خير الدين.
+- **خطباء المنبر الحسيني في النعي:** الشيخ عبد الوهاب الكاشي، الدكتور أحمد الوائلي، السيد جاسم الطويرجاوي، الشيخ عبد الحي قمبر، الشيخ زمان الحسناوي، السيد نصرات قشاقش، الشيخ حيدر المولى، الشيخ زمان العقابي.
+
+---
+
+## ثالثاً: القواعد الذهبية العشر لضمان أعلى جودة إنتاج (`10 Golden Rules`)
+
+1. **لا للاستنساخ الحرفي (`Zero Blind Cloning`):** لا تنسخ برومبت أو بذرة (`Seed`) قصيدة سابقة على قصيدة جديدة مختلفة الوزن والموضوع؛ بل فصّل لكل قصيدة رحلتها المقامية وسرعتها الإيقاعية الخاصة.
+2. **اللطمة البشرية الخالصة والابتعاد عن الموسيقى (`100% Non-Musical Pure Chest-Slap`):** في اللطميات المنبرية، اعتمد حصرياً على الصوت البشري ولطمة الكف على الصدر (`55Hz bare-palm chest thud`)، ولا تكتب أسماء آلات موسيقية (`piano, guitar, synth`) حتى في صيغة النفي داخل مربع `Sound description` في Flow Music.
+3. **صفر حروف إنجليزية في مربع الكلمات (`Zero English in Lyrics Box`):** اكتب الكلمات والوسوم بالعربية الصرفة فقط، أو بدون أقواس معقوفة نهائياً.
+4. **حذف النقاط الثلاث المتتالية (`...`) والتنوين الفصيح (`ٌ / ٍ`):** لأنها تدفع المحرك لقراءة القصيدة قراءة إلقائية جافة بدلاً من إنشادها بلحن شجي؛ واستخدم بدلاً منها نقطتين (`..`) للوقفة التنفسية الوسطية والوقف بالسكون في أواخر الأشطر.
+5. **تثبيت الشطر الرابع أو اللازمة الختامية (`Identical Anchor Refrain`):** اجعل نهاية كل دور تعود إلى نفس الشطر الرابط أو اللازمة الموحدة ليحفظ المحرك والمستمع قرار اللحن.
+6. **قوس الطبقات الصوتية (`Qarar ⟵ Mayan ⟵ Jawab ⟵ Wanna`):** ابدأ المستهل في طبقة القرار الدافئة، واصعد تدريجياً في الأبيات إلى الجواب، ثم اختم كل دور بالانكسار والونة الحسينية.
+7. **إدخال جسر الـ `آآآه ..` الحنجري قبل مقاطع الذروة:** لإجبار المحرك على إخراج المدّات الصوتية الحنجرية الباكية في مقام الصبا والحجاز.
+8. **التشكيل الفونيمي الكامل (`Full Arabic Tashkeel`):** شكّل جميع الحروف، وخاصة حروف المدّ والحروف الحلقية (`ع، ح، خ، غ، ق`) والمفردات الشعبية (`گ، چ`).
+9. **تخصيص الفضاء الصوتي (`Bespoke DSP Space`):** استخدم دايناكورد ناعماً (`260ms, 22% feedback`) وريفيرب حجرة (`2.8s`) في قصائد المناجاة والعتاب، ودايناكورد كلاسيكياً (`285ms`) وريفيرب قاعة حسينية واسعة (`3.2–3.5s`) في قصائد الفاجعة العاشورائية.
+10. **فتح مساحة جديدة (`New Space`) لكل مشروع مستقل في Flow Music:** لضمان نقاء البصمة اللحنية وعدم تداخل الجلسات.
+
+---
+
+## رابعاً: هيكل ملفات المهارة (Repository Structure)
+
+```text
+hussaini-production-studio/
+├── SKILL.md                                         # ملف التعليمات الرئيسي وسير العمل (Workflows 1, 1.5, 2, 3 & Gotchas)
+├── README.md                                        # دليل وتعليمات الاستخدام الشاملة (هذا الملف)
+├── references/
+│   ├── atwar_maqamat_and_poetry_guide.md            # الموسوعة الكاملة (الأقسام 1–12: المقامات، الأطوار، دستور البرومبت، والمدارس الـ 23 الأسطورية)
+│   └── radoods_and_khutaba_encyclopedia.md          # موسوعة الخصائص الفنية والهندسية لـ 13+ رادوداً و8 من كبار خطباء المنبر
+└── scripts/
+    └── hussaini_dsp_montage.py                      # سكربت المونتاج والهندسة الصوتية (لطم، دمام، زنجيل، آهات، دايناكورد، ريفيرب)
+```
