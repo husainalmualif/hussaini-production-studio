@@ -32,7 +32,7 @@
   - `شاب وطفل` (`RhQdSDt1-mg` — مع علي باسم الكربلائي — الشاعر حمزة السماوي): حوار الأجيال الثنائي واعتذار الشهداء الأربعة من الحسين (ع) مع قفلة النداء الساكن `يا حسين`.
   - `بعيونك حزن ينشاف` (`bnuiKoJigFA` — السيد عبد الخالق المحنة): رثاء تشييع النعش العلوي (6 أشطر سردية في الصبا ⟵ 3 أشطر مدح صاعدة للجواب ⟵ بيت قفل يعود لخطاب العينين).
 - **الهندسة الصوتية:** تُبنى على توزيع "كورال" (مجموعات صوتية) ضخم ومحترف، واستخدام فلاتر الصدى (`Delay`) والـ (`Reverb`) الاستوديوية العميقة التي تمنح القصيدة بعداً ملحمياً، مع توازن دقيق بين صوت الرادود وصوت اللطم والمؤثرات البشرية الحزينة دون فوضى.
-- **الواصف الهندسي للبرومت:** `Grand Karbalai modernist school, agile 4-octave golden-throated baritone-tenor vocalist, complex multi-Maqam melodic composition (Bayati, Sikah, Kurd, Nahawand, Hijaz, Rast, Saba), innovative soaring Jawab and Jawab-al-Jawab cadences, rich Jawhari vocal articulations (taqatee' sawtiya), lush professional studio male choir harmonies, deep studio Reverb and analog Delay, balanced somatic chest-latm`.
+- **الواصف الهندسي للبرومت:** `Grand Karbalai modernist school, commanding thick resonant 4-octave Jawhari Baritone vocalist with immense chest power and powerful soaring high Jawab and Jawab-al-Jawab registers, complex multi-Maqam melodic composition (Bayati, Sikah, Kurd, Nahawand, Hijaz, Rast, Saba), rich Jawhari vocal articulations (taqatee' sawtiya), natural warm laryngeal vocal rasp (bahha), lush professional studio male choir harmonies, deep studio Reverb and analog Delay, balanced somatic chest-latm`.
 
 ### 2. الشيخ حسين الأكرف (مدرسة الوعي واللحن الأكاديمي والتوشيح البحراني)
 - **الأسلوب:** أسلوب رسالي، خطابي، وتوعوي؛ يركز على النص الفكري والثوري ويمتاز بالأداء الهادئ والعميق الذي يخاطب الوجدان.
@@ -82,13 +82,13 @@
 - **الأسلوب:** يمثل المدرسة الخليجية الحديثة بتأثر واضح بالمدرسة العراقية؛ يمتاز بالدقة والنبرة الصوتية الحادة والنقية والقدرة على أداء القصائد الطويلة والملحمية.
 - **اللحن واستخدام المقامات:** ألحانه مبتكرة ومستوحاة من التراث الخليجي والعراقي معاً؛ يبرز في استخدام مقامات **الحجاز، النهاوند، والكرد، والبيات**، ويتميز بالانتقال السريع والمنظم بين الأطوار.
 - **الهندسة الصوتية:** هندسة استوديو فائقة الدقة (`High-Fidelity`)، حيث يتم استخدام الكورال الموزع على طبقات صوتية بشرية متعددة (باس، باريتون، تينور)، ومؤثرات صوتية محيطية تمنح القصيدة طابعاً سينمائياً.
-- **الواصف الهندسي للبرومت:** `High-Fidelity Ahsa-Gulf epic school, crystal-clear articulate tenor-baritone vocalist, rapid and structured multi-Tor transitions across Maqam Hijaz, Nahawand, Kurd, and Bayati, multi-layered human vocal choir harmonies, cinematic spatial studio reverb`.
+- **الواصف الهندسي للبرومت:** `High-Fidelity Ahsa-Gulf epic school, crystal-clear articulate resonant Jawhari Baritone vocalist with soaring high Jawab registers, rapid and structured multi-Tor transitions across Maqam Hijaz, Nahawand, Kurd, and Bayati, multi-layered human vocal choir harmonies, cinematic spatial studio reverb`.
 
 ### 9. الرادود صالح الدرازي (عملاق المدرسة البحرانية الملحمية الأصيلة)
 - **الأسلوب:** مدرسة قائمة بذاتها في العزاء البحراني؛ يمتاز بالأسلوب الملحمي الحماسي، والقدرة الفائقة على قيادة المواكب الضخمة وتوجيه الجمهور صوتاً وحركة.
 - **اللحن واستخدام المقامات:** ألحانه تراثية، حماسية وثقيلة تعتمد على الموروث البحراني (الغريد واللطم الكلاسيكي)؛ يوظف مقامات **الحجاز، الرست، والبيات**، ويمتاز بالطبقات الصوتية العالية جداً (الجوابات القوية الموزونة).
 - **الهندسة الصوتية:** تركز الهندسة على تضخيم صوت "الرداديين" (الجمهور) وصوت اللطمة البحرانية الشهيرة (اللطمة الحيدرية الثقيلة)، مع إبقاء صوت الرادود في المقدمة بوضوح ونقاء ودون فلاتر تشويه.
-- **الواصف الهندسي للبرومت:** `Epic Bahrani Mawkib heritage school, commanding baritone-tenor with powerful soaring Jawab registers, classic Bahrani Ghareed and heavy Haidari chest-latm in Maqam Hijaz, Rast, and Bayati, clean Distortion-free lead vocal in foreground with massive unison crowd Raddada`.
+- **الواصف الهندسي للبرومت:** `Epic Bahrani Mawkib heritage school, commanding thick resonant Jawhari Baritone with immense chest power and powerful soaring Jawab and Jawab-al-Jawab registers, classic Bahrani Ghareed and heavy Haidari chest-latm in Maqam Hijaz, Rast, and Bayati, clean Distortion-free lead vocal in foreground with massive unison crowd Raddada`.
 
 ### 10. السيد هاني الوداعي والسيد عصام الهاشمي وحسين خير الدين (المدرسة البحرانية التراثية-الروحانية ومدرسة النشيد اللطمي المقاوم)
 - **الأسلوب:** يجمع السيد عصام الهاشمي والسيد هاني الوداعي بين الأصالة البحرانية التراثية (أطوار العاشوري والراعبية والنزلة البحرانية) وبين الأداء الروحاني الشجي، بينما يمثل حسين خير الدين مدرسة النشيد اللطمي الفصيح المقاوم (شبكة سماوات).
@@ -111,3 +111,16 @@
 6. **السيد نصرات قشاقش (رثاء جبل عامل والتصعيد الدرامي الفاجع):** `Dramatic Jabal Amel and Iraqi fusion Na'i style, high-intensity emotional build-up in Maqam Saba and Hijaz, theatrical sacred pauses, audible weeping inhales, and soaring lamentation peaks`.
 7. **الشيخ حيدر المولى (النعي الإنشادي الشجي والحزن الرخيم):** `Lyrical and resonant Iraqi Minbar Na'i style, smooth vocal control blending traditional lamentation with melodic Muwashah phrasing in Maqam Bayati, Kurd, and Saba`.
 8. **الشيخ زمان العقابي (الشجن الجنوبي الريفي والأبوذية المفجوعة):** `Deep Southern Iraqi rural Na'i school (Tor Fartousi), husky throat resonance, raw emotional delivery of colloquial Abudhiyah and Darmi in Maqam Lami and Saba`.
+
+---
+
+## ثالثاً: مصفوفة الطبقات والخامات الصوتية الجوهرية السبعة وقفل فخامة الصوت (7 Essential Vocal Timbres & Jawhari Baritone Lock)
+
+- **القاعدة الحاسمة لمنع نعومة الصوت:** لا تستخدم كلمة **`tenor`** (أو `baritone-tenor`) عند الرغبة في صوت منبري فخم وجهوري، لأنها تدفع المحرك نحو الخامات الخفيفة والناعمة؛ واستخدم بدلاً منها أحد الواصفات السبعة التالية:
+  1. **الباريتون الجوهري الفخم ذو الجوابات الصاعدة (`Commanding Thick Resonant Jawhari Baritone + Powerful Soaring Jawab & Jawab-al-Jawab` — دمج باسم الكربلائي في الجوابات العالية + عمار الكناني + صالح الدرازي):** `commanding thick resonant Jawhari Baritone lead vocalist with immense chest power and powerful soaring high Jawab and Jawab-al-Jawab registers, rich masculine vocal timbre, natural warm laryngeal vocal rasp (bahha), emotional weep cracks, long powerful sorrowful vowel stretches (maddat sawtiya), trembling Bahrani Faizi tarjee' and deep Iraqi Wanna cadences, Mid presence +4.5dB at 2.5kHz, HPF at 85Hz`.
+  2. **الباريتون المنبري الرخيم ذو البحة العراقية الشجية (`Deep Velvet Minbari Baritone with Warm Laryngeal Bahha` — الطويرجاوي، حمزة الزغير، العلوي، مرتضى حرب):** `deep velvet Minbari Baritone with heavy mournful chest authority, high laryngeal friction (bahha), tear-soaked weep cracks, and deep Iraqi Wanna cadences`.
+  3. **الباص-باريتون الملحمي الحماسي المجلجل (`Thunderous Heroic Bass-Baritone` — قحطان البديري، حيدر البياتي، مهدي رسولي):** `thunderous heroic Bass-Baritone with massive sub-harmonic chest weight (80Hz-180Hz) and commanding military epic projection`.
+  4. **الحنجرة البحرانية التوشيحية العريضة ذات الترجيع والمدّات (`Wide Majestic Bahrani Tawshih & Faizi Jawhari Voice` — الأكرف، الهاشمي، الدرازي):** `wide majestic Bahrani Tawshih and Faizi Jawhari Baritone voice, long powerful vowel stretches (maddat sawtiya), trembling Bahrani Faizi tarjee', and soaring Hijaz/Saba climaxes`.
+  5. **الحنجرة الفراتية الشجية المخنوقة بالعَبرة (`Weeping Euphrates Lami/Saba Larynx` — مدين العياشي، عباس عجيد العامري، داخل حسن):** `raw exhausted weeping Euphrates Lami/Saba Baritone larynx with natural weep cracks (kasrat al-buka') and prolonged high Saba Aaah melismas`.
+  6. **الصوت الصدري الجبلي الصاعد (`High-Power Chest-Belted Dramatic Jawab` — سيد سلام الحسيني، مسلم الوائلي، جليل الكربلائي):** `high-power full-chest belted dramatic Jawab vocalist with intense laryngeal grit cutting through dense congregation (+4.5dB at 2.5kHz)`.
+  7. **الكورال الحسيني المهيب (`Massive Wide-Stereo Unison Male Raddada Choir`):** `massive wide-stereo unison male Raddada congregation choir (80% pan, 15-35ms human timing jitter, -4dB sidechain ducking)`.
