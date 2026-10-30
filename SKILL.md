@@ -164,6 +164,9 @@ python3 hussaini_dsp_montage.py \
 
 ## Gotchas
 
+- **Google Flow Music Architecture (`New session` vs. `Spaces`)**:
+  - **`New session` (`+ New session` / جلسة جديدة — The Direct Generative Audio Studio)**: Always use **`New session`** for generating, editing, remixing, or extending poems, Latmiyat, Mawals, and audio clips (`Lyrics` box + `Sound` prompt + `AI Producer` chat + `Remix/Extend` + `MP3/WAV/Stems` export). It gives full control over melodic structure, Maqam transitions, arrangement, choral refrains, and acoustic effects.
+  - **`Spaces` (`/library/spaces` — المساحات البرمجية والتفاعلية)**: Never use `Spaces` for direct song/Latmiya audio generation. Use `Spaces` **only** when the user explicitly wants to build a custom interactive web tool or mini-application (`App/Tool` via Vibe-coding inside the browser), such as a custom rhythm distributor, interactive Husseini chest-latm / drum pad matrix, or custom audio filter interface to assist in future sessions.
 - **Gold-Standard Flow Music Multi-Stage Pipeline & Acoustic Case Studies (`Producer Chat` vs. Manual `Compose`)**:
   0. **How to Study Reference Clips Without Blind Cloning (`الاستلهام الهندسي والمقامي مقابل الاستنساخ`)**:
      - **CRITICAL**: Do NOT copy-paste a reference track's `sound_prompt`, `seed`, or `source_clip_ids` verbatim onto a new poem with a different meter or theme! Instead, synthesize custom `sound_prompt` and prosodic structures using **Workflow 1.5** (`Multi-Maqam modulation`, `Syllable-to-BPM matching`, and `Bespoke DSP`).
