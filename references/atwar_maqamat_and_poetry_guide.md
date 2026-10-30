@@ -77,224 +77,165 @@
 
 ---
 
-## 4. القفل الصوتي-اللحني ودرع اللهجة (Modules 33 & 34: Melodic-Phonetic & Dialect Lock)
+## 4. القفل الصوتي-اللحني ودرع اللهجة وقاموس الإملاء الصوتي (Modules 33, 34 & 35)
 
 ### أ. القفل الصوتي-اللحني (Module 33: Melodic-Phonetic Lock)
-يُدرج هذا التوجيه الهندسي في وصف الصوت (`Sound description`) لضمان خروج المدات والتقاطيع من الحنجرة بانسيابية دون تقطيع آلي:
-> `"Melodic-Phonetic Lock: When a syllable is held over a long note or melisma (maddat sawtiya and oroub), preserve its exact open vowel quality without drifting, and treat multi-note throat passages on one syllable as a SINGLE fluid phonetic unit — do not re-articulate the consonant with each note change. Melodic peaks (highest pitch, longest elongation, and Bahrani tarjee' / Iraqi wanna ornament onset) must align naturally with the emotional stress syllable of each word."`
+عند تمديد حروف المدّ على الجمل النغمية، يجب الحفاظ على صفاء حركة المدّ (`ا، و، ي`) كوحدة صوتية متصلة دون إعادة نطق الحرف الساكن مع كل تغير في الطبقة النغمية، مع مطابقة ذروة الصعود الصوتي مع الكلمة الأكثر لوعة في الشطر.
 
-### ب. درع التزام اللهجة ومنع الإلقاء النثري (Module 34 & Flow Music Adaptation)
-1. **تجنب مفردات الإلقاء الجاف**: يُمنع كتابة `reciter`, `spoken`, `recitation`, `poem reading` في `Sound description`، ويُستبدل بها دائماً: `"colloquial spoken-dialect melodic singing and soulful Maqam chanting (100% sung musical melody with rich throat-driven pitch contours, never dry spoken reading)"`.
-2. **تجنب التنوين الفصيح والنقاط المتتابعة في القصائد اللحنّية**:
-   - في مربع `Lyrics`، لا تضع `...` في نهاية كل شطر، ولا تستخدم تنوين الضم أو الكسر الفصيح (`مَحْرُوقَةٌ، طِفْلَةٌ`) في اللطميات لأن ذلك يحول النموذج إلى قارئ نصوص إخبارية أو شعر فصيح جامد.
-   - افتح أواخر الكلمات بحروف مد طويلة (`ـا، ـي، ـو، ـه`) تمنح الحنجرة مساحة للمد والترجيع.
-3. **الاستهلال الصوتي الملحن (`Vocal Melisma Anchor`)**:
-   - افتتح كل مقطع بسطر آهات ومدات حنجرية عربية صريحة مثل: `آه يَا حُسَيْنَا... آه يَا مَظْلُومْ` لربط المحرك الصوتي بالغناء المقامي منذ الثانية الأولى.
+### ب. درع التزام اللهجة والإملاء العروضي الصوتي ومنع الكليشيهات (Module 34: Dialect Commitment Lock & Dynamic Opening)
+1. **Dialect Commitment Lock & Phonetic Orthography (`قفل اللهجة الإملائي الصوتي ومنع الخلط اللغوي`)**:
+   - **Zero Fusha-Colloquial Mixing in Root Tracks**: يُمنع خلط أبيات فصحى أو لوازم فصحى داخل لطمية شعبية عراقية أو بحرانية في مرحلة التوليد التأسيسي (`Stage 1`)؛ يجب أن تنتمي كل كلمة في القصيدة الشعبية إلى المعجم المحكي العراقي/البحراني الأصيل.
+   - **Strict Phonetic Colloquial Spelling (`الكتابة العروضية الصوتية باللهجة الدارجة`)**: في منصة Flow Music (حيث تُمنع الوسوم الإنجليزية داخل `Lyrics`)، يتم فرض النطق العراقي والبحراني حصرياً عبر الإملاء الصوتي العربي والتشكيل الدقيق:
+     1. اكتب الكلمات الدارجة تماماً كما ينطقها الرادود على المنبر (`شْلُونْ، چَبِدْ، گَلِبْ، عْيُونِچْ، بْچِيتْ، مْحَنِّيَه، وْگَفِتْ، يِمَّه، خُويَه، بْلَيَّاكْ، مَا ظَلْ`).
+     2. **Mandatory End-of-Word Sukun (`الوقف بالسكون الصارم`)**: ضع دائماً سكوناً (`ْ`) أو حرف مدّ مفتوح (`ا، و، ي، ه`) في أواخر الكلمات والأشطر. يُمنع منعاً باتاً وضع حركات إعراب فصيحة (ضمة `ُ` أو كسرة `ِ` أو تنوين `ٌ / ٍ` في أواخر الكلمات) داخل الشعر الشعبي لأنها تحوّل نطق المحرك فوراً إلى لهجة مذيع أخبار بالفصحى.
+2. **Dynamic Poem-Specific Opening (`منع الكليشيهات الجاهزة في المستهل`)**:
+   - **NEVER** hardcode or repeat generic opening sighs such as `آآآه يَا حُسَيْنَا .. آآآه يَا مَظْلُومْ` across poems.
+   - ادخل مباشرة في الشطر الأول للمستهل، مع الحرص على أن تتضمن الكلمات الافتتاحية حروف مدّ طبيعية (`ا، و، ي`) نابعة من موضوع القصيدة ولهجتها الخاصة (مثل: `يَا طَارِشْ الظَّعَنْ بْاللّٰه ..`، `بْاللّٰه اسْتَعِدِّي يَمّ البَنِينْ ..`، `عَلَى رَمْلِ الطَّفْ عْيُونِي تِرْعَاكْ ..`).
+
+### ج. قاموس التحويل الإملائي الصوتي للهجات المنبرية (Module 35: Colloquial Phonetic Orthography Dictionary)
+عند إعداد النص لخانة `Lyrics`، حوّل الكلمات من الرسم الإملائي الفصيح إلى الرسم الصوتي المنبري المقفل بالسكون:
+
+| الكلمة بالرسم العادي (تسبب نطقاً فصيحاً) | الرسم العروضي الصوتي المنبري المعتمد (`Phonetic Colloquial Spelling`) | اللهجة والاستخدام |
+| :--- | :--- | :--- |
+| كيف / ما جرى / ماذا صار | `شْلُونْ` / `شْجَرَى` / `شْصَارْ` | عراقية / بحرانية / خليجية |
+| قلبي / كبدي / عيونكِ | `گَلْبِي` (أو `گَلِبْ`) / `چَبْدِي` (أو `چَبِدْ`) / `عْيُونِچْ` | عراقية / فراتية / أهوازية |
+| بكيت / وقفت / سقط | `بْچِيتْ` / `وْگَفِتْ` / `طَاحْ` | عراقية / بحرانية |
+| على الباب / على النهر / إلى الحسين | `عَالبَابْ` / `عَالنَّهَرْ` / `لِحْسَيْنْ` | دمج حرف الجر صوتياً لمنع القراءة الفصيحة |
+| أمي / أخي / بدونك / لم يبقَ | `يِمَّه` / `خُويَه` / `بْلَيَّاكْ` / `مَا ظَلْ` | عراقية / بحرانية |
+| أولادي / أطفالي / محنّاة | `وْلِيدَاتِي` / `بْزُورْتِي` / `مْحَنِّيَه` | عراقية / بحرانية |
 
 ---
 
-## 5. برمجة المنتج الذكي في Google Flow Music (`Customize Producer` — V34.0 PRO-MAX)
+## 5. البرومبت القياسي لخانة `Sound` ومكتبة الأنماط الثمانية (`Modules 36 & 37`)
 
-عند استخدام ميزة **`Customize producer -> Instructions`** في Google Flow Music، يمكن تزويد المنتج بالتعليمات الدائمة التالية لضبط الهندسة الصوتية الحسينية:
+### أ. البرومبت القياسي المعتمد لخانة `Sound` (مركّز من 40 كلمة ومقفل اللهجة والمقام الواحد — Module 36)
+- **قواعد صارمة لحقل `Sound`:**
+  1. **لا تتجاوز 40 إلى 50 كلمة** من الواصفات الصوتية الإنجليزية الصرفة والواضحة.
+  2. **اذكر اللهجة صراحةً في أول سطر** (`authentic Iraqi and Bahrani colloquial dialect`).
+  3. **ثبّت مقاماً أساسياً واحداً فقط في التوليد التأسيسي** (`Maqam Saba` أو `Maqam Bayati`) لضمان توازن اللحن واستقراره (`Rule B1`).
+  4. **يُمنع وضع الكلمات المعرّبة** (`maddat sawtiya`, `taqatee'`, `bahha`, `tarjee'`) أو **أرقام المعادل الصوتي** (`+4.5dB at 2.5kHz`, `HPF at 85Hz`) أو كلمة **`tenor`** داخل حقل `Sound`؛ لأن مكان الفلاتر التقنية هو أداة `audio__apply_effect` بعد التوليد.
 
+- **النموذج المعتمد للدمج العراقي-البحراني الحزين والفخم (`58 BPM` — Master Standard):**
 ```text
-Role: Master Hussaini Audio DSP Engineer, Iraqi-Bahrani Maqam Composer & Studio Vocal Producer.
-1. MELODIC & THROAT MASTERY: Every track must be 100% melodically SUNG (never spoken poem reading). Enforce Arabic 24-EDO microtonality (Maqam Bayati, Saba, Hijaz, Lami, Kurd, Sikah). Deliver commanding thick resonant Jawhari Baritone vocals with immense chest power and powerful soaring high Jawab and Jawab-al-Jawab registers (never use the word "tenor", which causes soft/light vocal timbres), deep throat-driven melismas (ikhraj al-lahn min al-hanjara), natural warm laryngeal vocal rasp (bahha), long sorrowful vowel elongations (maddat sawtiya), Bahrani trembling tarjee', smooth Qarar-to-Jawab-al-Jawab transitions, and classic Iraqi weeping Wanna cadences.
-2. MELODIC-PHONETIC LOCK: Hold open vowels across multi-note melismas as a single fluid phonetic unit without consonant re-articulation. Align melodic peaks with emotional stress words.
-3. CLEAN STUDIO ACAPELLA MIX: 100% Acapella human vocal and organic heritage chest-slap (Latm) production. Foreground the crystal-clear solo lead vocal (Dry +0dB center with Mid presence +4.5dB @ 2.5kHz, HPF @ 85Hz, warm 3.2s Husseiniya Cathedral reverb and 285ms Dynacord slapback delay). Support with lush, harmonically tuned male Ahaat vocal pads (-10dB wide stereo) and a calm, deep dual-layer chest-slap rhythm (55Hz sub-thud + 4kHz skin transient with 15-30ms Raddada crowd flam). Zero melodic instruments, zero clutter, zero harsh screaming.
+Traditional Iraqi and Bahrani Hussaini Latmiya, Thaqeel Faizi and Nazla style, Maqam Saba, 58 BPM, authentic Iraqi and Bahrani colloquial dialect, commanding deep resonant Baritone lead vocal, powerful high chest-voice climbs, natural vocal rasp, emotional weep cracks, heavy 55Hz bare-palm chest thud, 285ms analog tape echo, 3.2s Husseiniya hall reverb, wide unison male Raddada choir response, Pure Acapella No Instruments
+```
+
+### ب. مكتبة البرومتات القياسية الثمانية المركّزة (40–45 كلمة لكل نمط):
+1. **الدمج العراقي-البحراني الثقيل والفخم (`58 BPM — Maqam Saba`)**: *(النموذج القياسي أعلاه)*.
+2. **اللطمية العراقية الثقيلة / النزلة الكربلائية (`60 BPM — Maqam Bayati`)**:
+   `Traditional Iraqi Hussaini Latmiya, heavy Karbalai Nazla style, Maqam Bayati, 60 BPM, authentic Iraqi colloquial dialect, commanding deep resonant Baritone lead vocal, powerful high chest-voice climbs, natural vocal rasp, emotional weep cracks, heavy 55Hz bare-palm chest thud, 285ms analog tape echo, 3.2s Husseiniya hall reverb, wide unison male Raddada choir response, Pure Acapella No Instruments`
+3. **الموشح البحراني الرزين والطور الفائزي (`66 BPM — Maqam Hijaz`)**:
+   `Traditional Bahrani Hussaini Tawshih and Faizi Latmiya, Maqam Hijaz, 66 BPM, authentic Bahrani colloquial dialect, wide majestic Baritone lead vocal, trembling microtonal vowel elongations, powerful high chest-voice climbs, synchronous 55Hz bare-palm chest thud, 260ms analog tape delay, 2.8s Matam hall reverb, wide unison male Raddada choir response, Pure Acapella No Instruments`
+4. **بحر النصاري والنعي اللطمي الفراتي (`56 BPM — Maqam Lami`)**:
+   `Traditional Southern Iraqi Euphrates Hussaini Latmiya, Bahr Al-Nassari style, Maqam Lami, 56 BPM, authentic Southern Iraqi colloquial dialect, raw grieving Baritone lead vocal, natural weep cracks, prolonged mournful vowel cries, slow heavy 55Hz bare-palm chest thud, 285ms analog tape echo, 3.2s Husseiniya hall reverb, unison male Raddada response, Pure Acapella No Instruments`
+5. **الگعدية العراقية والمتوسط السريع (`74 BPM — Maqam Kurd`)**:
+   `Traditional Iraqi Hussaini Keadia Latmiya, Maqam Kurd, 74 BPM, authentic Iraqi colloquial dialect, high-power full-chest belted Baritone lead vocal, natural vocal rasp, emotional weep cracks, rhythmic 55Hz bare-palm chest-slap pulse, 250ms analog slapback echo, 2.5s Husseiniya hall reverb, energetic unison male Raddada choir response, Pure Acapella No Instruments`
+6. **الزنجيل الموكبي العراقي/البحراني (`80 BPM — Maqam Hijaz`)**:
+   `Traditional Hussaini Zanjeel procession chant, Maqam Hijaz, 80 BPM, authentic Iraqi and Bahrani colloquial dialect, thunderous heroic Bass-Baritone lead vocal, commanding epic chest projection, deep acoustic Dammam drum strikes locked with metallic shoulder Zanjeel chains and brass Tasa cymbals, 1.2s open-air street slapback echo, massive unison male Raddada response, No Melodic Instruments`
+7. **الشور الحسيني الحماسي (`132 BPM — Maqam Kurd`)**:
+   `Traditional Iraqi Karbalaei Shoor Latmiya, Maqam Kurd, 132 BPM, authentic Iraqi colloquial dialect, impassioned raspy Baritone lead vocal, powerful high chest-voice cries, rapid driving 55Hz bare-palm chest slaps, continuous deep male congregation rhythmic Hussain chant drone, 1.5s tight Husseiniya hall reverb, Pure Acapella No Instruments`
+8. **النعي المنبري والموال الحر بلا إيقاع (`0 BPM Rubato — Maqam Saba`)**:
+   `Traditional Iraqi and Bahrani Minbar Na'i vocal lament, strict Rubato free tempo with zero rhythmic grid, Maqam Saba, authentic Iraqi and Bahrani colloquial dialect, deep velvet mournful Baritone solo voice, raw weeping cracks, prolonged microtonal vowel cries, 450ms analog tape echo, 3.8s large Husseiniya cathedral reverb, Pure Solo Acapella No Percussion No Instruments`
+
+### ج. تطبيق الفلاتر والمعادل الصوتي بعد التوليد عبر `audio__apply_effect` (Module 37)
+بدلاً من وضع أرقام الترددات داخل حقل `Sound`، تُطبق الفلاتر الهندسية بعد التوليد عبر محادثة الـ `Producer`:
+```text
+Apply audio__apply_effect on the generated clip: HighPass filter at 85Hz, AdvancedEqualizer (cut 450Hz by -2.5dB, boost mid 1200Hz by +1.5dB, boost high-mid presence 2500Hz by +4.5dB), Compressor (ratio 3:1, threshold -12dB), Reverb (room_size 0.55, wet mix 0.18), and Limiter at -1.0dB.
 ```
 
 ### قواعد التوافق الذهبية لمنصة Google Flow Music (`Lyria 3.5`):
-1. **مربع الكلمات (`Lyrics`)**: يجب أن يكون **باللغة العربية الخالصة 100%** (يُمنع وضع أي حرف إنجليزي `[a-zA-Z]` مثل `[pause: 0.4s]` أو `(deep heavy sigh)` داخل مربع `Lyrics` في مرحلة التوليد الأولي لأن المنصة قد تنطقها ككلمات إنجليزية، باستثناء وسوم الأقسام القياسية `[Refrain 1]`, `[Verse 1]`, `[Interlude]`, `[Outro]`).
-2. **صيغة الشطرين المتصلين بفاصل النقطتين (` .. `) والكثافة المثالية (`12 سطراً في التوليد الأولي`)**:
-   - أثبتت الدراسة الهندسية لأقوى مخرجات Flow Music (`06647932` و `b8dc7888` — `تعب ممشى الظعن`) أن أفضل تناسق للّحن والطور مع الكلمات يتحقق عند:
-     - كتابة البيت الكامل في سطر واحد يفصل بين شطريه نقطتان فقط محاطتان بمسافة (`الشطر الأول .. الشطر الثاني`) دون وضع نقاط في نهاية السطر.
-     - الاكتفاء بـ **3 مقاطع رباعية فقط (12 بيتاً) في التوليد الأولي (`Root Track ~2:00`)** حتى يأخذ الرادود 10 ثوانٍ كاملة لكل بيت ويمدّ حروف المد (`1500ms–1800ms`) بوقفة سكون طبيعية بين الشطرين (`0.5s–1.0s`)، ثم استخدام أوامر التمديد (`audio__render_edit`) لإضافة بقية مقاطع القصيدة والخاتمة (`Extended Outro`).
-     - ختم كل مقطع رباعي بسطر نداء قصير مستقل (`يَا حُسَيْنْ` / `مَظْلُومْ يَا حُسَيْنْ` / `وَاوَيْلَاهْ .. عَالزَّهْرَه وْبِزِرْهَا`) مع ضبط **الوقف بالسكون (`Waqf bi-s-Sukun`)** في القفلات.
+1. **مربع الكلمات (`Lyrics`)**: يجب أن يكون **باللغة العربية الخالصة 100%** (يُمنع وضع أي حرف إنجليزي `[a-zA-Z]` مثل `[pause: 0.4s]` أو `(deep heavy sigh)` داخل مربع `Lyrics` في مرحلة التوليد الأولي لأن المنصة قد تنطقها ككلمات إنجليزية).
+2. **صيغة الشطرين المتصلين بفاصل النقطتين (` .. `) والكثافة المثالية (`12 سطراً متساوية التفعيلة في التوليد الأولي`)**:
+   - كتابة البيت الكامل في سطر واحد يفصل بين شطريه نقطتان فقط محاطتان بمسافة (`الشطر الأول .. الشطر الثاني`) دون وضع نقاط في نهاية السطر.
+   - الاكتفاء بـ **3 مقاطع رباعية فقط (12 سطراً متساوية البحر وعدد المقاطع الصوتية — `Strict Iso-Syllabic Lock`)** في التوليد الأولي (`Root Track ~2:00`)، ثم استخدام أوامر التمديد (`audio__render_edit`) لإضافة بقية مقاطع القصيدة والخاتمة (`Extended Outro`).
 
 ---
 
 ## 7. المعمارية المرجعية متعددة المراحل في Google Flow Music (Gold-Standard Multi-Stage Pipeline & `reference_clip_ids`)
 
-### أ. السر الهندسي الأكبر في Google Flow Music: التوليد عبر `Producer Chat` وتمرير البصمة الصوتية المرجعية (`reference_clip_ids`)
-أثبت الفحص التشريحي لأفضل الأعمال الحسينية المولدة في المنصة (`785f8230`، `34d27fb5: عهد الدماء`، `26bbb3d2: عهد الوفا V33.0 Grand Master`، و`c5c2291b: عهد الصدور`) حقيقة تقنية حاسمة:
-- عند التوليد اليدوي من لوحة `Compose` اليمنى (`Lyrics` + `Sound description`)، يكون الحقل `reference_clip_ids: null`، فيضطر المحرك الصوتي لاختراع خامة الصوت والإيقاع من الصفر.
-- أما عند التوليد عبر **محادثة المنتج اليسرى (`Producer Chat`)** بتوجيه الوكيل لاستدعاء أداة `lyrics__register` ثم أداة `audio__create_song` مع تمرير **`reference_clip_ids`** (سواء لمقطع مرجعي معتمد أو ملف صوتي مرفوع)، فإن المحرك يستنسخ **بصمة لطمة الصدر الحقيقية (`55Hz Chest-Slap`) وروح الطور الحسيني والردادة** بنسبة 100%!
+### أ. التوليد عبر `Producer Chat` وتمرير البصمة الصوتية المرجعية (`reference_clip_ids`)
+- عند التوليد اليدوي من لوحة `Compose` اليمنى (`Lyrics` + `Sound`)، يكون الحقل `reference_clip_ids: null`.
+- أما عند التوليد عبر **محادثة المنتج اليسرى (`Producer Chat`)** باستدعاء أداة `lyrics__register` ثم أداة `audio__create_song` مع تمرير **`reference_clip_ids`** (مثل المعرف الذهبي `26bbb3d2-65f0-42c3-a167-37127631ef0a`) والبرومبت القياسي المختصر (40 كلمة)، فإن المحرك يقفل خامة الباريتون العراقي-البحراني وبصمة لطمة الصدر الحقيقية (`55Hz Chest-Slap`) بنسبة 100%!
 
 #### قائمة المعرفات المرجعية الذهبية المعتمدة (`Master Reference Clip IDs`):
-1. **`34d27fb5-9fdc-4923-a260-9d14edba6313` (`عهد الدماء - نسخة ثانية` — وأصل المسار الإيقاعي المعزول `785f8230-757e-49b1-a093-4883888cd1ef` والمسار الصوتي المعزول `f7380d77-47ff-4c58-a0de-e068689a0ea3`):**
-   - **البرومبت الصوتي (`sound_prompt`):**
-     `Iraqi Shia vocal lament, Latmiya Thaqeel, Maqam Saba vocal improvisations, heavy slow chest-slapping rhythm, 64 BPM, deep baritone male solo singer, weeping vocal crack, vocal fry sighs, low ambient drone, traditional mourning chant`
-2. **`26bbb3d2-65f0-42c3-a167-37127631ef0a` (`عهد الوفا V33.0 Grand Master`):**
-   - **البرومبت الصوتي (`sound_prompt`):**
-     `Hussaini Studio OS V33.0. Starts with improvised Mawal Mifjou' in Maqam Saba, rubato tempo, maximum vocal stretching, large cathedral reverb (3.8s decay). Transitions into Heavy Iraqi Nazla, strict 55 BPM, 55Hz acoustic chest-slap transient. Deep emotive Baritone lead, Bahrani/Iraqi colloquial dialect, high vocal friction, weep cracks, vocal fry. Massive wide-stereo Raddada choir (80% pan) with human jitter. DSP: Mid presence +4.5dB @ 2.5kHz, HPF @ 85Hz, sidechain ducking under lead. No modern instruments.`
-3. **`c5c2291b-5261-4358-a826-62df0f06a972` (`عهد الصدور` — الطور الفايزي البحراني ولطمة الصدر الثقيلة):**
-   - **البرومبت الصوتي (`sound_prompt`):**
-     `Bahrani Hussaini Latmiya, traditional Faizi Tor, Maqam Bayati, slow Thaqeel rhythm, male soloist lead vocal with natural vocal fry, emotional weep cracks, mournful sighs, 66 BPM marching chest-striking cadence, wide-stereo Raddada congregational choir response, raw acoustic acoustics, solemn roots heritage, atmospheric reverent soundscape`
-4. **`38e14d1c-f452-41b5-af3d-589a526961e8` (`يا حسين - الدمعة ماتروح`):**
-   - **البرومبت الصوتي (`sound_prompt`):**
-     `Traditional Middle Eastern Iraqi Latmiya, Thaqeel style, Maqam Saba, Maqam Lami, 64 BPM, solemn slow tempo, deep emotive male lead vocals, chest resonance, acoustic 55Hz chest-slapping Latm sub-bass, Dynacord analog tape delay 300ms, 3.2s Husseiniya reverb decay, vocal sighs Ahaat, wide-stereo male choir Raddada, boxy resonance notch filtered at 650Hz, tragic tone, emotional pauses`
-5. **`94098363-76cc-4bea-87c2-4bd0b1b4e649` (`عتاب الضعن` — موال صبا مرتجل مع آهات عراقية `(آآاخ... يا دهر)` / `(أوف... أوف)` ينتقل إلى نزلة عراقية ثقيلة `55 BPM`):**
-   - **البرومبت الصوتي (`sound_prompt`):**
-     `Iraqi Husayni latmiya, vocal sacred chant, improvised opening mawal in Maqam Saba, transitions to heavy chest-striking rhythm, deep resonant male cantor lead voice, slow solemn cadence, 55 BPM, emotional mourning tone, rich acoustic echo, traditional Shia vocal lament`
-   - **الهيكل النصي المميز لـ `عتاب الضعن` (`94098363`):**
-     يفتتح بوسم `[Mawal]` يتضمن تأوهات حسينية عراقية بين قوسين في بداية ووسط ونهاية الموال: `(آآاخ... يا دهر)`، `(آه يا أخي... آه)`، `(أوف... أوف)`، ثم ينتقل إلى `[Verse 1]` (4 أشطر تنتهي بـ `(آه يا حسين)`)، ثم `[Refrain]` (شطران إيقاعيان + ردّتان للجمهور بين قوسين `(حسين يا مظلوم)` / `(حسين يا حسين)`)، ثم `[Verse 2]` و `[Refrain]` و `[Outro]` المختوم بـ `(آآاخ يا حسين)` و `(آه... أوف)`.
-6. **`4ecb0673-d39b-4df9-ab79-a5da4911e2ff` (`عهد الوفا - النسخة التأسيسية الأولى`، المنبثقة من `bd8dbe8d-6367-452b-ac6b-2a4d9ef83094: بشير الرزية` والأصل الأب لـ `a5923354-701a-4010-ab96-e04ea98b96e4: هيبة الديوان`):**
-   - **البرومبت الصوتي (`sound_prompt`):**
-     `Latmiya Hussainiya Thaqeel, traditional Iraqi and Bahrani acoustic religious lament, raw live minbar recording atmosphere, heavy chest thumping rhythms, deep resonant male lead voice, mournful group chorus responses, solemn minor key, slow heavy tempo, 65 BPM, acoustic soundscapes, authentic traditional Islamic eulogy, emotional tearful delivery, zero modern electronic production`
-7. **`2ed9b98c-dac9-427d-809f-d1b202f82bb5` (`غريبه وحايره - بحر النصاري V36.0` — `seed: 562968419` — تحفة التحول من اللامي إلى الصبا مع صدى الدايناكورد `285ms` ولطمة الصدر الثقيلة `60 BPM`):**
-   - **البرومبت الصوتي (`sound_prompt`):**
-     `Traditional Hussaini Latmiya, Lami to Saba Maqam, 60 BPM, Heavy Slow Organic Human Chest Thud, Dynacord analog tape echo simulator with 285ms delay, 3.2s Cathedral Reverb, Mournful Male Humming Ahaat Pads, Deep Baritone Lead Vocal, Exhausted and Grieving Iraqi/Gulf mourning tone, Pure Acapella No Instruments`
-   - **البذرة الرقمية المثبتة (`seed`):** `562968419`
-   - **الهيكل النصي الصافي بدون أي وسوم معقوفة (`Zero-Bracket ABABABA 4-Line Alternating Mustahal Structure`):**
-     تُكتب القصيدة كمقاطع رباعية صافية تماماً **بدون أي وسوم معقوفة (`[Intro]` أو `[Verse]`)**، مع تكرار المستهل الرباعي كاملاً بين كل مقطع ومقطع (`المستهل 4 أشطر -> المقطع الأول 4 أشطر -> المستهل 4 أشطر -> المقطع الثاني 4 أشطر -> المستهل 4 أشطر -> المقطع الثالث 4 أشطر -> المستهل 4 أشطر`)، وتكرار الشطر الثالث مرتين في المستهل (كالسطر الثالث والرابع معاً) لتثبيت القفلة اللحنية للرادود والردادة!
+1. **`34d27fb5-9fdc-4923-a260-9d14edba6313` (`عهد الدماء - نسخة ثانية` — وأصل المسار الإيقاعي المعزول `785f8230-757e-49b1-a093-4883888cd1ef` والمسار الصوتي المعزول `f7380d77-47ff-4c58-a0de-e068689a0ea3`)**
+2. **`26bbb3d2-65f0-42c3-a167-37127631ef0a` (`عهد الوفا V33.0 Grand Master`)**
+3. **`c5c2291b-5261-4358-a826-62df0f06a972` (`عهد الصدور` — الطور الفايزي البحراني ولطمة الصدر الثقيلة)**
+4. **`38e14d1c-f452-41b5-af3d-589a526961e8` (`يا حسين - الدمعة ماتروح`)**
+5. **`94098363-76cc-4bea-87c2-4bd0b1b4e649` (`عتاب الضعن` — موال صبا مرتجل ينتقل إلى نزلة عراقية ثقيلة `55 BPM`)**
+6. **`4ecb0673-d39b-4df9-ab79-a5da4911e2ff` (`عهد الوفا - النسخة التأسيسية الأولى`)**
+7. **`2ed9b98c-dac9-427d-809f-d1b202f82bb5` (`غريبه وحايره - بحر النصاري V36.0` — `seed: 562968419` — هيكل رباعي صافٍ بدون وسوم معقوفة `ABABABA`)**
 
-#### أدوات المعالجة الاستوديوية المتقدمة داخل `Producer Chat`:
-- **`audio__split_stems(clip_id)`**: لعزل صوت الرادود (`Vocals`) عن إيقاع لطمة الصدر (`Instrumental` مثل `785f8230-757e-49b1-a093-4883888cd1ef`).
-- **`audio__apply_effect(graph, output_title)`**: لتطبيق سلسلة فلاتر `HighPass (90Hz)` -> `AdvancedEqualizer (bass 200Hz -3dB, low_mid 450Hz -2.5dB, mid 1200Hz +1.5dB, high_mid 3000Hz +4.5dB)` -> `Compressor (ratio 3, threshold -12dB)` -> `Reverb (room_size 0.55, mix 0.18)` -> `Limiter (-1dB)`.
+### ب. المرحلة الأولى في التوليد (`Stage 1: Iso-Syllabic 12-Line Root Track`)
+- تُكتب الكلمات في 3 مقاطع رباعية متساوية الوزن والتفعيلة (`[المُسْتَهَلّ]`, `[المَقْطَع الأَوَّل]`, `[المَقْطَع الثَّانِي]`) بالهجاء الصوتي الدارج والوقف بالسكون (`ْ`).
+
+### ج. المرحلة الثانية والثالثة (`Stage 2 & 3: Producer Chat Extension & 48 BPM Mournful Outro`)
+- بعد قفل اللحن الأساسي في المرحلة الأولى، يُستخدم أمر التمديد (`audio__render_edit`) لإضافة المقاطع التالية أو حركات الگريز، ويُختم العمل بتمديد الخاتمة الرثائية المتباطئة (`60s Mournful Outro ritardando down to 48 BPM`).
 
 ---
 
-### ب. المرحلة الأولى في التوليد بدون مرجع خارجي (`Stage 1: Root Track Creation — ~2:00`)
-- **البرومبت الصوتي الجذري للطمية الحسينية الخالصة بلطمة الصدر فقط دون أي طريقة موسيقية (`Pure Non-Musical Chest-Slap Latmiya`):**
-  *(ملاحظة هامة: كتابة `Dammam drum` أو `choral hum pads` قد تدفع المحرك لتوليد طبول أو خلفيات هارمونية تشبه الموسيقى؛ لذلك لضمان لطمية منبرية خالصة بلطمة الكف على الصدر فقط وبعيداً عن الطريقة الموسيقية، يُستخدم النص التالي):*
-```text
-Raw, non-musical traditional Iraqi Husseiniya mourning council (Majlis Latm), 60 BPM, strictly unaccompanied solo male Radood voice and physical human palm-on-chest slaps (Latm) only. Strictly non-musical religious lamentation: zero musical style, zero instruments, zero drums, zero Dammam, zero vocal pads, zero background humming, and zero musical harmonies.
-
-Rhythm (Pure Chest-Slap Latm Only): The ONLY rhythmic element is the raw, heavy, physical sound of bare human palms striking bare chests in unison inside a reverberant Husseiniya hall (deep 55Hz somatic chest thud and natural skin-slap impact at 60 BPM).
-
-Vocal Delivery (Authentic Non-Musical Husseini Mourning Tor): Deep, mournful, exhausted Iraqi male Radood chanting in an authentic, weeping traditional Husseini mourning Tor in Maqam Saba with raw throat sorrow, mandatory 0.5s to 1.0s tearful pauses between hemistichs, strict Arabic diacritics alignment, and grieving male mourners answering the refrain in raw unison.
-```
-- **هيكل الكلمات في المرحلة الأولى (`3 مقاطع × 4 أسطر + سطر القفلة`):**
-```text
-[Refrain 1]
-الشَّطْرُ الأَوَّلُ بِالتَّشْكِيلْ .. الشَّطْرُ الثَّانِي بِالتَّشْكِيلْ
-الشَّطْرُ الأَوَّلُ بِالتَّشْكِيلْ .. الشَّطْرُ الثَّانِي بِالتَّشْكِيلْ
-الشَّطْرُ الأَوَّلُ بِالتَّشْكِيلْ .. الشَّطْرُ الثَّانِي بِالتَّشْكِيلْ
-الشَّطْرُ الأَوَّلُ بِالتَّشْكِيلْ .. الشَّطْرُ الثَّانِي بِالتَّشْكِيلْ؟
-يَا حُسَيْنْ
-
-[Verse 1]
-الشَّطْرُ الأَوَّلُ بِالتَّشْكِيلْ .. الشَّطْرُ الثَّانِي بِالتَّشْكِيلْ
-الشَّطْرُ الأَوَّلُ بِالتَّشْكِيلْ .. الشَّطْرُ الثَّانِي بِالتَّشْكِيلْ
-الشَّطْرُ الأَوَّلُ بِالتَّشْكِيلْ .. الشَّطْرُ الثَّانِي بِالتَّشْكِيلْ
-مَظْلُومْ يَا حُسَيْنْ
-
-[Verse 2]
-الشَّطْرُ الأَوَّلُ بِالتَّشْكِيلْ .. الشَّطْرُ الثَّانِي بِالتَّشْكِيلْ
-الشَّطْرُ الأَوَّلُ بِالتَّشْكِيلْ .. الشَّطْرُ الثَّانِي بِالتَّشْكِيلْ
-الشَّطْرُ الأَوَّلُ بِالتَّشْكِيلْ .. الشَّطْرُ الثَّانِي بِالتَّشْكِيلْ؟
-يَا حُسَيْنْ
-مَظْلُومْ يَا حُسَيْنْ
-```
-
-### المرحلة الثانية: التمديد الزمني عبر ملف الإنتاج المهيكل (`Stage 2: JSON Production Manifest Extension to ~4:26`)
-بعد توليد المقطع الجذري، يُرسل أمر التعديل والتمديد في محادثة الـ Producer لتوسيع العمل إلى `4:26` دقيقة مع التناوب بين طبقة القرار (`Qarar` مع `Muted_Chest_Slaps_60BPM` و `Low_Pass_Humming_Unison`) في المستهل، وطبقة الجواب (`Jawab` مع `Spacious_Palm_Strikes` و `Stereo_Widened_Ahat`) في الأبيات، وتحديد زمن مدّ حروف العلة (`"ي": 1500ms, "و": 1500ms, "ا": 1800ms`).
-
-### المرحلة الثالثة: تمديد الخاتمة الرثائية المتباطئة (`Stage 3: 60s Mournful Extended Outro — Ritardando to 48 BPM`)
-يُرسل أمر `audio__render_edit` النهائي التالي لإضافة خاتمة منبرية باكية تتباطأ تدريجياً إلى `48 BPM` مع صدى حسينية (`3.2s decay reverb`) وتشبع شريطي تناظري دافئ يتلاشى إلى همس أكابيلا في مقام الصبا:
-```text
-Extend the mournful outro section by 60 seconds with extended vocal lamentations and deep acoustic chest slaps (Latm) with gradual tempo deceleration (ritardando down to 48 BPM). Apply a rich, wide Husseiniya hall acoustics effect with a 3.2-second decay reverb and subtle analog warm tape saturation to deepen the emotional resonance ('huzn' and 'shajan') of the weeping vocals and chest-thud rhythm. Smoothly transition from the climax into a gentle, fading acapella whisper in Maqam Saba.
-Lyrics:
-[Outro]
-يَا حُسَيْنْ .. يَا حُسَيْنْ
-يَا غَرِيبَ الدَّارِ .. وَالدَّمْعُ يِسِيْل
-مَظْلُومْ يَا حُسَيْنْ
-```
-
----
-
-## 8. مصفوفة ضبط الجودة وتشخيص الأعطال (QC1–QC14 Troubleshooting Matrix)
+## 8. مصفوفة ضبط الجودة وتشخيص الأعطال (QC1–QC12 Troubleshooting Matrix)
 
 | الكود | المشكلة الصوتية المرصودة | السبب الهندسي | الحل الفوري في البرومبت والكلمات |
 | :--- | :--- | :--- | :--- |
-| **QC1** | الرادود يقرأ القصيدة قراءة عادية ولا يلحنها | وجود كلمات `reciter / spoken` أو سرعة أقل من `55 BPM` أو وجود `...` وتنوين فصيح في كل شطر | رفع السرعة إلى `56-60 BPM`، كتابة `100% SUNG melodic vocal elegy, never spoken word`، حذف `...` والتنوين، تطبيق هيكل `MODE M/C` (4 أشطر + الشطر الرابع الموحد) وإضافة استهلال مدات `آه يَا حُسَيْنَا` |
-| **QC2** | صرخات مزعجة أو حادة غير شاعرية | وجود كلمات `wailing / screaming / tear-choked` | استبدالها بـ `melodically composed heartfelt weeping cries, warm velvet chest-to-head voice transitions, silky microtonal vibrato — never shrill or harsh` |
-| **QC3** | فوضى وضجيج في الخلفية يغطي على صوت الرادود | تزاحم الكورال واللطم مع صوت الرادود | إضافة `Clean High-Fidelity Studio Mix: crystal-clear lead vocal front and center, soft lush Ahaat pads at -10dB with -4dB sidechain ducking, calm steady chest-latm pulse, zero clutter` |
-| **QC4** | تحول اللطمية إلى أغنية بموسيقى (بيانو/جيتار/إيقاع غربي) | كتابة `--no piano, guitar, pop` في مربع `Sound description` في Flow Music أو استخدام كلمات مثل `chorus / drop / hook` | حذف أي ذكر لأسماء الآلات الموسيقية من `Sound description`، والاكتفاء بـ `100% acapella human voice and organic chest-slap latm only, no melodic instruments` |
-| **QC5** | نطق كلمات إنجليزية داخل القصيدة العربية | وجود وسوم إنجليزية مثل `[pause]` أو `[Section 1]` داخل مربع `Lyrics` | تطهير مربع `Lyrics` من أي حرف لاتيني `[a-zA-Z]` واستخدام وسوم عربية فقط `[المُسْتَهَلّ]` |
+| **QC1** | الرادود يقرأ القصيدة قراءة عادية ولا يلحنها | وجود كلمات `reciter / spoken` أو سرعة أقل من `55 BPM` أو وجود `...` وتنوين فصيح في كل شطر | رفع السرعة إلى `56-60 BPM`، حذف `...` والتنوين، تطبيق هيكل `MODE M/C` (4 أشطر متساوية التفعيلة + الشطر الرابع الموحد) مع البدء مباشرة بشطر المستهل الغني بحروف المدّ |
+| **QC2** | صرخات مزعجة أو حادة غير شاعرية | وجود كلمات `wailing / screaming / tear-choked` | استبدالها بـ `powerful high chest-voice climbs, natural vocal rasp, emotional weep cracks` |
+| **QC3** | فوضى وضجيج في الخلفية يغطي على صوت الرادود | تزاحم الكورال واللطم مع صوت الرادود أو طول البرومبت المفرط | استخدام البرومبت القياسي المختصر (40 كلمة) مع `Pure Acapella No Instruments` وتطبيق الفلاتر عبر `audio__apply_effect` |
+| **QC4** | تحول اللطمية إلى أغنية بموسيقى (بيانو/جيتار/إيقاع غربي) | كتابة `--no piano, guitar, pop` في مربع `Sound` في Flow Music أو استخدام كلمات مثل `chorus / drop / hook` | حذف أي ذكر لأسماء الآلات الموسيقية من `Sound`، والاكتفاء بـ `Pure Acapella No Instruments` |
+| **QC5** | نطق كلمات إنجليزية داخل القصيدة العربية | وجود وسوم إنجليزية مثل `[pause]` أو `[colloquial]` داخل مربع `Lyrics` | تطهير مربع `Lyrics` من أي حرف لاتيني `[a-zA-Z]` واستخدام وسوم عربية فقط `[المُسْتَهَلّ]` |
 | **QC6** | ضياع اللحن وتغيره العشوائي في كل بيت | أبيات طويلة غير مقسمة أو غياب اللازمة الموحدة | تطبيق قاعدة `B2` و `B4` من `MODE M`: تقسيم القصيدة إلى مقاطع من 4 أشطر فقط، وتثبيت الشطر الرابع حرفياً في كل مقطع كمرساة لحنية |
-| **QC7** | تنافر اللحن مع كلمات القصيدة عند نسخ قالب جاهز | استنساخ حرفي (`Cloning`) لبرومبت أو بذرة (`Seed`) قصيدة سابقة ذات وزن وموضوع مختلفين | منع الاستنساخ الحرفي، وتطبيق **القسم 9 (منظومة الابتكار اللحني ومطابقة الأوزان وتنويع المقامات)** لتفصيل لحن ومقام وإيقاع وهندسة صوتية خاصة بكل قصيدة |
-| **QC8** | صوت الرادود يظهر ناعماً أو خفيفاً بدلاً من الفخامة والجهارة المنبرية | وجود كلمة `tenor` (أو `baritone-tenor`) في خانة `Sound`، أو البدء بتأوهات هامسة، أو التوليد العشوائي بدون قفل الخامة | حذف كلمة `tenor` نهائياً، وتثبيت `commanding thick resonant Jawhari Baritone lead vocalist with immense chest power and powerful soaring high Jawab and Jawab-al-Jawab registers`، وبدء النص بمدّات مفتوحة (`آآآه يَا حُسَيْنَا .. آآآه يَا مَظْلُومْ`)، أو القفل الحاسم عبر `Producer Chat` بالربط مع المعرف الذهبي `26bbb3d2-65f0-42c3-a167-37127631ef0a` |
+| **QC7** | تنافر اللحن مع كلمات القصيدة عند نسخ قالب جاهز | استنساخ حرفي (`Cloning`) لبرومبت أو بذرة (`Seed`) قصيدة سابقة ذات وزن وموضوع مختلفين | منع الاستنساخ الحرفي، وتطبيق **القسم 9** لتفصيل مقام وسرعة إيقاعية مناسبة لوزن القصيدة |
+| **QC8** | صوت الرادود يظهر ناعماً أو خفيفاً بدلاً من الفخامة والجهارة المنبرية | وجود كلمة `tenor` في خانة `Sound` | حذف كلمة `tenor` نهائياً، واستخدام واصف مختصر ومباشر: `commanding deep resonant Baritone lead vocal, powerful high chest-voice climbs`، أو الربط عبر `Producer Chat` بالمعرف المرجعي `26bbb3d2-65f0-42c3-a167-37127631ef0a` |
+| **QC9** | اللهجة غير عراقية/بحرانية واللحن غير متوازن ومكسور | غياب عبارة `authentic Iraqi and Bahrani colloquial dialect` من حقل `Sound`، أو خلط كلمات فصحى وتنوين وحركات إعراب في `Lyrics`، أو تكديس عدة مقامات وأوزان مختلفة في التوليد الأولي | 1. تثبيت `authentic Iraqi and Bahrani colloquial dialect` ومقام واحد فقط (`Maqam Saba` أو `Maqam Bayati`) في برومبت مختصر (40 كلمة). 2. كتابة الكلمات بالهجاء الصوتي الشعبي الخالص (`شْلُونْ، گَلِبْ، چَبِدْ، عْيُونِچْ`) مع تسكين أواخر الكلمات (`ْ`). 3. توحيد وزن وعدد تفعيلات جميع أسطر المرحلة الأولى الـ 12 (`Iso-Syllabic Lock`) |
+| **QC10** | الكورال ينطق عناوين الأقسام مثل «الرابط والقفلة» ككلمات مغناة | وضع التسميات الهيكلية بين قوسين دائريين `(الرابط والقفلة)` داخل `Lyrics` | عدم وضع أي توجيه هيكلي بين قوسين دائريين `(...)` لأن المحرك يغني ما بين القوسين الدائريين بصوت الكورال؛ تُحجز `(...)` حصراً لردّة الجمهور الفعلية مثل `(مَوْلَايَ يَا حُسَيْنْ)` |
 
 ---
 
-## 9. منظومة الابتكار اللحني والتنويع المقامي ومطابقة الأوزان والإخراج الهندسي الاحترافي (Master Compositional & Acoustic Synthesis Engine)
+## 9. منظومة الابتكار اللحني وقفل توازن التفعيلات واللهجة (Master Compositional & Iso-Syllabic Synthesis Engine — Module 38)
 
-> **القانون الذهبي (منع الاستنساخ الحرفي):**
-> المقاطع المرجعية المولدة بالذكاء الاصطناعي (`تعب ممشى الظعن`، `عهد الدماء`، `عهد الوفا`، `عتاب الضعن`، `غريبه وحايره`) هي **مختبر صوتي للتعلّم واستخلاص القوانين** وليست قوالب جامدة تُنسخ حرفياً على كل قصيدة جديدة. كل قصيدة حسينية لها **روح وجدانية خاصة، وبحر عروضي خاص، وتنقلات تفعيلية متعددة**، ويجب تصميم **لحن مبتكر، ورحلة مقامية متنوعة، وسرعة إيقاعية مدروسة، وإخراج هندسي مفصّل** يناسب كلماتها حرفاً بحرف.
+> **القانون الذهبي المزدوج (منع الاستنساخ الحرفي + قفل توازن المرحلة الأولى):**
+> 1. لا تستنسخ برومبت أو بذرة قصيدة سابقة على قصيدة جديدة مختلفة الوزن والموضوع.
+> 2. **Strict Iso-Syllabic Balance in Stage 1 (`قفل تساوي التفعيلات الصارم لضمان توازن اللحن`)**: لضمان لحن متوازن ومحفوظ بنسبة 100% في المرحلة الأولى (`Root Track — 12 lines`)، يجب أن تشترك جميع الأسطر الـ 12 (المستهل والمقاطع وشطر القفلة الرابع) في **نفس البحر العروضي ونفس عدد المقاطع الصوتية لكل شطر**. يُمنع خلط الأشطر الطويلة (14 مقطعاً) مع القصيرة (7 مقاطع) داخل التوليد الأولي؛ ولا يتم إدخال التغييرات الإيقاعية أو الگريز الداخلي إلا في **المرحلة الثانية (`Stage 2 Extend`)** بعد قفل اللحن الأساسي!
 
-### أولاً: تشريح الأوزان المتعددة داخل القصيدة الواحدة (`Polymetric Stanza Engineering`)
-كثير من القصائد الحسينية والمنبرية الحديثة تتكون من **3 إلى 4 حركات عروضية مختلفة** داخل الدورة الواحدة، ويجب التعامل مع كل حركة بلحن وتنفس مختلف:
-1. **حركة المستهل الاستفهامي أو الندائي (`Opening Mustahal`)**:
-   - *مثال:* `هَلْ يَا تَرَى .. مَوْجُودْ بْعَالَمْ خُدَّامَكْ` أو `وَاوَيْلَاهْ .. عَالزَّهْرَه وْبِزِرْهَا`.
-   - *المعالجة اللحنية:* يبدأ في **طبقة القرار (`Qarar`)** بوقفة تنفسية واضحة (`..`) بعد جملة النداء الأولى، بصوت حميم قريب من الميكروفون، ويُختم بسطر ارتكاز ثابت يقفل الجملة المقامية.
-2. **حركة الثلاثية أو الغصن الطويل المتدفق (`Long Flowing Triplet / Ghusn`)**:
-   - *مثال:* `سَجِّلْنِي وِيَّاكْ وَانْصُرَكْ .. لَوْ أَضِيعْ وِيّ اليِضِيعْ` (14 إلى 16 مقطعاً صوتياً).
-   - *المعالجة اللحنية:* يحتاج إلى **مدّ نغمي متصل (`Legato Vowel Stretching`)** يصعد تدريجياً إلى **طبقة الجواب الأول (`Mayan / Jawab`)** في مقام الحجاز أو الصبا، مع تكرار الشطر الثالث (`سَيِّدِي بْحَقّ الزَّجِيَّه .. لَا تْغَرْبِلْنِي أَضِيعْ`) لتثبيت الذروة الشعورية.
-3. **حركة الموشح / النزلة الرباعية القصيرة (`Short-Hemistich Quatrain / Nazla`)**:
-   - *مثال:* `خَايِفْ ذُنُوبِي چِبِيرَه .. رُوحِي لِلدِّنْيَا أَسِيرَه` (أشطر قصيرة متلاحقة القوافي).
-   - *المعالجة اللحنية:* تنتقل فيها اللطمة إلى **ارتكاز إيقاعي متماسك (`Rhythmic Lock`)** بحيث تقع ضربة الكف على الصدر بالتزامن الدقيق مع القافية الداخلية والخارجية، مع انتقال النغم إلى **مقام الصبا أو الكرد أو اللامي**.
-4. **حركة القفلة المرسلة (`Rubato Closing Cry / Qafla`)**:
-   - *مثال:* `آه .. يَا صَاحِبَ الزَّمَانْ` أو `يَا يِمَّه` أو `يَا وَيْلِي`.
-   - *المعالجة اللحنية:* يتوقف فيها الإيقاع الرتيب لحظياً (`Rubato Pause`) ليطلق الرادود نداءً منكسراً بالونة الحسينية والوقف بالسكون مع ذيل صدى دايناكورد طويل.
+### أولاً: إدارة الأوزان المتعددة عبر المراحل (`Stage-1 Iso-Syllabic Lock vs. Stage-2 Polymetric Extension`)
+1. **في المرحلة الأولى (`Stage 1 Root Track — 12 Lines`)**:
+   - وحّد البحر العروضي وعدد التفعيلات في جميع الأسطر الـ 12، وثبّت مقاماً واحداً فقط في خانة `Sound` (`Maqam Saba` أو `Maqam Bayati`).
+2. **في المرحلة الثانية (`Stage 2 Extend via Producer Chat`)**:
+   - بعد استقرار اللحن الأساسي، يمكنك تمديد القصيدة بإدخال **حركة الگريز أو الموشح القصير** (`Short-Hemistich Quatrain / Nazla`) أو الانتقال إلى جواب مقام الحجاز/الصبا.
+3. **في المرحلة الثالثة (`Stage 3 Mournful Outro`)**:
+   - ختم القصيدة بوقفة النداء المرسلة والـ `Ritardando` المتباطئ إلى `48 BPM`.
 
-### ثانياً: مصفوفة اختيار المقامات والتنقل النغمي (`Multi-Maqam Modulation Matrix`)
-| موضوع القصيدة والروح الشعورية | المقام الأساسي (القرار) | مقام الصعود والذروة (الجواب) | مقام القفلة والانكسار | الطور الحسيني والمدرسة الأنسب |
-| :--- | :--- | :--- | :--- | :--- |
-| **مناجاة صاحب الزمان (عج) والتوبة والشوق** | **بياتي شوري + سيكاه / هزام** | **حجاز** (نداء واستغاثة) | **صبا ⟵ لامي** (انكسار ودمعة) | طور المناجاة الوجدانية الهادئة (`56–58 BPM` لطمة كنبض القلب) |
-| **فاجعة الزهراء (ع) وكسر الضلع والمحسن** | **صبا خالص** (أنين الفاجعة) | **صبا زمزم / بياتي عالي** | **لامي حزين** (ونة الفقد) | طور النعي العاشورائي + النزلة العراقية الثقيلة (`55–60 BPM`) |
-| **السبايا والضعن وغربة زينب (ع)** | **لامي عراقي** (ضياع وغربة) | **صبا** (شكوى وعتاب) | **بياتي / لامي** | بحر النصاري / الطور المحمراوي والفايزي (`60 BPM`) |
-| **الحماسة الرثائية والفصيح (العباس ع / الطف)** | **رست أو حجاز مهيب** | **بياتي جواب / نهاوند** | **صبا أو رست قرار** | الطور الكربلائي والبحراني الفصيح أو الزنجيل الموكبي (`58–64 BPM` أو `78 BPM`) |
-| **شباب الطف (علي الأكبر / القاسم ع)** | **كرد أو بياتي دافئ** | **حجاز أو صبا** | **كرد قرار باكي** | طور الموشح والگعدية المتدرجة (`66–74 BPM`) |
-| **النعي المنبري والمجالس الخالصة** | **صبا أو حجاز أو لامي** | **جواب الصبا / الحجاز** | **قفلة الونة بالقرار** | أطوار النعي السبعة (`0 BPM Rubato` مرسل بلا إيقاع) |
+### ثانياً: مصفوفة اختيار المقام الأساسي الواحد للمرحلة الأولى (`Single-Maqam Stage-1 Selection Matrix`)
+| موضوع القصيدة والروح الشعورية | المقام الأساسي المعتمد في `Stage 1` (`Rule B1`) | مقام التمديد الذروي الاختياري في `Stage 2` | السرعة والنمط الأنسب |
+| :--- | :--- | :--- | :--- |
+| **فاجعة الزهراء (ع)، الطف، والانكسار العاشورائي** | **`Maqam Saba`** | `Maqam Lami` أو `Hijaz` | الدمج العراقي-البحراني الثقيل (`58 BPM`) |
+| **السرد الكربلائي الأصيل واللطم الثقيل** | **`Maqam Bayati`** | `Maqam Saba` | النزلة العراقية الثقيلة (`60 BPM`) |
+| **التوشيح البحراني، الفائزي، والنداء الملحمي** | **`Maqam Hijaz`** | `Maqam Saba` | الموشح والفايزي البحراني (`66 BPM`) أو الزنجيل (`80 BPM`) |
+| **السبايا، الضعن، غربة زينب (ع)، والأبوذية** | **`Maqam Lami`** | `Maqam Saba` | بحر النصاري والطور الفراتي (`56 BPM`) |
+| **شباب الطف (الأكبر والقاسم ع)، الگعدية، والشور** | **`Maqam Kurd`** | `Maqam Hijaz` | الگعدية (`74 BPM`) أو الشور (`132 BPM`) |
+| **مناجاة صاحب الزمان (عج) والشوق الوجداني** | **`Maqam Sikah`** أو **`Maqam Bayati`** | `Maqam Hijaz` | طور المناجاة الوجدانية (`56–58 BPM`) |
 
-### ثالثاً: تفصيل الإخراج الهندسي الصوتي حسب جنس القصيدة (`Bespoke Acoustic & DSP Mastering`)
-1. **ميكس المناجاة والعتاب الوجداني (`Intimate Munajat & Supplication Mix`)**:
-   - `Close-mic warm resonant Jawhari Baritone vocal (+3.5dB presence @ 2.8kHz, HPF @ 85Hz)` لالتقاط شجن التوبة والأنفاس المتهدجة.
-   - `Dynacord tape delay (250–260ms slapback, 20–22% feedback)` ليبقى الكلام واضحاً وغير غارق في الصدى.
-   - `2.6–2.8s warm Husseiniya chamber reverb` + `Soft somatic 55Hz bare-palm chest pulse acting like a grieving heartbeat at 58 BPM`.
-2. **ميكس المأتم العاشورائي الثقيل والمدرسة البحرانية-الكربلائية الكبرى (`Heavy Ashura & Bahrani-Karbalai Grand Mix`)**:
-   - `Commanding thick resonant Jawhari Baritone with immense chest power, powerful soaring Jawab and Jawab-al-Jawab registers, laryngeal bahha and weep cracks (+4.5dB @ 2.5kHz, HPF @ 85Hz)`.
-   - `Classic Dynacord analog tape echo (285ms delay)` + `3.2–3.5s wide Husseiniya Cathedral reverb`.
-   - `Heavy 55Hz bare-palm chest thud at 55–60 BPM` + `Wide-stereo grieving Raddada crowd unison (80% pan) with -4dB sidechain ducking`.
-3. **ميكس النعي المنبري والموال الحر (`Pure Minbar Rubato Na'i / Mawal Mix`)**:
-   - `0 BPM Rubato (zero rhythmic grid, zero chest-slap bed)`.
-   - `3.8s Cathedral reverb + 450ms mournful echo tail` لملء الفراغ العاطفي بين الجمل النعيّة الطويلة.
+### ثالثاً: موسوعة الطبقات والخامات الصوتية الجوهرية السبعة (بواصفات إنجليزية نقية ومختصرة بدون `tenor`)
+- **القاعدة الحاسمة:** يُمنع استخدام كلمة `tenor` أو المصطلحات المعرّبة (`bahha`, `tarjee'`, `maddat`) أو أرقام الـ `EQ` داخل حقل `Sound`. استخدم هذه الواصفات الإنجليزية الصرفة ضمن البرومبت القياسي ذي الـ 40 كلمة:
+  1. **الباريتون الجوهري الفخم ذو الجوابات الصاعدة (باسم الكربلائي + عمار الكناني + صالح الدرازي):**
+     `commanding deep resonant Baritone lead vocal, powerful high chest-voice climbs, natural vocal rasp, emotional weep cracks`
+  2. **الباريتون المنبري الرخيم ذو البحة الشجية (الطويرجاوي، حمزة الزغير، العلوي، مرتضى حرب):**
+     `deep velvet mournful Baritone lead vocal, heavy chest resonance, raw vocal rasp, tearful weeping cracks, descending mournful cadences`
+  3. **الباص-باريتون الملحمي الحماسي المجلجل (قحطان البديري، حيدر البياتي، مهدي رسولي):**
+     `thunderous heroic Bass-Baritone lead vocal, massive deep chest authority, commanding epic projection, powerful high chest-voice leaps`
+  4. **الحنجرة البحرانية التوشيحية العريضة (الشيخ حسين الأكرف، السيد عصام الهاشمي، الدرازي):**
+     `wide majestic Bahrani Baritone lead vocal, warm velvety chest resonance, trembling microtonal vowel elongations, soaring high chest-voice climaxes`
+  5. **الحنجرة الفراتية الشجية المخنوقة بالعَبرة (مدين العياشي، عباس عجيد العامري، داخل حسن):**
+     `raw grieving southern Iraqi Baritone lead vocal, exhausted tear-choked chest timbre, natural weep cracks, prolonged high mournful vowel cries`
+  6. **الصوت الصدري الجبلي الصاعد (السيد سلام الحسيني، مسلم الوائلي، الملا جليل الكربلائي):**
+     `high-power full-chest belted Baritone lead vocal, intense gritty upper-register projection, emotional weep cracks, commanding congregation delivery`
+  7. **الكورال الحسيني المهيب (`Unison Raddada Choir`):**
+     `wide unison male Raddada choir response, deep masculine congregation chanting`
 
-### رابعاً: موسوعة الطبقات والخامات الصوتية الجوهرية السبعة وقفل فخامة الصوت (`7 Essential Vocal Timbres & Jawhari Baritone Lock`)
-
-> **القاعدة الهندسية الحاسمة لمنع نعومة الصوت:**
-> وجود كلمة **`tenor`** (أو `baritone-tenor`) في خانة `Sound` يدفع محرك التوليد نحو الخامات الصوتية الخفيفة والناعمة. للحصول على حنجرة منبرية فخمة وجهورية تمتلك طبقات عالية وقوية في **الجواب وجواب الجواب (`Powerful Soaring Jawab & Jawab-al-Jawab`)**، يُحظر استخدام كلمة `tenor` ويُعتمد أحد الواصفات السبعة التالية:
-
-1. **الباريتون الجوهري الفخم ذو الجوابات الصاعدة (`Commanding Thick Resonant Jawhari Baritone + Powerful Soaring Jawab & Jawab-al-Jawab`)**:
-   - *المدارس المرجعية:* دمج مدرسة الحاج باسم الكربلائي في الجوابات العالية (`Jawab-al-Jawab`) مع فخامة وجهارة حنجرة عمار الكناني وصالح الدرازي.
-   - *البرومبت المعتمد لخانة `Sound`:*
-     `Grand Karbalai and Epic Bahrani mourning school, 58 BPM, commanding thick resonant Jawhari Baritone lead vocalist with immense chest power and powerful soaring high Jawab and Jawab-al-Jawab registers, 100% deeply SUNG dramatic Arabic Maqam melody in Maqam Saba, Hijaz, and Iraqi Lami, rich masculine vocal timbre, natural warm laryngeal vocal rasp (bahha), emotional weep cracks, long powerful sorrowful vowel stretches (maddat sawtiya), trembling Bahrani Faizi tarjee' and deep Iraqi Wanna cadences, Melodic-Phonetic Lock holding open vowels with full vocal weight, Mid presence +4.5dB at 2.5kHz, HPF at 85Hz, Heavy Slow Organic 55Hz Human Chest Thud, 285ms Dynacord analog tape echo, 3.2s Husseiniya Cathedral Reverb, massive wide-stereo unison male Raddada choir response, Pure Acapella No Instruments`
-2. **الباريتون المنبري الرخيم ذو البحة العراقية الشجية (`Deep Velvet Minbari Baritone with Warm Laryngeal Bahha & Weep Cracks`)**:
-   - *المدارس المرجعية:* السيد جاسم الطويرجاوي، حمزة الزغير، السيد محمد باقر العلوي، مرتضى حرب.
-   - *الواصف الصوتي:* `deep velvet Minbari Baritone with heavy mournful chest authority, high laryngeal friction (bahha), tear-soaked weep cracks, and deep Iraqi Wanna cadences in Maqam Saba and Lami`.
-3. **الباص-باريتون الملحمي الحماسي المجلجل (`Thunderous Heroic Bass-Baritone / Sub-Harmonic Chest Quake`)**:
-   - *المدارس المرجعية:* قحطان البديري، حيدر البياتي، مهدي رسولي، والملاحم العباسية والزنجيل.
-   - *الواصف الصوتي:* `thunderous heroic Bass-Baritone with massive sub-harmonic chest weight (80Hz-180Hz) and commanding military epic projection`.
-4. **الحنجرة البحرانية التوشيحية العريضة ذات الترجيع والمدّات (`Wide Majestic Bahrani Tawshih & Faizi Jawhari Voice`)**:
-   - *المدارس المرجعية:* الشيخ حسين الأكرف، السيد عصام الهاشمي، صالح وجعفر الدرازي، عبد الأمير البلادي.
-   - *الواصف الصوتي:* `wide majestic Bahrani Tawshih and Faizi Jawhari Baritone voice, long powerful vowel stretches (maddat sawtiya), trembling Bahrani Faizi tarjee', and soaring Hijaz/Saba climaxes`.
-5. **الحنجرة الفراتية الشجية المخنوقة بالعَبرة (`Weeping Euphrates Lami/Saba Larynx`)**:
-   - *المدارس المرجعية:* مدين العياشي، عباس عجيد العامري، داخل حسن.
-   - *الواصف الصوتي:* `raw exhausted weeping Euphrates Lami/Saba Baritone larynx with natural weep cracks (kasrat al-buka') and prolonged high Saba Aaah melismas`.
-6. **الصوت الصدري الجبلي الصاعد (`High-Power Chest-Belted Dramatic Jawab`)**:
-   - *المدارس المرجعية:* السيد سلام الحسيني، مسلم الوائلي، الملا جليل الكربلائي.
-   - *الواصف الصوتي:* `high-power full-chest belted dramatic Jawab vocalist with intense laryngeal grit cutting through dense congregation (+4.5dB at 2.5kHz)`.
-7. **الكورال الحسيني المهيب (`Massive Wide-Stereo Unison Male Raddada Choir`)**:
-   - *الواصف الصوتي:* `massive wide-stereo unison male Raddada congregation choir (80% pan, 15-35ms human timing jitter, -4dB sidechain ducking)`.
-
-#### القفل الحاسم لفخامة الصوت بنسبة 100% عبر `Producer Chat` + الاستهلال المفتوح:
-- **الاستهلال الصوتي الملحن المفتوح (`Open-Throat Vocal Melisma Anchor`):** ابدأ النص بمدّات مفتوحة بالألف والنداء العالي (`آآآه يَا حُسَيْنَا .. آآآه يَا مَظْلُومْ`) بدلاً من التأوهات الهامسة لإجبار المحرك على الدخول بحنجرة مفتوحة وقوية منذ الثانية الأولى.
-- **أمر `Producer Chat` المرتبط بالمعرف المرجعي الذهبي `26bbb3d2-65f0-42c3-a167-37127631ef0a` (`عهد الوفا V33.0 Grand Master`):**
+#### أمر `Producer Chat` القياسي لقفل الصوت بالمعرف الذهبي `26bbb3d2-65f0-42c3-a167-37127631ef0a`:
 ```text
 Register the lyrics using lyrics__register and create the track using audio__create_song referencing clip ID "26bbb3d2-65f0-42c3-a167-37127631ef0a" at 58 BPM with this sound prompt:
-"Hussaini Studio OS V33.0. Starts with improvised Mawal Mifjou' in Maqam Saba and Hijaz, rubato tempo, maximum vocal stretching, large cathedral reverb (3.8s decay). Transitions into Heavy Iraqi-Bahrani Nazla and Faizi Tor, strict 58 BPM, 55Hz acoustic chest-slap transient. Commanding deep emotive Jawhari Baritone lead with powerful soaring high Jawab-al-Jawab registers, Bahrani/Iraqi colloquial dialect, high vocal friction, weep cracks, natural vocal rasp. Massive wide-stereo Raddada choir (80% pan). DSP: Mid presence +4.5dB @ 2.5kHz, HPF @ 85Hz, sidechain ducking under lead. No modern instruments."
+"Traditional Iraqi and Bahrani Hussaini Latmiya, Thaqeel Faizi and Nazla style, Maqam Saba, 58 BPM, authentic Iraqi and Bahrani colloquial dialect, commanding deep resonant Baritone lead vocal, powerful high chest-voice climbs, natural vocal rasp, emotional weep cracks, heavy 55Hz bare-palm chest thud, 285ms analog tape echo, 3.2s Husseiniya hall reverb, wide unison male Raddada choir response, Pure Acapella No Instruments"
 ```
 
 ---
