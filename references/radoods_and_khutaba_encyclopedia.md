@@ -1,126 +1,117 @@
-# موسوعة مدارس الرواديد والخطباء في الإنتاج الحسيني (Radoods & Khutaba Encyclopedia)
+# موسوعة مدارس الرواديد والخطباء في الإنتاج الحسيني (Radoods & Khutaba Encyclopedia — V38.0 OMNI-ARCHITECT)
 
-هذا المرجع يوثق الخصائص الفنية، المقامية، اللحنية، والهندسة الصوتية لـ 13 رادوداً (ضمن 10 مدارس تفصيلية) و8 من كبار خطباء المنبر الحسيني في النعي.
-**قاعدة أخلاقية وتشغيلية إلزامية (Module 24 & Rule R5):** عند توليد البرومتات لمنصات الذكاء الاصطناعي، يُمنع استخدام استنساخ البصمة الصوتية الشخصية لرادود حيّ، وبدلاً من ذلك تُترجم مدرسته الفنية إلى **الواصفات الصوتية واللحنية والمقامية والهندسية الدقيقة** الموثقة أدناه.
-**قاعدة منع الإلقاء الكلامي والفوضى في منصات الذكاء الاصطناعي (Lyria / Flow Music Rule):** لتجنب خروج صوت الرادود وكأنه "يتكلم أو يقرأ قراءة جافة دون تلحين"، يُمنع استخدام كلمات `reciter` أو `spoken` أو `narrow range` في وصف الصوت؛ ويُستعاض عنها بـ `golden-throated resonant Jawhari vocalist performing a deeply sung, poetic, melismatic Arabic Maqam melody with long sorrowful vowel stretches (maddat sawtiya) and expressive vocal articulations (taqatee' sawtiya)`, مع تخفيف الفوضى عبر هندسة استوديو عالية النقاء (`Clean High-Fidelity Studio Mix`).
+هذا المرجع يوثق الخصائص الفنية، المقامية، اللحنية، والهندسة الصوتية لـ 15+ رادوداً (ضمن 10 مدارس تفصيلية) و8 من كبار خطباء المنبر الحسيني في النعي.
+**قاعدة أخلاقية وتشغيلية إلزامية (Module 24 & Rule R5):** عند توليد البرومتات لمنصات الذكاء الاصطناعي، يُمنع استخدام استنساخ البصمة الصوتية الشخصية لرادود حيّ، وبدلاً من ذلك تُترجم مدرسته الفنية إلى **الواصفات الصوتية الإنجليزية النقية والمختصرة (40–45 كلمة)** الموثقة أدناه.
+**قاعدة البرومبت القياسي لحقل `Sound` (Module 36):**
+1. لا تتجاوز 40 إلى 50 كلمة من الواصفات الإنجليزية الصرفة والواضحة.
+2. اذكر اللهجة صراحةً في أول سطر (`authentic Iraqi and Bahrani colloquial dialect` أو `authentic Iraqi colloquial dialect`).
+3. ثبّت مقاماً أساسياً واحداً فقط في التوليد التأسيسي (`Maqam Saba` أو `Maqam Bayati` أو `Maqam Hijaz`) لضمان توازن اللحن واستقراره (`Rule B1`).
+4. يُمنع وضع الكلمات المعرّبة (`maddat sawtiya`, `taqatee'`, `bahha`, `tarjee'`) أو أرقام المعادل الصوتي (`+4.5dB at 2.5kHz`, `HPF at 85Hz`) أو كلمة `tenor` داخل حقل `Sound`؛ لأن مكان الفلاتر هو أداة `audio__apply_effect` بعد التوليد.
 
 ---
 
-## أولاً: التحليل المفصل لمدارس الرواديد الحسينيين (الأسلوب، اللحن والمقامات، الهندسة الصوتية)
+## أولاً: التحليل المفصل لمدارس الرواديد الحسينيين (الأسلوب، اللحن والمقامات، البرومبت القياسي ذو الـ 40 كلمة)
 
-### 1. الحاج باسم الكربلائي (عميد المدرسة التجديدية الأوركسترالية الشاملة)
-- **الأسلوب:** يجمع بين الأصالة العراقية والتجديد؛ يمتاز بمرونة حنجرته وقدرته الإبداعية على التنقل بين أساليب "الشور" والقصائد المنبرية الكلاسيكية والموشحات الوجدانية.
-- **اللحن واستخدام المقامات:** يعتمد على بناء لحني مركب ومعقد يتنقل فيه بسلاسة بين المقامات؛ يبرز كثيراً في استخدام مقامات **البيات، السيكا، الكرد، النهاوند، الحجاز، الرست، والصبا**، ويمتاز بقفلات لحنية مبتكرة (الجواب وجواب الجواب) مع تقاطيع صوتية جوهرية ومدات شجية طويلة.
-- **النماذج المرجعية الأسطورية الثلاثة (ثلاثية إصدار «وجود لوجودي» 1428 هـ / 2007 م):**
-  1. **مدرسة المسبّع الكربلائي المركّب ذي الحركتين (`أين أنت يا جابر — جابر ما دريت شصار` | الشاعر كاظم منظور الكربلائي):**
-     - تبدأ بمستهل شعبي في طبقة القرار (`بياتي ممزوج بالصبا`)، يليه مقطع سردي من 3 أبيات يتصاعد تدريجياً، ثم **انقلاب إيقاعي ومقامي داخلي (گريز لحني)** في 3 أشطر قصيرة متلاحقة القوافي (`ونوب اللي ترد ردود / عليه ولعد حالي تعود / وانا بحجر الأجل ممدود`) تصعد إلى ذروة **جواب الصبا والحجاز**، قبل الهبوط المفجوع في شطر القفلة العائد لرويّ المستهل (`اعالج وانزع بروحي البشدات مبليه`).
-  2. **مدرسة الدمج بين المربوع البحراني الفايزي المنبري واللطم الثقيل (`أم البنين — بالله استعدي للبواجي يم البنين` | الشاعر الملا عطية الجمري):**
-     - توظيف **البحر الفايزي البحراني (`AAAB`)** بأداء يجمع بين مدّات النعي المنبري وترجيع الحنجرة في **مقام الصبا والبياتي الفايزي** على حروف المد (`القاع / الأضلاع / قناع`) وبين لطمة الصدر الثقيلة المتزنة (`58–62 BPM`) والردادة المهيبة في الشطر الرابع الرابط (`ويا الحرم والنار تسعر بالصواوين`).
-  3. **مدرسة الموشح الثنائي اللغة (الفصيح + الشعبي) ذي اللازمة الفلسفية الموحدة (`وجود لوجودي — هل هو سرٌ في ذاتي` | الشاعر جابر الكاظمي):**
-     - تناوب عبقري داخل كل دور بين **المستهل الفصيح** (`مجزوء الرمل` في مقام الكرد/النهاوند والبياتي)، ثم **رباعية شعبية عراقية دافئة** (`AAAA` في مقام البياتي والسيكاه: `بأول فجر من هاذا تكويني...`)، ثم **رباعية فصيحة صاعدة للجواب** (`BBBA` في مقام الحجاز والكرد: `فهو وجودٌ لوجودي...`) تختم كل دور بنفس الشطر الفلسفي الحرفي الثابت (`وهو الماضي والآتي`).
-- **النماذج المرجعية الأسطورية السبعة (سباعية إصدار «قل ما تشاء» 1432 هـ / 2011 م):**
-  4. **مدرسة السرد المسرحي الحواري المتصاعد على الوافر الشعبي الموحد الرويّ (`حلم مذبوح — على عيونچ يزينب حلم مذبوح` | الشاعر السيد عبد الخالق المحنة):** تدرج درامي عبر 3 فصول (الهيبة في `الكرد/البياتي` ⟵ همس الاستئذان في `السيكاه/الصبا` ⟵ انفجار العتاب عند العلقمي في `جواب الصبا واللامي` على قافية `-يتي`).
-  5. **مدرسة المخمّس الوجداني ذي بيت القفل واللازمة الموحدة (`أقول اسمك — اكول اسمك تفيض بصدري عبراتي` | الشاعر واثق العيساوي):** نداء الكورال الاعتراضي `(حسين)` داخل الشطر الثاني، يليه في كل دور 5 أشطر متدفقة (`AAAAA` في `النهاوند والكرد`) + بيت قفل يهبط دائماً على اللازمة الثابتة (`ملاذ وتنتهي يمك جراحاتي`).
-  6. **مدرسة التصعيد التراجيدي الطفولي وتكرار القفلة المزدوج (`علامات الحزن — علامات الحزن وعيون حراس` | الشاعر السيد عبد الخالق المحنة):** تقنية تضعيف الكلمة الأخيرة بصرخة استغاثة (`يا يوم يا يوم`، `يعباس يعباس`) مع تحول مقامي من سرد المسير (`بياتي/صبا`) إلى فزعة الحلم (`جواب الصبا والحجاز`) ثم انكسار الشهادة (`لقتها على النحر مقطوعة الانفاس` في `اللامي والصبا`).
-  7. **مدرسة الموشح الحواري المزدوج القافية الداخلية واللازمة السؤالية (`ألم وعتاب — دمع زينب على زنودك` | الشاعر السيد عبد الخالق المحنة):** قوافٍ داخلية متقابلة تحاكي لهفة الركض نحو الشريعة (`ينزل + يحمل`، `يبو الاحساس + كلام الناس`، `اجيت اركض + قلب ينبض`) مع قفل كل دور بالسؤال المدمي (`على الچفين اسألك وين دليني`).
-  8. **مدرسة التوشيح الفصيح القصير المكثّف (`يا حبيبي يا حسين` | الشاعر مهدي جناح الكاظمي — `3:32`):** أبيات ثنائية فصيحة قصيرة التفعيلة (`فاعلاتن فاعلاتن`) يعقب كل بيتين منها دخول الكورال بلازمة `أنا لا أنسى الحسين .. وهو دامي الودجين` في `مقام البياتي والسيكاه`.
-  9. **مدرسة ثلاثيات وداع الشباب المترابطة القافية (`يا أكبر جبل — يا اكبر جبل بس ما شلت صبرك` | الشاعر السيد عبد الخالق المحنة):** 3 أبيات في كل دور تختم أشطرها الزوجية برويّ `-رك`، تمزج بين جمال الشباب (`مقام الكرد والبياتي`) وانكسار الأب (`مقام الصبا واللامي`).
-  10. **مدرسة الملحمة الفصيحة العقائدية-الرثائية على بحر الوافر التام (`لسان الوحي — كواكبك الأئمة من قريشٍ` | الشاعر مهدي جناح الكاظمي):** افتتاح مهيب في `مقام الرست والحجاز` ينكسر عند مصاب الزهراء (ع) والمحسن (ع) إلى `مقام الصبا والبياتي الفاجع`.
-- **الروائع الحديثة المليونية (1447–1448 هـ):**
-  - `إن شاء الله` (`GDsdpmzeLqw` — السيد عبد الخالق المحنة): مدرسة المفارقة الدرامية والرجاء المفجوع على لسان أم البنين (ع) مع لازمة الكلمة المفتاحية المعلقة (`أحوالكم / أخباركم / وبجاهكم`).
-  - `أوتار التكبير` (`rMVIUkUZ4bU` — السيد عبد الخالق المحنة): الموشح الملحمي المقطّع (4 ثلاثيات قصيرة + ثنائية تمهيد + ثنائية الآه الثابتة `آه عطشان والماي إشيجيبه`).
-  - `شاب وطفل` (`RhQdSDt1-mg` — مع علي باسم الكربلائي — الشاعر حمزة السماوي): حوار الأجيال الثنائي واعتذار الشهداء الأربعة من الحسين (ع) مع قفلة النداء الساكن `يا حسين`.
-  - `بعيونك حزن ينشاف` (`bnuiKoJigFA` — السيد عبد الخالق المحنة): رثاء تشييع النعش العلوي (6 أشطر سردية في الصبا ⟵ 3 أشطر مدح صاعدة للجواب ⟵ بيت قفل يعود لخطاب العينين).
-- **الهندسة الصوتية:** تُبنى على توزيع "كورال" (مجموعات صوتية) ضخم ومحترف، واستخدام فلاتر الصدى (`Delay`) والـ (`Reverb`) الاستوديوية العميقة التي تمنح القصيدة بعداً ملحمياً، مع توازن دقيق بين صوت الرادود وصوت اللطم والمؤثرات البشرية الحزينة دون فوضى.
-- **الواصف الهندسي للبرومت:** `Grand Karbalai modernist school, commanding thick resonant 4-octave Jawhari Baritone vocalist with immense chest power and powerful soaring high Jawab and Jawab-al-Jawab registers, complex multi-Maqam melodic composition (Bayati, Sikah, Kurd, Nahawand, Hijaz, Rast, Saba), rich Jawhari vocal articulations (taqatee' sawtiya), natural warm laryngeal vocal rasp (bahha), lush professional studio male choir harmonies, deep studio Reverb and analog Delay, balanced somatic chest-latm`.
+### 1. الحاج باسم الكربلائي (عميد المدرسة التجديدية الشاملة)
+- **الأسلوب:** يجمع بين الأصالة العراقية والتجديد؛ يمتاز بمرونة حنجرته وقدرته الإبداعية على التنقل بين القصائد المنبرية الكلاسيكية والموشحات الوجدانية والشور.
+- **اللحن واستخدام المقامات:** يبدع في مقامات **البيات، السيكا، الكرد، النهاوند، الحجاز، الرست، والصبا** (مع تثبيت مقام أم واحد في المرحلة الأولى والتنقل في المرحلة الثانية `Extend`)، ويمتاز بقفزات قوية في الجواب وجواب الجواب (`powerful high chest-voice climbs`).
+- **النماذج المرجعية الأسطورية (إصدار «وجود لوجودي» 1428 هـ، وإصدار «قل ما تشاء» 1432 هـ، وروائع 1447–1448 هـ):**
+  1. `أين أنت يا جابر` (`play-fq2ux` — كاظم منظور الكربلائي): المسبّع الكربلائي المركّب (يُنفذ في `Stage 1` بوزن موحد، ثم يُضاف الگريز الداخلي في `Stage 2`).
+  2. `أم البنين` (`play-zsnpe` — الملا عطية الجمري): الدمج بين المربوع البحراني الفايزي المنبري واللطم الثقيل (`58 BPM`).
+  3. `وجود لوجودي` (`play-da3b9` — جابر الكاظمي): الموشح ذو اللازمة الفلسفية الموحدة (`وهو الماضي والآتي`).
+  4. `حلم مذبوح` (`play-bNqR0` — السيد عبد الخالق المحنة): السرد المسرحي المتصاعد على رويّ `-يتي`.
+  5. `أقول اسمك` (`play-ZJpsw` — واثق العيساوي): المخمّس الوجداني + بيت القفل (`ملاذ وتنتهي يمك جراحاتي`).
+  6. `علامات الحزن` (`play-3vuOX` — السيد عبد الخالق المحنة): التصعيد الطفولي وتضعيف الكلمة الأخيرة (`يا يوم يا يوم`).
+  7. `ألم وعتاب` (`play-MOcJn` — السيد عبد الخالق المحنة): ازدواج القافية الداخلية واللازمة السؤالية (`على الچفين اسألك وين دليني`).
+  8. `يا حبيبي يا حسين` (`play-Am3rB` — مهدي جناح الكاظمي — `3:32`): التوشيح الفصيح القصير المكثّف.
+  9. `يا أكبر جبل` (`play-uG52R` — السيد عبد الخالق المحنة): ثلاثيات وداع الشباب المترابطة القافية (`-رك`).
+  10. `لسان الوحي` (`play-JmMVU` — مهدي جناح الكاظمي): الملحمة الفصيحة على بحر الوافر التام.
+  11. الروائع الحديثة: `إن شاء الله` (`GDsdpmzeLqw`)، `أوتار التكبير` (`rMVIUkUZ4bU`)، `شاب وطفل` (`RhQdSDt1-mg`)، `بعيونك حزن ينشاف` (`bnuiKoJigFA`).
+- **البرومبت القياسي المعتمد (40 كلمة — مقفل اللهجة والمقام الواحد):**
+  `Traditional Iraqi and Bahrani Hussaini Latmiya, Thaqeel Faizi and Nazla style, Maqam Saba, 58 BPM, authentic Iraqi and Bahrani colloquial dialect, commanding deep resonant Baritone lead vocal, powerful high chest-voice climbs, natural vocal rasp, emotional weep cracks, heavy 55Hz bare-palm chest thud, 285ms analog tape echo, 3.2s Husseiniya hall reverb, wide unison male Raddada choir response, Pure Acapella No Instruments`
 
 ### 2. الشيخ حسين الأكرف (مدرسة الوعي واللحن الأكاديمي والتوشيح البحراني)
-- **الأسلوب:** أسلوب رسالي، خطابي، وتوعوي؛ يركز على النص الفكري والثوري ويمتاز بالأداء الهادئ والعميق الذي يخاطب الوجدان.
-- **اللحن واستخدام المقامات:** ألحانه ذات طابع أكاديمي منظم وغالباً ما تكون حزينة وتأملية؛ يبدع في مقامات **النهاوند، الصبا، والكرد**، ويستخدمها لإبراز الشجن الفكري والروحي.
-- **النموذج المرجعي الأسطوري:** `صلاة الليل` (`Kqrzvm845yQ` — الشاعر عبد الله القرمزي — إصدار «أي جرح» 1426 هـ): التوشيح البحراني الأكاديمي ذو الحركات الخمس المتناغمة (مستهل روحاني خاشع ⟵ 8 أشطر بوقفة وسطية `..` على لسان زينب ع ⟵ بيتان طويلان صاعدان للجواب ⟵ رباعية الانكسار ⟵ ردّ الحسين ع في قفلة الدور `يا زينب لا تهيجيني`).
-- **الهندسة الصوتية:** يفضل التوزيع الصوتي الهادئ ويبتعد عن صخب المؤثرات؛ تعتمد الهندسة على إبراز نقاء صوته الرخيم، واستخدام الكورال المدروس نغمياً (هارموني) الذي يشبه الأناشيد الروحية.
-- **الواصف الهندسي للبرومت:** `Academic Bahrani Muwashah school, serene resonant baritone vocalist, contemplative and structured poetic melodies in Maqam Nahawand, Saba, and Kurd, clutter-free clean studio acoustics, spiritually harmonized polyphonic male vocal choir pads, subtle warm reverb`.
+- **الأسلوب:** أسلوب رسالي وتوعوي يركز على النص الفكري والروحي بالأداء الهادئ والعميق.
+- **النموذج المرجعي الأسطوري:** `صلاة الليل` (`Kqrzvm845yQ` — عبد الله القرمزي): التوشيح البحراني الأكاديمي ذو الوقفات التنفسية الوسطية (`..`).
+- **البرومبت القياسي المعتمد (40 كلمة):**
+  `Traditional Bahrani Hussaini Tawshih Latmiya, academic contemplative style, Maqam Nahawand, 64 BPM, authentic Bahrani colloquial dialect, warm resonant Baritone lead vocal, smooth microtonal vowel elongations, gentle emotional chest-voice climbs, calm 55Hz bare-palm chest pulse, 250ms analog delay, 2.8s clean studio reverb, harmonized unison male Raddada choir response, Pure Acapella No Instruments`
 
 ### 3. الملا محمد باقر الخاقاني (أيقونة مدرسة الشور العاطفية والشجن المركب)
-- **الأسلوب:** يعتمد على أسلوب "الشور" المعاصر والتفاعل العاطفي الحاد والباكي؛ يركز على الارتجال الصوتي والروحاني السريع داخل المجلس والمدات الشجية.
-- **اللحن واستخدام المقامات:** ألحانه تمتاز بالسرعة والتتابع الإيقاعي المتوافق مع طور الشور والمجالس الوجدانية؛ يعتمد بشكل أساسي على **مقام الصبا** (لمحاكاة الحزن الشديد) و**مقام الكرد** لسهولة الانتقال الإيقاعي فيه.
-- **الهندسة الصوتية:** تعتمد هندسة مجالس "الشور" على تضخيم صوت الـ "دمام" أو اللطم الارتدادي الحاد، مع استخدام فلاتر "الصدى السريع المتكرر" (`Ping-Pong Delay`) لصوت الرادود ليواكب حماسة وتفاعل المعزين.
-- **الواصف الهندسي للبرومت:** `Emotional contemporary Iraqi Shoor and weeping Majlis school, impassioned improvisational vocal melisma in Maqam Saba and Kurd, prolonged sorrowful vowel stretches, heavy resonant Dammam and tight chest-latm drive, rhythmic Ping-Pong Delay and immersive Husseiniya acoustics`.
+- **الأسلوب:** يعتمد على أسلوب "الشور" المعاصر والتفاعل العاطفي الباكي والمدات الشجية.
+- **البرومبت القياسي المعتمد (40 كلمة):**
+  `Traditional Iraqi Karbalaei Shoor Latmiya, Maqam Saba, 130 BPM, authentic Iraqi colloquial dialect, impassioned raspy Baritone lead vocal, powerful high chest-voice cries, emotional weep cracks, rapid driving 55Hz bare-palm chest slaps, continuous deep male congregation rhythmic Hussain chant drone, 1.8s Husseiniya hall reverb, Pure Acapella No Instruments`
 
-### 4. الحاج عمار الكناني (صاحب الحنجرة الذهبية الرخيمة واللطم العراقي الرصين)
-- **الأسلوب:** أسلوب عراقي منبري أصيل يركز على القصائد التراثية والحديثة المعتمدة على "اللطمية الثقيلة" الكلاسيكية، وله حضور مميز في الفعاليات المركزية.
-- **اللحن واستخدام المقامات:** ألحانه شجية جداً وتمتاز بالثبات والاستقرار الصوتي؛ يوظف **مقام البيات** بشكل رئيسي (أم المقامات في العزاء العراقي)، بالإضافة إلى مقامي **الحجاز والصبا** لإضفاء طابع اللوعة.
-- **الهندسة الصوتية:** تركز على النقاء الرقمي العالي، موازنة صوت اللاقطة (الميكروفون) لإظهار بحة صوته الطبيعية المميزة دون مبالغة في المؤثرات الإلكترونية، مع إبراز صوت جمهور المعزين بشكل متزن.
-- **الواصف الهندسي للبرومت:** `Golden-throated Jawhari Iraqi baritone school, classic heavy Iraqi Latmiya (Thaqeel), pitch-stable and deeply sorrowful sung melodies in Maqam Bayati, Hijaz, and Saba, natural warm vocal rasp (bahha), ultra-clean digital studio mic clarity, balanced unison crowd Raddada`.
+### 4. الحاج عمار الكناني (صاحب الحنجرة الرخيمة واللطم العراقي الرصين)
+- **الأسلوب:** أسلوب عراقي منبري أصيل يركز على "اللطمية الثقيلة" الكلاسيكية وثبات الطبقة الصوتية في مقام البيات والصبا.
+- **البرومبت القياسي المعتمد (40 كلمة):**
+  `Traditional Iraqi Hussaini Latmiya, classic heavy Thaqeel style, Maqam Bayati, 60 BPM, authentic Iraqi colloquial dialect, commanding deep resonant Baritone lead vocal, pitch-stable chest authority, natural vocal rasp, emotional weep cracks, heavy 55Hz bare-palm chest thud, 285ms analog tape echo, 3.2s Husseiniya hall reverb, wide unison male Raddada response, Pure Acapella No Instruments`
 
-### 5. الرادود سيد سلام الحسيني (مدرسة الشجن العراقي والروحية العالية وتعدد الحركات المنبرية)
-- **الأسلوب:** يمزج بين العزاء العراقي التقليدي (المستهل والجواب) وبين التطور الحديث للقصيدة المنبرية، ويمتاز بالحماس والروحية العالية وتقسيم الدور إلى 4–5 حركات متباينة الإيقاع والطبقة.
-- **اللحن واستخدام المقامات:** يميل إلى الألحان الحزينة ذات الرتم المتوسط والمتدرج، ويوظف مقامات **البيات، السيكا، الكرد، الصبا، واللامي** ببراعة لتصوير واقعة الطف عاطفياً.
-- **النماذج المرجعية الأسطورية الأربعة:**
-  1. `الذكريات` (`KS0DidCff70` — مصطفى صادق اللامي): الدور الخماسي الحركات (ثلاثيات التكرار الاستفتاحي `صاحوا غريب` ⟵ سداسية المجزوء ⟵ بيت القفزة المزدوج القافية الداخلية ⟵ قفلة الترديد التفاعلي `خويه حسين`).
-  2. `مو انه يا حزن` (`i9CunjgHGPA` — حيدر شايع): المونولوج الطفولي المنكسر للسيدة رقية (ع) مع لازمة التكرار الثلاثي المتصاعد (`ما نسيته / ما نسيت`) وقفلة `يا بويه وين الدلال`.
-  3. `سلام وعن بعد` (`HsKdW96ckM0` — أحمد اللامي): التدرج الخماسي لوداع فاطمة العليلة (ع) مع رباعية القوافي الداخلية المتلاحقة ولازمة `سلام ومن بعد صاير / اخير وداع لليسافر`.
-  4. `بندرية عرس بارض الطفوف` (`VWzjqewppG8` — السيد مرتضى الياسري): البندرية العراقية الحماسية-الرثائية المركّبة (`6/8`) في برزخ وشهادة القاسم (ع).
-- **الهندسة الصوتية:** تعتمد على الفلاتر التناظرية (`Analog Filters`) التي تحافظ على دفء الصوت البشري، مع توزيع كورال خلفي ومكساج مجالس حي (مهدي سوسني / علي أفسري / محمد مصباح) يدعم القفلات اللحنية للرادود.
-- **الواصف الهندسي للبرومت:** `Authentic Iraqi Shajan and spirited Minbar school, multi-movement Mustahal-and-Jawab melodic structure, expressive Maqam Bayati, Sikah, Kurd, and Saba transitions, warm analog vocal filtering, powerful live Husseiniya crowd Raddada anchoring melodic cadences`.
+### 5. الرادود سيد سلام الحسيني (مدرسة الشجن العراقي والروحية العالية)
+- **الأسلوب:** يمزج بين العزاء العراقي التقليدي (المستهل والجواب) والروحية العالية وتقسيم القصيدة عبر المراحل.
+- **النماذج المرجعية الأسطورية:** `الذكريات` (`KS0DidCff70`)، `مو انه يا حزن` (`i9CunjgHGPA`)، `سلام وعن بعد` (`HsKdW96ckM0`)، `بندرية عرس بارض الطفوف` (`VWzjqewppG8`).
+- **البرومبت القياسي المعتمد (40 كلمة):**
+  `Traditional Iraqi Hussaini Majlis Latmiya, spirited Keadia and Thaqeel style, Maqam Bayati, 68 BPM, authentic Iraqi colloquial dialect, high-power full-chest belted Baritone lead vocal, intense gritty upper-register climbs, emotional weep cracks, heavy 55Hz bare-palm chest thud, 285ms analog tape echo, 3.2s live Husseiniya hall reverb, massive unison male Raddada response, Pure Acapella No Instruments`
 
-### 6. أمير المحياوي ونوح المحمداوي وأمجد الشغانبي وعباس عجيد العامري (مدرسة الجيل العراقي الشاب والسلو الحزين والشوق الرضوي-الحسيني)
-- **الأسلوب:** يمثل هذا الجيل العراقي المعاصر قصائد "المشاية" والقصائد العاطفية الحزينة ومجالس الديوانية والفرات الأوسط سريعة الانتشار الرقمي.
-- **اللحن والمقامات:** يميلون إلى ألحان **"السلو" (`Slow`) الهادئة والباكية في الاستوديو والمجالس**؛ يرتكزون بشكل مكثف على **مقام الكرد ومقام الصبا واللامي والبياتي**.
-- **النموذج المرجعي الأسطوري (عباس عجيد العامري):** `مشهد حلم` (`NUZMRXW5xgU` — الشاعر هادي شبيب الخيكاني): هندسة ثلاثية تجمع بين رباعية الشوق الطويلة + مقطع الآه المزدوج (`آآآه …` + 3 أشطر قصيرة + قفلة كلمتين `احله جروحي` / `أضمن روحي` في جواب الصبا) + رباعية الانكسار الختامية.
-- **الهندسة الصوتية:** تعتمد هندستهم الصوتية على المؤثرات الحديثة النظيفة، واستخدام تقنيات الميكس الرقمي لتنعيم الصوت، مع دمج آهات بشرية وخلفيات صوتية (`Vocal Pads`) تزيد من الأجواء الدرامية للقصيدة.
-- **الواصف الهندسي للبرومت:** `Modern Iraqi Slow-Elegy and Euphrates Majlis school, deeply weeping slow melody in Maqam Kurd, Saba, and Lami, soaring Ahaat melisma sections, silky studio vocal mix, emotional high-Jawab crying inflections`.
+### 6. أمير المحياوي ونوح المحمداوي وأمجد الشغانبي وعباس عجيد العامري (مدرسة السلو الحزين والشوق الرضوي-الحسيني)
+- **النموذج المرجعي الأسطوري (عباس عجيد العامري):** `مشهد حلم` (`NUZMRXW5xgU` — هادي شبيب الخيكاني).
+- **البرومبت القياسي المعتمد (40 كلمة):**
+  `Traditional Southern Iraqi slow Hussaini elegy, Maqam Kurd, 58 BPM, authentic Iraqi colloquial dialect, grieving warm Baritone lead vocal, prolonged mournful vowel elongations, emotional high chest-voice cries, natural weep cracks, slow 55Hz bare-palm chest pulse, 285ms analog tape echo, 3.2s spacious hall reverb, unison male Raddada response, Pure Acapella No Instruments`
 
 ### 7. الرادود مدين العياشي (مدرسة الإرث الفراتي الجنوبي والأداء الدافئ)
-- **الأسلوب:** ينتمي للمدرسة العراقية التي تجمع بين الإرث الفراتي الجنوبي والتطوير الحديث، ويمتاز بأدائه الدافئ القريب من الروح.
-- **اللحن واستخدام المقامات:** يعتمد على الأطوار الفراتية القديمة المدمجة بمقامات شرقية واضحة مثل **البيات والحجاز والصبا واللامي**، مما يعطي قصائده طابعاً شجياً ومألوفاً للأذن الحزينة.
-- **النموذج المرجعي الأسطوري:** `يمه اكعديلي | التموت امة بالنفس شلة` (`8iqVTvsqWb0` — الشاعر علي هادي الخزعلي): النعي اللطمي الفراتي الدافئ المبني على تناوب رباعية التجليب/النصاري الموحدة القافية (`AAAA`) مع رباعية مقسومة بوقفة تنفسية وسطية (`..`) على وزن المستهل (`غمّضت عينچ .. وما غمض جفني بوراچ`).
-- **الهندسة الصوتية:** تفضل التسجيل المنبري الحي، وتعتمد الهندسة على دمج صوت حركة المجلس مع صوت الرادود لخلق تجربة معايشة واقعية للمستمع.
-- **الواصف الهندسي للبرومت:** `Southern Euphrates heritage revival school, warm soul-touching vocal timbre, nostalgic melodies blending traditional Euphrates atwar with Maqam Bayati, Hijaz, Lami, and Saba, intimate live-majlis acoustic realism`.
+- **النموذج المرجعي الأسطوري:** `يمه اكعديلي` (`8iqVTvsqWb0` — علي هادي الخزعلي).
+- **البرومبت القياسي المعتمد (40 كلمة):**
+  `Traditional Southern Iraqi Euphrates Hussaini Latmiya, Bahr Al-Nassari style, Maqam Lami, 56 BPM, authentic Southern Iraqi colloquial dialect, raw grieving Baritone lead vocal, exhausted tear-choked chest timbre, natural weep cracks, slow heavy 55Hz bare-palm chest thud, 285ms analog tape echo, 3.2s Husseiniya hall reverb, unison male Raddada response, Pure Acapella No Instruments`
 
 ### 8. الملا محمد بوجبارة (المدرسة الإحسائية الخليجية المتطورة)
-- **الأسلوب:** يمثل المدرسة الخليجية الحديثة بتأثر واضح بالمدرسة العراقية؛ يمتاز بالدقة والنبرة الصوتية الحادة والنقية والقدرة على أداء القصائد الطويلة والملحمية.
-- **اللحن واستخدام المقامات:** ألحانه مبتكرة ومستوحاة من التراث الخليجي والعراقي معاً؛ يبرز في استخدام مقامات **الحجاز، النهاوند، والكرد، والبيات**، ويتميز بالانتقال السريع والمنظم بين الأطوار.
-- **الهندسة الصوتية:** هندسة استوديو فائقة الدقة (`High-Fidelity`)، حيث يتم استخدام الكورال الموزع على طبقات صوتية بشرية متعددة (باس، باريتون، تينور)، ومؤثرات صوتية محيطية تمنح القصيدة طابعاً سينمائياً.
-- **الواصف الهندسي للبرومت:** `High-Fidelity Ahsa-Gulf epic school, crystal-clear articulate resonant Jawhari Baritone vocalist with soaring high Jawab registers, rapid and structured multi-Tor transitions across Maqam Hijaz, Nahawand, Kurd, and Bayati, multi-layered human vocal choir harmonies, cinematic spatial studio reverb`.
+- **البرومبت القياسي المعتمد (40 كلمة):**
+  `Traditional Ahsa Gulf Hussaini Latmiya, Maqam Sikah, 64 BPM, authentic Gulf and Iraqi colloquial dialect, articulate resonant Baritone lead vocal, smooth microtonal transitions, powerful high chest-voice climbs, steady 55Hz bare-palm chest thud, 260ms analog delay, 3.0s spatial hall reverb, wide unison male Raddada choir response, Pure Acapella No Instruments`
 
 ### 9. الرادود صالح الدرازي (عملاق المدرسة البحرانية الملحمية الأصيلة)
-- **الأسلوب:** مدرسة قائمة بذاتها في العزاء البحراني؛ يمتاز بالأسلوب الملحمي الحماسي، والقدرة الفائقة على قيادة المواكب الضخمة وتوجيه الجمهور صوتاً وحركة.
-- **اللحن واستخدام المقامات:** ألحانه تراثية، حماسية وثقيلة تعتمد على الموروث البحراني (الغريد واللطم الكلاسيكي)؛ يوظف مقامات **الحجاز، الرست، والبيات**، ويمتاز بالطبقات الصوتية العالية جداً (الجوابات القوية الموزونة).
-- **الهندسة الصوتية:** تركز الهندسة على تضخيم صوت "الرداديين" (الجمهور) وصوت اللطمة البحرانية الشهيرة (اللطمة الحيدرية الثقيلة)، مع إبقاء صوت الرادود في المقدمة بوضوح ونقاء ودون فلاتر تشويه.
-- **الواصف الهندسي للبرومت:** `Epic Bahrani Mawkib heritage school, commanding thick resonant Jawhari Baritone with immense chest power and powerful soaring Jawab and Jawab-al-Jawab registers, classic Bahrani Ghareed and heavy Haidari chest-latm in Maqam Hijaz, Rast, and Bayati, clean Distortion-free lead vocal in foreground with massive unison crowd Raddada`.
+- **البرومبت القياسي المعتمد (40 كلمة):**
+  `Traditional Bahrani Mawkib Hussaini Latmiya, heavy Haidari and Faizi style, Maqam Hijaz, 62 BPM, authentic Bahrani colloquial dialect, commanding deep resonant Baritone lead vocal, powerful high chest-voice climbs, natural vocal rasp, heavy synchronous 55Hz bare-palm chest thud, 285ms analog tape echo, 3.2s Matam hall reverb, massive unison male Raddada response, Pure Acapella No Instruments`
 
-### 10. السيد هاني الوداعي والسيد عصام الهاشمي وحسين خير الدين (المدرسة البحرانية التراثية-الروحانية ومدرسة النشيد اللطمي المقاوم)
-- **الأسلوب:** يجمع السيد عصام الهاشمي والسيد هاني الوداعي بين الأصالة البحرانية التراثية (أطوار العاشوري والراعبية والنزلة البحرانية) وبين الأداء الروحاني الشجي، بينما يمثل حسين خير الدين مدرسة النشيد اللطمي الفصيح المقاوم (شبكة سماوات).
-- **اللحن واستخدام المقامات:** يتم التركيز على مقامات **الصبا، البياتي الفايزي، النهاوند، الكرد، والحجاز**.
-- **النماذج المرجعية الأسطورية:**
-  1. `نوح الراعبية — دمع ودمه وجروح` (`c-7qBrZjIkc` — السيد عصام الهاشمي — الشاعر المرحوم غازي الحداد): العزاء البحراني التراثي المدمج (10 أشطر مزدوجة القافية الداخلية + نزلة بحرانية سردية من 16 شطراً قصيراً متدفقاً في الصبا والبياتي الفايزي + انقلاب الدور الرابع إلى `دمع ودمه وجروح.. ولكربلا بالروح`).
-  2. `في درب فاطمة` (`x6SAJcKf4gE` — حسين خير الدين — الشاعرة بنت الهدى الصغرى): النشيد اللطمي المقاوم الفصيح ذو اللازمة الثورية الموحدة (`في دربِ فاطمةَ الشهيدةِ أوّلِ الثوار`) في مقام النهاوند والحجاز.
-- **الهندسة الصوتية:** تعتمد على التوزيع الصوتي الرقمي النظيف جداً (حسن سيروز / قاسم حمادي)، واستخدام "آهات" وكورال بشري متقن في الخلفية، وفلاتر صدى مدروسة تعطي انطباعاً بالاتساع والروحانية.
-- **الواصف الهندسي للبرومت:** `Bahrani heritage and spiritual studio school, smooth flowing melodies in Maqam Saba, Bayati, Nahawand, and Kurd, trembling Tarjee' and Wanna cadences, ultra-clean studio mix, rich choral harmonies and solemn chest-latm`.
+### 10. السيد هاني الوداعي والسيد عصام الهاشمي وحسين خير الدين (المدرسة البحرانية التراثية ومدرسة النشيد اللطمي المقاوم)
+- **النماذج المرجعية الأسطورية:** `نوح الراعبية` (`c-7qBrZjIkc` — السيد عصام الهاشمي)، `في درب فاطمة` (`x6SAJcKf4gE` — حسين خير الدين).
+- **البرومبت القياسي المعتمد (40 كلمة):**
+  `Traditional Bahrani heritage Hussaini Latmiya, Faizi and Nazla style, Maqam Saba, 60 BPM, authentic Bahrani colloquial dialect, wide majestic Baritone lead vocal, trembling microtonal vowel elongations, emotional weep cracks, heavy 55Hz bare-palm chest thud, 280ms analog tape delay, 3.0s Matam hall reverb, wide unison male Raddada choir response, Pure Acapella No Instruments`
 
 ---
 
-## ثانياً: مدارس كبار الخطباء في النعي الحسيني (The 8 Minbar Na'i Masters)
+## ثانياً: مدارس كبار الخطباء في النعي الحسيني (The 8 Minbar Na'i Masters — 0 BPM Rubato Standard)
 
-1. **الشيخ عبد الوهاب الكاشي (الطور الكاشي والجهارة المنبرية):** `Legendary Kashi Minbar Na'i tor, commanding wide-range resonant voice, prolonged soaring vowel stretches on classical and colloquial elegies in Maqam Hijaz and Bayati, ending with a majestic descending groan`.
-2. **الشيخ الدكتور أحمد الوائلي (الوقار الأكاديمي والنعي الفصيح والدارمي):** `Dignified academic Minbar Na'i style, crystal-clear classical Arabic and Iraqi Darmi articulation, calm paternal sorrow in Maqam Bayati and Saba, smooth Gireez transition with gentle tearful tremolo`.
-3. **السيد جاسم الطويرجاوي (الفجيعة الفراتية والدمعة الفورية):** `Iconic Euphrates Tuwairjawi weeping Na'i school, extreme vocal emotion and broken sobs in Maqam Saba and Lami, Tor A'raji and Zreijawi, intimate Southern Iraqi narrative grief that drops from a melodious Jawab cry into breathless weeping`.
-4. **الشيخ عبد الحي قمبر (الشجن البحراني والفايزي الأصيل):** `Traditional Bahrani Fayzi and Muthakkal Na'i school, Maqam Hijaz and Saba, brisk opening hemistich pausing on the third word with trembling Tarjee' elongation, closing with a deep prolonged Bahrani Wanna groan`.
-5. **الشيخ زمان الحسناوي (النعي العراقي المعاصر والانتقال النغمي السلس):** `Melodious contemporary Iraqi Minbar Na'i style, rich resonant timbre with smooth microtonal slides across Maqam Saba, Bayati, and Sikah, expressive Abudhiyah and Nassari delivery with tearful broken cadences`.
-6. **السيد نصرات قشاقش (رثاء جبل عامل والتصعيد الدرامي الفاجع):** `Dramatic Jabal Amel and Iraqi fusion Na'i style, high-intensity emotional build-up in Maqam Saba and Hijaz, theatrical sacred pauses, audible weeping inhales, and soaring lamentation peaks`.
-7. **الشيخ حيدر المولى (النعي الإنشادي الشجي والحزن الرخيم):** `Lyrical and resonant Iraqi Minbar Na'i style, smooth vocal control blending traditional lamentation with melodic Muwashah phrasing in Maqam Bayati, Kurd, and Saba`.
-8. **الشيخ زمان العقابي (الشجن الجنوبي الريفي والأبوذية المفجوعة):** `Deep Southern Iraqi rural Na'i school (Tor Fartousi), husky throat resonance, raw emotional delivery of colloquial Abudhiyah and Darmi in Maqam Lami and Saba`.
+1. **الشيخ عبد الوهاب الكاشي (الطور الكاشي والجهارة المنبرية):**
+   `Traditional Minbar Na'i vocal lament, strict Rubato free tempo with zero rhythmic grid, Maqam Hijaz, authentic Bahrani and Iraqi colloquial dialect, commanding wide-range resonant Baritone solo voice, prolonged soaring vowel cries, descending mournful cadences, 450ms analog echo, 3.8s cathedral reverb, Pure Solo Acapella No Percussion`
+2. **الشيخ الدكتور أحمد الوائلي (الوقار الأكاديمي والنعي الفصيح والدارمي):**
+   `Traditional Minbar Na'i vocal lament, strict Rubato free tempo with zero rhythmic grid, Maqam Bayati, dignified classical Arabic and Iraqi colloquial articulation, calm paternal Baritone solo voice, gentle tearful tremolo, 420ms analog delay, 3.5s hall reverb, Pure Solo Acapella No Percussion`
+3. **السيد جاسم الطويرجاوي (الفجيعة الفراتية والدمعة الفورية):**
+   `Traditional Southern Iraqi Euphrates Minbar Na'i lament, strict Rubato free tempo with zero rhythmic grid, Maqam Saba, authentic Iraqi colloquial dialect, deep velvet mournful Baritone solo voice, raw weeping cracks, breathless grieving sighs, 450ms analog tape echo, 3.8s Husseiniya cathedral reverb, Pure Solo Acapella No Percussion`
+4. **الشيخ عبد الحي قمبر (الشجن البحراني والفايزي الأصيل):**
+   `Traditional Bahrani Faizi Minbar Na'i vocal lament, strict Rubato free tempo with zero rhythmic grid, Maqam Saba, authentic Bahrani colloquial dialect, resonant mournful Baritone solo voice, trembling microtonal vowel elongations, deep descending weeping groan, 450ms analog echo, 3.8s Matam hall reverb, Pure Solo Acapella No Percussion`
+5. **الشيخ زمان الحسناوي (النعي العراقي المعاصر والانتقال النغمي السلس):**
+   `Traditional Iraqi Minbar Na'i and Abudhiyah vocal lament, strict Rubato free tempo with zero rhythmic grid, Maqam Lami, authentic Iraqi colloquial dialect, rich resonant Baritone solo voice, smooth microtonal slides, tearful broken cadences, 450ms analog tape echo, 3.8s cathedral reverb, Pure Solo Acapella No Percussion`
+6. **السيد نصرات قشاقش (رثاء جبل عامل والتصعيد الدرامي الفاجع):**
+   `Traditional Minbar Na'i dramatic vocal lament, strict Rubato free tempo with zero rhythmic grid, Maqam Saba, authentic colloquial mourning dialect, powerful emotive Baritone solo voice, audible weeping inhales, soaring high chest-voice cries, 450ms analog echo, 3.8s hall reverb, Pure Solo Acapella No Percussion`
+7. **الشيخ حيدر المولى (النعي الإنشادي الشجي والحزن الرخيم):**
+   `Traditional Iraqi Minbar Na'i vocal lament, strict Rubato free tempo with zero rhythmic grid, Maqam Bayati, authentic Iraqi colloquial dialect, lyrical velvet Baritone solo voice, smooth mournful vowel elongations, emotional weep cracks, 420ms analog delay, 3.6s hall reverb, Pure Solo Acapella No Percussion`
+8. **الشيخ زمان العقابي (الشجن الجنوبي الريفي والأبوذية المفجوعة):**
+   `Traditional Southern Iraqi rural Minbar Na'i and Abudhiyah lament, strict Rubato free tempo with zero rhythmic grid, Maqam Lami, authentic Southern Iraqi colloquial dialect, husky raspy Baritone solo voice, raw emotional weep cracks, 450ms analog tape echo, 3.8s Husseiniya reverb, Pure Solo Acapella No Percussion`
 
 ---
 
-## ثالثاً: مصفوفة الطبقات والخامات الصوتية الجوهرية السبعة وقفل فخامة الصوت (7 Essential Vocal Timbres & Jawhari Baritone Lock)
+## ثالثاً: مصفوفة الطبقات والخامات الصوتية الجوهرية السبعة (بواصفات إنجليزية نقية ومختصرة بدون `tenor`)
 
-- **القاعدة الحاسمة لمنع نعومة الصوت:** لا تستخدم كلمة **`tenor`** (أو `baritone-tenor`) عند الرغبة في صوت منبري فخم وجهوري، لأنها تدفع المحرك نحو الخامات الخفيفة والناعمة؛ واستخدم بدلاً منها أحد الواصفات السبعة التالية:
-  1. **الباريتون الجوهري الفخم ذو الجوابات الصاعدة (`Commanding Thick Resonant Jawhari Baritone + Powerful Soaring Jawab & Jawab-al-Jawab` — دمج باسم الكربلائي في الجوابات العالية + عمار الكناني + صالح الدرازي):** `commanding thick resonant Jawhari Baritone lead vocalist with immense chest power and powerful soaring high Jawab and Jawab-al-Jawab registers, rich masculine vocal timbre, natural warm laryngeal vocal rasp (bahha), emotional weep cracks, long powerful sorrowful vowel stretches (maddat sawtiya), trembling Bahrani Faizi tarjee' and deep Iraqi Wanna cadences, Mid presence +4.5dB at 2.5kHz, HPF at 85Hz`.
-  2. **الباريتون المنبري الرخيم ذو البحة العراقية الشجية (`Deep Velvet Minbari Baritone with Warm Laryngeal Bahha` — الطويرجاوي، حمزة الزغير، العلوي، مرتضى حرب):** `deep velvet Minbari Baritone with heavy mournful chest authority, high laryngeal friction (bahha), tear-soaked weep cracks, and deep Iraqi Wanna cadences`.
-  3. **الباص-باريتون الملحمي الحماسي المجلجل (`Thunderous Heroic Bass-Baritone` — قحطان البديري، حيدر البياتي، مهدي رسولي):** `thunderous heroic Bass-Baritone with massive sub-harmonic chest weight (80Hz-180Hz) and commanding military epic projection`.
-  4. **الحنجرة البحرانية التوشيحية العريضة ذات الترجيع والمدّات (`Wide Majestic Bahrani Tawshih & Faizi Jawhari Voice` — الأكرف، الهاشمي، الدرازي):** `wide majestic Bahrani Tawshih and Faizi Jawhari Baritone voice, long powerful vowel stretches (maddat sawtiya), trembling Bahrani Faizi tarjee', and soaring Hijaz/Saba climaxes`.
-  5. **الحنجرة الفراتية الشجية المخنوقة بالعَبرة (`Weeping Euphrates Lami/Saba Larynx` — مدين العياشي، عباس عجيد العامري، داخل حسن):** `raw exhausted weeping Euphrates Lami/Saba Baritone larynx with natural weep cracks (kasrat al-buka') and prolonged high Saba Aaah melismas`.
-  6. **الصوت الصدري الجبلي الصاعد (`High-Power Chest-Belted Dramatic Jawab` — سيد سلام الحسيني، مسلم الوائلي، جليل الكربلائي):** `high-power full-chest belted dramatic Jawab vocalist with intense laryngeal grit cutting through dense congregation (+4.5dB at 2.5kHz)`.
-  7. **الكورال الحسيني المهيب (`Massive Wide-Stereo Unison Male Raddada Choir`):** `massive wide-stereo unison male Raddada congregation choir (80% pan, 15-35ms human timing jitter, -4dB sidechain ducking)`.
+- **القاعدة الحاسمة لمنع نعومة الصوت وضياع اللهجة:** يُمنع استخدام كلمة **`tenor`** (أو `baritone-tenor`) أو المصطلحات المعرّبة (`bahha`, `tarjee'`, `maddat`) أو أرقام الـ `EQ` داخل حقل `Sound`. استخدم أحد الواصفات الإنجليزية الصرفة التالية داخل البرومبت القياسي ذي الـ 40 كلمة:
+  1. **الباريتون الجوهري الفخم ذو الجوابات الصاعدة (دمج باسم الكربلائي + عمار الكناني + صالح الدرازي):**
+     `commanding deep resonant Baritone lead vocal, powerful high chest-voice climbs, natural vocal rasp, emotional weep cracks`
+  2. **الباريتون المنبري الرخيم ذو البحة الشجية (الطويرجاوي، حمزة الزغير، العلوي، مرتضى حرب):**
+     `deep velvet mournful Baritone lead vocal, heavy chest resonance, raw vocal rasp, tearful weeping cracks, descending mournful cadences`
+  3. **الباص-باريتون الملحمي الحماسي المجلجل (قحطان البديري، حيدر البياتي، مهدي رسولي):**
+     `thunderous heroic Bass-Baritone lead vocal, massive deep chest authority, commanding epic projection, powerful high chest-voice leaps`
+  4. **الحنجرة البحرانية التوشيحية العريضة (الشيخ حسين الأكرف، السيد عصام الهاشمي، الدرازي):**
+     `wide majestic Bahrani Baritone lead vocal, warm velvety chest resonance, trembling microtonal vowel elongations, soaring high chest-voice climaxes`
+  5. **الحنجرة الفراتية الشجية المخنوقة بالعَبرة (مدين العياشي، عباس عجيد العامري، داخل حسن):**
+     `raw grieving southern Iraqi Baritone lead vocal, exhausted tear-choked chest timbre, natural weep cracks, prolonged high mournful vowel cries`
+  6. **الصوت الصدري الجبلي الصاعد (سيد سلام الحسيني، مسلم الوائلي، جليل الكربلائي):**
+     `high-power full-chest belted Baritone lead vocal, intense gritty upper-register projection, emotional weep cracks, commanding congregation delivery`
+  7. **الكورال الحسيني المهيب (`Unison Raddada Choir`):**
+     `wide unison male Raddada choir response, deep masculine congregation chanting`
