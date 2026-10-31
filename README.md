@@ -1,9 +1,10 @@
-# استوديو الإنتاج الحسيني الشامل — Hussaini Production Studio (V44.0 OMNI-ARCHITECT)
+# استوديو الإنتاج الحسيني الشامل — Hussaini Production Studio (V45.0 OMNI-ARCHITECT)
 
-مهارة متكاملة للتأليف الشعري الحسيني، وهندسة الألحان والمقامات والأطوار المنبرية ومزجها (`Multi-Tor & Melodic Blending`)، وتوليد القصائد واللطميات بالذكاء الاصطناعي (**Google Flow Music / Lyria 3.5, Suno, Udio**) عبر **بروتوكول التهيئة المسبقة للجلسة بصيغة `JSON` (`Module 39`)** و**قوانين ضبط التنوين اللهجي/العروضي وفصل الكلمات والتمييز الصوتي واللحني بين اللهجتين البحرانية والعراقية (`Modules 40, 41 & 43`)**، والمونتاج الصوتي الاحترافي (**DSP Vocal Montage, 5-Track DAW Routing & Live Matam Sound Engineering**) للتسجيلات الصوتية والمجالس.
+مهارة متكاملة للتأليف الشعري الحسيني، وهندسة الألحان والمقامات والأطوار المنبرية ومزجها (`Multi-Tor & Melodic Blending`)، وتوليد القصائد واللطميات بالذكاء الاصطناعي (**Google Flow Music / Lyria 3.5, Suno, Udio**) عبر **بروتوكول التهيئة المسبقة للجلسة بصيغة `JSON` (`Module 39`)** و**مُترجم النطق الصوتي الآلي وفصل الكلمات وضبط التنوين اللهجي/العروضي والتمييز الصوتي واللحني بين اللهجتين البحرانية والعراقية (`Modules 40, 41 & 43`)**، والمونتاج الصوتي الاحترافي (**5-Track DAW Routing, Smart `-3.0 dB` Dynamic Sidechain Ducking & Automated CI/Unit Testing**) للتسجيلات الصوتية والمجالس.
 
 تدمج هذه المهارة:
-- **الموسوعة الصوتية الحسينية الموحدة (`V26.0 – V44.0 OMNI-ARCHITECT`)**
+- **الموسوعة الصوتية الحسينية الموحدة (`V26.0 – V45.0 OMNI-ARCHITECT`)**
+- **المحرك البرمجي التنفيذي للنطق الصوتي والـ DSP (`scripts/hussaini_dsp_montage.py`) ومجموعة اختبارات الوحدات الآلية (`tests/test_hussaini_modules.py` + `requirements.txt` + `.github/workflows/ci.yml`)**
 - **بروتوكول التهيئة المسبقة للجلسة بصيغة `JSON` على خطوتين في `Producer Chat` (`Module 39 / Section 17 — JSON Session Pre-Conditioning Protocol`)**
 - **هندسة النطق الدقيق والتنوين العروضي واللّهجي (`Module 40`)، وقانون فصل الكلمات وفكّ الالتصاق الصوتي لمنع التشبيك في `Flow Music` (`Module 41 / Section 18`)**
 - **خوارزمية التعرف التلقائي والتمييز الصوتي واللحني والمقامي الدقيق بين «اللهجة البحرانية» و«اللهجة العراقية» (`Module 43 / Section 19`)**
@@ -261,18 +262,21 @@ python3 scripts/hussaini_dsp_montage.py \
 
 ---
 
-## رابعاً: هيكل ملفات المهارة (Repository Structure)
+## رابعاً: هيكل ملفات المهارة وبيئة الفحص الآلي (Repository Structure & CI/CD)
 
 ```text
 hussaini-production-studio/
-├── SKILL.md                                         # ملف التعليمات الرئيسي وسير العمل (Workflows 1, 1.5, 2, 3 & Gotchas — V44.0)
+├── SKILL.md                                         # ملف التعليمات الرئيسي وسير العمل (Workflows 1, 1.5, 2, 3 & Gotchas — V45.0)
 ├── README.md                                        # دليل وتعليمات الاستخدام الشاملة (هذا الملف)
+├── requirements.txt                                 # متطلبات مكتبات المعالجة الرقمية والفحص (numpy, scipy, pylint, pytest)
 ├── references/
 │   ├── atwar_maqamat_and_poetry_guide.md            # الموسوعة الكاملة (الأقسام 1–19 + Modules 34–43 + جدول الأعطال QC1–QC12)
 │   └── radoods_and_khutaba_encyclopedia.md          # موسوعة الخصائص الفنية والهندسية لـ 20+ رادوداً (14 مدرسة) و8 من كبار خطباء المنبر
 ├── scripts/
-│   └── hussaini_dsp_montage.py                      # سكربت المونتاج والهندسة الصوتية (Pylint 10/10 — جميع الأنماط الـ 7 والمقامات الـ 6)
+│   └── hussaini_dsp_montage.py                      # محرك الـ DSP ذي الـ 5 مسارات، الـ Sidechain Ducking (-3dB)، ومُترجم النطق واللهجات (Pylint 10/10)
+├── tests/
+│   └── test_hussaini_modules.py                     # اختبارات الوحدات الآلية (Unit Tests) لفحص Modules 34, 38, 39, 40, 41, 43 ومحرك الـ DSP
 └── .github/
     └── workflows/
-        └── ci.yml                                   # الفحص الآلي (GitHub Actions CI) للتحقق من المهارة وPylint ومحرك الصوت
+        └── ci.yml                                   # الفحص الآلي (GitHub Actions CI): Pylint + Pytest Unit Tests + 7-Mode DSP Validation
 ```
