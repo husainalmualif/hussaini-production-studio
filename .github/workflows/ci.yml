@@ -9,7 +9,7 @@ on:
 
 jobs:
   validate-skill-and-dsp:
-    name: Validate Skill Docs, Pylint & DSP Montage Engine
+    name: Validate Skill Docs, Pylint, Unit Tests & DSP Montage Engine
     runs-on: ubuntu-latest
 
     steps:
@@ -21,23 +21,29 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Install DSP & Lint dependencies
+      - name: Install DSP, Lint & Test dependencies from requirements.txt
         run: |
           python -m pip install --upgrade pip
-          pip install numpy scipy pylint
+          pip install -r requirements.txt
 
       - name: Validate Skill Structure & Required Files
         run: |
           test -f SKILL.md
           test -f README.md
+          test -f requirements.txt
           test -f references/atwar_maqamat_and_poetry_guide.md
           test -f references/radoods_and_khutaba_encyclopedia.md
           test -f scripts/hussaini_dsp_montage.py
+          test -f tests/test_hussaini_modules.py
           grep -q "^name: hussaini-production-studio" SKILL.md
 
-      - name: Lint DSP Montage Script with Pylint
+      - name: Lint DSP Montage Script & Unit Tests with Pylint
         run: |
-          pylint --disable=C0301,R0912,R0913,R0914,R0917 scripts/hussaini_dsp_montage.py
+          pylint --disable=C0301,R0912,R0913,R0914,R0917 scripts/hussaini_dsp_montage.py tests/test_hussaini_modules.py
+
+      - name: Run Unit Tests for Modules 34, 38, 39, 40, 41, 43 & 5-Track DSP Engine
+        run: |
+          pytest -v tests/test_hussaini_modules.py
 
       - name: Test Hussaini DSP Montage Engine Across All 7 Modes
         run: |
