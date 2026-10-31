@@ -15,6 +15,7 @@ Bridges poetic/phonetic engineering with procedural DSP audio mastering:
 """
 
 import argparse
+import json
 import os
 import re
 import sys
@@ -79,6 +80,15 @@ COLLOQUIAL_TANWEEN_MAP = {
     "ضامرٍ يشكي": "ضَامِرِنْ يِشْكِي",
 }
 
+FUSHA_MIDLINE_TANWEEN_MAP = {
+    "جسماً على الثرى": "جِسْمَنْ عَلَى الثَّرَى",
+    "جِسْماً عَلَى الثَّرَى": "جِسْمَنْ عَلَى الثَّرَى",
+    "دامٍ بلا قبور": "دَامِنْ بِلَا قُبُورْ",
+    "دَامٍ بِلَا قُبُورْ": "دَامِنْ بِلَا قُبُورْ",
+    "عزٌ لنا": "عِزُّنْ لَنَا",
+    "عِزٌّ لَنَا": "عِزُّنْ لَنَا",
+}
+
 BAHRANI_MARKERS = (
     "بويي", "خويي", "ونتي", "هالگفره", "امساعد", "عفارم",
     "إشحالك", "اشحالك", "لچن", "الراعبية", "الراعبيه", "يا بويي",
@@ -94,19 +104,25 @@ def de_cliticize_and_separate_words(text):
     """Module 41: Separate attached vocatives, prepositions, and clitics to prevent G2P slurring."""
     result = text
     for attached, separated in WORD_SEPARATION_MAP.items():
-        result = re.sub(rf"\b{re.escape(attached)}\b", separated, result)
         result = re.sub(rf"\bو{re.escape(attached)}\b", f"وَ {separated}", result)
+        result = re.sub(rf"\b{re.escape(attached)}\b", separated, result)
     return result
 
 
 def resolve_dialectal_and_prosodic_tanween(text, dialect="iraqi"):
-    """Module 40: Convert mid-line Tanween to phonetic Nunation and lock final Sukun."""
+    """Module 40: Convert mid-line Tanween to phonetic Nunation and lock final Sukun/Alif."""
     processed = text
     for raw_phrase, phonetic_phrase in COLLOQUIAL_TANWEEN_MAP.items():
         processed = processed.replace(raw_phrase, phonetic_phrase)
+    for raw_fusha, phonetic_fusha in FUSHA_MIDLINE_TANWEEN_MAP.items():
+        processed = processed.replace(raw_fusha, phonetic_fusha)
 
     if dialect in ("iraqi", "bahrani", "iraqi_bahrani"):
         processed = re.sub(r"(\S+)ٍ\s+([تي])", r"\1ِنْ \2ِ", processed)
+
+    processed = re.sub(r"(\S+)(?:اً|ً)(?=\s+(?!\.\.)\S)", r"\1َنْ", processed)
+    processed = re.sub(r"(\S+)ٍ(?=\s+(?!\.\.)\S)", r"\1ِنْ", processed)
+    processed = re.sub(r"(\S+)ٌ(?=\s+(?!\.\.)\S)", r"\1ُنْ", processed)
 
     lines = []
     for line in processed.splitlines():
@@ -114,8 +130,10 @@ def resolve_dialectal_and_prosodic_tanween(text, dialect="iraqi"):
         if not stripped or stripped.startswith("["):
             lines.append(line)
             continue
+        stripped = re.sub(r"(?:اً|ً)(\s+\.\.)", r"َا\1", stripped)
+        stripped = re.sub(r"(?:اً|ً)$", "َا", stripped)
         stripped = re.sub(r"[ٌٍُِ]$", "ْ", stripped)
-        if not stripped.endswith(("ْ", "ا", "و", "ي", "ه", "ة", ")")):
+        if not stripped.endswith(("ْ", "ا", "ى", "و", "ي", "ه", "ة", ")")):
             stripped = stripped + "ْ"
         lines.append(stripped)
     return "\n".join(lines)
@@ -138,7 +156,16 @@ def detect_and_shape_dialect(text):
         shaped = shaped.replace("قلبي", "گَلْبِي").replace("صبر", "صَبِرْ")
         maqam_rule = "3rd-Word Faizi Vibrato & Soft Bahrani Imala in Maqam Hijaz/Saba"
     else:
-        shaped = shaped.replace("قلب", "گَلُبْ").replace("صبر", "صَبُرْ").replace("جمر", "جَمُرْ")
+        shaped = (
+            shaped.replace("قلب", "گَلُبْ")
+            .replace("صبر", "صَبُرْ")
+            .replace("جمر", "جَمُرْ")
+            .replace("چبد", "چَبِدْ")
+            .replace("جبد", "چَبِدْ")
+            .replace("دمع", "دَمِعْ")
+            .replace("وگفت", "وْگَفِتْ")
+            .replace("عفتني", "عِفْتْنِي")
+        )
         maqam_rule = "Emphatic Iraqi Tafkheem & Final-Word Sudden Drop in Maqam Saba/Lami"
 
     shaped = resolve_dialectal_and_prosodic_tanween(shaped, dialect=detected)
@@ -464,12 +491,17 @@ def process_audio_file(input_path, output_path, mode="latm", bpm=60.0, maqam_dro
 
 
 def parse_args(argv=None):
-    """Parse CLI arguments for the Hussaini DSP Montage Engine."""
+    """Parse CLI arguments for the Hussaini DSP Montage Engine & Lyrics Compiler."""
     parser = argparse.ArgumentParser(
-        description="Hussaini Audio Omni-Engine DSP & Procedural Montage Script (V45.0)"
+        description="Hussaini Audio Omni-Engine DSP & Phonetics Compiler Script (V45.0)"
     )
-    parser.add_argument("--input", required=True, help="Path to raw input WAV recording")
-    parser.add_argument("--output", required=True, help="Path to output mastered stereo WAV")
+    parser.add_argument("--input", default=None, help="Path to raw input WAV recording")
+    parser.add_argument("--output", default=None, help="Path to output mastered stereo WAV")
+    parser.add_argument(
+        "--compile-lyrics",
+        default=None,
+        help="Compile and inspect poem lyrics (Modules 40, 41 & 43) directly from the terminal",
+    )
     parser.add_argument(
         "--mode",
         default="latm",
@@ -487,8 +519,17 @@ def parse_args(argv=None):
 
 
 def main(argv=None):
-    """CLI Entrypoint."""
+    """CLI Entrypoint supporting both --compile-lyrics and WAV DSP mastering."""
     args = parse_args(argv)
+    if args.compile_lyrics is not None:
+        report = detect_and_shape_dialect(args.compile_lyrics)
+        print(json.dumps(report, ensure_ascii=False, indent=2))
+        return 0
+
+    if not args.input or not args.output:
+        print("Error: --input and --output are required for audio processing.", file=sys.stderr)
+        return 1
+
     if not os.path.isfile(args.input):
         print(f"Error: Input file not found: {args.input}", file=sys.stderr)
         return 1
