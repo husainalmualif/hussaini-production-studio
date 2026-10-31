@@ -1,11 +1,12 @@
-# استوديو الإنتاج الحسيني الشامل — Hussaini Production Studio (V43.0 OMNI-ARCHITECT)
+# استوديو الإنتاج الحسيني الشامل — Hussaini Production Studio (V44.0 OMNI-ARCHITECT)
 
-مهارة متكاملة للتأليف الشعري الحسيني، وهندسة الألحان والمقامات والأطوار المنبرية ومزجها (`Multi-Tor & Melodic Blending`)، وتوليد القصائد واللطميات بالذكاء الاصطناعي (**Google Flow Music / Lyria 3.5, Suno, Udio**) عبر **بروتوكول التهيئة المسبقة للجلسة بصيغة `JSON` (`Module 39`)** و**قوانين ضبط التنوين اللهجي/العروضي وفصل الكلمات لمنع التشبيك الصوتي (`Modules 40–41`)**، والمونتاج الصوتي الاحترافي (**DSP Vocal Montage, 5-Track DAW Routing & Live Matam Sound Engineering**) للتسجيلات الصوتية والمجالس.
+مهارة متكاملة للتأليف الشعري الحسيني، وهندسة الألحان والمقامات والأطوار المنبرية ومزجها (`Multi-Tor & Melodic Blending`)، وتوليد القصائد واللطميات بالذكاء الاصطناعي (**Google Flow Music / Lyria 3.5, Suno, Udio**) عبر **بروتوكول التهيئة المسبقة للجلسة بصيغة `JSON` (`Module 39`)** و**قوانين ضبط التنوين اللهجي/العروضي وفصل الكلمات والتمييز الصوتي واللحني بين اللهجتين البحرانية والعراقية (`Modules 40, 41 & 43`)**، والمونتاج الصوتي الاحترافي (**DSP Vocal Montage, 5-Track DAW Routing & Live Matam Sound Engineering**) للتسجيلات الصوتية والمجالس.
 
 تدمج هذه المهارة:
-- **الموسوعة الصوتية الحسينية الموحدة (`V26.0 – V43.0 OMNI-ARCHITECT`)**
+- **الموسوعة الصوتية الحسينية الموحدة (`V26.0 – V44.0 OMNI-ARCHITECT`)**
 - **بروتوكول التهيئة المسبقة للجلسة بصيغة `JSON` على خطوتين في `Producer Chat` (`Module 39 / Section 17 — JSON Session Pre-Conditioning Protocol`)**
 - **هندسة النطق الدقيق والتنوين العروضي واللّهجي (`Module 40`)، وقانون فصل الكلمات وفكّ الالتصاق الصوتي لمنع التشبيك في `Flow Music` (`Module 41 / Section 18`)**
+- **خوارزمية التعرف التلقائي والتمييز الصوتي واللحني والمقامي الدقيق بين «اللهجة البحرانية» و«اللهجة العراقية» (`Module 43 / Section 19`)**
 - **موسوعة الليالي العشر لمحرم وصفر، هندسة فن «الگريز»، الهوسة العشائرية العراقية (`3+1 Arjooza`)، والأطوار التراثية النادرة (`العشاق، الحويزاوي، الششتري، الدشتي، والتعديد النسائي — Module 42 / Section 18`)**
 - **دستور البرومبت الحسيني (`Constitution V5.5+ — MODE M & MODE C`)**
 - **منظومة قفل اللهجة الإملائي الصوتي وتوازن التفعيلات (`Dialect Commitment Lock & Iso-Syllabic Stage-1 Lock — Modules 34–38`)**
@@ -264,10 +265,10 @@ python3 scripts/hussaini_dsp_montage.py \
 
 ```text
 hussaini-production-studio/
-├── SKILL.md                                         # ملف التعليمات الرئيسي وسير العمل (Workflows 1, 1.5, 2, 3 & Gotchas — V43.0)
+├── SKILL.md                                         # ملف التعليمات الرئيسي وسير العمل (Workflows 1, 1.5, 2, 3 & Gotchas — V44.0)
 ├── README.md                                        # دليل وتعليمات الاستخدام الشاملة (هذا الملف)
 ├── references/
-│   ├── atwar_maqamat_and_poetry_guide.md            # الموسوعة الكاملة (الأقسام 1–18 + Modules 34–42 + جدول الأعطال QC1–QC12)
+│   ├── atwar_maqamat_and_poetry_guide.md            # الموسوعة الكاملة (الأقسام 1–19 + Modules 34–43 + جدول الأعطال QC1–QC12)
 │   └── radoods_and_khutaba_encyclopedia.md          # موسوعة الخصائص الفنية والهندسية لـ 20+ رادوداً (14 مدرسة) و8 من كبار خطباء المنبر
 ├── scripts/
 │   └── hussaini_dsp_montage.py                      # سكربت المونتاج والهندسة الصوتية (Pylint 10/10 — جميع الأنماط الـ 7 والمقامات الـ 6)
