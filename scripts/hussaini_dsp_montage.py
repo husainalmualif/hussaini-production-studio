@@ -95,6 +95,7 @@ def de_cliticize_and_separate_words(text):
     result = text
     for attached, separated in WORD_SEPARATION_MAP.items():
         result = re.sub(rf"\b{re.escape(attached)}\b", separated, result)
+        result = re.sub(rf"\bو{re.escape(attached)}\b", f"وَ {separated}", result)
     return result
 
 
