@@ -1,6 +1,6 @@
-# الموسوعة الشاملة للأطوار والمقامات والعروض ودستور الهندسة الصوتية الحسينية (V26.0 – V44.0 OMNI-ARCHITECT & Constitution V5.5)
+# الموسوعة الشاملة للأطوار والمقامات والعروض ودستور الهندسة الصوتية الحسينية (V26.0 – V45.0 OMNI-ARCHITECT & Constitution V5.5)
 
-تجمع هذه الوثيقة المرجعية خلاصة **جامعة الصوتيات الحسينية الرقمية (الإصدارات V26.0 حتى V44.0 OMNI-ARCHITECT)** مع **دستور البرومبت الحسيني (Hussaini Prompt Constitution V5.5)**، شاملةً الفيزياء الفسيولوجية للصوت الجوهري والحنجرة الذهبية، هندسة المسارات الخمسة لطور الزنجيل والبندرية (`5-Track DAW Routing Matrix`)، الأطروحة الكاملة للهندسة الصوتية والفونيتك لنعي المنبر الحسيني، فلسفة ومعايير مزج الأطوار والفرق بين المقام («القماشة») والطور («الثوب المُفصّل»)، دستور الأركان الثلاثة لنجاح اللطمية الحسينية، بروتوكول التهيئة المسبقة للجلسة بصيغة `JSON` (`Module 39`)، هندسة التنوين اللهجي والفصيح وفصل الكلمات لمنع التشبيك (`Modules 40–41`)، موسوعة الليالي العشر وفن الگريز والهوسة (`Module 42`)، وخوارزمية التمييز الصوتي واللحني والمقامي الدقيق بين اللهجتين البحرانية والعراقية (`Module 43`).
+تجمع هذه الوثيقة المرجعية خلاصة **جامعة الصوتيات الحسينية الرقمية (الإصدارات V26.0 حتى V45.0 OMNI-ARCHITECT)** مع **دستور البرومبت الحسيني (Hussaini Prompt Constitution V5.5)**، شاملةً الفيزياء الفسيولوجية للصوت الجوهري والحنجرة الذهبية، هندسة المسارات الخمسة لطور الزنجيل والبندرية (`5-Track DAW Routing Matrix`)، الأطروحة الكاملة للهندسة الصوتية والفونيتك لنعي المنبر الحسيني، فلسفة ومعايير مزج الأطوار والفرق بين المقام («القماشة») والطور («الثوب المُفصّل»)، دستور الأركان الثلاثة لنجاح اللطمية الحسينية، بروتوكول التهيئة المسبقة للجلسة بصيغة `JSON` (`Module 39`)، هندسة التنوين اللهجي والفصيح وفصل الكلمات لمنع التشبيك (`Modules 40–41`)، موسوعة الليالي العشر وفن الگريز والهوسة (`Module 42`)، وخوارزمية التمييز الصوتي واللحني والمقامي الدقيق بين اللهجتين البحرانية والعراقية (`Module 43`).
 
 ---
 
@@ -97,10 +97,10 @@
 
 | الكلمة بالرسم العادي (تسبب نطقاً فصيحاً) | الرسم العروضي الصوتي المنبري المعتمد (`Phonetic Colloquial Spelling`) | اللهجة والاستخدام |
 | :--- | :--- | :--- |
-| كيف / ما جرى / ماذا صار | `شْلُونْ` / `شْجَرَى` / `شْصَارْ` | عراقية / بحرانية / خليجية |
-| قلبي / كبدي / عيونكِ | `گَلْبِي` (أو `گَلِبْ`) / `چَبْدِي` (أو `چَبِدْ`) / `عْيُونِچْ` | عراقية / فراتية / أهوازية |
+| كيف / ما جرى / ماذا صار | `شْلُونْ` / `إِشْ جَرَى` / `إِشْ صَارْ` | عراقية / بحرانية / خليجية (مع فصل `إِشْ` لمنع التشبيك — الوحدة 41) |
+| قلبي / كبدي / عيونكِ | `گَلْبِي` (أو `گَلُبْ`) / `چَبْدِي` (أو `چَبِدْ`) / `عْيُونِچْ` | عراقية / فراتية / بحرانية / أهوازية |
 | بكيت / وقفت / سقط | `بْچِيتْ` / `وْگَفِتْ` / `طَاحْ` | عراقية / بحرانية |
-| على الباب / على النهر / إلى الحسين | `عَالبَابْ` / `عَالنَّهَرْ` / `لِحْسَيْنْ` | دمج حرف الجر صوتياً لمنع القراءة الفصيحة |
+| على الباب / على النهر / إلى الحسين | `عَلَى البَابْ` / `عَلَى النَّهَرْ` / `لِـ حْسَيْنْ` | فصل حرف الجر صوتياً لمنع التشبيك في النطق (توافقاً مع الوحدة 41) |
 | أمي / أخي / بدونك / لم يبقَ | `يِمَّه` / `خُويَه` / `بْلَيَّاكْ` / `مَا ظَلْ` | عراقية / بحرانية |
 | أولادي / أطفالي / محنّاة | `وْلِيدَاتِي` / `بْزُورْتِي` / `مْحَنِّيَه` | عراقية / بحرانية |
 
@@ -143,7 +143,9 @@ Traditional Iraqi and Bahrani Hussaini Latmiya, Thaqeel Faizi and Nazla style, M
 Apply audio__apply_effect on the generated clip: HighPass filter at 85Hz, AdvancedEqualizer (cut 450Hz by -2.5dB, boost mid 1200Hz by +1.5dB, boost high-mid presence 2500Hz by +4.5dB), Compressor (ratio 3:1, threshold -12dB), Reverb (room_size 0.55, wet mix 0.18), and Limiter at -1.0dB.
 ```
 
-### قواعد التوافق الذهبية لمنصة Google Flow Music (`Lyria 3.5`):
+---
+
+## 6. قواعد التوافق الذهبية لمنصة Google Flow Music (`Lyria 3.5`)
 1. **مربع الكلمات (`Lyrics`)**: يجب أن يكون **باللغة العربية الخالصة 100%** (يُمنع وضع أي حرف إنجليزي `[a-zA-Z]` مثل `[pause: 0.4s]` أو `(deep heavy sigh)` داخل مربع `Lyrics` في مرحلة التوليد الأولي لأن المنصة قد تنطقها ككلمات إنجليزية).
 2. **صيغة الشطرين المتصلين بفاصل النقطتين (` .. `) والكثافة المثالية (`12 سطراً متساوية التفعيلة في التوليد الأولي`)**:
    - كتابة البيت الكامل في سطر واحد يفصل بين شطريه نقطتان فقط محاطتان بمسافة (`الشطر الأول .. الشطر الثاني`) دون وضع نقاط في نهاية السطر.
@@ -188,6 +190,8 @@ Apply audio__apply_effect on the generated clip: HighPass filter at 85Hz, Advanc
 | **QC8** | صوت الرادود يظهر ناعماً أو خفيفاً بدلاً من الفخامة والجهارة المنبرية | وجود كلمة `tenor` في خانة `Sound` | حذف كلمة `tenor` نهائياً، واستخدام واصف مختصر ومباشر: `commanding deep resonant Baritone lead vocal, powerful high chest-voice climbs`، أو الربط عبر `Producer Chat` بالمعرف المرجعي `26bbb3d2-65f0-42c3-a167-37127631ef0a` |
 | **QC9** | اللهجة غير عراقية/بحرانية واللحن غير متوازن ومكسور | غياب عبارة `authentic Iraqi and Bahrani colloquial dialect` من حقل `Sound`، أو خلط كلمات فصحى وتنوين وحركات إعراب في `Lyrics`، أو تكديس عدة مقامات وأوزان مختلفة في التوليد الأولي | 1. تثبيت `authentic Iraqi and Bahrani colloquial dialect` ومقام واحد فقط (`Maqam Saba` أو `Maqam Bayati`) في برومبت مختصر (40 كلمة). 2. كتابة الكلمات بالهجاء الصوتي الشعبي الخالص (`شْلُونْ، گَلِبْ، چَبِدْ، عْيُونِچْ`) مع تسكين أواخر الكلمات (`ْ`). 3. توحيد وزن وعدد تفعيلات جميع أسطر المرحلة الأولى الـ 12 (`Iso-Syllabic Lock`) |
 | **QC10** | الكورال ينطق عناوين الأقسام مثل «الرابط والقفلة» ككلمات مغناة | وضع التسميات الهيكلية بين قوسين دائريين `(الرابط والقفلة)` داخل `Lyrics` | عدم وضع أي توجيه هيكلي بين قوسين دائريين `(...)` لأن المحرك يغني ما بين القوسين الدائريين بصوت الكورال؛ تُحجز `(...)` حصراً لردّة الجمهور الفعلية مثل `(مَوْلَايَ يَا حُسَيْنْ)` |
+| **QC11** | تشبيك الكلمات المتجاورة ودمجها في النطق (`Word-Boundary Slurring`) | كتابة أدوات النداء أو الجر أو الاستفهام أو العطف متصلة بالكلمة (`ياحسين، يبوفاضل، عالباب، شصار، والشمس`) | تطبيق **الوحدة 41 (`Module 41`)**: فصل الكلمات بمسافة صريحة (`يَا حْسَيْنْ`، `يَا بُو فَاضِلْ`، `عَلَى البَابْ`، `إِشْ صَارْ`، `وَ الشَّمْسُ`) أو وضع فاصلة عربية خفيفة (`،`) بين الكلمات المتتالية |
+| **QC12** | خلل نطق التنوين (ابتلاع التنوين في وسط الشطر أو نطقه بلهجة فصحى جافة في الشعر الشعبي) | كتابة رمز التنوين القياسي (`ٍ / ٌ / ً`) في الشعر الشعبي أو في آخر الشطر (موضع الوقف) | تطبيق **الوحدة 40 (`Module 40`)**: كتابة تنوين التمكين الشعبي في وسط الشطر بنون ساكنة مكسورة مع كسر فعل المضارعة (`عَيْنِنْ تِسِيلْ`، `جَرْحِنْ چِبِيرْ`)، وكتابة تنوين الوصل الفصيح عروضياً (`جِسْمَنْ عَلَى الثَّرَى`، `دَامِنْ بِلَا قُبُورْ`)، مع إسقاط التنوين في آخر الشطر والوقف بالسكون (`ْ`) أو قلب تنوين الفتح إلى ألف مد (`ظَامِئَا`) |
 
 ---
 
@@ -452,7 +456,7 @@ Register the lyrics using lyrics__register and create the track using audio__cre
 
 ---
 
-## 13. الفيزياء الفسيولوجية للصوت الجوهري والحنجرة الذهبية، قواعد القصيدة الشجية، وهندسة المسارات الخمسة لطور «الزنجيل» و«البندرية» (`V39.0 OMNI-ARCHITECT`)
+## 13. الفيزياء الفسيولوجية للصوت الجوهري والحنجرة الذهبية، قواعد القصيدة الشجية، وهندسة المسارات الخمسة لطور «الزنجيل» و«البندرية» (`V45.0 OMNI-ARCHITECT`)
 
 ### أولاً: قواعد كتابة القصيدة الحسينية الشجية وصياغة الأطوار اللحنية
 1. **اختيار البحر والوزن الشعري الشجي:**
@@ -528,7 +532,7 @@ Register the lyrics using lyrics__register and create the track using audio__cre
 
 ---
 
-## 14. الأطروحة الشاملة للهندسة الصوتية والأدائية والفونيتك لنعي المنبر الحسيني ومقارنة المدرستين العراقية والبحرانية (`V39.0 Minbar Na'i Reference`)
+## 14. الأطروحة الشاملة للهندسة الصوتية والأدائية والفونيتك لنعي المنبر الحسيني ومقارنة المدرستين العراقية والبحرانية (`V45.0 OMNI-ARCHITECT`)
 
 ### أولاً: الجذور التاريخية وأطوار النعي الستة الكبرى
 يمتد النعي الحسيني بجذوره إلى الرثاء العربي القديم متبلوراً عقائدياً من دعوة أهل البيت (ع) لإحياء أمرهم بالإنشاد الحزين («رحم الله من أحيا أمرنا» وتوجيه الإمام الصادق ع لأبي هارون المكفوف: «أنشدني كما تنشدون عندكم» أي بالرقة والشجن). وتنقسم أطوار النعي المنبري إلى ستة أطوار رئيسية:
@@ -581,7 +585,7 @@ Register the lyrics using lyrics__register and create the track using audio__cre
 
 ---
 
-## 15. فلسفة ومعايير مزج الأطوار والألحان (`Atwar & Melodic Blending Architecture`)، الفرق الجوهري بين «المقام» و«الطور»، والتقسيم الوظيفي للأطوار مع الأمثلة التطبيقية (`V40.0 OMNI-ARCHITECT`)
+## 15. فلسفة ومعايير مزج الأطوار والألحان (`Atwar & Melodic Blending Architecture`)، الفرق الجوهري بين «المقام» و«الطور»، والتقسيم الوظيفي للأطوار مع الأمثلة التطبيقية (`V45.0 OMNI-ARCHITECT`)
 
 ### أولاً: الفرق الجوهري بين «المقام الموسيقي» («القماشة») و«الطور الحسيني» («الثوب المُفصّل»)
 العلاقة بين المقام والطور تشبه العلاقة بين **«القماشة الخام»** و**«الثوب المُفصّل»**:
@@ -651,7 +655,7 @@ Register the lyrics using lyrics__register and create the track using audio__cre
 
 ---
 
-## 16. دستور الأركان الثلاثة لنجاح اللطمية الحسينية: اللحن والأطوار، البناء المقامي، والهندسة الصوتية في الاستوديو والمأتم المباشر (`V41.0 OMNI-ARCHITECT`)
+## 16. دستور الأركان الثلاثة لنجاح اللطمية الحسينية: اللحن والأطوار، البناء المقامي، والهندسة الصوتية في الاستوديو والمأتم المباشر (`V45.0 OMNI-ARCHITECT`)
 
 تعتمد اللطمية الحسينية الناجحة والخالدة على تكامل ثلاثة أركان أساسية (**اللحن والأطوار، توظيف المقامات، والهندسة الصوتية بشقيها الاستوديوي والمباشر**) لتقديم عمل فني وعزائي يلامس وجدان المستمع ويحفظ قدسية وهوية المنبر الحسيني:
 
@@ -689,7 +693,7 @@ Register the lyrics using lyrics__register and create the track using audio__cre
 
 ---
 
-## 17. بروتوكول التهيئة المسبقة للجلسة بصيغة `JSON` على خطوتين في `Producer Chat` (`Module 39: Two-Step JSON Session Pre-Conditioning Protocol — V42.0 OMNI-ARCHITECT`)
+## 17. بروتوكول التهيئة المسبقة للجلسة بصيغة `JSON` على خطوتين في `Producer Chat` (`Module 39: Two-Step JSON Session Pre-Conditioning Protocol — V45.0 OMNI-ARCHITECT`)
 
 ### الفلسفة الهندسية (`JSON Session Pre-Conditioning / System Context Injection`)
 وكيل **`Producer Chat`** في `https://www.flowmusic.app/` هو نموذج لغوي ذكي يتحكم في أدوات التوليد الصوتي (`lyrics__register`، `audio__create_song`، `audio__render_edit`، `audio__apply_effect`). عندما نعطيه **دستور الإنتاج الحسيني الشامل بصيغة `JSON`** في الرسالة الأولى داخل `New session` قبل إدخال أي قصيدة، ونطلب منه حفظه كمرجع تشغيلي للجلسة دون استدعاء أداة التوليد بعد، فإنه يقفل ذاكرته السياقية بالكامل على قوانين المأتم الحسيني (منع الغناء والآلات، قفل اللهجة العراقية والبحرانية والوقف بالسكون، الالتزام بالـ 40 كلمة في `Sound` بمقام واحد، وتثبيت المعرفات الصوتية المرجعية والفلاتر).
@@ -700,10 +704,10 @@ Register the lyrics using lyrics__register and create the track using audio__cre
 انسخ هذا الأمر مع كائن الـ `JSON` الشامل وأرسله في **`Producer Chat`**، وانتظر رد الـ `Producer` بتأكيد استلام القواعد (`Acknowledge & Lock`):
 
 ```text
-System Context Injection (Hussaini Production Studio OS V42.0): Read and lock the following JSON production constitution in your active session memory as our strict operating protocol for all upcoming tracks in this session. DO NOT call lyrics__register or audio__create_song yet—simply acknowledge that you have locked these rules and are ready to receive the Arabic poem in Step 2:
+System Context Injection (Hussaini Production Studio OS V45.0): Read and lock the following JSON production constitution in your active session memory as our strict operating protocol for all upcoming tracks in this session. DO NOT call lyrics__register or audio__create_song yet—simply acknowledge that you have locked these rules and are ready to receive the Arabic poem in Step 2:
 
 {
-  "protocol_name": "Hussaini_Production_Studio_OS_V42_OMNI_ARCHITECT",
+  "protocol_name": "Hussaini_Production_Studio_OS_V45_OMNI_ARCHITECT",
   "session_mode": "Pre_Conditioning_Lock_Only_Wait_For_Step_2_Lyrics",
   "1_cultural_and_acoustic_firewall": {
     "permitted_sound_sources": [
@@ -801,7 +805,7 @@ System Context Injection (Hussaini Production Studio OS V42.0): Read and lock th
 بعد أن يردّ عليك `Producer Chat` بأنه حفظ دستور الـ `JSON` وأنه جاهز، أرسل له الرسالة الثانية التالية مع أبيات قصيدتك (12 سطراً موزونة ومشكولة بالوقف بالسكون):
 
 ```text
-Now execute Step 2 following the locked V42.0 JSON constitution:
+Now execute Step 2 following the locked V45.0 JSON constitution:
 1. Call `lyrics__register` with the exact pure-Arabic lyrics below.
 2. Call `audio__create_song` referencing clip ID "26bbb3d2-65f0-42c3-a167-37127631ef0a" at 58 BPM using the `iraqi_bahrani_58bpm_saba` 40-word sound prompt:
 "Traditional Iraqi and Bahrani Hussaini Latmiya, Thaqeel Faizi and Nazla style, Maqam Saba, 58 BPM, authentic Iraqi and Bahrani colloquial dialect, commanding deep resonant Baritone lead vocal, powerful high chest-voice climbs, natural vocal rasp, emotional weep cracks, heavy 55Hz bare-palm chest thud, 285ms analog tape echo, 3.2s Husseiniya hall reverb, wide unison male Raddada choir response, Pure Acapella No Instruments"
@@ -832,7 +836,7 @@ Lyrics to register:
 
 ---
 
-## 18. هندسة النطق الدقيق والتنوين العروضي واللّهجي (`Module 40`)، قانون فصل الكلمات لمنع التشبيك في `Flow Music` (`Module 41`)، وموسوعة الليالي العشر وفن «الگريز» والهوسة والأطوار التراثية النادرة (`Module 42 — V43.0 OMNI-ARCHITECT`)
+## 18. هندسة النطق الدقيق والتنوين العروضي واللّهجي (`Module 40`)، قانون فصل الكلمات لمنع التشبيك في `Flow Music` (`Module 41`)، وموسوعة الليالي العشر وفن «الگريز» والهوسة والأطوار التراثية النادرة (`Module 42 — V45.0 OMNI-ARCHITECT`)
 
 ### أولاً: هندسة النطق الدقيق والتنوين المتناسب مع اللهجات والفصحى في `www.flowmusic.app` (`Module 40: Dialect-Accurate & Prosodic Tanween Resolution`)
 يعاني محرك التحويل الصوتي (`Arabic G2P Tokenizer`) في نماذج الذكاء الاصطناعي من خلل شائع عند قراءة رموز التنوين القياسية (`ً ، ٌ ، ٍ`)؛ فإما أن يبتلعها فيكسر الوزن العروضي، أو يقرأها بلهجة فصحى مدرسية جافة داخل القصيدة الشعبية. ولضبط التنوين بنسبة 100% بما يناسب كل لهجة ومقام، تُطبّق القواعد الثلاث التالية:
@@ -875,7 +879,7 @@ Lyrics to register:
 
 ---
 
-### ثالثاً: المراجعة الشاملة وإضافة الأركان التراثية المفقودة في عالم الرثاء الحسيني (`Module 42: Comprehensive Heritage Expansion — V43.0`)
+### ثالثاً: المراجعة الشاملة وإضافة الأركان التراثية المفقودة في عالم الرثاء الحسيني (`Module 42: Comprehensive Heritage Expansion — V45.0`)
 
 لضمان تكامل المهارة بنسبة 100% كمرجع خبير شامل في عالم الرثاء الحسيني، تمت إضافة الأركان التراثية والفنية الأربعة التالية:
 
@@ -923,7 +927,7 @@ Lyrics to register:
 
 ---
 
-## 19. خوارزمية التعرف التلقائي والتمييز الصوتي واللحني والمقامي الدقيق بين «اللهجة البحرانية» و«اللهجة العراقية» (`Module 43: Automatic Bahrani vs. Iraqi Dialect Identification, Phonological Diacritics & Maqam Articulation Engine — V44.0 OMNI-ARCHITECT`)
+## 19. خوارزمية التعرف التلقائي والتمييز الصوتي واللحني والمقامي الدقيق بين «اللهجة البحرانية» و«اللهجة العراقية» (`Module 43: Automatic Bahrani vs. Iraqi Dialect Identification, Phonological Diacritics & Maqam Articulation Engine — V45.0 OMNI-ARCHITECT`)
 
 لا يقتصر الفرق بين المدرسة البحرانية والمدرسة العراقية على المفردات فحسب، بل يمتد إلى **فيزياء نطق الحروف والحركات (الفونولوجيا) وكيفية تفاعل الكلمة مع اللحن والمقام الموسيقي**. هذا القسم يزود الوكيل الذكي ومحرك `Flow Music` (`Lyria 3.5`) بخوارزمية التعرف التلقائي على اللهجة وضبط تشكيلها الصوتي ومسارها النغمي بدقة 100%:
 
@@ -963,6 +967,7 @@ Lyrics to register:
 
 #### 3. إذا كانت القصيدة «دمجاً عراقياً-بحرانياً مشتركاً» (مثل مدرسة «أم البنين» للملا عطية الجمري وباسم الكربلائي):
 - نضبط كل مفردة في النص بتشكيلها الصوتي الأصيل (بحسب جدول المقارنة أعلاه)، ونقفل دستور الـ `JSON` في `Producer Chat` (الخطوة الأولى) الذي يحتوي الآن على حقل **`bahrani_vs_iraqi_dialect_recognition_and_maqam_articulation`** بحيث يميّز المحرك تلقائياً بين ترقيق المدّ البحراني وتفخيم المدّ العراقي داخل المقام!
+
 
 
 
