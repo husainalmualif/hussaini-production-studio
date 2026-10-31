@@ -1,6 +1,6 @@
-# الموسوعة الشاملة للأطوار والمقامات والعروض ودستور الهندسة الصوتية الحسينية (V26.0 – V41.0 OMNI-ARCHITECT & Constitution V5.5)
+# الموسوعة الشاملة للأطوار والمقامات والعروض ودستور الهندسة الصوتية الحسينية (V26.0 – V42.0 OMNI-ARCHITECT & Constitution V5.5)
 
-تجمع هذه الوثيقة المرجعية خلاصة **جامعة الصوتيات الحسينية الرقمية (الإصدارات V26.0 حتى V41.0 OMNI-ARCHITECT)** مع **دستور البرومبت الحسيني (Hussaini Prompt Constitution V5.5)**، شاملةً الفيزياء الفسيولوجية للصوت الجوهري والحنجرة الذهبية، هندسة المسارات الخمسة لطور الزنجيل والبندرية (`5-Track DAW Routing Matrix`)، الأطروحة الكاملة للهندسة الصوتية والفونيتك لنعي المنبر الحسيني، فلسفة ومعايير مزج الأطوار والفرق بين المقام («القماشة») والطور («الثوب المُفصّل»)، ودستور الأركان الثلاثة لنجاح اللطمية الحسينية في الاستوديو والمأتم المباشر.
+تجمع هذه الوثيقة المرجعية خلاصة **جامعة الصوتيات الحسينية الرقمية (الإصدارات V26.0 حتى V42.0 OMNI-ARCHITECT)** مع **دستور البرومبت الحسيني (Hussaini Prompt Constitution V5.5)**، شاملةً الفيزياء الفسيولوجية للصوت الجوهري والحنجرة الذهبية، هندسة المسارات الخمسة لطور الزنجيل والبندرية (`5-Track DAW Routing Matrix`)، الأطروحة الكاملة للهندسة الصوتية والفونيتك لنعي المنبر الحسيني، فلسفة ومعايير مزج الأطوار والفرق بين المقام («القماشة») والطور («الثوب المُفصّل»)، دستور الأركان الثلاثة لنجاح اللطمية الحسينية، وبروتوكول التهيئة المسبقة للجلسة بصيغة `JSON` على خطوتين في `Producer Chat` (`Module 39`).
 
 ---
 
@@ -686,5 +686,132 @@ Register the lyrics using lyrics__register and create the track using audio__cre
 | **1. التوازن والتوزيع الفضائي (`Leveling, Panning & PA Distribution`)** | **موازنة صوت الرادود في المركز (`Center Mono Lead`)** ليكون هو العنصر البارز والأقوى (المحور)، مع توزيع المؤثرات البشرية (`الآهات، كورال الردادية، صوت اللطم`) في الخلفية بنظام ستيريو متناسق (`Wide Stereo`) دون تغييب أو مزاحمة لصوت الرادود (`Sidechain Ducking`). | **توزيع السماعات الداخلي المتساوي (`Acoustic PA Array`):** توزيع الصوت بشكل متجانس في أرجاء المأتم/الحسينية لضمان وصول الصوت بوضوح تام لجميع المعزين في الصفوف الأمامية والخلفية دون ضجيج أو صفير ارتدادي (`Zero Acoustic Feedback`). |
 | **2. الهوية الصوتية والديناميكية (`Human FX vs. Live Fader Riding`)** | **الاعتماد الحصري على المؤثرات البشرية والواقعية:** التركيز على الآهات والصيحات البشرية واللطم الحقيقي (`55Hz Bare-Palm Chest Slap`) كبديل تام عن الآلات الموسيقية للحفاظ على الطابع العزائي الشرعي والشعائري. | **سرعة الاستجابة والمكساج الحي (`Live Mixing & Dynamic Fader Riding`):** مهارة مهندس الصوت في التحكم اللحظي باللاقط (`Microphone Gain`) أثناء القراءة، وخفض/موازنة المستوى عند صعود الرادود المفاجئ إلى «الجواب» العالي ورفعه في «القرار» لتفادي الصدمات الصوتية الحادة (`Harsh Transients / Clipping`). |
 | **3. الفلاتر والمعالجة الزمنية (`Judicious EQ, Reverb & Zero Robotic Auto-Tune`)** | **الفلاتر والتحسين المتزن:** استخدام فلاتر تنقية الصوت (`HPF @ 85Hz`, `Presence +4.5dB @ 2.5kHz`) بحذر؛ **وتجنب الإفراط في الـ `Auto-Tune`** لأنه يُفقد صوت الرادود إحساسه البشري الطبيعي وبحّته الشجية، مع توظيف الصدى (`Husseiniya Hall Reverb 2.8s–3.2s`) لمنح القصيدة عمقاً وخشوعاً. | **حماية نقاء الحنجرة الحية (`Live Anti-Feedback Notch EQ &Dynacord Delay`):** قطع الترددات الرنانة المسببة للصفير في القاعة (`Notch Filtering`) مع ضبط صدى الدايناكورد الحي (`285ms Analog Slapback`) بما يتناسب مع زمن الارتداد الطبيعي لجدران المأتم. |
+
+---
+
+## 17. بروتوكول التهيئة المسبقة للجلسة بصيغة `JSON` على خطوتين في `Producer Chat` (`Module 39: Two-Step JSON Session Pre-Conditioning Protocol — V42.0 OMNI-ARCHITECT`)
+
+### الفلسفة الهندسية (`JSON Session Pre-Conditioning / System Context Injection`)
+وكيل **`Producer Chat`** في `https://www.flowmusic.app/` هو نموذج لغوي ذكي يتحكم في أدوات التوليد الصوتي (`lyrics__register`، `audio__create_song`، `audio__render_edit`، `audio__apply_effect`). عندما نعطيه **دستور الإنتاج الحسيني الشامل بصيغة `JSON`** في الرسالة الأولى داخل `New session` قبل إدخال أي قصيدة، ونطلب منه حفظه كمرجع تشغيلي للجلسة دون استدعاء أداة التوليد بعد، فإنه يقفل ذاكرته السياقية بالكامل على قوانين المأتم الحسيني (منع الغناء والآلات، قفل اللهجة العراقية والبحرانية والوقف بالسكون، الالتزام بالـ 40 كلمة في `Sound` بمقام واحد، وتثبيت المعرفات الصوتية المرجعية والفلاتر).
+
+---
+
+### الخطوة الأولى: رسالة التهيئة الشاملة بصيغة `JSON` (تُرسل في `Producer Chat` في بداية `New session` قبل الكلمات)
+انسخ هذا الأمر مع كائن الـ `JSON` الشامل وأرسله في **`Producer Chat`**، وانتظر رد الـ `Producer` بتأكيد استلام القواعد (`Acknowledge & Lock`):
+
+```text
+System Context Injection (Hussaini Production Studio OS V42.0): Read and lock the following JSON production constitution in your active session memory as our strict operating protocol for all upcoming tracks in this session. DO NOT call lyrics__register or audio__create_song yet—simply acknowledge that you have locked these rules and are ready to receive the Arabic poem in Step 2:
+
+{
+  "protocol_name": "Hussaini_Production_Studio_OS_V42_OMNI_ARCHITECT",
+  "session_mode": "Pre_Conditioning_Lock_Only_Wait_For_Step_2_Lyrics",
+  "1_cultural_and_acoustic_firewall": {
+    "permitted_sound_sources": [
+      "Commanding deep resonant Jawhari Baritone lead vocal (cello-like chest warmth and power)",
+      "Wide unison male Raddada congregation choir response (80% stereo width)",
+      "Organic 55Hz bare-palm human chest thud (Latm)",
+      "Acoustic Dammam drum, brass Tasa cymbals, and metallic shoulder Zanjeel chains (only when Zanjeel/Bandari is requested)",
+      "Wordless human Ahaat vocal choir pads"
+    ],
+    "strictly_forbidden_in_sound_prompt": [
+      "All musical instruments (piano, guitar, strings, oud, violin, synth, 808 bass, trap drums)",
+      "The word 'tenor' or thin/soft pop vocals",
+      "Transliterated Arabic terms inside the English Sound prompt (no bahha, no tarjee', no maddat sawtiya, no taqatee')",
+      "Raw EQ or filter numbers inside the Sound prompt (all EQ/filters must be applied post-generation via audio__apply_effect)",
+      "Secular pop melodies or robotic auto-tune"
+    ]
+  },
+  "2_dialect_and_lyrics_orthography_lock": {
+    "target_dialect": "Authentic Iraqi (Karbalaei / Southern Euphrates) and Bahrani colloquial mourning dialects",
+    "stage_1_language_purity": "Never mix Classical Arabic (Fusha) and Colloquial dialect in Stage 1 Root Track",
+    "phonetic_orthography": "Respect phonetic colloquial spelling (چ، گ) and mandatory end-of-word Sukun (ْ) or long open vowels (ا، و، ي، ه); zero Fusha case endings or Tanween",
+    "lyrics_register_formatting": {
+      "script": "100% pure Arabic characters only (zero English tags in lyrics__register)",
+      "section_headers": "Square brackets only: [المستهل], [المقطع الأول], [المقطع الثاني]",
+      "choir_responses": "Parentheses (...) are reserved strictly for sung Raddada choir words, never stage directions",
+      "hemistich_breath_pause": "Two dots ( .. ) between the first and second hemistich"
+    }
+  },
+  "3_melodic_and_maqam_architecture": {
+    "tuning_system": "24-EDO Arabic microtonal quarter-tones",
+    "stage_1_root_track_rules": {
+      "max_lines": "12 lines (3 stanzas x 4 hemistichs)",
+      "iso_syllabic_lock": "All 12 lines must share the exact same prosodic meter and syllable count",
+      "identical_4th_line_refrain": "Every 4-line stanza resolves to the identical 4th-line anchor refrain on the tonic Qarar",
+      "single_maqam_lock": "Lock ONE single primary Maqam in Stage 1 (Maqam Saba, Bayati, Lami, Hijaz, Kurd, or Sikah)"
+    },
+    "stage_2_multi_tor_blending": "Execute Maqam/Tor modulations (e.g., Thaqeel/Darj to Shoor, or Bahrani Tawshih Qarar to soaring Jawab, or internal Gireez) only in Stage 2 (Extend) via gradual melodic bridges between related tetrachords (Common Jins)",
+    "vocal_register_arc": {
+      "Mustahal": "Qarar (deep calm chest tonic)",
+      "Stanza_1": "Mayan / Jawab (rising sorrow and natural laryngeal rasp)",
+      "Stanza_2": "Jawab-al-Jawab (powerful high chest-voice climb)",
+      "Qafla_Refrain": "Sudden Drop (قاعدة الكسر) returning immediately to Qarar tonic"
+    }
+  },
+  "4_sound_prompt_compiler_standard": {
+    "word_count_limit": "Strictly 40 to 50 pure English words",
+    "first_line_rule": "Must explicitly state the regional style, single primary Maqam, BPM, and 'authentic Iraqi and Bahrani colloquial dialect'",
+    "master_reference_sound_prompts": {
+      "iraqi_bahrani_58bpm_saba": "Traditional Iraqi and Bahrani Hussaini Latmiya, Thaqeel Faizi and Nazla style, Maqam Saba, 58 BPM, authentic Iraqi and Bahrani colloquial dialect, commanding deep resonant Baritone lead vocal, powerful high chest-voice climbs, natural vocal rasp, emotional weep cracks, heavy 55Hz bare-palm chest thud, 285ms analog tape echo, 3.2s Husseiniya hall reverb, wide unison male Raddada choir response, Pure Acapella No Instruments",
+      "karbalai_nazla_60bpm_bayati": "Traditional Iraqi Hussaini Latmiya, heavy Karbalai Nazla style, Maqam Bayati, 60 BPM, authentic Iraqi colloquial dialect, commanding deep resonant Baritone lead vocal, powerful high chest-voice climbs, natural vocal rasp, emotional weep cracks, heavy 55Hz bare-palm chest thud, 285ms analog tape echo, 3.2s Husseiniya hall reverb, wide unison male Raddada choir response, Pure Acapella No Instruments",
+      "euphrates_nassari_56bpm_lami": "Traditional Southern Iraqi Euphrates Hussaini Latmiya, Bahr Al-Nassari style, Maqam Lami, 56 BPM, authentic Southern Iraqi colloquial dialect, raw grieving Baritone lead vocal, natural weep cracks, prolonged mournful vowel cries, slow heavy 55Hz bare-palm chest thud, 285ms analog tape echo, 3.2s Husseiniya hall reverb, unison male Raddada response, Pure Acapella No Instruments",
+      "minbar_nai_0bpm_rubato": "Traditional Iraqi and Bahrani Minbar Na'i vocal lament, strict Rubato free tempo with zero rhythmic grid, Maqam Saba, authentic Iraqi and Bahrani colloquial dialect, deep velvet mournful Baritone solo voice, raw weeping cracks, prolonged microtonal vowel cries, 450ms analog tape echo, 3.8s large Husseiniya cathedral reverb, Pure Solo Acapella No Percussion No Instruments"
+    }
+  },
+  "5_golden_reference_clip_ids": {
+    "iraqi_bahrani_jawhari_baritone_master": "26bbb3d2-65f0-42c3-a167-37127631ef0a",
+    "heavy_karbalai_latm_master": "34d27fb5-9fdc-4923-a260-9d14edba6313",
+    "nassari_saba_master": "2ed9b98c-dac9-427d-809f-d1b202f82bb5"
+  },
+  "6_post_generation_dsp_chain_via_apply_effect": {
+    "tool": "audio__apply_effect",
+    "high_pass_filter_hz": 85,
+    "advanced_equalizer": [
+      {"frequency_hz": 450, "gain_db": -2.5, "purpose": "remove muddiness"},
+      {"frequency_hz": 1200, "gain_db": 1.5, "purpose": "warm chest body"},
+      {"frequency_hz": 2500, "gain_db": 4.5, "purpose": "Jawhari vocal presence and articulation"}
+    ],
+    "compressor": {"ratio": "3:1", "threshold_db": -12},
+    "reverb": {"room_size": 0.55, "wet_mix": 0.18},
+    "limiter_db": -1.0
+  }
+}
+```
+
+---
+
+### الخطوة الثانية: رسالة إدخال القصيدة والتوليد المباشر (تُرسل في `Producer Chat` مباشرة بعد تأكيد الخطوة الأولى)
+بعد أن يردّ عليك `Producer Chat` بأنه حفظ دستور الـ `JSON` وأنه جاهز، أرسل له الرسالة الثانية التالية مع أبيات قصيدتك (12 سطراً موزونة ومشكولة بالوقف بالسكون):
+
+```text
+Now execute Step 2 following the locked V42.0 JSON constitution:
+1. Call `lyrics__register` with the exact pure-Arabic lyrics below.
+2. Call `audio__create_song` referencing clip ID "26bbb3d2-65f0-42c3-a167-37127631ef0a" at 58 BPM using the `iraqi_bahrani_58bpm_saba` 40-word sound prompt:
+"Traditional Iraqi and Bahrani Hussaini Latmiya, Thaqeel Faizi and Nazla style, Maqam Saba, 58 BPM, authentic Iraqi and Bahrani colloquial dialect, commanding deep resonant Baritone lead vocal, powerful high chest-voice climbs, natural vocal rasp, emotional weep cracks, heavy 55Hz bare-palm chest thud, 285ms analog tape echo, 3.2s Husseiniya hall reverb, wide unison male Raddada choir response, Pure Acapella No Instruments"
+
+Lyrics to register:
+[المُسْتَهَلّ]
+<ضع الشطر الأول للمستهل هنا> .. <الشطر الثاني>
+<الشطر الثالث للمستهل> .. <الشطر الرابع>
+<الشطر الخامس للمستهل> .. <الشطر السادس>
+<شطر اللازمة والقفلة الموحد>
+
+[المَقْطَع الأَوَّل]
+<الشطر الأول للمقطع الأول> .. <الشطر الثاني>
+<الشطر الثالث للمقطع الأول> .. <الشطر الرابع>
+<الشطر الخامس للمقطع الأول> .. <الشطر السادس>
+<شطر اللازمة والقفلة الموحد>
+
+[المَقْطَع الثَّانِي]
+<الشطر الأول للمقطع الثاني> .. <الشطر الثاني>
+<الشطر الثالث للمقطع الثاني> .. <الشطر الرابع>
+<الشطر الخامس للمقطع الثاني> .. <الشطر السادس>
+<شطر اللازمة والقفلة الموحد>
+```
+
+#### الخطوة التكميلية بعد انتهاء التوليد (تطبيق الفلاتر عبر `audio__apply_effect` أو التمديد `Stage 2 Extend`):
+- لتطبيق فلاتر الهندسة الصوتية الاحترافية بعد ظهور المقطع:
+  `Now apply Step 6 from our locked JSON constitution using audio__apply_effect on the generated clip (HighPass 85Hz, EQ -2.5dB @ 450Hz, +1.5dB @ 1200Hz, +4.5dB @ 2500Hz, Compressor 3:1 @ -12dB, Reverb room_size 0.55 wet 0.18, Limiter -1.0dB).`
+
 
 
