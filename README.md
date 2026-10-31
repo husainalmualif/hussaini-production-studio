@@ -286,12 +286,15 @@ json_payload = build_flowmusic_json_preconditioning(dialect="iraqi_bahrani", maq
 bridge = build_multi_tor_melodic_bridge("saba", "hijaz", "Tor Faizi / Nazla", "Tor Rukban / Hosa")
 ```
 
-#### 2. تشغيل اختبارات الوحدات الآلية (`Pytest`) وفحص جودة الكود (`Pylint`):
+#### 2. ترجمة وفحص كلمات القصيدة مباشرة من الطرفية (`CLI Lyrics Compiler`) وتشغيل الاختبارات (`Pytest & Pylint`):
 ```bash
 # تثبيت المتطلبات
 pip install -r requirements.txt
 
-# تشغيل اختبارات الوحدات الـ 6 (Modules 34, 38, 39, 40, 41, 43 + 5-Track DAW & -3.0dB Sidechain Ducking)
+# ترجمة وفحص كلمات القصيدة مباشرة من الطرفية (فصل الكلمات + التنوين + كشف اللهجة وتشكيلها) بدون الحاجة لملف صوتي
+python3 scripts/hussaini_dsp_montage.py --compile-lyrics "ياحسين يا خويه شلون قلب وچبد ودمع وعينٍ تسيل"
+
+# تشغيل اختبارات الوحدات الـ 7 (Modules 34, 38, 39, 40, 41, 43 + CLI + 5-Track DAW & -3.0dB Sidechain Ducking)
 pytest -v tests/test_hussaini_modules.py
 
 # فحص جودة الكود بمعايير Pylint الصارمة
