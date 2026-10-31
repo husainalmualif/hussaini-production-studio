@@ -1,9 +1,10 @@
-# استوديو الإنتاج الحسيني الشامل — Hussaini Production Studio (V41.0 OMNI-ARCHITECT)
+# استوديو الإنتاج الحسيني الشامل — Hussaini Production Studio (V42.0 OMNI-ARCHITECT)
 
-مهارة متكاملة للتأليف الشعري الحسيني، وهندسة الألحان والمقامات والأطوار المنبرية ومزجها (`Multi-Tor & Melodic Blending`)، وتوليد القصائد واللطميات بالذكاء الاصطناعي (**Google Flow Music / Lyria 3.5, Suno, Udio**)، والمونتاج الصوتي الاحترافي (**DSP Vocal Montage, 5-Track DAW Routing & Live Matam Sound Engineering**) للتسجيلات الصوتية والمجالس.
+مهارة متكاملة للتأليف الشعري الحسيني، وهندسة الألحان والمقامات والأطوار المنبرية ومزجها (`Multi-Tor & Melodic Blending`)، وتوليد القصائد واللطميات بالذكاء الاصطناعي (**Google Flow Music / Lyria 3.5, Suno, Udio**) عبر **بروتوكول التهيئة المسبقة للجلسة بصيغة `JSON` (`Two-Step JSON Session Pre-Conditioning`)**، والمونتاج الصوتي الاحترافي (**DSP Vocal Montage, 5-Track DAW Routing & Live Matam Sound Engineering**) للتسجيلات الصوتية والمجالس.
 
 تدمج هذه المهارة:
-- **الموسوعة الصوتية الحسينية الموحدة (`V26.0 – V41.0 OMNI-ARCHITECT`)**
+- **الموسوعة الصوتية الحسينية الموحدة (`V26.0 – V42.0 OMNI-ARCHITECT`)**
+- **بروتوكول التهيئة المسبقة للجلسة بصيغة `JSON` على خطوتين في `Producer Chat` (`Module 39 / Section 17 — JSON Session Pre-Conditioning Protocol`)**
 - **دستور البرومبت الحسيني (`Constitution V5.5+ — MODE M & MODE C`)**
 - **منظومة قفل اللهجة الإملائي الصوتي وتوازن التفعيلات (`Dialect Commitment Lock & Iso-Syllabic Stage-1 Lock — Modules 34–38`)**
 - **الفيزياء الفسيولوجية للصوت الجوهري (`Jawhari Cello-Resonance Voice`) والحنجرة الذهبية (`Golden Larynx`)، وهندسة المسارات الخمسة لطور الزنجيل والبندرية (`5-Track DAW Routing & EQ Matrix — Section 13`)**
@@ -110,13 +111,91 @@ Traditional Iraqi and Bahrani Hussaini Latmiya, Thaqeel Faizi and Nazla style, M
 | **6** | **الصوت الصدري الجبلي الصاعد (`Chest-Belted Jawab`)** | `high-power full-chest belted Baritone lead vocal, intense gritty upper-register projection, emotional weep cracks, commanding congregation delivery` | مدرسة السيد سلام الحسيني، مسلم الوائلي، والملا جليل الكربلائي (للمجالس المتعددة الحركات والقصائد التفاعلية) |
 | **7** | **الكورال الحسيني المهيب (`Unison Raddada Choir`)** | `wide unison male Raddada choir response, deep masculine congregation chanting` | لتثبيت طبقة القرار والردّة الجماعية المهيبة في المستهل والقفلات |
 
-#### رابعاً: قفل الصوت عبر `Producer Chat` بالربط مع المعرف الذهبي `26bbb3d2-65f0-42c3-a167-37127631ef0a` + تطبيق الفلاتر لاحقاً (`audio__apply_effect`):
-1. **أمر التوليد عبر `Producer Chat`:**
+#### رابعاً: بروتوكول التهيئة المسبقة للجلسة بصيغة `JSON` على خطوتين في `Producer Chat` (`Two-Step JSON Session Pre-Conditioning Protocol — Module 39`)
+لقفل ذاكرة وكيل `Producer Chat` في `https://www.flowmusic.app/` بنسبة 100% ومنع أي أخطاء لحنية أو لغوية أو مقامية أو موسيقية، نطبّق بروتوكول الخطوتين في بداية كل `New session`:
+
+1. **الخطوة الأولى (رسالة التهيئة الشاملة بصيغة `JSON` قبل إدخال أي قصيدة):**
+   انسخ هذا الأمر مع كائن الـ `JSON` الشامل وأرسله في **`Producer Chat`**، وانتظر تأكيد الـ `Producer` بحفظ القواعد دون توليد:
 ```text
+System Context Injection (Hussaini Production Studio OS V42.0): Read and lock the following JSON production constitution in your active session memory as our strict operating protocol for all upcoming tracks in this session. DO NOT call lyrics__register or audio__create_song yet—simply acknowledge that you have locked these rules and are ready to receive the Arabic poem in Step 2:
+
+{
+  "protocol_name": "Hussaini_Production_Studio_OS_V42_OMNI_ARCHITECT",
+  "session_mode": "Pre_Conditioning_Lock_Only_Wait_For_Step_2_Lyrics",
+  "1_cultural_and_acoustic_firewall": {
+    "permitted_sound_sources": [
+      "Commanding deep resonant Jawhari Baritone lead vocal (cello-like chest warmth and power)",
+      "Wide unison male Raddada congregation choir response (80% stereo width)",
+      "Organic 55Hz bare-palm human chest thud (Latm)",
+      "Acoustic Dammam drum, brass Tasa cymbals, and metallic shoulder Zanjeel chains (only when Zanjeel/Bandari is requested)",
+      "Wordless human Ahaat vocal choir pads"
+    ],
+    "strictly_forbidden_in_sound_prompt": [
+      "All musical instruments (piano, guitar, strings, oud, violin, synth, 808 bass, trap drums)",
+      "The word 'tenor' or thin/soft pop vocals",
+      "Transliterated Arabic terms inside the English Sound prompt (no bahha, no tarjee', no maddat sawtiya, no taqatee')",
+      "Raw EQ or filter numbers inside the Sound prompt (all EQ/filters must be applied post-generation via audio__apply_effect)",
+      "Secular pop melodies or robotic auto-tune"
+    ]
+  },
+  "2_dialect_and_lyrics_orthography_lock": {
+    "target_dialect": "Authentic Iraqi (Karbalaei / Southern Euphrates) and Bahrani colloquial mourning dialects",
+    "stage_1_language_purity": "Never mix Classical Arabic (Fusha) and Colloquial dialect in Stage 1 Root Track",
+    "phonetic_orthography": "Respect phonetic colloquial spelling (چ، گ) and mandatory end-of-word Sukun (ْ) or long open vowels (ا، و، ي، ه); zero Fusha case endings or Tanween",
+    "lyrics_register_formatting": {
+      "script": "100% pure Arabic characters only (zero English tags in lyrics__register)",
+      "section_headers": "Square brackets only: [المستهل], [المقطع الأول], [المقطع الثاني]",
+      "choir_responses": "Parentheses (...) are reserved strictly for sung Raddada choir words, never stage directions",
+      "hemistich_breath_pause": "Two dots ( .. ) between the first and second hemistich"
+    }
+  },
+  "3_melodic_and_maqam_architecture": {
+    "tuning_system": "24-EDO Arabic microtonal quarter-tones",
+    "stage_1_root_track_rules": {
+      "max_lines": "12 lines (3 stanzas x 4 hemistichs)",
+      "iso_syllabic_lock": "All 12 lines must share the exact same prosodic meter and syllable count",
+      "identical_4th_line_refrain": "Every 4-line stanza resolves to the identical 4th-line anchor refrain on the tonic Qarar",
+      "single_maqam_lock": "Lock ONE single primary Maqam in Stage 1 (Maqam Saba, Bayati, Lami, Hijaz, Kurd, or Sikah)"
+    },
+    "stage_2_multi_tor_blending": "Execute Maqam/Tor modulations only in Stage 2 (Extend) via gradual melodic bridges between related tetrachords (Common Jins)",
+    "vocal_register_arc": {
+      "Mustahal": "Qarar (deep calm chest tonic)",
+      "Stanza_1": "Mayan / Jawab (rising sorrow and natural laryngeal rasp)",
+      "Stanza_2": "Jawab-al-Jawab (powerful high chest-voice climb)",
+      "Qafla_Refrain": "Sudden Drop (قاعدة الكسر) returning immediately to Qarar tonic"
+    }
+  },
+  "4_sound_prompt_compiler_standard": {
+    "word_count_limit": "Strictly 40 to 50 pure English words",
+    "master_iraqi_bahrani_58bpm_saba": "Traditional Iraqi and Bahrani Hussaini Latmiya, Thaqeel Faizi and Nazla style, Maqam Saba, 58 BPM, authentic Iraqi and Bahrani colloquial dialect, commanding deep resonant Baritone lead vocal, powerful high chest-voice climbs, natural vocal rasp, emotional weep cracks, heavy 55Hz bare-palm chest thud, 285ms analog tape echo, 3.2s Husseiniya hall reverb, wide unison male Raddada choir response, Pure Acapella No Instruments"
+  },
+  "5_golden_reference_clip_ids": {
+    "iraqi_bahrani_jawhari_baritone_master": "26bbb3d2-65f0-42c3-a167-37127631ef0a",
+    "heavy_karbalai_latm_master": "34d27fb5-9fdc-4923-a260-9d14edba6313",
+    "nassari_saba_master": "2ed9b98c-dac9-427d-809f-d1b202f82bb5"
+  },
+  "6_post_generation_dsp_chain_via_apply_effect": {
+    "tool": "audio__apply_effect",
+    "high_pass_filter_hz": 85,
+    "advanced_equalizer": [
+      {"frequency_hz": 450, "gain_db": -2.5},
+      {"frequency_hz": 1200, "gain_db": 1.5},
+      {"frequency_hz": 2500, "gain_db": 4.5}
+    ],
+    "compressor": {"ratio": "3:1", "threshold_db": -12},
+    "reverb": {"room_size": 0.55, "wet_mix": 0.18},
+    "limiter_db": -1.0
+  }
+}
+```
+
+2. **الخطوة الثانية (إرسال القصيدة وأمر التوليد بعد تأكيد الـ `Producer`):**
+```text
+Now execute Step 2 following the locked V42.0 JSON constitution:
 Register the lyrics using lyrics__register and create the track using audio__create_song referencing clip ID "26bbb3d2-65f0-42c3-a167-37127631ef0a" at 58 BPM with this sound prompt:
 "Traditional Iraqi and Bahrani Hussaini Latmiya, Thaqeel Faizi and Nazla style, Maqam Saba, 58 BPM, authentic Iraqi and Bahrani colloquial dialect, commanding deep resonant Baritone lead vocal, powerful high chest-voice climbs, natural vocal rasp, emotional weep cracks, heavy 55Hz bare-palm chest thud, 285ms analog tape echo, 3.2s Husseiniya hall reverb, wide unison male Raddada choir response, Pure Acapella No Instruments"
 ```
-2. **أمر المعادل الصوتي والفلاتر بعد التوليد (`Post-Generation DSP via audio__apply_effect`):**
+3. **الخطوة التكميلية بعد التوليد (تطبيق المعادل الصوتي والفلاتر عبر `audio__apply_effect`):**
 ```text
 Apply audio__apply_effect on the generated clip: HighPass filter at 85Hz, AdvancedEqualizer (cut 450Hz by -2.5dB, boost mid 1200Hz by +1.5dB, boost high-mid presence 2500Hz by +4.5dB), Compressor (ratio 3:1, threshold -12dB), Reverb (room_size 0.55, wet mix 0.18), and Limiter at -1.0dB.
 ```
@@ -181,10 +260,10 @@ python3 scripts/hussaini_dsp_montage.py \
 
 ```text
 hussaini-production-studio/
-├── SKILL.md                                         # ملف التعليمات الرئيسي وسير العمل (Workflows 1, 1.5, 2, 3 & Gotchas — V41.0)
+├── SKILL.md                                         # ملف التعليمات الرئيسي وسير العمل (Workflows 1, 1.5, 2, 3 & Gotchas — V42.0)
 ├── README.md                                        # دليل وتعليمات الاستخدام الشاملة (هذا الملف)
 ├── references/
-│   ├── atwar_maqamat_and_poetry_guide.md            # الموسوعة الكاملة (الأقسام 1–16 + Modules 34–38 + جدول الأعطال QC1–QC12)
+│   ├── atwar_maqamat_and_poetry_guide.md            # الموسوعة الكاملة (الأقسام 1–17 + Modules 34–39 + جدول الأعطال QC1–QC12)
 │   └── radoods_and_khutaba_encyclopedia.md          # موسوعة الخصائص الفنية والهندسية لـ 20+ رادوداً (14 مدرسة) و8 من كبار خطباء المنبر
 ├── scripts/
 │   └── hussaini_dsp_montage.py                      # سكربت المونتاج والهندسة الصوتية (Pylint 10/10 — جميع الأنماط الـ 7 والمقامات الـ 6)
