@@ -26,7 +26,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Validate Skill Structure & Required Files
+      - name: Validate Skill Structure & V45.0 Version Consistency Across All Files
         run: |
           test -f SKILL.md
           test -f README.md
@@ -36,6 +36,13 @@ jobs:
           test -f scripts/hussaini_dsp_montage.py
           test -f tests/test_hussaini_modules.py
           grep -q "^name: hussaini-production-studio" SKILL.md
+          grep -q "V45.0 OMNI-ARCHITECT" SKILL.md
+          grep -q "V45.0 OMNI-ARCHITECT" README.md
+          grep -q "V45.0 OMNI-ARCHITECT" references/atwar_maqamat_and_poetry_guide.md
+          grep -q "V45.0 OMNI-ARCHITECT" references/radoods_and_khutaba_encyclopedia.md
+          grep -q "V45.0 OMNI-ARCHITECT" scripts/hussaini_dsp_montage.py
+          grep -q "Hussaini_Production_Studio_OS_V45_OMNI_ARCHITECT" README.md
+          grep -q "Hussaini_Production_Studio_OS_V45_OMNI_ARCHITECT" references/atwar_maqamat_and_poetry_guide.md
 
       - name: Lint DSP Montage Script & Unit Tests with Pylint
         run: |
@@ -45,8 +52,9 @@ jobs:
         run: |
           pytest -v tests/test_hussaini_modules.py
 
-      - name: Test Hussaini DSP Montage Engine Across All 7 Modes
+      - name: Test Hussaini CLI Lyrics Compiler & DSP Montage Engine Across All 7 Modes
         run: |
+          python scripts/hussaini_dsp_montage.py --compile-lyrics "ياحسين يا خويه شلون قلب وچبد ودمع وعينٍ تسيل"
           python -c "import numpy as np; from scipy.io import wavfile; sr=16000; t=np.linspace(0, 2.0, 2*sr, endpoint=False); sig=(0.5*np.sin(2*np.pi*160.0*t)*32767).astype(np.int16); wavfile.write('/tmp/test_in.wav', sr, sig)"
           for mode in latm zanjeel_iraqi zanjeel_bahrani shoor bandari mawal nai; do
             python scripts/hussaini_dsp_montage.py --input /tmp/test_in.wav --output "/tmp/test_out_${mode}.wav" --mode "$mode" --bpm 60 --maqam-drone saba
