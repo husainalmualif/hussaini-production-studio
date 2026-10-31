@@ -178,18 +178,30 @@ Select the concise 40–45 word `Sound` prompt from `references/atwar_maqamat_an
 8. **النعي المنبري والموال الحر بلا إيقاع (`0 BPM Rubato — Maqam Saba`)**:
    `Traditional Iraqi and Bahrani Minbar Na'i vocal lament, strict Rubato free tempo with zero rhythmic grid, Maqam Saba, authentic Iraqi and Bahrani colloquial dialect, deep velvet mournful Baritone solo voice, raw weeping cracks, prolonged microtonal vowel cries, 450ms analog tape echo, 3.8s large Husseiniya cathedral reverb, Pure Solo Acapella No Percussion No Instruments`
 
-### Workflow 3: Audio Montage and DSP Processing on User Voice Recordings
+### Workflow 3: Audio Montage, 5-Track DAW Processing, Phonetic Compilation & Automated Unit Testing
 
-1. **Direct In-Sandbox Audio Montage**: Run `scripts/hussaini_dsp_montage.py`:
+1. **Direct In-Sandbox 5-Track Audio Montage (`Track_01_Dammam` Anti-Mud EQ + Smart `-3.0 dB` Sidechain Ducking)**: Run `scripts/hussaini_dsp_montage.py`:
 ```bash
-python3 hussaini_dsp_montage.py \
+python3 scripts/hussaini_dsp_montage.py \
   --input "<input_wav_path>" \
   --output "<output_wav_path>" \
   --mode "<latm|zanjeel_iraqi|zanjeel_bahrani|shoor|bandari|mawal|nai>" \
   --bpm <bpm_value> \
   --maqam-drone "<saba|bayati|hijaz|lami|kurd|rast>"
 ```
-2. **Post-Generation DSP Mastering in Google Flow Music (`audio__apply_effect` — Module 37)**:
+2. **Programmatic Phonetic Compilation, Dialect Detection & JSON Pre-Conditioning API (`V45.0`)**:
+   - Use the helper functions in `scripts/hussaini_dsp_montage.py` to preprocess lyrics and build Flow Music payloads programmatically:
+     - `de_cliticize_and_separate_words(text)` (**Module 41** — splits attached vocatives/prepositions/clitics such as `ياحسين ⟵ يَا حْسَيْنْ`, `ويبوفاضل ⟵ وَ يَا بُو فَاضِلْ`, `عالباب ⟵ عَلَى البَابْ`, `شصار ⟵ إِشْ صَارْ`).
+     - `resolve_dialectal_and_prosodic_tanween(text, dialect)` (**Module 40** — converts mid-line colloquial Tanween `عينٍ تسيل ⟵ عَيْنِنْ تِسِيلْ`, Fusha prosodic Tanween `جِسْماً عَلَى الثَّرَى ⟵ جِسْمَنْ عَلَى الثَّرَى`, and enforces end-of-phrase Sukun `ْ`).
+     - `detect_and_shape_dialect(text)` (**Module 43** — auto-detects Bahrani vs. Iraqi dialect, shapes CVC nouns `گَلْبِي/صَبِرْ` vs. `گَلُبْ/صَبُرْ/جَمُرْ`, and returns the corresponding Maqam articulation rule).
+     - `validate_stage1_iso_syllabic_lock(stanzas)` & `build_multi_tor_melodic_bridge(from_maqam, to_maqam, from_tor, to_tor)` (**Modules 34 & 38**).
+     - `build_flowmusic_json_preconditioning(dialect, maqam, bpm)` (**Module 39**).
+3. **Automated Unit Testing & Pylint Verification (`CI/CD Pipeline`)**:
+```bash
+pytest -v tests/test_hussaini_modules.py
+pylint scripts/hussaini_dsp_montage.py tests/test_hussaini_modules.py
+```
+4. **Post-Generation DSP Mastering in Google Flow Music (`audio__apply_effect` — Module 37)**:
    - Never put raw EQ/filter numbers (`+4.5dB at 2.5kHz`, `HPF at 85Hz`) inside the initial `Sound` box. Instead, apply them **after generation** via `Producer Chat`:
      `Apply audio__apply_effect on the generated clip: HighPass filter at 85Hz, AdvancedEqualizer (cut 450Hz by -2.5dB, boost mid 1200Hz by +1.5dB, boost high-mid presence 2500Hz by +4.5dB), Compressor (ratio 3:1, threshold -12dB), Reverb (room_size 0.55, wet mix 0.18), and Limiter at -1.0dB.`
 
@@ -213,7 +225,7 @@ python3 hussaini_dsp_montage.py \
   4. **Dynamic Poem-Specific Opening (`منع كليشيه آآآه يَا حُسَيْنَا .. آآآه يَا مَظْلُومْ`)**:
      - Never prepend generic repeated clichés like `آآآه يَا حُسَيْنَا .. آآآه يَا مَظْلُومْ` to poems. Start directly with the poem's own first hemistich containing natural long vowels (`يَا طَارِشْ الظَّعَنْ بْاللّٰه ..`, `بْاللّٰه اسْتَعِدِّي يَمّ البَنِينْ ..`).
   5. **Two-Step JSON Session Pre-Conditioning Protocol + 100% Vocal Timbre Lock in `Producer Chat` (`Module 39` — Section 17 of `references/atwar_maqamat_and_poetry_guide.md`)**:
-     - **Step 1 (JSON Session Pre-Conditioning before entering any lyrics)**: At the start of every `New session` in `https://www.flowmusic.app/`, send the **Hussaini Production Studio OS V42.0 JSON Constitution** in `Producer Chat` with the instruction: `Read and lock the following JSON production constitution in your active session memory. DO NOT call lyrics__register or audio__create_song yet—simply acknowledge that you have locked these rules and are ready to receive the Arabic poem in Step 2.`
+     - **Step 1 (JSON Session Pre-Conditioning before entering any lyrics)**: At the start of every `New session` in `https://www.flowmusic.app/`, send the **Hussaini Production Studio OS V45.0 JSON Constitution** (generated via `build_flowmusic_json_preconditioning` or copied from Section 17) in `Producer Chat` with the instruction: `Read and lock the following JSON production constitution in your active session memory. DO NOT call lyrics__register or audio__create_song yet—simply acknowledge that you have locked these rules and are ready to receive the Arabic poem in Step 2.`
      - **Step 2 (Register Lyrics & Create Song with Golden Reference Clip `26bbb3d2-65f0-42c3-a167-37127631ef0a`)**: Only after `Producer Chat` acknowledges the JSON constitution, send Step 2:
        `Register the lyrics using lyrics__register and create the track using audio__create_song referencing clip ID "26bbb3d2-65f0-42c3-a167-37127631ef0a" at 58 BPM with this sound prompt: "Traditional Iraqi and Bahrani Hussaini Latmiya, Thaqeel Faizi and Nazla style, Maqam Saba, 58 BPM, authentic Iraqi and Bahrani colloquial dialect, commanding deep resonant Baritone lead vocal, powerful high chest-voice climbs, natural vocal rasp, emotional weep cracks, heavy 55Hz bare-palm chest thud, 285ms analog tape echo, 3.2s Husseiniya hall reverb, wide unison male Raddada choir response, Pure Acapella No Instruments"`
 - **Master Reference Clips in Flow Music (Acoustic Building Blocks)**:

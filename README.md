@@ -41,17 +41,20 @@ npx skills add husainalmualif/hussaini-production-studio
 
 ---
 
-### السيناريو 1: تلحين وإنتاج قصيدة جاهزة لديك (مع قفل اللهجة وتوازن اللحن 100%)
-عندما تكون لديك قصيدة مكتوبة وتريد تحويلها إلى لطمية أو نعي أو مناجاة متقنة اللهجة واللحن والمقام والإيقاع:
+### السيناريو 1: تلحين وإنتاج قصيدة جاهزة لديك (مع التعرّف التلقائي على اللهجة البحرانية/العراقية، فصل الكلمات، ضبط التنوين، وتوازن اللحن 100%)
+عندما تكون لديك قصيدة مكتوبة وتريد تحويلها إلى لطمية أو نعي أو مناجاة متقنة اللهجة والنطق واللحن والمقام والإيقاع:
 
 **مثال للأمر (Prompt) الذي تكتبه للوكيل:**
-> «إليك هذه القصيدة الحسينية، طبّق قواعد `hussaini-production-studio` (`V38.0`) لضبط إملائها الصوتي باللهجة العراقية/البحرانية مع الوقف بالسكون، وتوحيد تفعيلات المرحلة الأولى (`Iso-Syllabic Stage-1 Lock`)، واختيار البرومبت القياسي المركّز (40 كلمة) بمقام واحد مستقر، ثم أنتجها في جلسة جديدة (`New session`) على `https://www.flowmusic.app/` عبر `/browser`»
+> «إليك هذه القصيدة الحسينية، طبّق قواعد `hussaini-production-studio` (`V45.0 OMNI-ARCHITECT`) للتعرف على لهجتها (بحرانية أو عراقية)، وفصل الكلمات المتصلة لمنع التشبيك (`Module 41`)، وضبط التنوين اللهجي/العروضي والوقف بالسكون (`Module 40 & 43`)، وتوحيد تفعيلات المرحلة الأولى (`Iso-Syllabic Stage-1 Lock`)، ثم أنتجها في `New session` على `https://www.flowmusic.app/` عبر بروتوكول التهيئة المسبقة بصيغة `JSON` على خطوتين (`Module 39`) عبر `/browser`»
 
 **ما الذي ستقوم به المهارة تلقائياً؟**
-1. **قفل اللهجة الإملائي الصوتي (`Dialect Commitment Lock & Phonetic Orthography`):** تحوّل الكلمات الدارجة إلى كتابة عروضية صوتية مطابقة لنطق المنبر (`شْلُونْ، چَبِدْ، گَلِبْ، عْيُونِچْ، بْچِيتْ، مْحَنِّيَه، وْگَفِتْ، يِمَّه، خُويَه، بْلَيَّاكْ، مَا ظَلْ`) مع **الوقف بالسكون الصارم (`ْ`)** في أواخر الكلمات ومنع خلط الفصحى بالدارج أو استخدام التنوين وحركات الإعراب الفصيحة.
-2. **قفل تساوي التفعيلات في المرحلة الأولى (`Strict Iso-Syllabic Balance in Stage 1`):** تضبط أسطر التوليد التأسيسي الـ 12 (3 مقاطع × 4 أسطر) على **بحر عروضي واحد وعدد مقاطع صوتية متساوٍ تماماً** لضمان لحن متوازن ومحفوظ في الذاكرة الموسيقية، وتؤجل أي تغيير في الوزن أو الگريز إلى المرحلة الثانية (`Extend`).
-3. **البرومبت القياسي المركّز (40 كلمة) بمقام واحد (`Single-Maqam 40-Word Sound Prompt`):** تكتب وصفاً صوتياً إنجليزياً نقياً ومختصراً (40–50 كلمة) يثبت اللهجة في السطر الأول (`authentic Iraqi and Bahrani colloquial dialect`) ومقاماً واحداً فقط (`Maqam Saba` أو `Maqam Bayati`) دون حشر مصطلحات معرّبة أو أرقام معادل صوتي (`EQ`).
-4. **استهلال خاص من صلب القصيدة (`Dynamic Poem-Specific Opening`):** تدخل مباشرة في الشطر الأول للمستهل بحروف مدّ طبيعية من كلمات القصيدة نفسها (دون تكرار كليشيهات جاهزة).
+1. **التعرّف التلقائي على اللهجة البحرانية مقابل العراقية وتشكيلها لحنياً (`Automatic Bahrani vs. Iraqi Dialect Engine — Module 43`):**
+   - إذا رصدت دلالات **المدرسة البحرانية** (`يَا بُويِي، يَا خُويِي، وِنِّتِي، هَالگَفْرَه، اِمْسَاعَدْ اللّٰه`): تشكّل الأسماء الثلاثية بالسكون/الكسر الخفيف (`گَلْبِي / قَلْبِي، صَبِرْ، دَمْعَه، وِنَّه`)، وتطبّق الإمالة البحرانية الناعمة (`-َه`)، وتوجّه اللحن نحو **مدّ وترجيع الكلمة الثالثة من الشطر (`الترجيع البحراني الفايزي`)** في مقام الحجاز أو الصبا.
+   - إذا رصدت دلالات **المدرسة العراقية الكربلائية/الفراتية** (`يَا بُويَه، يَا خُويَه، يِمَّه، وْلِيدِي، دَلَّالِي، شْلُونْ، إِشْ صَارْ، بْلَيَّاكْ، مَا ظَلْ`): تشكّل الأسماء الثلاثية بـ **ضمة التفخيم العراقية الوسطية (`-ُ`)** (`گَلُبْ، صَبُرْ، گَبُرْ، دَرُبْ، جَمُرْ، حَرُبْ`) أو **الكسرة الفراتية (`-ِ`)** (`چَبِدْ، دَمِعْ، وْگَفِتْ`)، وتطبّق **قاعدة الكسر الفراتية (`Sudden Drop`)** في الكلمة الأخيرة من البيت على مقام الصبا أو اللامي أو البياتي.
+2. **فصل الكلمات وفكّ الالتصاق الصوتي لمنع التشبيك (`Anti-Slurring Word Separation — Module 41`):** تفصل تلقائياً أدوات النداء وحروف الجر والاستفهام والواو (`ياحسين ⟵ يَا حْسَيْنْ`، `ويبوفاضل ⟵ وَ يَا بُو فَاضِلْ`، `عالباب ⟵ عَلَى البَابْ`، `شصار ⟵ إِشْ صَارْ`، `والشمس ⟵ وَ الشَّمْسُ`) وتضع فواصل تنفس خفيفة (`،`) لمنع إدغام الكلمات في `Flow Music`.
+3. **ضبط التنوين اللهجي والفصيح والوقف بالسكون (`Dialectal & Prosodic Tanween — Module 40`):** تحوّل تنوين التمكين الشعبي في وسط الشطر إلى نون ساكنة مكسورة مع كسر فعل المضارعة التالي (`عينٍ تسيل ⟵ عَيْنِنْ تِسِيلْ`، `كلٍ ينادي ⟵ كِلِّنْ يِنَادِي`، `جرحٍ چبير ⟵ جَرْحِنْ چِبِيرْ`)، وتثبّت تنوين الوصل الفصيح عروضياً في وسط الشطر (`جِسْماً عَلَى الثَّرَى ⟵ جِسْمَنْ عَلَى الثَّرَى`)، بينما تفرض **الوقف بالسكون الصارم (`ْ`)** أو الألف الممدودة (`ظَامِئاً ⟵ ظَامِئَا`) في أواخر الأشطر والقوافي.
+4. **قفل تساوي التفعيلات في المرحلة الأولى (`Strict Iso-Syllabic Balance in Stage 1 — Module 38`):** تضبط أسطر التوليد التأسيسي الـ 12 (3 مقاطع × 4 أسطر + تطابق الشطر الرابع) على **بحر عروضي واحد وعدد مقاطع صوتية متساوٍ تماماً**، وتؤجل تغيير الوزن أو الگريز أو مزج الأطوار إلى المرحلة الثانية (`Stage 2 Extend`).
+5. **التهيئة المسبقة بصيغة `JSON` والبرومبت القياسي (40 كلمة) بمقام واحد (`Modules 36 & 39`):** ترسل دستور الإنتاج الشامل بصيغة `JSON` في الرسالة الأولى داخل `Producer Chat` لقفل ذاكرة الجلسة، ثم ترسل القصيدة مع البرومبت الإنجليزي المركّز (40–50 كلمة) في الرسالة الثانية، متبوعاً بفلاتر `audio__apply_effect`.
 
 ---
 
@@ -119,12 +122,12 @@ Traditional Iraqi and Bahrani Hussaini Latmiya, Thaqeel Faizi and Nazla style, M
 لقفل ذاكرة وكيل `Producer Chat` في `https://www.flowmusic.app/` بنسبة 100% ومنع أي أخطاء لحنية أو لغوية أو مقامية أو موسيقية، نطبّق بروتوكول الخطوتين في بداية كل `New session`:
 
 1. **الخطوة الأولى (رسالة التهيئة الشاملة بصيغة `JSON` قبل إدخال أي قصيدة):**
-   انسخ هذا الأمر مع كائن الـ `JSON` الشامل وأرسله في **`Producer Chat`**، وانتظر تأكيد الـ `Producer` بحفظ القواعد دون توليد:
+   انسخ هذا الأمر مع كائن الـ `JSON` الشامل (`V45.0 OMNI-ARCHITECT`) وأرسله في **`Producer Chat`**، وانتظر تأكيد الـ `Producer` بحفظ القواعد دون توليد:
 ```text
-System Context Injection (Hussaini Production Studio OS V42.0): Read and lock the following JSON production constitution in your active session memory as our strict operating protocol for all upcoming tracks in this session. DO NOT call lyrics__register or audio__create_song yet—simply acknowledge that you have locked these rules and are ready to receive the Arabic poem in Step 2:
+System Context Injection (Hussaini Production Studio OS V45.0): Read and lock the following JSON production constitution in your active session memory as our strict operating protocol for all upcoming tracks in this session. DO NOT call lyrics__register or audio__create_song yet—simply acknowledge that you have locked these rules and are ready to receive the Arabic poem in Step 2:
 
 {
-  "protocol_name": "Hussaini_Production_Studio_OS_V42_OMNI_ARCHITECT",
+  "protocol_name": "Hussaini_Production_Studio_OS_V45_OMNI_ARCHITECT",
   "session_mode": "Pre_Conditioning_Lock_Only_Wait_For_Step_2_Lyrics",
   "1_cultural_and_acoustic_firewall": {
     "permitted_sound_sources": [
@@ -142,10 +145,19 @@ System Context Injection (Hussaini Production Studio OS V42.0): Read and lock th
       "Secular pop melodies or robotic auto-tune"
     ]
   },
-  "2_dialect_and_lyrics_orthography_lock": {
+  "2_dialect_tanween_and_anti_slurring_orthography_lock": {
     "target_dialect": "Authentic Iraqi (Karbalaei / Southern Euphrates) and Bahrani colloquial mourning dialects",
     "stage_1_language_purity": "Never mix Classical Arabic (Fusha) and Colloquial dialect in Stage 1 Root Track",
-    "phonetic_orthography": "Respect phonetic colloquial spelling (چ، گ) and mandatory end-of-word Sukun (ْ) or long open vowels (ا، و، ي، ه); zero Fusha case endings or Tanween",
+    "bahrani_vs_iraqi_dialect_articulation": {
+      "bahrani_school_rules": "When Bahrani lexical markers appear (يَا بُويِي، يَا خُويِي، وِنِّتِي، گَلْبِي، صَبِرْ، هَالگَفْرَه), apply soft coastal Imala (-eh), light Kasra/Sukun medial vowels (گَلْبِي / صَبِرْ), and hold microtonal vibrato on the 3rd word of the hemistich (الترجيع البحراني الفايزي) in Maqam Hijaz/Saba",
+      "iraqi_school_rules": "When Iraqi lexical markers appear (يَا بُويَه، يَا خُويَه، يِمَّه، وْلِيدِي، دَلَّالِي، گَلُبْ، صَبُرْ، چَبِدْ، شْلُونْ، إِشْ صَارْ), apply deep velarized Tafkheem on long Alif vowels (طَاحْ، رَاحْ، مَايْ), emphatic medial Damma (گَلُبْ / صَبُرْ / جَمُرْ), and the Sudden Drop (قاعدة الكسر الفراتية) on the final word of the verse in Maqam Saba/Lami/Bayati"
+    },
+    "anti_slurring_word_separation": "Strictly articulate each space-separated word and clitic distinctly without slurring or merging adjacent words (يَا حْسَيْنْ، يَا بُو فَاضِلْ، عَلَى البَابْ، إِشْ صَارْ، وَ الشَّمْسُ); honor micro-commas (،) as clean consonant boundaries",
+    "dialectal_and_prosodic_tanween_engine": {
+      "end_of_hemistich_waqf": "Mandatory Sukun (ْ) or long open vowel (ا، و، ي، ه) at the end of every hemistich; never pronounce Tanween at the end of a line (convert Fusha -ً to open Alif -َا as in ظَامِئَا)",
+      "colloquial_mid_line_tanween": "Pronounce mid-line colloquial poetic Tanween as a soft dialectal Kasra-Nun (-ِنْ) linked to a Kasra verb prefix (عَيْنِنْ تِسِيلْ، كِلِّنْ يِنَادِي، جَرْحِنْ چِبِيرْ) without switching to stiff Fusha",
+      "fusha_mid_line_tanween": "Preserve prosodic meter on mid-line Classical Fusha Tanween (جِسْمَنْ عَلَى الثَّرَى، دَامِنْ بِلَا قُبُورْ)"
+    },
     "lyrics_register_formatting": {
       "script": "100% pure Arabic characters only (zero English tags in lyrics__register)",
       "section_headers": "Square brackets only: [المستهل], [المقطع الأول], [المقطع الثاني]",
@@ -161,7 +173,7 @@ System Context Injection (Hussaini Production Studio OS V42.0): Read and lock th
       "identical_4th_line_refrain": "Every 4-line stanza resolves to the identical 4th-line anchor refrain on the tonic Qarar",
       "single_maqam_lock": "Lock ONE single primary Maqam in Stage 1 (Maqam Saba, Bayati, Lami, Hijaz, Kurd, or Sikah)"
     },
-    "stage_2_multi_tor_blending": "Execute Maqam/Tor modulations only in Stage 2 (Extend) via gradual melodic bridges between related tetrachords (Common Jins)",
+    "stage_2_multi_tor_blending": "Execute Maqam/Tor modulations and internal Gireez shifts only in Stage 2 (Extend) via gradual melodic bridges between related tetrachords (Common Jins)",
     "vocal_register_arc": {
       "Mustahal": "Qarar (deep calm chest tonic)",
       "Stanza_1": "Mayan / Jawab (rising sorrow and natural laryngeal rasp)",
@@ -195,7 +207,7 @@ System Context Injection (Hussaini Production Studio OS V42.0): Read and lock th
 
 2. **الخطوة الثانية (إرسال القصيدة وأمر التوليد بعد تأكيد الـ `Producer`):**
 ```text
-Now execute Step 2 following the locked V42.0 JSON constitution:
+Now execute Step 2 following the locked V45.0 JSON constitution:
 Register the lyrics using lyrics__register and create the track using audio__create_song referencing clip ID "26bbb3d2-65f0-42c3-a167-37127631ef0a" at 58 BPM with this sound prompt:
 "Traditional Iraqi and Bahrani Hussaini Latmiya, Thaqeel Faizi and Nazla style, Maqam Saba, 58 BPM, authentic Iraqi and Bahrani colloquial dialect, commanding deep resonant Baritone lead vocal, powerful high chest-voice climbs, natural vocal rasp, emotional weep cracks, heavy 55Hz bare-palm chest thud, 285ms analog tape echo, 3.2s Husseiniya hall reverb, wide unison male Raddada choir response, Pure Acapella No Instruments"
 ```
@@ -240,6 +252,51 @@ python3 scripts/hussaini_dsp_montage.py \
 - **المقام الموسيقي («القماشة»):** هو السلم النغمي العام ذو الدرجات السبع (`بيات، صبا، رست، حجاز، لامي، كرد`).
 - **الطور الحسيني («الثوب المُفصّل»):** هو القالب الأدائي والبيئي الشعبي الذي يحدد أين يمدّ الرادود صوته وأين يقف وكيف يتنقل مع حركة اللطم (فمقام `الصبا` الواحد يصبح **طور حياوي** في الأنين الريفي العراقي، أو **طور محمراوي** في النصاري الجنوبي، أو **طور فايزي** في الترجيع البحراني).
 - **المعايير الخمسة لمزج الأطوار (`Multi-Tor Blending`):** (1) **التوافق المقامي (القرابة النغمية والجنس المشترك)** مثل البيات ⟷ الشور، أو الرست ⟷ الصبا، (2) **سلاسة الانتقال عبر «الجسر اللحني» (`Melodic Bridge`)** من الطور الهادئ إلى الحماسي، (3) **المساحة الصوتية الواسعة (`Qarar` إلى `Jawab`)**، (4) **تطابق اللحن مع النص (`تجسيد المعنى`)** (أطوار اللامي/الصبا/الحياوي للمصيبة والوداع ⟵ أطوار الركبان/الهوسة/الموشح للشجاعة والميدان)، (5) **مراعاة البحر الشعري**، مع تثبيت الطور الأول في `Stage 1` وتنفيذ الانتقال في `Stage 2 Extend`.
+
+---
+
+### السيناريو 6: استخدام المُترجم الصوتي البرمجي (`V45.0 Phonetic & Dialect Compiler API`) وتشغيل اختبارات الوحدات (`Unit Tests`)
+يوفر الإصدار **`V45.0 OMNI-ARCHITECT`** دوال برمجية تنفيذية داخل `scripts/hussaini_dsp_montage.py` لمعالجة القصائد صوتياً وتوليد كائنات التهيئة والجسور اللحنية وفحص جودة الكود آلياً:
+
+#### 1. استدعاء مُترجم اللهجات وفصل الكلمات والتنوين برمجياً (Python API):
+```python
+from scripts.hussaini_dsp_montage import (
+    de_cliticize_and_separate_words,
+    resolve_dialectal_and_prosodic_tanween,
+    detect_and_shape_dialect,
+    build_flowmusic_json_preconditioning,
+    build_multi_tor_melodic_bridge,
+)
+
+# 1) فكّ الالتصاق الصوتي ومنع التشبيك (Module 41):
+clean_text = de_cliticize_and_separate_words("ياحسين ويبوفاضل عالباب شصار")
+# النتيجة: "يَا حْسَيْنْ وَ يَا بُو فَاضِلْ عَلَى البَابْ إِشْ صَارْ"
+
+# 2) التعرف التلقائي على اللهجة (البحرانية مقابل العراقية) وتشكيل الحركات والوقف بالسكون (Modules 40 & 43):
+bahrani_res = detect_and_shape_dialect("يا بويي ونتي بقلبي وصبر عيني")
+# bahrani_res["detected_dialect"] -> "bahrani" (تشكيل گَلْبِي / صَبِرْ + الترجيع الفايزي في الكلمة الثالثة)
+
+iraqi_res = detect_and_shape_dialect("يا بويه شلون دلالي بقلب وصبر وجمر")
+# iraqi_res["detected_dialect"] -> "iraqi" (تشكيل گَلُبْ / صَبُرْ / جَمُرْ + قاعدة الكسر الفراتية)
+
+# 3) توليد دستور التهيئة المسبقة بصيغة JSON لـ Producer Chat (Module 39):
+json_payload = build_flowmusic_json_preconditioning(dialect="iraqi_bahrani", maqam="Maqam Saba", bpm=58)
+
+# 4) بناء الجسر اللحني للانتقال بين الأطوار والمقامات في Stage 2 Extend (Module 38 & Section 15):
+bridge = build_multi_tor_melodic_bridge("saba", "hijaz", "Tor Faizi / Nazla", "Tor Rukban / Hosa")
+```
+
+#### 2. تشغيل اختبارات الوحدات الآلية (`Pytest`) وفحص جودة الكود (`Pylint`):
+```bash
+# تثبيت المتطلبات
+pip install -r requirements.txt
+
+# تشغيل اختبارات الوحدات الـ 6 (Modules 34, 38, 39, 40, 41, 43 + 5-Track DAW & -3.0dB Sidechain Ducking)
+pytest -v tests/test_hussaini_modules.py
+
+# فحص جودة الكود بمعايير Pylint الصارمة
+pylint scripts/hussaini_dsp_montage.py tests/test_hussaini_modules.py
+```
 
 ---
 
