@@ -34,7 +34,7 @@ def test_module41_word_separation_anti_slurring():
 
 
 def test_module40_dialectal_and_prosodic_tanween():
-    """Verify colloquial mid-line Tanween converts to -ِنْ and lines end with Sukun."""
+    """Verify colloquial/Fusha mid-line Tanween, final Fathah Alif, and Alif Maqsura exemption."""
     raw_line = "عينٍ تسيل وجرحٍ چبير وكلٍ ينادي يمظلومُ"
     resolved = engine.resolve_dialectal_and_prosodic_tanween(raw_line, dialect="iraqi")
     assert "عَيْنِنْ تِسِيلْ" in resolved
@@ -42,9 +42,20 @@ def test_module40_dialectal_and_prosodic_tanween():
     assert "كِلِّنْ يِنَادِي" in resolved
     assert resolved.endswith("ْ")
 
+    fusha_line1 = "جسماً على الثرى"
+    resolved_fusha1 = engine.resolve_dialectal_and_prosodic_tanween(fusha_line1, dialect="fusha")
+    assert "جِسْمَنْ عَلَى الثَّرَى" in resolved_fusha1
+    assert resolved_fusha1.endswith("ى")
+    assert not resolved_fusha1.endswith("ىْ")
+
+    fusha_line2 = "دامٍ بلا قبورٍ .. يقضي ظامئاً"
+    resolved_fusha2 = engine.resolve_dialectal_and_prosodic_tanween(fusha_line2, dialect="fusha")
+    assert "دَامِنْ بِلَا قُبُورْ" in resolved_fusha2
+    assert resolved_fusha2.endswith("ظَامِئَا")
+
 
 def test_module43_bahrani_vs_iraqi_dialect_detection_and_sukun():
-    """Verify automatic recognition and CVC shaping for Bahrani vs. Iraqi dialects."""
+    """Verify automatic recognition, Iraqi medial Damma, and Euphrates Kasra shaping."""
     bahrani_poem = "يا بويي ونتي بهالگفره امساعد الله يا قلبي وصبر"
     bahrani_res = engine.detect_and_shape_dialect(bahrani_poem)
     assert bahrani_res["detected_dialect"] == "bahrani"
@@ -52,12 +63,16 @@ def test_module43_bahrani_vs_iraqi_dialect_detection_and_sukun():
     assert "صَبِرْ" in bahrani_res["shaped_lyrics"]
     assert "3rd-Word Faizi Vibrato" in bahrani_res["maqam_articulation_rule"]
 
-    iraqi_poem = "يا خويه يمه وليدي دلالي شلون شصار بلياك قلب وصبر وجمر"
+    iraqi_poem = "يا خويه يمه وليدي دلالي شلون شصار بلياك قلب وصبر وجمر وچبد ودمع ووگفت وعفتني"
     iraqi_res = engine.detect_and_shape_dialect(iraqi_poem)
     assert iraqi_res["detected_dialect"] == "iraqi"
     assert "گَلُبْ" in iraqi_res["shaped_lyrics"]
     assert "صَبُرْ" in iraqi_res["shaped_lyrics"]
     assert "جَمُرْ" in iraqi_res["shaped_lyrics"]
+    assert "چَبِدْ" in iraqi_res["shaped_lyrics"]
+    assert "دَمِعْ" in iraqi_res["shaped_lyrics"]
+    assert "وْگَفِتْ" in iraqi_res["shaped_lyrics"]
+    assert "عِفْتْنِي" in iraqi_res["shaped_lyrics"]
     assert "Sudden Drop" in iraqi_res["maqam_articulation_rule"]
 
 
@@ -111,3 +126,30 @@ def test_dsp_5track_daw_and_minus_3db_sidechain_ducking():
     echo_out = engine.apply_dynacord_echo(vocal_sig, sample_rate, delay_ms=285.0)
     reverb_out = engine.apply_husseiniya_reverb(echo_out, sample_rate, rt60=3.2)
     assert len(reverb_out) == len(vocal_sig)
+
+
+def test_cli_compile_lyrics_and_v45_version_consistency():
+    """Verify CLI --compile-lyrics flag and V45.0 version consistency across all skill files."""
+    exit_code = engine.main(["--compile-lyrics", "ياحسين يا خويه شلون قلب وچبد ودمع"])
+    assert exit_code == 0
+
+    repo_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+    for rel_path in (
+        "SKILL.md",
+        "README.md",
+        os.path.join("references", "atwar_maqamat_and_poetry_guide.md"),
+        os.path.join("references", "radoods_and_khutaba_encyclopedia.md"),
+        os.path.join("scripts", "hussaini_dsp_montage.py"),
+    ):
+        full_path = os.path.join(repo_root, rel_path)
+        with open(full_path, "r", encoding="utf-8") as handle:
+            content = handle.read()
+        assert "V45.0 OMNI-ARCHITECT" in content, f"Missing V45.0 OMNI-ARCHITECT in {rel_path}"
+
+    guide_path = os.path.join(repo_root, "references", "atwar_maqamat_and_poetry_guide.md")
+    with open(guide_path, "r", encoding="utf-8") as handle:
+        guide_text = handle.read()
+    assert "## 6. قواعد التوافق الذهبية لمنصة Google Flow Music" in guide_text
+    assert "| **QC11** |" in guide_text
+    assert "| **QC12** |" in guide_text
+    assert '"protocol_name": "Hussaini_Production_Studio_OS_V45_OMNI_ARCHITECT"' in guide_text
