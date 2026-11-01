@@ -132,6 +132,7 @@ IRAQI_WORD_SHAPING_MAP = {
     "بقلبي": "بِـ گَلْبِي",
     "وقلبي": "وَ گَلْبِي",
     "قلبك": "گَلْبَكْ",
+    "وقلبك": "وَ گَلْبَكْ",
     "قلبچ": "گَلْبِچْ",
     "قلبه": "گَلْبَه",
     "صبر": "صَبُرْ",
@@ -171,6 +172,7 @@ BAHRANI_WORD_SHAPING_MAP = {
     "بقلبي": "بِـ گَلْبِي",
     "وقلبي": "وَ گَلْبِي",
     "قلبك": "گَلْبِكْ",
+    "وقلبك": "وَ گَلْبِكْ",
     "قلبچ": "گَلْبِچْ",
     "قلبه": "گَلْبَه",
     "صبر": "صَبِرْ",
@@ -251,6 +253,8 @@ def shape_words_by_boundary(text, word_map, use_tatweel=True):
     for raw_word, vocalized_word in word_map.items():
         target = vocalized_word if use_tatweel else vocalized_word.replace("ـ", "")
         shaped = re.sub(rf"(?<!\S){re.escape(raw_word)}(?!\S)", target, shaped)
+        if not raw_word.startswith("و"):
+            shaped = re.sub(rf"(?<!\S)و{re.escape(raw_word)}(?!\S)", f"وَ {target}", shaped)
     return shaped
 
 
