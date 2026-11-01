@@ -184,31 +184,36 @@ Select the concise 40–45 word `Sound` prompt from `references/atwar_maqamat_an
 8. **النعي المنبري والموال الحر بلا إيقاع (`0 BPM Rubato — Maqam Saba`)**:
    `Traditional Iraqi and Bahrani Minbar Na'i vocal lament, strict Rubato free tempo with zero rhythmic grid, Maqam Saba, authentic Iraqi and Bahrani colloquial dialect, deep velvet mournful Baritone solo voice, raw weeping cracks, prolonged microtonal vowel cries, 450ms analog tape echo, 3.8s large Husseiniya cathedral reverb, Pure Solo Acapella No Percussion No Instruments`
 
-### Workflow 3: Audio Montage, 5-Track DAW Processing, Phonetic Compilation & Automated Unit Testing
+### Workflow 3: Audio Montage, 5-Track DAW Processing, Phonetic Compilation, Poem Linting & Automated Unit Testing
 
-1. **Direct In-Sandbox 5-Track Audio Montage (`Track_01_Dammam` Anti-Mud EQ + Smart `-3.0 dB` Sidechain Ducking)**: Run `scripts/hussaini_dsp_montage.py`:
+1. **Direct In-Sandbox 5-Track Audio Montage (`SOS Filters` + `-28 dBFS` RMS Sidechain Ducking + `-14.0 LUFS` & `-1.0 dBTP` Mastering)**: Run `scripts/hussaini_dsp_montage.py`:
 ```bash
 python3 scripts/hussaini_dsp_montage.py \
   --input "<input_wav_path>" \
   --output "<output_wav_path>" \
   --mode "<latm|zanjeel_iraqi|zanjeel_bahrani|shoor|bandari|mawal|nai>" \
   --bpm <bpm_value> \
-  --maqam-drone "<saba|bayati|hijaz|lami|kurd|rast>"
+  --maqam-drone "<saba|bayati|hijaz|lami|kurd|rast>" \
+  [--samples-dir "<optional_real_samples_folder>"] \
+  [--offset-ms <optional_manual_onset_ms>] \
+  [--swing <0.0_to_0.35_bandari_swing>] \
+  [--session-log "<optional_jsonl_path>"]
 ```
-2. **Programmatic & CLI Phonetic Compilation, Dialect Detection & JSON Pre-Conditioning API (`V45.0`)**:
-   - **Direct CLI Lyrics Compilation (`--compile-lyrics`)**:
+2. **Programmatic & CLI Phonetic Compilation, Pre-Generation Poem Linter, Dialect Detection & JSON Pre-Conditioning API (`V45.0`)**:
+   - **Direct CLI Lyrics Compilation (`--compile-lyrics`) & Pre-Generation Poem Linting (`--lint-poem`)**:
      ```bash
-     python3 scripts/hussaini_dsp_montage.py --compile-lyrics "ياحسين يا خويه شلون قلب وچبد ودمع وعينٍ تسيل"
+     python3 scripts/hussaini_dsp_montage.py --compile-lyrics "ياحسين يا خويه شلون قلب وقلبي وقلبك وچبد ودمع وعينٍ تسيل" [--enforce-iraqi-dhaa] [--no-tatweel]
+     python3 scripts/hussaini_dsp_montage.py --lint-poem "ياحسين يا خويه شلون قلب وقلبي .. عينٍ تسيل بدمعي"
      ```
    - **Python API**: Use the helper functions in `scripts/hussaini_dsp_montage.py` to preprocess lyrics and build Flow Music payloads programmatically:
-     - `de_cliticize_and_separate_words(text)` (**Module 41** — splits attached vocatives/prepositions/clitics such as `ياحسين ⟵ يَا حْسَيْنْ`, `ويبوفاضل ⟵ وَ يَا بُو فَاضِلْ`, `عالباب ⟵ عَلَى البَابْ`, `شصار ⟵ إِشْ صَارْ`).
-     - `resolve_dialectal_and_prosodic_tanween(text, dialect)` (**Module 40** — converts mid-line colloquial Tanween `عينٍ تسيل ⟵ عَيْنِنْ تِسِيلْ`, Fusha prosodic Tanween `جِسْماً عَلَى الثَّرَى ⟵ جِسْمَنْ عَلَى الثَّرَى`, converts final Fathah Tanween `ظَامِئاً ⟵ ظَامِئَا`, and enforces end-of-phrase Sukun `ْ` while exempting Alif Maqsura `ى`).
-     - `detect_and_shape_dialect(text)` (**Module 43** — auto-detects Bahrani vs. Iraqi dialect, shapes CVC nouns `گَلْبِي/صَبِرْ` vs. Iraqi Damma `گَلُبْ/صَبُرْ/جَمُرْ` & Euphrates Kasra `چَبِدْ/دَمِعْ/وْگَفِتْ/عِفْتْنِي`, and returns the corresponding Maqam articulation rule).
-     - `validate_stage1_iso_syllabic_lock(stanzas)` & `build_multi_tor_melodic_bridge(from_maqam, to_maqam, from_tor, to_tor)` (**Modules 34 & 38**).
-     - `build_flowmusic_json_preconditioning(dialect, maqam, bpm)` (**Module 39**).
-3. **Automated Unit Testing & Pylint Verification (`CI/CD Pipeline`)**:
+     - `de_cliticize_and_separate_words(text, use_tatweel=True)` (**Module 41** — splits attached vocatives/prepositions/clitics such as `ياحسين ⟵ يَا حْسَيْنْ`, `ويبوفاضل ⟵ وَ يَا بُو فَاضِلْ`, `عالباب ⟵ عَلَى البَابْ`, `شصار ⟵ إِشْ صَارْ`).
+     - `resolve_dialectal_and_prosodic_tanween(text, dialect)` (**Module 40** — converts mid-line colloquial Tanween `عينٍ تسيل ⟵ عَيْنِنْ تِسِيلْ` safely without corrupting vocalized verbs `نارٍ يَصْلَى` or vocatives `دمعٍ ياحسين`, Fusha prosodic Tanween `جِسْماً عَلَى الثَّرَى ⟵ جِسْمَنْ عَلَى الثَّرَى`, converts final Fathah Tanween `ظَامِئاً ⟵ ظَامِئَا`, and enforces end-of-phrase Sukun `ْ` while exempting Alif Maqsura `ى`).
+     - `detect_and_shape_dialect(text, enforce_iraqi_dhaa=False, use_tatweel=True)` (**Module 43** — word-boundary morphological dialect shaper for `bahrani`, `iraqi`, and hybrid `iraqi_bahrani`; shapes `قلب/قلبي/قلبك` without corrupting derived words like `الجمرة` or `المقلوب`).
+     - `count_arabic_syllables(hemistich)`, `validate_stage1_iso_syllabic_lock(stanzas)`, `lint_poem(text, stage=1)`, & `build_multi_tor_melodic_bridge(from_maqam, to_maqam, from_tor, to_tor)` (**Modules 34 & 38**).
+     - `build_flowmusic_json_preconditioning(dialect, maqam, bpm, reference_clip_id=None)` & `log_generation_session(...)` (**Module 39**).
+3. **Automated Unit Testing with Coverage & Pylint Verification (`CI/CD Pipeline`)**:
 ```bash
-pytest -v tests/test_hussaini_modules.py
+pytest -v --cov=scripts tests/test_hussaini_modules.py
 pylint scripts/hussaini_dsp_montage.py tests/test_hussaini_modules.py
 ```
 4. **Post-Generation DSP Mastering in Google Flow Music (`audio__apply_effect` — Module 37)**:

@@ -218,19 +218,37 @@ Apply audio__apply_effect on the generated clip: HighPass filter at 85Hz, Advanc
 
 ---
 
-### السيناريو 4: المونتاج والهندسة الصوتية لتسجيل صوتي خام بصوتك (`Audio DSP Montage`) ومصفوفة المسارات الخمسة لطور الزنجيل والبندرية (`5-Track DAW Matrix`)
-إذا كان لديك تسجيل صوتي خام بصوتك (أو بصوت رادود/خطيب) بصيغة `.ogg` أو `.wav` أو `.mp3` وتريد إضافة لطم صدر بشري، أو دمام، أو زنجيل، أو آهات، أو صدى دايناكورد وريفيرب حسينية:
+### السيناريو 4: المونتاج والهندسة الصوتية لتسجيل صوتي خام بصوتك (`Audio DSP Montage — SOS Filters, -28 dBFS RMS Ducking & -14.0 LUFS Mastering`) ومصفوفة المسارات الخمسة (`5-Track DAW Matrix`)
+إذا كان لديك تسجيل صوتي خام بصوتك (أو بصوت رادود/خطيب) بصيغة `.wav` (سواء كان `Mono` أو `Stereo` وبأي تردد اعتيان مثل `8kHz, 16kHz, 44.1kHz, 48kHz`) وتريد إضافة لطم صدر بشري، أو دمام، أو زنجيل، أو آهات، أو صدى دايناكورد متجهي (`Vectorized Multi-Tap Echo`) وريفيرب حسينية مع موازنة الجهارة العالمية (`-14.0 LUFS` و`-1.0 dBTP`):
 
 ```bash
+# 1) مونتاج أساسي مع مزامنة تلقائية لبداية صوت الرادود (Auto Vocal Onset Sync) وماسترنغ -14.0 LUFS:
 python3 scripts/hussaini_dsp_montage.py \
   --input "raw_voice.wav" \
   --output "mastered_latmiya.wav" \
   --mode "latm" \
   --bpm 60 \
   --maqam-drone "saba"
+
+# 2) مونتاج متقدم مع تمرير مجلد عينات صوتية حقيقية (latm.wav, dammam.wav, zanjeel.wav, husseiniya_ir.wav)، وإزاحة يدوية، وتأرجح بندري (Swing)، وتسجيل الجلسة:
+python3 scripts/hussaini_dsp_montage.py \
+  --input "raw_voice.wav" \
+  --output "mastered_bandari.wav" \
+  --mode "bandari" \
+  --bpm 105 \
+  --maqam-drone "hijaz" \
+  --samples-dir "./custom_samples" \
+  --offset-ms 50 \
+  --swing 0.18 \
+  --session-log "logs/session_ledger.jsonl"
 ```
 - **الأطوار المدعومة في `--mode`:** `latm`, `zanjeel_iraqi`, `zanjeel_bahrani`, `shoor`, `bandari`, `mawal`, `nai`.
 - **المقامات المدعومة في `--maqam-drone`:** `saba`, `bayati`, `hijaz`, `lami`, `kurd`, `rast`.
+- **الخيارات الهندسية المتقدمة:**
+  - `--samples-dir`: مسار اختياري لمجلد يحتوي على عينات صوتية مسجلة حقيقية (`latm.wav`, `dammam.wav`, `zanjeel.wav`, `husseiniya_ir.wav`)؛ وفي حال عدم توفره يستخدم المحرك التوليد الإجرائي الفيزيائي كبديل تلقائي (`Fallback`).
+  - `--offset-ms`: إزاحة بداية الإيقاع بالملي ثانية (وعند عدم تحديده يقوم المحرك بكشف بداية نبرة الرادود تلقائياً `detect_vocal_onset_offset_samples`).
+  - `--swing`: نسبة التأرجح الإيقاعي (`0.0` إلى `0.35`) لنبضات طور البندرية (`6/8`).
+  - `--session-log`: حفظ سجل الجلسة التجريبي بصيغة `JSONL` لتتبع التعديلات ومقارنات `A/B`.
 
 #### مصفوفة المسارات الخمسة لمكساج طور «الزنجيل» و«البندرية» (`5-Track DAW Routing & EQ Matrix — 100–110 BPM / 80 BPM`):
 | رقم واسم المسار (`Track ID`) | التوزيع الفضائي (`Panning / Stereo`) | المعالجة الترددية (`EQ Curve`) | المعالجة الديناميكية والزمنية (`Dynamics & Spatial FX`) |
@@ -255,52 +273,79 @@ python3 scripts/hussaini_dsp_montage.py \
 
 ---
 
-### السيناريو 6: استخدام المُترجم الصوتي البرمجي (`V45.0 Phonetic & Dialect Compiler API`) وتشغيل اختبارات الوحدات (`Unit Tests`)
-يوفر الإصدار **`V45.0 OMNI-ARCHITECT`** دوال برمجية تنفيذية داخل `scripts/hussaini_dsp_montage.py` لمعالجة القصائد صوتياً وتوليد كائنات التهيئة والجسور اللحنية وفحص جودة الكود آلياً:
+### السيناريو 6: استخدام المُترجم الصوتي البرمجي، والمدقق الآلي للقصيدة (`Poem Linter`)، وتشغيل اختبارات الوحدات (`V45.0 API & Unit Tests`)
+يوفر الإصدار **`V45.0 OMNI-ARCHITECT`** دوال برمجية تنفيذية داخل `scripts/hussaini_dsp_montage.py` لمعالجة القصائد صوتياً بحدود الكلمة الصرفية الكاملة، وفحص توازن الشطرين، وتوليد كائنات التهيئة والجسور اللحنية، وفحص جودة الكود آلياً:
 
-#### 1. استدعاء مُترجم اللهجات وفصل الكلمات والتنوين برمجياً (Python API):
+#### 1. استدعاء مُترجم اللهجات وفصل الكلمات والتنوين والمدقق العروضي برمجياً (Python API):
 ```python
 from scripts.hussaini_dsp_montage import (
     de_cliticize_and_separate_words,
     resolve_dialectal_and_prosodic_tanween,
     detect_and_shape_dialect,
+    count_arabic_syllables,
+    validate_stage1_iso_syllabic_lock,
+    lint_poem,
     build_flowmusic_json_preconditioning,
     build_multi_tor_melodic_bridge,
+    log_generation_session,
 )
 
-# 1) فكّ الالتصاق الصوتي ومنع التشبيك (Module 41):
-clean_text = de_cliticize_and_separate_words("ياحسين ويبوفاضل عالباب شصار")
-# النتيجة: "يَا حْسَيْنْ وَ يَا بُو فَاضِلْ عَلَى البَابْ إِشْ صَارْ"
+# 1) فكّ الالتصاق الصوتي ومنع التشبيك (Module 41 — مع خيار use_tatweel=False للفصل بمسافة صافية):
+clean_text = de_cliticize_and_separate_words("ياحسين ويبوفاضل عالباب شصار بغربتي", use_tatweel=False)
+# النتيجة: "يَا حْسَيْنْ وَ يَا بُو فَاضِلْ عَلَى البَابْ إِشْ صَارْ بِ غُرْبِتِي"
 
-# 2) التعرف التلقائي على اللهجة (البحرانية مقابل العراقية) وتشكيل الحركات والوقف بالسكون (Modules 40 & 43):
-bahrani_res = detect_and_shape_dialect("يا بويي ونتي بقلبي وصبر عيني")
-# bahrani_res["detected_dialect"] -> "bahrani" (تشكيل گَلْبِي / صَبِرْ + الترجيع الفايزي في الكلمة الثالثة)
+# 2) التعرف التلقائي على اللهجة (البحرانية / العراقية / الهجينة) بحدود الكلمة الصرفية (Modules 40 & 43):
+bahrani_res = detect_and_shape_dialect("يا بويي ونتي بقلبي وقلب وصبر عيني")
+# bahrani_res["detected_dialect"] -> "bahrani" (تشكيل گَلْبِي / گَلِبْ / صَبِرْ + الترجيع الفايزي في الكلمة الثالثة)
 
-iraqi_res = detect_and_shape_dialect("يا بويه شلون دلالي بقلب وصبر وجمر")
-# iraqi_res["detected_dialect"] -> "iraqi" (تشكيل گَلُبْ / صَبُرْ / جَمُرْ + قاعدة الكسر الفراتية)
+iraqi_res = detect_and_shape_dialect(
+    "يا بويه شلون دلالي بقلب وقلبي وقلبك والجمرةيبوفاضل",
+    enforce_iraqi_dhaa=True,
+)
+# iraqi_res["detected_dialect"] -> "iraqi" (تشكيل گَلُبْ / گَلْبِي / وَ گَلْبَكْ + حماية "الجمرة" من التحريف + ظاء عراقية مفخمة)
 
-# 3) توليد دستور التهيئة المسبقة بصيغة JSON لـ Producer Chat (Module 39):
-json_payload = build_flowmusic_json_preconditioning(dialect="iraqi_bahrani", maqam="Maqam Saba", bpm=58)
+# 3) عدّ المقاطع الصوتية العروضية (CV/CVV/CVC) وفحص توازن الشطرين (Module 34 & 38):
+syllables = count_arabic_syllables("يَا حْسَيْنْ بْضَمِيرِي")
+iso_report = validate_stage1_iso_syllabic_lock([
+    [
+        "يَا حْسَيْنْ بْضَمِيرِي .. صَوْتَكْ يِسْرِي بْوَرِيدِي",
+        "يَا حْسَيْنْ بْضَمِيرِي .. صَوْتَكْ يِسْرِي بْوَرِيدِي",
+        "يَا حْسَيْنْ بْضَمِيرِي .. صَوْتَكْ يِسْرِي بْوَرِيدِي",
+        "يَا حْسَيْنْ بْضَمِيرِي .. صَوْتَكْ يِسْرِي بْوَرِيدِي",
+    ]
+])
+# iso_report["iso_syllabic_locked"] -> True, iso_report["internal_hemistich_balanced"] -> True
 
-# 4) بناء الجسر اللحني للانتقال بين الأطوار والمقامات في Stage 2 Extend (Module 38 & Section 15):
+# 4) الفحص الشامل للقصيدة قبل التوليد (Pre-Generation Poem Linter):
+lint_report = lint_poem("ياحسين يا خويه شلون قلب وقلبي .. عينٍ تسيل بدمعي", stage=1)
+
+# 5) توليد دستور التهيئة المسبقة بصيغة JSON لـ Producer Chat (Module 39 — reference_clip_id اختياري):
+json_payload = build_flowmusic_json_preconditioning(
+    dialect="iraqi_bahrani", maqam="Maqam Saba", bpm=58, reference_clip_id=None
+)
+
+# 6) بناء الجسر اللحني للانتقال بين الأطوار والمقامات في Stage 2 Extend (Module 38 & Section 15):
 bridge = build_multi_tor_melodic_bridge("saba", "hijaz", "Tor Faizi / Nazla", "Tor Rukban / Hosa")
 ```
 
-#### 2. ترجمة وفحص كلمات القصيدة مباشرة من الطرفية (`CLI Lyrics Compiler`) وتشغيل الاختبارات (`Pytest & Pylint`):
+#### 2. ترجمة وفحص كلمات القصيدة مباشرة من الطرفية (`CLI Lyrics Compiler & Linter`) وتشغيل الاختبارات (`Pytest & Pylint`):
 ```bash
 # تثبيت المتطلبات
 pip install -r requirements.txt
 
-# ترجمة وفحص كلمات القصيدة مباشرة من الطرفية (فصل الكلمات + التنوين + كشف اللهجة وتشكيلها) بدون الحاجة لملف صوتي
-python3 scripts/hussaini_dsp_montage.py --compile-lyrics "ياحسين يا خويه شلون قلب وقلبي وچبد ودمع وعينٍ تسيل"
+# 1) ترجمة وفحص كلمات القصيدة مباشرة من الطرفية (فصل الكلمات + التنوين + كشف اللهجة وتشكيلها)
+python3 scripts/hussaini_dsp_montage.py --compile-lyrics "ياحسين يا خويه شلون قلب وقلبي وقلبك وچبد ودمع وعينٍ تسيل"
 
-# فحص القصيدة الشامل قبل التوليد (Pre-Generation Poem Linter: حدود الكلمات، خلط الفصحى بالعامية، وتوازن مقاطع كل شطر)
-python3 scripts/hussaini_dsp_montage.py --lint-poem "ياحسين يا خويه شلون قلب وقلبي"
+# 2) تفعيل الظاء العراقية المفخمة (--enforce-iraqi-dhaa) والفصل بمسافة صافية بدون تطويل (--no-tatweel)
+python3 scripts/hussaini_dsp_montage.py --compile-lyrics "يبوفاضل يا بويه بضلوعي بغربتي" --enforce-iraqi-dhaa --no-tatweel
 
-# تشغيل اختبارات الوحدات الـ 8 شاملة الحالات السلبية واختبارات الثبات التكراري (Idempotency) مع نسبة التغطية
+# 3) فحص القصيدة الشامل قبل التوليد (Pre-Generation Poem Linter: يرصد الكلمات المتصلة، التنوين، وتوازن مقاطع كل شطر)
+python3 scripts/hussaini_dsp_montage.py --lint-poem "ياحسين يا خويه شلون قلب وقلبي .. عينٍ تسيل بدمعي"
+
+# 4) تشغيل اختبارات الوحدات الـ 8 شاملة الحالات السلبية واختبارات الثبات التكراري (Idempotency) مع نسبة التغطية
 pytest -v --cov=scripts tests/test_hussaini_modules.py
 
-# فحص جودة الكود بمعايير Pylint الصارمة
+# 5) فحص جودة الكود بمعايير Pylint الصارمة (10.00/10)
 pylint scripts/hussaini_dsp_montage.py tests/test_hussaini_modules.py
 ```
 
@@ -329,17 +374,23 @@ pylint scripts/hussaini_dsp_montage.py tests/test_hussaini_modules.py
 
 ```text
 hussaini-production-studio/
-├── SKILL.md                                         # ملف التعليمات الرئيسي وسير العمل (Workflows 1, 1.5, 2, 3 & Gotchas — V45.0)
+├── VERSION                                          # مصدر الحقيقة الموحد لرقم الإصدار (V45.0 OMNI-ARCHITECT)
+├── SKILL.md                                         # ملف التعليمات الرئيسي والموجه المهيكل (Workflows 1, 1.5, 2, 3 & Gotchas — V45.0)
 ├── README.md                                        # دليل وتعليمات الاستخدام الشاملة (هذا الملف)
-├── requirements.txt                                 # متطلبات مكتبات المعالجة الرقمية والفحص (numpy, scipy, pylint, pytest)
+├── requirements.txt                                 # متطلبات مكتبات المعالجة الرقمية والفحص (numpy, scipy, pylint, pytest, pytest-cov)
 ├── references/
-│   ├── atwar_maqamat_and_poetry_guide.md            # الموسوعة الكاملة (الأقسام 1–19 + Modules 34–43 + جدول الأعطال QC1–QC12)
-│   └── radoods_and_khutaba_encyclopedia.md          # موسوعة الخصائص الفنية والهندسية لـ 20+ رادوداً (14 مدرسة) و8 من كبار خطباء المنبر
+│   ├── atwar_maqamat_and_poetry_guide.md            # الموسوعة المرجعية الشاملة (الأقسام 1–19 + Modules 34–43 + جدول الأعطال QC1–QC12)
+│   ├── radoods_and_khutaba_encyclopedia.md          # موسوعة الخصائص الفنية والهندسية لـ 20+ رادوداً (14 مدرسة) و8 من كبار خطباء المنبر
+│   └── modules/                                     # الوحدات المرجعية المقسّمة للتحميل الانتقائي السريع والحوكمة التجريبية:
+│       ├── experimental_ab_evaluation_and_human_review.md # مصفوفة التقييم التجريبي (A/B) وبوابة المراجعة البشرية والشرعية وحفظ حقوق الشاعر
+│       ├── module_39_json_preconditioning.md        # بروتوكول التهيئة المسبقة بصيغة JSON لـ Producer Chat (مع reference_clip_id اختياري)
+│       ├── module_40_41_43_phonetics_and_dialects.md # هندسة النطق بحدود الكلمات، التنوين المحمي، والتمييز بين البحرانية والعراقية والهجينة
+│       └── module_42_gireez_hosa_and_muharram_calendar.md # فن الگريز، الهوسة العراقية (3+1)، وتقويم الليالي العشر لمحرم وصفر
 ├── scripts/
-│   └── hussaini_dsp_montage.py                      # محرك الـ DSP ذي الـ 5 مسارات، الـ Sidechain Ducking (-3dB)، ومُترجم النطق واللهجات (Pylint 10/10)
+│   └── hussaini_dsp_montage.py                      # محرك الـ DSP (SOS Filters, -28dBFS RMS Ducking, -14 LUFS)، المدقق، ومُترجم اللهجات (Pylint 10/10)
 ├── tests/
-│   └── test_hussaini_modules.py                     # اختبارات الوحدات الآلية (Unit Tests) لفحص Modules 34, 38, 39, 40, 41, 43 ومحرك الـ DSP
+│   └── test_hussaini_modules.py                     # اختبارات الوحدات الآلية (8 مجموعات شاملة الحالات السلبية واختبار الثبات Idempotency)
 └── .github/
     └── workflows/
-        └── ci.yml                                   # الفحص الآلي (GitHub Actions CI): Pylint + Pytest Unit Tests + 7-Mode DSP Validation
+        └── ci.yml                                   # الفحص الآلي (GitHub Actions CI): Pylint + Pytest (--cov) + Multi-Rate/Stereo 7-Mode DSP
 ```
