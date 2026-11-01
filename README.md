@@ -292,10 +292,13 @@ bridge = build_multi_tor_melodic_bridge("saba", "hijaz", "Tor Faizi / Nazla", "T
 pip install -r requirements.txt
 
 # ترجمة وفحص كلمات القصيدة مباشرة من الطرفية (فصل الكلمات + التنوين + كشف اللهجة وتشكيلها) بدون الحاجة لملف صوتي
-python3 scripts/hussaini_dsp_montage.py --compile-lyrics "ياحسين يا خويه شلون قلب وچبد ودمع وعينٍ تسيل"
+python3 scripts/hussaini_dsp_montage.py --compile-lyrics "ياحسين يا خويه شلون قلب وقلبي وچبد ودمع وعينٍ تسيل"
 
-# تشغيل اختبارات الوحدات الـ 7 (Modules 34, 38, 39, 40, 41, 43 + CLI + 5-Track DAW & -3.0dB Sidechain Ducking)
-pytest -v tests/test_hussaini_modules.py
+# فحص القصيدة الشامل قبل التوليد (Pre-Generation Poem Linter: حدود الكلمات، خلط الفصحى بالعامية، وتوازن مقاطع كل شطر)
+python3 scripts/hussaini_dsp_montage.py --lint-poem "ياحسين يا خويه شلون قلب وقلبي"
+
+# تشغيل اختبارات الوحدات الـ 8 شاملة الحالات السلبية واختبارات الثبات التكراري (Idempotency) مع نسبة التغطية
+pytest -v --cov=scripts tests/test_hussaini_modules.py
 
 # فحص جودة الكود بمعايير Pylint الصارمة
 pylint scripts/hussaini_dsp_montage.py tests/test_hussaini_modules.py
