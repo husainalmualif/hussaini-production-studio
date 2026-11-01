@@ -26,37 +26,55 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Validate Skill Structure & V45.0 Version Consistency Across All Files
+      - name: Validate Skill Structure & Single-Source VERSION Consistency
         run: |
+          test -f VERSION
           test -f SKILL.md
           test -f README.md
           test -f requirements.txt
           test -f references/atwar_maqamat_and_poetry_guide.md
           test -f references/radoods_and_khutaba_encyclopedia.md
+          test -f references/modules/experimental_ab_evaluation_and_human_review.md
+          test -f references/modules/module_39_json_preconditioning.md
+          test -f references/modules/module_40_41_43_phonetics_and_dialects.md
+          test -f references/modules/module_42_gireez_hosa_and_muharram_calendar.md
           test -f scripts/hussaini_dsp_montage.py
           test -f tests/test_hussaini_modules.py
+          VER="$(tr -d '\r\n' < VERSION)"
           grep -q "^name: hussaini-production-studio" SKILL.md
-          grep -q "V45.0 OMNI-ARCHITECT" SKILL.md
-          grep -q "V45.0 OMNI-ARCHITECT" README.md
-          grep -q "V45.0 OMNI-ARCHITECT" references/atwar_maqamat_and_poetry_guide.md
-          grep -q "V45.0 OMNI-ARCHITECT" references/radoods_and_khutaba_encyclopedia.md
-          grep -q "V45.0 OMNI-ARCHITECT" scripts/hussaini_dsp_montage.py
-          grep -q "Hussaini_Production_Studio_OS_V45_OMNI_ARCHITECT" README.md
-          grep -q "Hussaini_Production_Studio_OS_V45_OMNI_ARCHITECT" references/atwar_maqamat_and_poetry_guide.md
+          grep -q "$VER" SKILL.md
+          grep -q "$VER" README.md
+          grep -q "$VER" references/atwar_maqamat_and_poetry_guide.md
+          grep -q "$VER" references/radoods_and_khutaba_encyclopedia.md
 
       - name: Lint DSP Montage Script & Unit Tests with Pylint
         run: |
-          pylint --disable=C0301,R0912,R0913,R0914,R0917 scripts/hussaini_dsp_montage.py tests/test_hussaini_modules.py
+          pylint --disable=C0301,R0912,R0913,R0914,R0915,R0917 scripts/hussaini_dsp_montage.py tests/test_hussaini_modules.py
 
-      - name: Run Unit Tests for Modules 34, 38, 39, 40, 41, 43 & 5-Track DSP Engine
+      - name: Run Unit, Negative-Edge & Idempotency Tests with Coverage
         run: |
-          pytest -v tests/test_hussaini_modules.py
+          pytest -v --cov=scripts tests/test_hussaini_modules.py
 
-      - name: Test Hussaini CLI Lyrics Compiler & DSP Montage Engine Across All 7 Modes
+      - name: Test CLI Lyrics Compiler, Poem Linter & Multi-Rate/Stereo DSP Engine
         run: |
-          python scripts/hussaini_dsp_montage.py --compile-lyrics "ياحسين يا خويه شلون قلب وچبد ودمع وعينٍ تسيل"
-          python -c "import numpy as np; from scipy.io import wavfile; sr=16000; t=np.linspace(0, 2.0, 2*sr, endpoint=False); sig=(0.5*np.sin(2*np.pi*160.0*t)*32767).astype(np.int16); wavfile.write('/tmp/test_in.wav', sr, sig)"
+          python scripts/hussaini_dsp_montage.py --compile-lyrics "ياحسين يا خويه شلون قلب وقلبي وچبد ودمع وعينٍ تسيل"
+          python scripts/hussaini_dsp_montage.py --lint-poem "ياحسين يا خويه شلون قلب وقلبي"
+          python -c "import numpy as np; from scipy.io import wavfile
+          for sr in (8000, 16000, 44100, 48000):
+              t = np.linspace(0, 1.2, int(1.2*sr), endpoint=False)
+              mono = (0.4*np.sin(2*np.pi*180.0*t)*32767).astype(np.int16)
+              wavfile.write(f'/tmp/in_{sr}.wav', sr, mono)
+          t44 = np.linspace(0, 1.2, int(1.2*44100), endpoint=False)
+          sig = (0.4*np.sin(2*np.pi*180.0*t44)*32767).astype(np.int16)
+          stereo = np.column_stack((sig, sig))
+          wavfile.write('/tmp/in_stereo.wav', 44100, stereo)"
+          for sr in 8000 16000 44100 48000; do
+            python scripts/hussaini_dsp_montage.py --input "/tmp/in_${sr}.wav" --output "/tmp/out_${sr}.wav" --mode latm --bpm 60 --maqam-drone saba
+            test -s "/tmp/out_${sr}.wav"
+          done
+          python scripts/hussaini_dsp_montage.py --input /tmp/in_stereo.wav --output /tmp/out_stereo.wav --mode bandari --bpm 88 --swing 0.22 --maqam-drone kurd
+          test -s /tmp/out_stereo.wav
           for mode in latm zanjeel_iraqi zanjeel_bahrani shoor bandari mawal nai; do
-            python scripts/hussaini_dsp_montage.py --input /tmp/test_in.wav --output "/tmp/test_out_${mode}.wav" --mode "$mode" --bpm 60 --maqam-drone saba
+            python scripts/hussaini_dsp_montage.py --input /tmp/in_16000.wav --output "/tmp/test_out_${mode}.wav" --mode "$mode" --bpm 60 --maqam-drone saba
             test -s "/tmp/test_out_${mode}.wav"
           done
