@@ -119,9 +119,9 @@ def test_module43_prefix_decomposition_dhaa_and_neutral_tie():
     assert "وَ يَا بُو فَاظِلْ" in shaped_iraqi
     assert "بِ ظْلُوعِي" in shaped_iraqi
 
-    # 2b. Iraqi orthographic 'كَـ' (Kaf + Fatha + Tatweel) & open 'آنَه' from reference audio
+    # 2b. Iraqi orthographic 'كَـ' (Kaf + Fatha + Tatweel), open 'آنَه', and zero word-initial Sukun on 'شيجيبه/مدمه/اتبشري'
     ortho_iraqi = engine.detect_and_shape_dialect(
-        "يا يمه ابأرض الشام عشت انه اشكَـد آلام كَـوه النفس اشهكَـ صرت من كثر ما تعبوني صارت كَـدامي بالسوكَـ"
+        "يا يمه ابأرض الشام عشت انه اشكَـد آلام كَـوه النفس اشهكَـ صرت من كثر ما تعبوني صارت كَـدامي بالسوكَـ شيجيبه الي راعي الشيم طوله مدمه الكالي اتبشري اموذر ازماطي"
     )
     shaped_ortho = ortho_iraqi["shaped_lyrics"]
     assert "آنَه" in shaped_ortho
@@ -132,6 +132,12 @@ def test_module43_prefix_decomposition_dhaa_and_neutral_tie():
     assert "كِثِرْ" in shaped_ortho
     assert "گِدَّامِي" in shaped_ortho
     assert "بِ السُّوگْ" in shaped_ortho
+    assert "بِأَرْضِ" in shaped_ortho
+    assert "شِيجِيبَه" in shaped_ortho
+    assert "مُدَمَّه" in shaped_ortho
+    assert "إِتْبَشْرِي" in shaped_ortho
+    assert "إِمْوَذَّرْ" in shaped_ortho
+    assert "إِزْمَاطِي" in shaped_ortho
 
     # 3. Tie / Neutral case (iraqi_bahrani on 'يا حسين ...'): 100% neutral vocalization (قَلْبْ، صَبْرْ، ض)
     neutral_res = engine.detect_and_shape_dialect("ياحسين قلب وقلبي والصبر والجمرة ويبوفاضل بضلوعي")
