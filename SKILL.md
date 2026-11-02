@@ -9,10 +9,10 @@ Structured router for authentic Hussaini poetic composition, microtonal Maqam/To
 
 ## When to Use
 
-- Producing a Latmiya, Heavy Studio Clip (`60–75 BPM`), Zanjeel, Shoor, Bandari, Mawal, Na'i, Abudhiyah, or Hussaini chant in **Google Flow Music (`Lyria`)**, Suno, or Udio.
-- Composing or linting Hussaini poetry in Iraqi, Bahrani, Gulf, or Classical Arabic (Fusha) across traditional meters (`Ruba'i, Nassari, Muwashah, Fazza'iya, Fayzi, Tajleeb, Maymar, Abudhiyah, Mawal, Hosa`).
-- Emulating the melodic/rhythmic school or multi-Tor blending of renowned Radoods or Minbar Khutaba ethically via acoustic descriptors.
-- Mastering raw vocal recordings (`8/16/24/32-bit Mono/Stereo WAV` at `8kHz–48kHz`) with 5-Track DAW routing (`Double-Layered Latm + Human Sub-Bass, Dammam, Tasa, Zanjeel, Vocal Synth Strings, 3D Soundstage, Convolution Reverb, Foley, Audio Drop, -28 dBFS RMS Sidechain Ducking`).
+- Producing a Latmiya, Heavy Studio Clip (`60–75 BPM`), Zanjeel, Shoor, Bandari, Mawal, Na'i, or Abudhiyah in **Flow Music (`Lyria`)**, Suno, or Udio.
+- Composing or linting Hussaini poetry in Iraqi, Bahrani, Gulf, or Fusha across traditional meters (`Ruba'i, Nassari, Muwashah, Fazza'iya, Fayzi, Tajleeb, Maymar, Abudhiyah, Mawal, Hosa`).
+- Emulating renowned Radoods or Minbar Khutaba ethically via acoustic descriptors.
+- Mastering raw vocal WAVs (`8/16/24/32-bit Mono/Stereo, 8k–48kHz`) with 5-Track DAW routing (`Double-Layered Latm + Human Sub-Bass, Dammam, Tasa, Zanjeel, Vocal Synth Strings, 3D Soundstage, Convolution Reverb, Foley, Audio Drop, -28 dBFS RMS Ducking`).
 
 ## Modular Reference Map (Load Only What You Need)
 
@@ -27,18 +27,18 @@ Structured router for authentic Hussaini poetic composition, microtonal Maqam/To
 
 ## Hard Core Rules & Cultural Firewall
 
-1. **Acoustic Purity & 3-Tier Studio Architecture (`Module 44`)**:
-   - **Tier 1 & 2 (`Pure Acapella & Vocal Synth` — Default)**: Lead vocal (`Baritone`), `Raddada` choir (`Jawab & Qarar`), pharyngeal `Ahaat` pads, `Vocal Synth` humming strings, spontaneous `Ya Hussain` cries, `55Hz` chest thud + palm snap (`Latm`), `Dammam`, `Tasa`, `Zanjeel`. Forbid pop/dance instruments (`piano, guitar, 808, trap`), `tenor`, transliterated Arabic, or raw EQ numbers in `Sound`.
-   - **Tier 3 (`Heavy Studio Clips 60–75 BPM`, when requested)**: Double-layered chest+palm beat with beat-synced human `Sub-Bass` hum, `3D Soundstage` (`100% Center Dry` lead + extreme `L/R` choir/pads with `Convolution Reverb`), Foley (`wind, water, horses`), `Audio Drop`, and optional solo woodwind bridges (`Ney, Duduk, Clarinet`).
+1. **Acoustic Purity, 3-Tier Studio & Anti-Song-Drift Lock (`Module 44`)**:
+   - **Tier 1 & 2 (`Pure Acapella & Vocal Humming` — Default)**: Lead vocal (`Baritone`), `Raddada` choir (`Jawab & Qarar`), pharyngeal `Ahaat` humming drone, `Ya Hussain` cries, `55Hz` chest thud + palm snap (`Latm`), `Dammam`, `Tasa`, `Zanjeel`. **Never** write `strings`, `synth`, or `Nahawand` in Flow Music `Sound` prompts (triggers pop-song drift); use `pharyngeal Ahaat vocal humming choir drone` and `strictly non-musical mourning recitative, no pop melody, no melodic leaps` in `Sound`, and generate `Vocal Synth` via local DSP (`--mode heavy_clip`).
+   - **Tier 3 (`Heavy Studio Clips 60–66 BPM`)**: Double-layered chest+palm beat + human `Sub-Bass` hum, `3D Soundstage` (`100% Center Dry` lead + extreme `L/R` choir/pads + `Convolution Reverb`), Foley (`wind, water, horses`), `Audio Drop`, and max **2 stanzas (`16–20 lines`) per clip**.
 2. **Microtonal 24-EDO Maqam & Stage-1 Iso-Syllabic Lock (`Modules 34 & 38`)**:
-   - Enforce Arabic 24-EDO quarter-tones (`Maqam Saba, Bayati, Hijaz, Lami, Kurd, Nahawand, Sikah, Rast`) with smooth `Qarar-to-Jawab` legato transitions.
-   - Format **Stage 1 (`Root Track`)** as **12 lines max (3 stanzas × 4 hemistichs)** sharing the **exact same prosodic meter and syllable count** (`validate_stage1_iso_syllabic_lock`) and resolving to the **identical 4th-line anchor refrain**.
+   - Enforce Arabic 24-EDO quarter-tones (`Maqam Saba, Bayati, Hijaz, Lami, Kurd, Sikah, Rast`) with smooth `Qarar-to-Jawab` legato transitions.
+   - Format **Stage 1 (`Root Track`)** as **12 lines max (3 stanzas × 4 hemistichs)** sharing the **same meter and syllable count** (`validate_stage1_iso_syllabic_lock`) and resolving to the **identical 4th-line refrain**.
    - Lock **ONE primary Maqam** in Stage 1 (`Rule B1`). Defer multi-Tor bridges (`Common Jins`) to **Stage 2 (`Extend`)**. Never mix Fusha and Colloquial in Stage 1.
 3. **Morphological Dialect Shaping, Safe Tanween & Anti-Slurring (`Modules 40, 41 & 43`)**:
    - **Space-First Separation (`Module 41`, `use_tatweel=False` default)**: Separate attached vocatives, prepositions, and interrogatives (`ياحسين ⟵ يَا حْسَيْنْ`, `عالباب ⟵ عَلَى البَابْ`, `بغربتي ⟵ بِ غُرْبِتِي`, `شصار ⟵ إِشْ صَارْ`) and normalize Iraqi `كَـ ⟵ گ` (`اشكَـد ⟵ إِشْگَدْ`).
-   - **Safe Mid-Line Tanween & End Sukun (`Module 40`)**: Convert mid-line Tanween to `-ِنْ` (`عينٍ تسيل ⟵ عَيْنِنْ تِسِيلْ`, protecting vocalized `نارٍ يَصْلَى` and vocative `دمعٍ ياحسين`). End every hemistich with Sukun (`ْ`) or long open vowel (`ظامِئاً ⟵ ظَامِئَا`, exempting `ى`).
+   - **Safe Mid-Line Tanween & End Sukun (`Module 40`)**: Convert mid-line Tanween to `-ِنْ` (`عينٍ تسيل ⟵ عَيْنِنْ تِسِيلْ`, protecting vocalized `نارٍ يَصْلَى` and vocative `دمعٍ ياحسين`). End every hemistich with Sukun (`ْ`) or long vowel (`ظامِئاً ⟵ ظَامِئَا`, exempting `ى`).
    - **Prefix-Aware Dialect Shaping (`Module 43`)**: Decompose prefixes (`ال، و، ب، ك، ل، وال، بال، كال، لل`) before matching stems (`الجمرة ⟵ الجَمْرَه`, protecting `المقلوب`):
-     - **Iraqi (`iraqi`)**: Medial Damma (`قلب ⟵ گَلُبْ`, `والصبر ⟵ وَ الصَبُرْ`), Euphrates Kasra (`چبد ⟵ چَبِدْ`, `دمع ⟵ دَمِعْ`, `صرت ⟵ صِرِتْ`, `كثر ⟵ كِثِرْ`), open `أنه ⟵ آنَه`, `قلبي ⟵ گَلْبِي`, `قلبك ⟵ گَلْبَكْ`, Iraqi Dhaa `ظ` (`ويبوفاضل ⟵ وَ يَا بُو فَاظِلْ`, `بضلوعي ⟵ بِ ظْلُوعِي`), and **Final-Word Drop (`قاعدة الكسر`)**.
+     - **Iraqi (`iraqi`)**: Medial Damma (`قلب ⟵ گَلُبْ`, `والصبر ⟵ وَ الصَبُرْ`), Kasra (`چبد ⟵ چَبِدْ`, `دمع ⟵ دَمِعْ`, `صرت ⟵ صِرِتْ`, `كثر ⟵ كِثِرْ`), open `أنه ⟵ آنَه`, `قلبي ⟵ گَلْبِي`, `قلبك ⟵ گَلْبَكْ`, Iraqi Dhaa `ظ` (`ويبوفاضل ⟵ وَ يَا بُو فَاظِلْ`, `بضلوعي ⟵ بِ ظْلُوعِي`), and **Final-Word Drop (`قاعدة الكسر`)**.
      - **Bahrani (`bahrani`)**: Light Kasra (`قلب ⟵ گَلِبْ`, `والصبر ⟵ وَ الصَبِرْ`, `قلبي ⟵ گَلْبِي`, `قلبك ⟵ گَلْبِكْ`), Dhad `ض` (`فَاضِلْ`, `ضْلُوعِي`), and **3rd-Word Faizi Vibrato (`الترجيع الفايزي`)**.
      - **Neutral Tie (`iraqi_bahrani`)**: **100% neutral shaping** (`قلب ⟵ قَلْبْ`, `قلبي ⟵ قَلْبِي`, `والصبر ⟵ وَ الصَبْرْ`, `الجمرة ⟵ الجَمْرَه`, `فَاضِلْ`).
 4. **Ethical Emulation & Anti-Cloning (`Modules 24 & 39`)**: Translate living Radood/Khateeb styles into acoustic descriptors; never reuse unrelated `seed`/`reference_clip_id` (`reference_clip_id=None` default).
@@ -54,8 +54,8 @@ python3 scripts/hussaini_dsp_montage.py --compile-lyrics "ياحسين يا خو
 
 ### Workflow 2: Two-Step JSON Pre-Conditioning & 40-Word Sound Prompt in Flow Music
 1. **Step 1 (`New session` -> `Producer Chat`)**: Generate JSON constitution via `build_flowmusic_json_preconditioning(dialect, maqam, bpm, reference_clip_id=None)` (`references/modules/module_39_json_preconditioning.md`) and lock in session memory before registering lyrics.
-2. **Step 2 (Register Pure-Arabic Lyrics & Generate with 40–50 Word English `Sound` Prompt)**:
-   `Cinematic Heavy Studio Hussaini Latmiya, Maqam Saba and Kurd on D, 66 BPM, dry intimate center Baritone lead vocal, smooth legato Qarar to Jawab melody, double-layered chest thud and palm snap with deep human vocal sub-bass hum, wide 3D stereo pharyngeal Ahaat vocal-synth strings pad, Husseiniya convolution reverb, Pure Vocal Synth No Instruments`
+2. **Step 2 (Register Pure-Arabic Lyrics & Generate with 40–50 Word Funeral `Sound` Prompt)**:
+   `Solemn Funeral Iraqi Hussaini Latmiya, mournful Maqam Saba Zamzam and Bayati on D, 62 BPM, strictly non-musical Husseiniya mourning recitative, no pop melody, no melodic leaps, dry intimate center Baritone lead vocal, slow weeping legato phrasing, double-layered chest thud and palm snap with deep human vocal sub-bass hum, wide 3D stereo pharyngeal Ahaat vocal humming choir drone, Husseiniya convolution reverb, Pure Acapella Matam No Instruments`
 3. **Step 3 (Post-Generation DSP via `audio__apply_effect`)**:
    `Apply audio__apply_effect on the generated clip: HighPass filter at 85Hz, AdvancedEqualizer (cut 450Hz by -2.5dB, boost mid 1200Hz by +1.5dB, boost high-mid presence 2500Hz by +4.5dB), Compressor (ratio 3:1, threshold -12dB), Reverb (room_size 0.55, wet mix 0.18), and Limiter at -1.0dB.`
 
