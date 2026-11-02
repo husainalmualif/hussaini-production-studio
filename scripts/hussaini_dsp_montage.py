@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# pylint: disable=too-many-lines,line-too-long,too-many-branches,too-many-arguments,too-many-locals,too-many-statements,too-many-positional-arguments
 """Hussaini Audio Omni-Engine DSP, 5-Track DAW & Phonetics Compiler (V45.0 OMNI-ARCHITECT).
 
 Bridges poetic/phonetic engineering with procedural DSP audio mastering:
@@ -46,15 +45,17 @@ MAQAM_FREQS = {
     "lami": [146.83, 155.56, 174.61, 207.65],
     "kurd": [146.83, 155.56, 174.61, 220.00],
     "rast": [130.81, 146.83, 160.00, 196.00],
+    "nahawand": [146.83, 164.81, 174.61, 220.00],
 }
 
 COMMON_JINS_GRAPH = {
-    "bayati": ["saba", "kurd", "hijaz", "lami"],
-    "saba": ["bayati", "lami", "hijaz", "rast"],
-    "hijaz": ["bayati", "saba", "kurd"],
+    "bayati": ["saba", "kurd", "hijaz", "lami", "nahawand"],
+    "saba": ["bayati", "lami", "hijaz", "rast", "nahawand"],
+    "hijaz": ["bayati", "saba", "kurd", "nahawand"],
     "lami": ["saba", "bayati", "kurd"],
-    "kurd": ["bayati", "lami", "hijaz"],
+    "kurd": ["bayati", "lami", "hijaz", "nahawand"],
     "rast": ["saba", "bayati", "hijaz"],
+    "nahawand": ["kurd", "bayati", "saba", "hijaz"],
 }
 
 WORD_SEPARATION_MAP = {
@@ -770,6 +771,21 @@ def synthesize_percussion_hit(sample_rate, kind="latm", samples_dir=None):
             metallic = noise
         return 0.45 * metallic * np.exp(-22.0 * t_vec)
 
+    if kind == "heavy_clip":
+        # Double-Layered Beat (Chest Low-End + Crisp Palm Snap) + Beat-Synced Human Sub-Bass Hum
+        chest_low = np.sin(2.0 * np.pi * 54.0 * t_vec) * np.exp(-13.0 * t_vec)
+        human_sub_hum = (
+            np.sin(2.0 * np.pi * 44.0 * t_vec)
+            * (1.0 - np.exp(-38.0 * t_vec))
+            * np.exp(-8.5 * t_vec)
+        )
+        palm_snap = rng.normal(0.0, 1.0, num_samples) * np.exp(-48.0 * t_vec)
+        if 0.5 * sample_rate > 3400.0:
+            palm_snap = butter_filter(palm_snap, [1600.0, 3200.0], sample_rate, btype="band", order=2)
+        elif 0.5 * sample_rate > 1200.0:
+            palm_snap = butter_filter(palm_snap, [300.0, 1100.0], sample_rate, btype="band", order=2)
+        return 0.65 * chest_low + 0.42 * human_sub_hum + 0.35 * palm_snap
+
     sub_thud = np.sin(2.0 * np.pi * 55.0 * t_vec) * np.exp(-16.0 * t_vec)
     skin_slap = rng.normal(0.0, 1.0, num_samples) * np.exp(-42.0 * t_vec)
     if 0.5 * sample_rate > 1200.0:
@@ -790,6 +806,7 @@ def build_rhythm_bed(
         return bed
 
     primary_hit = synthesize_percussion_hit(sample_rate, "latm", samples_dir=samples_dir)
+    heavy_hit = synthesize_percussion_hit(sample_rate, "heavy_clip", samples_dir=samples_dir)
     dammam_hit = synthesize_percussion_hit(sample_rate, "dammam", samples_dir=samples_dir)
     zanjeel_hit = synthesize_percussion_hit(sample_rate, "zanjeel", samples_dir=samples_dir)
 
@@ -808,6 +825,8 @@ def build_rhythm_bed(
                 end_sw = min(num_samples, swing_pos + len(primary_hit))
                 if swing_pos < num_samples:
                     bed[swing_pos:end_sw] += 0.45 * primary_hit[: end_sw - swing_pos]
+        elif mode == "heavy_clip":
+            hit = heavy_hit
         else:
             hit = primary_hit
 
@@ -834,6 +853,83 @@ def synthesize_ahaat_drone(num_samples, sample_rate, maqam="saba"):
     if nyq > 300.0 and high_cut > 200.0:
         pad = butter_filter(pad, [150.0, high_cut], sample_rate, btype="band", order=2)
     return pad * 0.14
+
+
+def synthesize_vocal_synth_strings_pad(num_samples, sample_rate, maqam="saba"):
+    """Module 44: Synthesize Vocal-Synth Humming Strings & Cinematic Ambient Pad from vocal formants."""
+    freqs = MAQAM_FREQS.get(maqam, MAQAM_FREQS["saba"])
+    t_vec = np.arange(num_samples, dtype=np.float64) / sample_rate
+    pad = np.zeros(num_samples, dtype=np.float64)
+    swell = 0.75 + 0.25 * np.sin(2.0 * np.pi * 0.16 * t_vec)
+
+    for idx, freq in enumerate(freqs):
+        vib = 1.0 + 0.0035 * np.sin(2.0 * np.pi * (4.4 + 0.25 * idx) * t_vec)
+        fundamental = np.sin(2.0 * np.pi * freq * vib * t_vec)
+        octave_harm = 0.45 * np.sin(2.0 * np.pi * (2.0 * freq) * vib * t_vec)
+        fifth_harm = 0.22 * np.sin(2.0 * np.pi * (3.0 * freq) * vib * t_vec)
+        pad += (0.32 / (idx + 1)) * (fundamental + octave_harm + fifth_harm)
+
+    pad = pad * swell
+    nyq = 0.5 * sample_rate
+    high_cut = min(2800.0, 0.45 * sample_rate)
+    if nyq > 500.0 and high_cut > 320.0:
+        pad = butter_filter(pad, [220.0, high_cut], sample_rate, btype="band", order=2)
+    return pad * 0.18
+
+
+def synthesize_contextual_foley(num_samples, sample_rate, foley_type="none"):
+    """Module 44: Synthesize subtle dramatic Foley (desert wind, Euphrates water, echoed horses)."""
+    if not foley_type or foley_type == "none" or num_samples <= 0:
+        return np.zeros(num_samples, dtype=np.float64)
+
+    rng = np.random.default_rng(seed=202)
+    t_vec = np.arange(num_samples, dtype=np.float64) / sample_rate
+    noise = rng.normal(0.0, 1.0, num_samples)
+    nyq = 0.5 * sample_rate
+
+    if foley_type == "wind":
+        gust = 0.55 + 0.45 * np.sin(2.0 * np.pi * 0.22 * t_vec)
+        high_cut = min(1200.0, 0.42 * sample_rate)
+        if nyq > 350.0 and high_cut > 220.0:
+            wind = butter_filter(noise, [180.0, high_cut], sample_rate, btype="band", order=2)
+        else:
+            wind = noise
+        return 0.045 * wind * gust
+
+    if foley_type == "water":
+        stream = butter_filter(noise, min(900.0, 0.4 * sample_rate), sample_rate, btype="low", order=2)
+        droplet_env = np.exp(-35.0 * np.mod(t_vec, 0.45))
+        droplet = np.sin(2.0 * np.pi * 1150.0 * t_vec) * droplet_env
+        return 0.035 * (0.6 * stream + 0.4 * droplet)
+
+    if foley_type == "horses":
+        cadence = np.exp(-28.0 * np.mod(t_vec, 0.38)) + 0.7 * np.exp(-28.0 * np.mod(t_vec + 0.14, 0.38))
+        hoof = noise * cadence
+        if nyq > 600.0:
+            hoof = butter_filter(hoof, [120.0, min(850.0, 0.4 * sample_rate)], sample_rate, btype="band", order=2)
+        return 0.04 * hoof
+
+    return np.zeros(num_samples, dtype=np.float64)
+
+
+def apply_dramatic_audio_drop(signal, sample_rate, drop_start_sec=None, drop_duration_sec=3.0):
+    """Module 44: Apply a dramatic Audio Drop to background tracks so the Radood stands solo."""
+    if drop_start_sec is None or drop_start_sec < 0.0 or len(signal) == 0:
+        return signal
+
+    out = signal.copy()
+    start_idx = min(len(out), int(drop_start_sec * sample_rate))
+    end_idx = min(len(out), int((drop_start_sec + drop_duration_sec) * sample_rate))
+    if start_idx >= end_idx:
+        return out
+
+    env = np.ones(len(out), dtype=np.float64)
+    env[start_idx:end_idx] = 0.05
+    fade_len = min(int(0.05 * sample_rate), (end_idx - start_idx) // 2)
+    if fade_len > 1:
+        env[start_idx : start_idx + fade_len] = np.linspace(1.0, 0.05, fade_len)
+        env[end_idx - fade_len : end_idx] = np.linspace(0.05, 1.0, fade_len)
+    return out * env
 
 
 def tape_saturate(signal, drive=1.35):
@@ -923,6 +1019,8 @@ def process_audio_file(
     offset_ms=None,
     swing=0.0,
     samples_dir=None,
+    foley="none",
+    audio_drop_sec=None,
 ):
     """Load an input WAV file, apply 5-Track Husseiniya DSP montage & -14 LUFS mastering, and write WAV."""
     sample_rate, mono = read_wav_any_depth(input_path)
@@ -938,8 +1036,9 @@ def process_audio_file(
 
     ir_file = os.path.join(samples_dir, "husseiniya_ir.wav") if samples_dir else None
     echoed_vocal = apply_dynacord_echo(eq_vocal, sample_rate, delay_ms=delay_ms, feedback=0.32, mix=0.22)
+    wet_mix_val = 0.14 if mode == "heavy_clip" else 0.26
     wet_vocal = apply_husseiniya_reverb(
-        echoed_vocal, sample_rate, rt60=rt60, wet_mix=0.26, ir_path=ir_file
+        echoed_vocal, sample_rate, rt60=rt60, wet_mix=wet_mix_val, ir_path=ir_file
     )
 
     if offset_ms is not None:
@@ -956,12 +1055,27 @@ def process_audio_file(
         swing=swing,
         samples_dir=samples_dir,
     )
-    ahaat_pad = synthesize_ahaat_drone(len(mono), sample_rate, maqam_drone)
+    if mode == "heavy_clip":
+        ahaat_pad = synthesize_vocal_synth_strings_pad(len(mono), sample_rate, maqam_drone)
+        rhythm_bed = apply_husseiniya_reverb(
+            rhythm_bed, sample_rate, rt60=2.8, wet_mix=0.22, ir_path=ir_file
+        )
+    else:
+        ahaat_pad = synthesize_ahaat_drone(len(mono), sample_rate, maqam_drone)
+
+    foley_bed = synthesize_contextual_foley(len(mono), sample_rate, foley_type=foley)
+
+    if audio_drop_sec is not None:
+        rhythm_bed = apply_dramatic_audio_drop(rhythm_bed, sample_rate, drop_start_sec=audio_drop_sec)
+        ahaat_pad = apply_dramatic_audio_drop(ahaat_pad, sample_rate, drop_start_sec=audio_drop_sec)
 
     ducking = compute_smart_sidechain_ducking(eq_vocal, sample_rate, duck_db=-3.0)
 
-    left_chan = wet_vocal + (0.34 * rhythm_bed + 0.09 * ahaat_pad) * ducking
-    right_chan = wet_vocal + (0.32 * np.roll(rhythm_bed, 14) - 0.09 * np.roll(ahaat_pad, 32)) * ducking
+    # 3D Soundstage: Lead vocal centered; rhythm, Vocal-Synth Strings, and Foley panned wide L/R
+    left_bg = (0.36 * rhythm_bed + 0.12 * ahaat_pad + foley_bed) * ducking
+    right_bg = (0.34 * np.roll(rhythm_bed, 18) - 0.12 * np.roll(ahaat_pad, 42) + np.roll(foley_bed, 24)) * ducking
+    left_chan = wet_vocal + left_bg
+    right_chan = wet_vocal + right_bg
 
     stereo_raw = np.column_stack(
         (tape_saturate(left_chan, drive=1.4), tape_saturate(right_chan, drive=1.4))
@@ -1016,15 +1130,36 @@ def parse_args(argv=None):
     parser.add_argument(
         "--mode",
         default="latm",
-        choices=["latm", "zanjeel_iraqi", "zanjeel_bahrani", "shoor", "bandari", "mawal", "nai"],
-        help="Husseiniya rhythmic and acoustic processing mode",
+        choices=[
+            "latm",
+            "heavy_clip",
+            "zanjeel_iraqi",
+            "zanjeel_bahrani",
+            "shoor",
+            "bandari",
+            "mawal",
+            "nai",
+        ],
+        help="Husseiniya rhythmic and acoustic processing mode (including heavy_clip for 3D Studio Clips)",
     )
     parser.add_argument("--bpm", type=float, default=60.0, help="Tempo in BPM (0 for Rubato)")
     parser.add_argument(
         "--maqam-drone",
         default="saba",
         choices=list(MAQAM_FREQS.keys()),
-        help="Maqam frequency profile for the Ahaat vocal drone pad",
+        help="Maqam frequency profile for the Ahaat / Vocal-Synth Strings pad",
+    )
+    parser.add_argument(
+        "--foley",
+        default="none",
+        choices=["none", "wind", "water", "horses"],
+        help="Contextual dramatic Foley bed (wind, water, horses)",
+    )
+    parser.add_argument(
+        "--audio-drop-sec",
+        type=float,
+        default=None,
+        help="Optional timestamp in seconds to trigger a dramatic Audio Drop (solo broken vocal)",
     )
     parser.add_argument(
         "--offset-ms",
@@ -1085,6 +1220,8 @@ def main(argv=None):
         offset_ms=args.offset_ms,
         swing=args.swing,
         samples_dir=args.samples_dir,
+        foley=args.foley,
+        audio_drop_sec=args.audio_drop_sec,
     )
     if args.session_log:
         log_generation_session(
