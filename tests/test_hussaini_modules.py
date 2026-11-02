@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# pylint: disable=line-too-long,too-many-locals,too-many-statements,no-member
 """Comprehensive Unit, Negative-Edge, Idempotency, 24-Bit WAV & 7-Mode DSP Test Suite (V45.0).
 
 Validates:
@@ -284,17 +283,18 @@ def test_all_7_dsp_modes_24bit_wav_and_samples_dir(tmp_path):
 
     ledger_file = str(tmp_path / "session_ledger.json")
 
-    # 4) Run all 7 DSP modes via CLI main() across 24-bit, 8-bit, and Stereo inputs
+    # 4) Run all 8 DSP modes (including heavy_clip, foley, and audio_drop_sec) via CLI main()
     modes_and_inputs = [
-        ("latm", wav_24bit, "saba", "60"),
-        ("zanjeel_iraqi", wav_stereo, "hijaz", "80"),
-        ("zanjeel_bahrani", wav_8bit, "bayati", "80"),
-        ("shoor", wav_24bit, "kurd", "130"),
-        ("bandari", wav_stereo, "rast", "105"),
-        ("mawal", wav_24bit, "lami", "0"),
-        ("nai", wav_8bit, "saba", "0"),
+        ("latm", wav_24bit, "saba", "60", "none"),
+        ("heavy_clip", wav_24bit, "nahawand", "66", "wind"),
+        ("zanjeel_iraqi", wav_stereo, "hijaz", "80", "horses"),
+        ("zanjeel_bahrani", wav_8bit, "bayati", "80", "water"),
+        ("shoor", wav_24bit, "kurd", "130", "none"),
+        ("bandari", wav_stereo, "rast", "105", "none"),
+        ("mawal", wav_24bit, "lami", "0", "none"),
+        ("nai", wav_8bit, "saba", "0", "none"),
     ]
-    for mode, in_wav, maqam, bpm in modes_and_inputs:
+    for mode, in_wav, maqam, bpm, foley_kind in modes_and_inputs:
         out_wav = str(tmp_path / f"out_{mode}.wav")
         rc = engine.main([
             "--input", in_wav,
@@ -302,6 +302,8 @@ def test_all_7_dsp_modes_24bit_wav_and_samples_dir(tmp_path):
             "--mode", mode,
             "--bpm", bpm,
             "--maqam-drone", maqam,
+            "--foley", foley_kind,
+            "--audio-drop-sec", "0.08",
             "--swing", "0.2",
             "--offset-ms", "20",
             "--samples-dir", str(samples_dir),
