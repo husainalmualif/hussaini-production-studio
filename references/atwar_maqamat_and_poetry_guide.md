@@ -155,18 +155,18 @@ Apply audio__apply_effect on the generated clip: HighPass filter at 85Hz, Advanc
 
 ## 7. المعمارية المرجعية متعددة المراحل في Google Flow Music (Gold-Standard Multi-Stage Pipeline & `reference_clip_ids`)
 
-### أ. التوليد عبر `Producer Chat` وتمرير البصمة الصوتية المرجعية (`reference_clip_ids`)
-- عند التوليد اليدوي من لوحة `Compose` اليمنى (`Lyrics` + `Sound`)، يكون الحقل `reference_clip_ids: null`.
-- أما عند التوليد عبر **محادثة المنتج اليسرى (`Producer Chat`)** باستدعاء أداة `lyrics__register` ثم أداة `audio__create_song` مع تمرير **`reference_clip_ids`** (مثل المعرف الذهبي `26bbb3d2-65f0-42c3-a167-37127631ef0a`) والبرومبت القياسي المختصر (40 كلمة)، فإن المحرك يقفل خامة الباريتون العراقي-البحراني وبصمة لطمة الصدر الحقيقية (`55Hz Chest-Slap`) بنسبة 100%!
+### أ. التوليد عبر `Producer Chat` وتمرير البصمة الصوتية المرجعية الاختيارية (`reference_clip_id`)
+- عند التوليد القياسي (سواء من لوحة `Compose` أو عبر `Producer Chat` لقصيدة جديدة)، يكون الحقل **`reference_clip_id: null`** افتراضياً التزاماً بـ **القاعدة 5 (منع الاستنساخ الحرفي لبصمة قصيدة سابقة)** ولأن معرّفات المقاطع (`UUIDs`) في `Flow Music` خاصة بحساب المستخدم الذي أنشأها ولا تعمل في حسابات المستخدمين الآخرين.
+- أما إذا أراد المستخدم داخل حسابه الشخصي ربط التوليد أو التمديد بمقطع مرجعي من مكتبته الخاصة، فيمرر معرّف مقطعه الشخصي `<OPTIONAL_USER_CLIP_UUID>` إلى `audio__create_song` مع البرومبت القياسي المختصر (40 كلمة).
 
-#### قائمة المعرفات المرجعية الذهبية المعتمدة (`Master Reference Clip IDs`):
-1. **`34d27fb5-9fdc-4923-a260-9d14edba6313` (`عهد الدماء - نسخة ثانية` — وأصل المسار الإيقاعي المعزول `785f8230-757e-49b1-a093-4883888cd1ef` والمسار الصوتي المعزول `f7380d77-47ff-4c58-a0de-e068689a0ea3`)**
-2. **`26bbb3d2-65f0-42c3-a167-37127631ef0a` (`عهد الوفا V33.0 Grand Master`)**
-3. **`c5c2291b-5261-4358-a826-62df0f06a972` (`عهد الصدور` — الطور الفايزي البحراني ولطمة الصدر الثقيلة)**
-4. **`38e14d1c-f452-41b5-af3d-589a526961e8` (`يا حسين - الدمعة ماتروح`)**
-5. **`94098363-76cc-4bea-87c2-4bd0b1b4e649` (`عتاب الضعن` — موال صبا مرتجل ينتقل إلى نزلة عراقية ثقيلة `55 BPM`)**
-6. **`4ecb0673-d39b-4df9-ab79-a5da4911e2ff` (`عهد الوفا - النسخة التأسيسية الأولى`)**
-7. **`2ed9b98c-dac9-427d-809f-d1b202f82bb5` (`غريبه وحايره - بحر النصاري V36.0` — `seed: 562968419` — هيكل رباعي صافٍ بدون وسوم معقوفة `ABABABA`)**
+#### أمثلة توثيقية لمعرّفات مرجعية تاريخية (تعمل فقط داخل الحساب المالك لها — استخدم `<OPTIONAL_USER_CLIP_UUID>` أو `null` في حسابك):
+1. **`<OPTIONAL_USER_CLIP_UUID_1>` (مثال تاريخي: `عهد الدماء - نسخة ثانية` — مسار إيقاعي وصوتي معزول خاص بحساب المؤلف)**
+2. **`<OPTIONAL_USER_CLIP_UUID_2>` (مثال تاريخي: `عهد الوفا V33.0 Grand Master` — خاص بحساب المؤلف)**
+3. **`<OPTIONAL_USER_CLIP_UUID_3>` (مثال تاريخي: `عهد الصدور` — الطور الفايزي البحراني ولطمة الصدر الثقيلة)**
+4. **`<OPTIONAL_USER_CLIP_UUID_4>` (مثال تاريخي: `يا حسين - الدمعة ماتروح`)**
+5. **`<OPTIONAL_USER_CLIP_UUID_5>` (مثال تاريخي: `عتاب الضعن` — موال صبا مرتجل ينتقل إلى نزلة عراقية ثقيلة `55 BPM`)**
+6. **`<OPTIONAL_USER_CLIP_UUID_6>` (مثال تاريخي: `عهد الوفا - النسخة التأسيسية الأولى`)**
+7. **`<OPTIONAL_USER_CLIP_UUID_7>` (مثال تاريخي: `غريبه وحايره - بحر النصاري V36.0` — هيكل رباعي صافٍ بدون وسوم معقوفة `ABABABA`)**
 
 ### ب. المرحلة الأولى في التوليد (`Stage 1: Iso-Syllabic 12-Line Root Track`)
 - تُكتب الكلمات في 3 مقاطع رباعية متساوية الوزن والتفعيلة (`[المُسْتَهَلّ]`, `[المَقْطَع الأَوَّل]`, `[المَقْطَع الثَّانِي]`) بالهجاء الصوتي الدارج والوقف بالسكون (`ْ`).
@@ -187,7 +187,7 @@ Apply audio__apply_effect on the generated clip: HighPass filter at 85Hz, Advanc
 | **QC5** | نطق كلمات إنجليزية داخل القصيدة العربية | وجود وسوم إنجليزية مثل `[pause]` أو `[colloquial]` داخل مربع `Lyrics` | تطهير مربع `Lyrics` من أي حرف لاتيني `[a-zA-Z]` واستخدام وسوم عربية فقط `[المُسْتَهَلّ]` |
 | **QC6** | ضياع اللحن وتغيره العشوائي في كل بيت | أبيات طويلة غير مقسمة أو غياب اللازمة الموحدة | تطبيق قاعدة `B2` و `B4` من `MODE M`: تقسيم القصيدة إلى مقاطع من 4 أشطر فقط، وتثبيت الشطر الرابع حرفياً في كل مقطع كمرساة لحنية |
 | **QC7** | تنافر اللحن مع كلمات القصيدة عند نسخ قالب جاهز | استنساخ حرفي (`Cloning`) لبرومبت أو بذرة (`Seed`) قصيدة سابقة ذات وزن وموضوع مختلفين | منع الاستنساخ الحرفي، وتطبيق **القسم 9** لتفصيل مقام وسرعة إيقاعية مناسبة لوزن القصيدة |
-| **QC8** | صوت الرادود يظهر ناعماً أو خفيفاً بدلاً من الفخامة والجهارة المنبرية | وجود كلمة `tenor` في خانة `Sound` | حذف كلمة `tenor` نهائياً، واستخدام واصف مختصر ومباشر: `commanding deep resonant Baritone lead vocal, powerful high chest-voice climbs`، أو الربط عبر `Producer Chat` بالمعرف المرجعي `26bbb3d2-65f0-42c3-a167-37127631ef0a` |
+| **QC8** | صوت الرادود يظهر ناعماً أو خفيفاً بدلاً من الفخامة والجهارة المنبرية | وجود كلمة `tenor` في خانة `Sound` | حذف كلمة `tenor` نهائياً، واستخدام واصف مختصر ومباشر: `commanding deep resonant Baritone lead vocal, powerful high chest-voice climbs`، أو الربط الاختياري عبر `Producer Chat` بمعرّف مرجعي من مكتبة حسابك الشخصي (`<OPTIONAL_USER_CLIP_UUID>`) |
 | **QC9** | اللهجة غير عراقية/بحرانية واللحن غير متوازن ومكسور | غياب عبارة `authentic Iraqi and Bahrani colloquial dialect` من حقل `Sound`، أو خلط كلمات فصحى وتنوين وحركات إعراب في `Lyrics`، أو تكديس عدة مقامات وأوزان مختلفة في التوليد الأولي | 1. تثبيت `authentic Iraqi and Bahrani colloquial dialect` ومقام واحد فقط (`Maqam Saba` أو `Maqam Bayati`) في برومبت مختصر (40 كلمة). 2. كتابة الكلمات بالهجاء الصوتي الشعبي الخالص (`شْلُونْ، گَلِبْ، چَبِدْ، عْيُونِچْ`) مع تسكين أواخر الكلمات (`ْ`). 3. توحيد وزن وعدد تفعيلات جميع أسطر المرحلة الأولى الـ 12 (`Iso-Syllabic Lock`) |
 | **QC10** | الكورال ينطق عناوين الأقسام مثل «الرابط والقفلة» ككلمات مغناة | وضع التسميات الهيكلية بين قوسين دائريين `(الرابط والقفلة)` داخل `Lyrics` | عدم وضع أي توجيه هيكلي بين قوسين دائريين `(...)` لأن المحرك يغني ما بين القوسين الدائريين بصوت الكورال؛ تُحجز `(...)` حصراً لردّة الجمهور الفعلية مثل `(مَوْلَايَ يَا حُسَيْنْ)` |
 | **QC11** | تشبيك الكلمات المتجاورة ودمجها في النطق (`Word-Boundary Slurring`) | كتابة أدوات النداء أو الجر أو الاستفهام أو العطف متصلة بالكلمة (`ياحسين، يبوفاضل، عالباب، شصار، والشمس`) | تطبيق **الوحدة 41 (`Module 41`)**: فصل الكلمات بمسافة صريحة (`يَا حْسَيْنْ`، `يَا بُو فَاضِلْ`، `عَلَى البَابْ`، `إِشْ صَارْ`، `وَ الشَّمْسُ`) أو وضع فاصلة عربية خفيفة (`،`) بين الكلمات المتتالية |
@@ -236,9 +236,9 @@ Apply audio__apply_effect on the generated clip: HighPass filter at 85Hz, Advanc
   7. **الكورال الحسيني المهيب (`Unison Raddada Choir`):**
      `wide unison male Raddada choir response, deep masculine congregation chanting`
 
-#### أمر `Producer Chat` القياسي لقفل الصوت بالمعرف الذهبي `26bbb3d2-65f0-42c3-a167-37127631ef0a`:
+#### أمر `Producer Chat` القياسي للتوليد (مع معرّف مرجعي اختياري `<OPTIONAL_USER_CLIP_UUID>` من حسابك فقط عند الحاجة):
 ```text
-Register the lyrics using lyrics__register and create the track using audio__create_song referencing clip ID "26bbb3d2-65f0-42c3-a167-37127631ef0a" at 58 BPM with this sound prompt:
+Register the lyrics using lyrics__register and create the track using audio__create_song at 58 BPM (optionally referencing your own workspace clip ID "<OPTIONAL_USER_CLIP_UUID>") with this sound prompt:
 "Traditional Iraqi and Bahrani Hussaini Latmiya, Thaqeel Faizi and Nazla style, Maqam Saba, 58 BPM, authentic Iraqi and Bahrani colloquial dialect, commanding deep resonant Baritone lead vocal, powerful high chest-voice climbs, natural vocal rasp, emotional weep cracks, heavy 55Hz bare-palm chest thud, 285ms analog tape echo, 3.2s Husseiniya hall reverb, wide unison male Raddada choir response, Pure Acapella No Instruments"
 ```
 
@@ -740,7 +740,7 @@ System Context Injection (Hussaini Production Studio OS V45.0): Read and lock th
     "anti_slurring_word_separation": {
       "rule": "Prevent word-boundary slurring (تشبيك الكلمات) in G2P tokenization by physically separating attached prefixes, vocatives, prepositions, and conjunctions with spaces or micro-commas (،)",
       "examples": [
-        "Separate vocatives: write 'يَا حْسَيْنْ' and 'يَا بُو فَاضِلْ' and 'يَا أُمّ البَنِينْ' (never 'ياحسين' or 'يبوفاضل')",
+        "Separate vocatives: write 'يَا حْسَيْنْ' and 'يَا بُو فَاضِلْ' and 'يَا أُمّ البَنِينْ' (never 'ياحسين' or 'يبوفاضل' or 'يام البنين')",
         "Separate prepositions & interrogatives: write 'عَلَى البَابْ / عَ البَابْ' (never 'عالباب'), 'بِـ غُرْبِتِي' (never 'بغربتي'), 'إِشْ صَارْ / شْ صَارْ' (never 'شصار'), 'إِشْ نْگُولْ' (never 'شنگول')",
         "Separate conjunction Waw before Al-Ta'reef: write 'وَ الشَّمْسُ' or 'وْ الخَيْلْ' (instead of attached 'والشمس' / 'والخيل')",
         "Insert a micro-comma (،) between adjacent words that risk merging in fast delivery"
@@ -779,11 +779,8 @@ System Context Injection (Hussaini Production Studio OS V45.0): Read and lock th
       "minbar_nai_0bpm_rubato": "Traditional Iraqi and Bahrani Minbar Na'i vocal lament, strict Rubato free tempo with zero rhythmic grid, Maqam Saba, authentic Iraqi and Bahrani colloquial dialect, deep velvet mournful Baritone solo voice, raw weeping cracks, prolonged microtonal vowel cries, 450ms analog tape echo, 3.8s large Husseiniya cathedral reverb, Pure Solo Acapella No Percussion No Instruments"
     }
   },
-  "5_golden_reference_clip_ids": {
-    "iraqi_bahrani_jawhari_baritone_master": "26bbb3d2-65f0-42c3-a167-37127631ef0a",
-    "heavy_karbalai_latm_master": "34d27fb5-9fdc-4923-a260-9d14edba6313",
-    "nassari_saba_master": "2ed9b98c-dac9-427d-809f-d1b202f82bb5"
-  },
+  "5_optional_reference_clip_id": null,
+  "5_note": "Set 5_optional_reference_clip_id to your own Flow Music clip UUID (<OPTIONAL_USER_CLIP_UUID>) only when anchoring to a personal workspace track; keep null for fresh poem compositions.",
   "6_post_generation_dsp_chain_via_apply_effect": {
     "tool": "audio__apply_effect",
     "high_pass_filter_hz": 85,
@@ -807,7 +804,7 @@ System Context Injection (Hussaini Production Studio OS V45.0): Read and lock th
 ```text
 Now execute Step 2 following the locked V45.0 JSON constitution:
 1. Call `lyrics__register` with the exact pure-Arabic lyrics below.
-2. Call `audio__create_song` referencing clip ID "26bbb3d2-65f0-42c3-a167-37127631ef0a" at 58 BPM using the `iraqi_bahrani_58bpm_saba` 40-word sound prompt:
+2. Call `audio__create_song` at 58 BPM (optionally referencing your own workspace clip ID "<OPTIONAL_USER_CLIP_UUID>" if desired) using the `iraqi_bahrani_58bpm_saba` 40-word sound prompt:
 "Traditional Iraqi and Bahrani Hussaini Latmiya, Thaqeel Faizi and Nazla style, Maqam Saba, 58 BPM, authentic Iraqi and Bahrani colloquial dialect, commanding deep resonant Baritone lead vocal, powerful high chest-voice climbs, natural vocal rasp, emotional weep cracks, heavy 55Hz bare-palm chest thud, 285ms analog tape echo, 3.2s Husseiniya hall reverb, wide unison male Raddada choir response, Pure Acapella No Instruments"
 
 Lyrics to register:
