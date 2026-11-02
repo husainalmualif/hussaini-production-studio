@@ -163,6 +163,13 @@ def test_idempotency_across_all_phonetic_compilers():
     sh2 = engine.detect_and_shape_dialect(sh1)["shaped_lyrics"]
     assert sh1 == sh2
 
+    # Verify vertical splitting of long narrative lines (>5 words) to prevent rushed post-1:27 cadence
+    long_line = "مَكْسُورَة خَاطِرْ وَ الدَّمِعْ .. مَا ظَلْ بَعَدْ بِ عْيُونِي"
+    split_res = engine.split_long_lines_for_steady_pacing(long_line, max_words_per_line=5)
+    split_lines = split_res.splitlines()
+    assert len(split_lines) == 2
+    assert split_lines[0].endswith("..")
+
 
 def test_module34_and_38_per_hemistich_syllable_validator():
     """Verify per-hemistich syllable segmentation passes balanced stanzas and rejects lopsided hemistichs."""
