@@ -1,69 +1,72 @@
-# Modules 40, 41 & 43: Dialectal Tanween, Anti-Slurring Word Separation & Morphological Dialect Engine (V45.0 OMNI-ARCHITECT)
+# هندسة النطق الرقمي: التنوين (`Module 40`)، فصل الكلمات (`Module 41`)، والتحليل الصرفي بالبادئات بين البحرانية والعراقية (`Module 43`) — V45.0 OMNI-ARCHITECT
+
+يمثل هذا الملف الوحدة المرجعية المستقلة لقواعد معالجة النصوص الشعرية الحسينية قبل إرسالها إلى محرك التوليد الصوتي (`Google Flow Music / Lyria`) أو عبر المُترجم البرمجي `scripts/hussaini_dsp_montage.py`.
 
 ---
 
-## 1. Module 40: Dialectal & Prosodic Tanween (Nunation) Compiler (`مُعَالِجُ التَّنْوِينِ اللَّهْجِيِّ وَالعَرُوضِيّ`)
+## 1. الوحدة 41: قانون فصل الكلمات وفكّ الالتصاق الصوتي (`Anti-Slurring Word De-Cliticization`)
 
-In Arabic speech-to-singing and neural audio synthesis (`Google Flow Music`), raw orthographic **Tanween** (`ـً / ـٍ / ـٌ`) causes two severe acoustic defects if left uncompiled:
-1. **End-of-Line Hard-N Clipping:** Placing `ـً / ـٍ / ـٌ` at the end of a hemistich or rhyme word forces the TTS engine to pronounce a dry, clipped `/n/` consonant instead of a resonant open vowel (`إِشْبَاع`) or clean cutoff (`سُكُون`), destroying the rhyme (`القَافِيَة`).
-2. **Colloquial Linker Neglect (`تَنْوِينُ العِوَضِ اللَّهْجِيّ`):** In Iraqi and Bahrani colloquial poetry, an indefinite noun followed by a descriptive verb or adjective (e.g., `عَيْنٍ تِسِيلْ`, `جَرْحٍ چِبِيرْ`, `كِلٍّ يِنَادِي`) relies on an audible **phonetic Nunation linker (`ـِنْ`)** to maintain the prosodic meter (`الوَزْن`). If omitted or left as a bare diacritic, the AI drops a syllable and breaks the rhythm.
-
-### 1.1 The 3 Mandatory Laws of Module 40
-| Position & Register | Acoustic Rule | Raw Input (Forbidden / Unstable) | Compiled Phonetic Output (Locked) |
-| :--- | :--- | :--- | :--- |
-| **Rule 40-A: End-of-Line / Rhyme (`أَوَاخِرُ الأَبْيَاتِ وَالقَوَافِي`)** | **NEVER** leave `ـً / ـٍ / ـٌ` at the end of a line. Convert Accusative (`ـاً`) to open Alif (`ـَا`), and convert `ـٍ / ـٌ` to dead Sukun (`ـْ`). | `سَقَطَ جَسَداً` / `بِلَا قُبُورٍ` | `سَقَطَ جَسَدَا` / `بِلَا قُبُورْ` |
-| **Rule 40-B: Mid-Line Colloquial Linker (`التَّنْوِينُ اللَّهْجِيُّ الرَّابِط`)** | Write colloquial mid-line `تنوين الكسر` explicitly as a phonetic Nun + Sukun (`ـِنْ`) when linking a noun to its modifier in Iraqi/Bahrani verse, **without** corrupting already-vocalized following verbs or vocatives (`يَا`). | `عينٍ تسيل` / `جرحٍ چبير` / `كلٍ ينادي` | `عَيْنِنْ تِسِيلْ` / `جَرْحِنْ چِبِيرْ` / `كِلِّنْ يِنَادِي` |
-| **Rule 40-C: Mid-Line Fusha Prosodic Tanween (`التَّنْوِينُ الفَصِيحُ الوَصْلِيّ`)** | In Classical Fusha (`الشِّعْرُ الفَصِيح`), mid-line Tanween required by the `تَفْعِيلَة` is written phonetically as `ـَنْ / ـِنْ / ـُنْ` ONLY inside the line, never at the pause. | `جِسْماً عَلَى الثَّرَى` / `دَامٍ بِلَا قُبُورٍ` | `جِسْمَنْ عَلَى الثَّرَى` / `دَامِنْ بِلَا قُبُورْ` |
+- **فصل أدوات النداء:** `ياحسين ⟵ يَا حْسَيْنْ`، `يبوفاضل ⟵ يَا بُو فَاضِلْ` (وفي العراقي الخالص تتحول تلقائياً في الوحدة 43 إلى: `يَا بُو فَاظِلْ`)، `يزينب ⟵ يَا زَيْنَبْ`.
+- **فصل حروف الجر المندمجة:** `عالباب ⟵ عَلَى البَابْ`، `عالرمضا ⟵ عَلَى الرَّمْضَه`، `للذبحوا ⟵ لِلْ ذَبْحَوْا`.
+- **فصل حروف الجر الأحادية (`بـ، لـ`) بدون كشيدة افتراضياً (`Space-First Rule — use_tatweel=False`):**
+  - يُعتمد الفصل بالمسافة الصافية (`بِ غُرْبِتِي`، `بِ ضْلُوعِي`) كخيار افتراضي آمن (`use_tatweel=False`) لتجنب أي قراءة غريبة لرمز الكشيدة (`ـ`) في محركات الـ `G2P`، مع إتاحة خيار الكشيدة (`--use-tatweel`) عند الطلب.
+- **فصل أدوات الاستفهام العراقية:** `شصار ⟵ إِشْ صَارْ`، `شنگول ⟵ إِشْ نْگُولْ`، `شحچي ⟵ إِشْ أَحْچِي`.
 
 ---
 
-## 2. Module 41: Space-First & Optional-Tatweel Anti-Slurring Engine (`مُحَرِّكُ فَصْلِ الكَلِمَاتِ وَمَنْعِ الإِدْغَامِ العَشْوَائِيّ`)
+## 2. الوحدة 40: هندسة التنوين اللهجي والفصيح (`Dialectal & Prosodic Tanween Compiler`)
 
-Neural G2P (Grapheme-to-Phoneme) tokenizers frequently slur attached Arabic vocatives (`يا`), prepositions (`بـ / عـ / لـ`), and interrogative clitics (`شـ`) into a single garbled token when fed as compound strings.
-
-### 2.1 Space-First Default (`use_tatweel=False`) vs. Optional Tatweel (`use_tatweel=True`)
-By default (`use_tatweel=False`), the compiler uses **clean space separation** (`بِ غُرْبِتِي`, `لِ حْسَيْنْ`) so zero `ـ` (`Tatweel / U+0640`) characters enter the G2P tokenizer (preventing subword fragmentation in neural TTS). If visual kashida styling is desired for human sheet music, pass `--use-tatweel` (`use_tatweel=True`).
-
-### 2.2 Mandatory De-Cliticization & Orthographic Gaf Normalization Table
-| Attached / Raw Input | Default Space-First Output (`use_tatweel=False`) | Optional Tatweel Output (`use_tatweel=True`) | Acoustic Justification |
-| :--- | :--- | :--- | :--- |
-| `ياحسين` / `وياحسين` | `يَا حْسَيْنْ` / `وَ يَا حْسَيْنْ` | `يَا حْسَيْنْ` / `وَ يَا حْسَيْنْ` | Prevents swallowing the long `ا` of the vocative `يَا`. |
-| `يبوفاضل` / `يبو فاضل` | `يَا بُو فَاظِلْ` (Iraqi) / `يَا بُو فَاضِلْ` | `يَا بُو فَاظِلْ` / `يَا بُو فَاضِلْ` | Restores the open vocative vowel and separates `بُو` from `فَاضِلْ`. |
-| `يايمه` / `يافاطم` / `يحبيبه` | `يَا يُمَّه` / `يَا فَاطِمْ` / `يَا حَبِيبَه` | `يَا يُمَّه` / `يَا فَاطِمْ` / `يَا حَبِيبَه` | Separates attached colloquial vocatives cleanly. |
-| `عالباب` / `عالرمضا` / `عالشاطي` | `عَلَى البَابْ` / `عَلَى الرَّمْضَه` / `عَلَى الشَّاطِي` | `عَلَى البَابْ` / `عَلَى الرَّمْضَه` / `عَلَى الشَّاطِي` | Expands contracted `عَالـ` so the AI articulates both syllables smoothly. |
-| `للذبحوا` / `للناس` | `لِلْ ذَبْحَوْا` / `لِلْ نَاسْ` | `لِلْ ذَبْحَوْا` / `لِلْ نَاسْ` | Prevents attached `للـ` relative/prepositional slurring. |
-| `شصار` / `شنگول` / `شيجيبه` | `إِشْ صَارْ` / `إِشْ نْگُولْ` / `إِشْ يْجِيبَه` | `إِشْ صَارْ` / `إِشْ نْگُولْ` / `إِشْ يْجِيبَه` | Separates the Iraqi/Gulf interrogative `شـ` into a distinct phonetic syllable `إِشْ`. |
-| `بغربتي` / `بضلوعي` / `ابأرض` | `بِ غُرْبِتِي` / `بِ ظْلُوعِي` / `بِ أَرْضْ` | `بِـ غُرْبِتِي` / `بِـ ظْلُوعِي` / `بِـ أَرْضْ` | Detaches single-letter prepositions with clean space by default. |
-| `اشكَد` / `كَوه` / `اشهكَ` / `كَدامي` | `إِشْگَدْ` / `گُوَّه` / `أَشْهَگْ` / `گِدَّامِي` | `إِشْگَدْ` / `گُوَّه` / `أَشْهَگْ` / `گِدَّامِي` | **Iraqi Orthographic Gaf Normalization (`كَـ -> گ`):** Converts Iraqi keyboard shorthand (`Kaf + Fatha + Tatweel`) directly into phonetic `گ` (`U+06AF`) so the AI never pronounces a classical `/k/` or fragments on `ـ`. |
+1. **تنوين التمكين الشعبي في وسط الشطر:**
+   - يُحوَّل تنوين الكسر (`-ٍ`) إلى نون ساكنة مكسورة (`-ِنْ`)، ولا تُكسر بادئة الكلمة التالية (`ت/ي/ن`) إلا إذا كانت **فعل مضارعة غير مشكول الحرف الأول وغير متبوع بألف مد (`ا / آ / ى`)**:
+     - `عينٍ تسيل` ⟵ **`عَيْنِنْ تِسِيلْ`**
+     - `نارٍ يَصْلَى` ⟵ **`نارِنْ يَصْلَى`** *(يُحترم التشكيل الموجود على `يَ` ولا تُضاف كسرة مزدوجة)*.
+     - `دمعٍ ياحسين` ⟵ **`دمعِنْ يَا حْسَيْنْ`** *(تُفصل `يَا حْسَيْنْ` أولاً ولا تُكسر ياء النداء المتبوعة بألف)*.
+2. **تنوين الوصل والوقف في الفصحى:**
+   - في وسط الشطر: `جسماً على الثرى ⟵ جِسْمَنْ عَلَى الثَّرَى`، `دامٍ بلا قبور ⟵ دَامِنْ بِلَا قُبُورْ`.
+   - في آخر الشطر (موضع الوقف): يُقلب تنوين الفتح إلى ألف مد (`ظامئاً ⟵ ظَامِئَا`)، ويُسقط تنوين الضم والكسر إلى سكون (`ْ`)، وتُستثنى الألف المقصورة (`ى`) وحروف المد من إضافة السكون.
 
 ---
 
-## 3. Module 43: Word-Boundary Morphological Dialect Shaper (`مُحَرِّكُ التَّشْكِيلِ الصَّرْفِيِّ اللَّهْجِيّ`)
+## 3. الوحدة 43: التحليل الصرفي بتفكيك البادئات (`ال، و، ب، ك، ل`) والتمييز بين البحرانية والعراقية وحالة التعادل (`shape_token_morphologically`)
 
-Beyond simple consonant swaps (`گ / چ`), **Bahrani**, **Iraqi**, and **Neutral Iraqi-Bahrani Hybrid** dialects differ fundamentally in **internal vowel epenthesis (`كَسْرُ أَوْ ضَمُّ الوسط`)**, **suffix vowels**, and **melodic ornamentation**:
-
-### 3.1 Prefix-Aware Token Boundary Shaping
-To guarantee zero substring corruption (e.g., never turning `مُقَاتِلْ` into `مُگَاتِلْ` or corrupting `أَقْبَلَ`), the morphological shaper operates strictly on **whitespace-delimited word tokens**, decomposing prefixes (`الـ / وَ / بِـ / كَـ / لِـ`) before matching the stem.
-
-### 3.2 Comparative Dialectal Morphology Matrix
-| Linguistic Feature | Iraqi Dialect (`اللهجة العراقية`) | Bahrani Dialect (`اللهجة البحرانية`) | Neutral Iraqi-Bahrani Hybrid (`فصحى الوسط الحسيني الميسرة`) |
-| :--- | :--- | :--- | :--- |
-| **Epenthetic Vowel in `فَعْل` Nouns (`قلب / صبر / جمر / درب / قبر`)** | **Damma (`ضَمُّ الحَرْفِ الثَّانِي`)** before labials/liquids: `گَلُبْ`, `صَبُرْ`, `جَمُرْ`, `دَرُبْ`, `گَبُرْ` | **Kasra (`كَسْرُ الحَرْفِ الثَّانِي`)** with front-vowel harmony: `گَلِبْ`, `صَبِرْ`, `جَمِرْ`, `دَرِبْ`, `گَبِرْ` | **Clean Sukun or Standard Vowel:** `قَلْبْ`, `صَبْرْ`, `جَمْرْ`, `دَرْبْ`, `قَبْرْ` |
-| **Euphrates Iraqi Kasra Epenthesis (`صرت / كثر / دمع / كلهه`)** | **Soft Kasra Epenthesis:** `صِرِتْ`, `مِنْ كِثِرْ`, `وَ الدَّمِعْ`, `كِلْهَه` | **Fronted Kasra:** `صِرِتْ`, `دَمِعْ` | **Standard:** `صِرْتْ`, `دَمْعْ` |
-| **1st-Person Singular Pronoun (`أنه / وانه`)** | **Open Long Alif (`آنَه / وَ آنَه`):** Prevents TTS from reading `أنه` as Fusha `أَنَّهُ` (`annahu`). | `آنَا` / `أَنَا` | `أَنَا` / `آنَه` |
-| **Iraqi Long-U & Gaf Stems (`السوك / النوك / احلوك / فوك / بايك / ينكال`)** | `السُّوگْ`, `النُّوگْ`, `حْلُوگْ`, `فُوگْ`, `بَايِگْ`, `يِنْگَالْ` | `السُّوقْ` / `السُّوگْ`, `فَوْقْ` | `السُّوقْ`, `فَوْقْ` |
-| **2nd-Person Masc. Suffix (`ـك`)** | **Fatha (`ـَكْ`):** `گَلْبَكْ`, `صَبْرَكْ` | **Kasra (`ـِكْ`):** `گَلْبِكْ`, `صَبْرِكْ` | **Fatha (`ـَكْ`):** `قَلْبَكْ`, `صَبْرَكْ` |
-| **Articulation of `ض` (`Dhad`)** | **Emphatic Merged `ظ` (`Dhaa`):** `فَاظِلْ`, `ظْلُوعِي`, `مَا ظَلْ` | **Retained `ض` (or soft Gulf `ظ`):** `فَاضِلْ`, `ضْلُوعِي` | **Retained `ض` (unless `--enforce-iraqi-dhaa`):** `فَاضِلْ`, `ضْلُوعِي` |
+1. **تفكيك البادئات الصرفية قبل المطابقة (`Prefix Decomposition: ال، و، ب، ك، ل، وال، بال، كال، لل`):**
+   - تُفكَّك البادئات المتصلة بالكلمة (`والصبر ⟵ وَ + ال + صبر`، `كالجمر ⟵ كَ + ال + جمر`، `بالقلب ⟵ بِ + ال + قلب`، `الجمرة ⟵ ال + جمرة`) ثم يُشكَّل الجذر أو الصيغة الصرفية بدقة:
+     - `الجمرة` ⟵ **`الجَمْرَه`**، و`والجمرة` ⟵ **`وَ الجَمْرَه`** *(تشكيل صرفي سليم بسكون الميم وفتح الراء، دون الوقوع في خطأ `الجَمُرْة`)*.
+     - `والصبر` ⟵ **`وَ الصَبُرْ`** (في العراقية) / **`وَ الصَبِرْ`** (في البحرانية) / **`وَ الصَبْرْ`** (في حالة التعادل الحيادية).
+     - `المقلوب` ⟵ تبقى **`المقلوب`** دون أي تحريف لأن وزن `مفعول` ليس ضمن جذور الأسماء الثلاثية الساكنة الوسط.
+2. **حكم الضاد والظاء (`ض / ظ`) بين اللهجات (تطابق الكود والمواصفة 100%):**
+   - **في اللهجة العراقية (`detected == "iraqi"`):** يتم تفعيل `enforce_iraqi_dhaa=True` تلقائياً، فتتحول الضاد إلى ظاء عراقية مفخمة (`ويبوفاضل ⟵ وَ يَا بُو فَاظِلْ`، `بضلوعي ⟵ بِ ظْلُوعِي`، `ما ضل ⟵ مَا ظَلْ`).
+   - **في اللهجة البحرانية (`detected == "bahrani"`) وفي حالة التعادل الحيادية (`detected == "iraqi_bahrani"`):** تبقى الضاد المعيارية كما هي (`وَ يَا بُو فَاضِلْ`، `بِ ضْلُوعِي`).
+3. **معالجة حالة التعادل الحيادية (`iraqi_bahrani` Neutral Tie Mode):**
+   - عند تساوي مؤشرات اللهجتين أو غياب المؤشرات الخاصة (مثل نص عام يحتوي على `يا حسين قلب وقلبي والصبر والجمرة`)، يُصنَّف النص كـ **`iraqi_bahrani`** ويُشكَّل بتشكيل حيادي متوازن تماماً (`قَلْبْ`، `قَلْبِي`، `وَ الصَبْرْ`، `وَ الجَمْرَه`، `فَاضِلْ`) دون الانحياز إلى الضمة العراقية (`گَلُبْ`) أو الكسرة البحرانية (`گَلِبْ / گَلْبِكْ`).
+4. **تطبيع الكاف العراقية المكتوبة بالكشيدة (`كَـ ⟵ گ`) والمدّ الصوتي لضمير المتكلم (`آنَه`):**
+   - تُحوَّل كتابة الكاف العراقية (`كَـ` في دواوين الشعراء مثل: `اشكَـد`، `كَـوه`، `اشهكَـ`، `كَـدامي`، `يحركَـ`، `يكَـطع`، `اكَـبال`، `بايكَـله`، `وكَـفونه`، `النوكَـ`، `السوكَـ`، `احلوكَـ`) والكلمات السياقية (`فوك`، `ينكال`، `انياك`، `الكالي`) تلقائياً عبر الدالة `normalize_iraqi_orthographic_gaf` إلى **`گ`** مع تشكيلها الفراتي الدقيق (`إِشْگَدْ`، `گُوَّه`، `أَشْهَگْ`، `گِدَّامِي`، `فُوگْ`، `يِنْگَالْ`، `نْيَاگْ`، `السُّوگْ`، `النُّوگْ`).
+   - يُشكَّل ضمير المتكلم العراقي (`أنه / انه / وانه`) بألف المدّ المفتوحة **`آنَه / وَ آنَه`** (بدلاً من `أَنَه` المخطوفة) لضمان امتداد المقطع الأول على النغمة، مع كسر الكلمات الفراتية (`صِرِتْ`، `مِنْ كِثِرْ`، `كِلْهَه`).
+5. **تحريم الابتداء بساكن (`No Word-Initial Sukun`) والحفاظ على الألف الوقائية العراقية (`Prosthetic Alif`):**
+   - في محركات الـ `G2P` الصوتية (`Flow Music / Lyria`)، وضع سكون (`ْ`) على الحرف الأول من الكلمة (مثل `بْأَرْضِ`، `يْجِيبَه`، `مْدَمَّى`، `مْوَذَّرْ`، `زْمَاطِي`، `تْبَشْرِي`) يؤدي إلى ابتلاع الحرف أو لصقه بالكلمة السابقة وتشويه نطق الجملة بالكامل:
+     - `يا يمه ابأرض الشام` ⟵ **`يَا يُمَّه بِأَرْضِ الشَّامْ`** *(بكسر الباء `بِأَرْضِ`، ويُمنع تسكينها `بْأَرْضِ` حتى لا تصطدم بـ `يُمَّه`)*.
+     - `شيجيبه الي راعي الشيم` ⟵ **`شِيجِيبَه إِلِي رَاعِي الشِّيَمْ`** *(تُكتب `شِيجِيبَه` بشين مكسورة ممدودة بالياء متصلة، ويُمنع تقطيعها إلى `إِشْ يْجِيبَه` المبدوءة بياء ساكنة)*.
+     - `عفته اعله طوله مدمه` ⟵ **`عِفْتَه عَلَى طُولَه مُدَمَّه`** *(بضم الميم `مُدَمَّه` وختمها بهاء السكت `-َه` بدلاً من السكون الابتدائي `مْدَمَّى` والألف المقصورة الفصيحة)*.
+     - الكلمات العراقية المبدوءة بالألف الوقائية (`اتبشري`، `اموذر`، `ازماطي`، `اجفوف`، `ايرامون`، `احجار`، `احلوگ`، `انياك`) **تُحفظ همزة وصلها المكسورة وجوباً**: **`إِتْبَشْرِي`**، **`إِمْوَذَّرْ إِزْمَاطِي`**، **`إِچْفُوفْ`**، **`إِيْرَامُونْ`**، **`إِحْجَارْ`**.
 
 ---
 
-## 4. Reference Melodic Legato Wave Architecture (`هَنْدَسَةُ المَوْجَةِ اللَّحْنِيَّةِ الهَادِئَةِ — طَوْرُ يَا يُمَّه بْأَرْضِ الشَّامْ`)
+## 4. هندسة «التِيفَال اللَّحْنِي» والهيكل الرباعي الدائري للقصيدة المنبرية (`4-Movement Melodic Wave Architecture`)
 
-When replicating calm, weeping Iraqi legato laments (such as *«يَا يُمَّه بْأَرْضِ الشَّامْ»* at **66 BPM** in **Maqam Kurd / Bayati on D**), each stanza follows a **4-Movement Circular Melodic Wave** (`مَوْجَةٌ لَحْنِيَّةٌ دَائِرِيَّةٌ مِنْ أَرْبَعِ حَرَكَات`):
+استناداً إلى تحليل التسجيلات المرجعية للألحان الحسينية العراقية الهادئة (مثل قصيدة **«يَا يُمَّه بْأَرْضِ الشَّامْ»** للشاعر موسى الخادم)، يتكون البناء اللحني الأصيل من **4 حركات متلاحمة داخل كل مقطع (الدائرة اللحنية الكربلائية)** بسرعات متوسطة هادئة (`66 BPM` على **مقام الكرد والبيات على درجة الري `Maqam Kurd & Bayati on D`**):
 
-| Movement | Stanza Lines | Prosodic & Melodic Contour | Acoustic Execution Rule |
-| :--- | :--- | :--- | :--- |
-| **Movement A (`المُسْتَهَلّ الهَادِئ`)** | 4 short lines (`3 + 1`) | `ـَامْ / ـَامْ / ـَامْ` -> `ذِبْحَوْا أَحْلَامِي (×2)` | Soft, weeping mid-Baritone entry; the 4th line drops to the tonic Qarar and is echoed softly by a unison chorus. |
-| **Movement B (`المَثْنَى المَمْدُود`)** | 2 paired couplets (4 short hemistichs) | `مِنْ وُصَلْنَاهَا .. الشَّامْ شِفْنَاهَا / نَاسْهَه مْعَيِّدَه .. لِلْ ذَبْحَوْا حْسِينْ` | Each internal rhyme (`ـَاهَا / ـَانَه` or `بَابِچْ / عِينِچْ`) is held on a **2-second open legato vowel (`مَدّ صَوْتِيّ مَفْتُوح`)** with zero rushing. |
-| **Movement C (`السَّرْدُ التَّفْصِيلِيّ`)** | 3 long 16-syllable narrative lines | `مَكْسُورَة خَاطِرْ وَ الدَّمِعْ .. مَا ظَلْ بَعَدْ بِ عْيُونِي` | Smooth, stepwise descending narrative wave (`سَرْدٌ مُتَدَرِّجٌ هَابِط`) unifying all 3 line endings on a shared long vowel (`ـُونِي / ـْمَه / ـَعْبَه`). |
-| **Movement D (`التَّسْلِيمُ وَ القَفْلَة`)** | 3 short lines returning to Mustahall melody | `بَسْ رُوسْ إِخْوَانِي وْيَايْ ... صَارَتْ گِدَّامِي (ذِبْحَوْا أَحْلَامِي)` | Circular melodic return (`التَّسْلِيمُ الدَّائِرِيّ`) to the exact melody of Movement A, resolving on `ـَامِي` (`گِدَّامِي / أَيَّامِي / أَيْتَامِي / الحَامِي / الدَّامِي`) + refrain `(ذِبْحَوْا أَحْلَامِي)`. |
+1. **الحركة الأولى (`Movement A — المستهَلّ الرباعي الهادئ 3+1`):**
+   - 3 أشطر متحدة القافية (`الشَّامْ / آلَامْ / الظُّلَّامْ`) + شطر رابع يمثل القفلة المركزية (`ذِبْحَوْا أَحْلَامِي` مع تكرارها مرتين للتثبيت).
+   - الأداء: طبقة `Mid-Baritone` دافئة متصلة (`Legato Weeping Melody`) تنحدر تدريجياً بخطوات سُلَّمية ناعمة (`Stepwise Descending Contour`) بدون صراخ حاد أو تقطيع عنيف.
+2. **الحركة الثانية (`Movement B — المثنّى الممدود المتناظر AA BB`):**
+   - رباعيتان من الأشطر القصيرة المتناظرة (`مِنْ وُصَلْنَاهَا .. الشَّامْ شِفْنَاهَا / نَاسْهَه مْعَيِّدَه .. لْ ذَبْحَوْا حْسِينْ` ثم `كِلْهَه فَرْحَانَه .. وَ آنَه تَعْبَانَه / حِيلْ مَا بِيَّه .. تِدْمَعْ العِينْ`).
+   - يُمدّ حرف العلة المفتوح في نهاية الأشطر الثلاثة الأولى (`-نَاهَااا / -انَااا` لمدة `~2.0` ثانية) ثم يهبط الشطر الرابع ليستقر على درجة الركوز (`حْسِينْ / العِينْ`).
+3. **الحركة الثالثة (`Movement C — الثلاثية السردية المتدفقة Double-Time Narrative`):**
+   - 3 أشطر طويلة متحدة القافية (`بِ عْيُونِي / مْتُونِي / تَعْبُونِي`) يتضاعف فيها الإيقاع اللفظي (`16 مقطعاً صوتياً للشطر`) مع وقفة تنفس وسطية بعد الكلمة الرابعة (`مَكْسُورَة خَاطِرْ وَ الدَّمِعْ .. مَا ظَلْ بَعَدْ بِ عْيُونِي`).
+4. **الحركة الرابعة (`Movement D — التسليم الدائري لقرار المستهَلّ Return Hook`):**
+   - 4 أشطر ختامية (`بَسْ رُوسْ إِخْوَانِي وْيَايْ / جَابُوهَه إِشْلُونْ بْهَايْ / هَايْ الوَحْدَه مِنِ هْوَايْ .. صَارَتْ گِدَّامِي`) **تستعيد نفس الجملة اللحنية للمستهَلّ (`Movement A`)** وتقفل على القافية الجامعة (`-امِي`: `أَحْلَامِي / گِدَّامِي / أَيَّامِي / أَيْتَامِي / الحَامِي / الدَّامِي`).
+
+### وصف الصوت القياسي لطور الترنيمة اللحنية الهادئة (`42-Word Melodic Legato Sound Prompt`):
+```text
+Melodic Iraqi Hussaini Latmiya, gentle weeping legato vocal melody, Maqam Kurd and Bayati on D, 66 BPM, authentic Iraqi colloquial dialect, warm expressive mid-Baritone solo vocal, smooth stepwise descending melodic phrases, long sustained vowel endings, soft 55Hz chest pulse, Pure Acapella No Instruments
+```
