@@ -622,8 +622,13 @@ def build_flowmusic_json_preconditioning(
         "single_stage1_maqam": maqam,
         "tempo_bpm": bpm,
         "anti_slurring_word_separation": True,
+        "zero_word_initial_sukun": True,
+        "preserve_iraqi_prosthetic_alif": True,
+        "vertical_short_line_splitting": True,
         "dialectal_tanween_compiler": True,
         "mandatory_end_of_line_sukun": True,
+        "strictly_non_musical_no_instruments": True,
+        "extend_via_native_remix_extend": True,
         "reference_clip_id": reference_clip_id,
     }
     return payload
