@@ -51,14 +51,15 @@
 
 ---
 
-## ثالثاً: قوالب `Sound Prompt` الجاهزة لـ `Flow Music` حسب مستوى الإنتاج
+## ثالثاً: قاعِدة منع الانحراف الغنائي (`Anti-Pop-Melody Funeral Lock`) وقوالب `Sound Prompt`
 
-### أ) قالب الكليب الاستوديوي الثقيل بالبدائل الصوتية البشرية (`Conservative Heavy Studio Clip — Vocal Synth & Double Beat`):
-```text
-Cinematic Heavy Studio Hussaini Latmiya, Maqam Saba and Nahawand, 66 BPM, dry intimate center Baritone lead vocal, seamless Qarar to Jawab melodic transitions, double-layered chest thud and crisp palm snap with synchronized deep human vocal sub-bass hum, wide 3D stereo pharyngeal Ahaat vocal-synth strings pad, spontaneous distant Ya Hussain majlis cries, Convolution Husseiniya reverb and phrase-end delay, dramatic audio drop on climax, Pure Vocal Synth No Musical Instruments
-```
+> [!IMPORTANT]
+> **لماذا قد ينحرف المقطع الثاني في `Flow Music` إلى "لحن غنائي" وكيف نمنعه؟**
+> 1. **حظر كلمات `strings` و`synth` و`Nahawand` داخل حقل `Sound` في `Flow Music`:** حتى لو كتبتَ `vocal-synth strings pad` أو `Nahawand`، فإن مُرمِّز النصوص في نموذج `Lyria` يقرأ كلمتي `strings` و`synth` كآلات موسيقية غربية ويقرأ `Nahawand` كسلّم `Minor Pop Ballad`، فينحرف اللحن تدريجياً إلى مسار غنائي راقص.
+>    - **البديل الصحيح في `Sound Prompt`:** اكتب دائماً **`sustained pharyngeal Ahaat vocal humming drone, wordless male mourning choir pad`**، واحصر المقام في **`funeral Maqam Saba Zamzam and Bayati, strictly non-musical mourning recitative, no pop melody, no melodic leaps`** (بينما تُولَّد طبقة الـ `Vocal Synth` برمجياً في المحرك المحلي [`synthesize_vocal_synth_strings_pad`](file:///C:/Users/husai/.gemini/config/skills/hussaini-production-studio/scripts/hussaini_dsp_montage.py#L852-L870)).
+> 2. **عدم تكديس أكثر من مقطعين (`16–20 شطراً كحد أقصى`) في التوليد الواحد:** إدخال 3 مقاطع طويلة (أكثر من 28 شطراً) في توليد واحد يجبر النموذج على تسريع اللفظ والقفز بالنغمات (`Bouncy Song Cadence`) لإنهاء الكلمات قبل انتهاء المدة. قسّم القصائد الطويلة إلى أجزاء من مقطعين فقط بسرعة `60–64 BPM`.
 
-### ب) قالب الكليب السينمائي مع الفواصل الروحية (`Cinematic Elegiac Clip with Sorrowful Ney/Duduk Bridge`):
+### أ) قالب الكليب الاستوديوي الثقيل الجنائزي المحافظ (`Funeral Heavy Studio Clip 3D — Zero Song Drift`):
 ```text
-Cinematic Studio Hussaini Elegy Clip, Maqam Saba and Bayati on D, 68 BPM, dry intimate center Baritone lead vocal, slow legato mournful melody, double-layered heavy chest thud and palm snap with deep human sub-bass hum, wide 3D stereo Raddada choir and sustained vocal strings pad, sorrowful solo Ney and Duduk spiritual bridge between stanzas, subtle desert wind atmospheric foley, dramatic beat drop before refrain, Husseiniya convolution reverb
+Solemn Funeral Iraqi Hussaini Latmiya, mournful Maqam Saba Zamzam and Bayati on D, 62 BPM, strictly non-musical Husseiniya mourning recitative, no pop melody, no melodic leaps, dry intimate center Baritone lead vocal, slow weeping legato phrasing, double-layered 55Hz bare-palm chest thud and crisp palm slap with synchronized deep human vocal sub-bass hum, wide 3D stereo pharyngeal Ahaat vocal humming choir drone, spontaneous distant Ya Hussain majlis cries, Husseiniya hall convolution reverb, Pure Acapella Matam No Instruments
 ```
