@@ -1,21 +1,25 @@
 #!/usr/bin/env python3
-"""Comprehensive Unit, Negative-Edge, Idempotency & DSP Test Suite (V45.0 OMNI-ARCHITECT).
+"""Comprehensive Unit, Negative-Edge, Idempotency, 24-Bit WAV & 7-Mode DSP Test Suite (V45.0).
 
 Validates:
-- Module 41: Anti-Slurring Word Separation, Space-vs-Tatweel mode, and Idempotency
+- Module 41: Anti-Slurring Word Separation, Space-First default (use_tatweel=False), and Idempotency
 - Module 40: Dialectal & Prosodic Tanween Compiler + Protection of Vocalized Verbs (نارٍ يَصْلَى)
   and Vocatives (دمعٍ ياحسين) + Alif Maqsura (ى) exemption
-- Module 43: Word-Boundary Morphological Shaping (prevents قلبي -> گَلُبْي and الجمرة -> الجَمُرْة),
-  Bahrani bare 'قلب' -> 'گَلِبْ', Iraqi Dhaa option (فَاظِلْ), and Explicit Hybrid Tie Mode
+- Module 43: Prefix-Aware Morphological Word-Boundary Shaping (ال، و، ب، ك، ل) so 'الجمرة' -> 'الجَمْرَه',
+  'والصبر' -> 'وَ الصَبُرْ' (Iraqi) / 'وَ الصَبِرْ' (Bahrani) / 'وَ الصَبْرْ' (Neutral Tie),
+  prevents 'قلبي' -> 'گَلُبْي' and 'المقلوب' corruption, enforces Iraqi Dhaa (فَاظِلْ / ظْلُوعِي)
+  in Iraqi dialect while keeping Dhad (ض) in Bahrani and Neutral Tie
 - Modules 34 & 38: Arabic Prosodic Syllable Segmenter & Per-Hemistich Balance Validator
-- Pre-Generation Poem Linter (lint_poem) & Optional reference_clip_id in JSON Pre-Conditioning
-- DSP Engine: SOS filters, Absolute dBFS RMS Sidechain Ducking (immune to single-clap spikes &
-  noise floor), Vectorized Dynacord Echo, and -14.0 LUFS + -1.0 dBTP Mastering
+- Pre-Generation Poem Linter (lint_poem), Optional reference_clip_id, and Compact SKILL.md Router (<10.5KB)
+- DSP Engine & CLI (>85% coverage): 8-bit, 16-bit, 24-bit, and Stereo WAV inputs, all 7 DSP modes,
+  custom --samples-dir, --session-log, SOS filters, RMS dBFS Sidechain Ducking, and -14.0 LUFS Mastering
 """
 
 import os
 import sys
+import wave
 import numpy as np
+from scipy.io import wavfile
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "scripts")))
 
@@ -23,21 +27,22 @@ import hussaini_dsp_montage as engine  # pylint: disable=wrong-import-position
 
 
 def test_module41_word_separation_and_tatweel_option():
-    """Verify attached vocatives, prepositions, interrogatives, and use_tatweel=False."""
+    """Verify attached vocatives, prepositions, interrogatives, and default use_tatweel=False."""
     raw = "ياحسين ويبوفاضل عالباب بغربتي شصار وشنگول للذبحوا والشمس"
-    separated = engine.de_cliticize_and_separate_words(raw, use_tatweel=True)
-    assert "يَا حْسَيْنْ" in separated
-    assert "يَا بُو فَاضِلْ" in separated
-    assert "عَلَى البَابْ" in separated
-    assert "بِـ غُرْبِتِي" in separated
-    assert "إِشْ صَارْ" in separated
-    assert "إِشْ نْگُولْ" in separated
-    assert "لِلْ ذَبْحَوْا" in separated
-    assert "وَ الشَّمْسْ" in separated
+    separated_default = engine.de_cliticize_and_separate_words(raw)
+    assert "ـ" not in separated_default
+    assert "يَا حْسَيْنْ" in separated_default
+    assert "وَ يَا بُو فَاضِلْ" in separated_default
+    assert "عَلَى البَابْ" in separated_default
+    assert "بِ غُرْبِتِي" in separated_default
+    assert "إِشْ صَارْ" in separated_default
+    assert "وَ إِشْ نْگُولْ" in separated_default
+    assert "لِلْ ذَبْحَوْا" in separated_default
+    assert "وَ الشَّمْسْ" in separated_default
 
-    no_tatweel = engine.de_cliticize_and_separate_words("بغربتي لحسين", use_tatweel=False)
-    assert "ـ" not in no_tatweel
-    assert "بِ غُرْبِتِي" in no_tatweel
+    with_tatweel = engine.de_cliticize_and_separate_words("بغربتي لحسين", use_tatweel=True)
+    assert "بِـ غُرْبِتِي" in with_tatweel
+    assert "لِـ حْسَيْنْ" in with_tatweel
 
 
 def test_module40_tanween_and_next_word_protection():
@@ -71,56 +76,66 @@ def test_module40_tanween_and_next_word_protection():
     assert resolved_fusha2.endswith("ظَامِئَا")
 
 
-def test_module43_word_boundary_negative_cases_and_dialects():
-    """Verify word-boundary shaping prevents قلبي->گَلُبْي and الجمرة->الجَمُرْة, and handles Bahrani/Iraqi/Hybrid."""
-    # Bahrani: both bare 'قلب' and suffixed 'قلبي' are shaped properly
-    bahrani_poem = "يا بويي ونتي بهالگفره امساعد الله يا قلبي وقلب وصبر"
+def test_module43_prefix_decomposition_dhaa_and_neutral_tie():
+    """Verify prefix decomposition (ال، و، ب، ك، ل), الجمرة/والصبر shaping, Iraqi Dhaa, and neutral tie."""
+    # 1. Bahrani: shapes bare 'قلب', 'والصبر', 'الجمرة', and keeps standard Dhad (ض) in فَاضِلْ / ضْلُوعِي
+    bahrani_poem = "يا بويي ونتي بهالگفره امساعد الله يا قلبي وقلب والصبر والجمرة ويبوفاضل بضلوعي"
     bahrani_res = engine.detect_and_shape_dialect(bahrani_poem)
+    shaped_bahrani = bahrani_res["shaped_lyrics"]
     assert bahrani_res["detected_dialect"] == "bahrani"
-    assert "گَلْبِي" in bahrani_res["shaped_lyrics"]
-    assert "گَلِبْ" in bahrani_res["shaped_lyrics"]
-    assert "صَبِرْ" in bahrani_res["shaped_lyrics"]
+    assert "گَلْبِي" in shaped_bahrani
+    assert "گَلِبْ" in shaped_bahrani
+    assert "وَ الصَبِرْ" in shaped_bahrani
+    assert "وَ الجَمْرَه" in shaped_bahrani
+    assert "وَ يَا بُو فَاضِلْ" in shaped_bahrani
+    assert "بِ ضْلُوعِي" in shaped_bahrani
     assert "3rd-Word Faizi Vibrato" in bahrani_res["maqam_articulation_rule"]
 
-    # Iraqi: bare CVC nouns vs. suffixed/derived words (Bug 1 negative cases)
+    # 2. Iraqi: shapes prefixes (والصبر، كالجمر، بالقلب، الجمرة), protects المقلوب, and applies Iraqi Dhaa (ظ)
     iraqi_poem = (
         "يا خويه يمه وليدي دلالي شلون شصار بلياك "
-        "قلب وقلبي وقلبك والجمرة والمقلوب وصبر وجمر وچبد ودمع ووگفت وعفتني"
+        "قلب وقلبي وقلبك والجمرة والمقلوب والصبر وكالجمر وبالقلب وچبد ودمع ووگفت وعفتني ويبوفاضل بضلوعي"
     )
     iraqi_res = engine.detect_and_shape_dialect(iraqi_poem)
     shaped_iraqi = iraqi_res["shaped_lyrics"]
     assert iraqi_res["detected_dialect"] == "iraqi"
+    assert iraqi_res["dhad_articulation"] == "Emphatic Iraqi Dhaa (ظ)"
     assert "گَلُبْ" in shaped_iraqi
     assert "گَلْبِي" in shaped_iraqi
-    assert "گَلْبَكْ" in shaped_iraqi
+    assert "وَ گَلْبَكْ" in shaped_iraqi
     assert "گَلُبْي" not in shaped_iraqi
     assert "گَلُبْك" not in shaped_iraqi
     assert "الجَمُرْة" not in shaped_iraqi
-    assert "الجمرة" in shaped_iraqi
+    assert "وَ الجَمْرَه" in shaped_iraqi
     assert "المقلوب" in shaped_iraqi
-    assert "صَبُرْ" in shaped_iraqi
-    assert "جَمُرْ" in shaped_iraqi
+    assert "وَ الصَبُرْ" in shaped_iraqi
+    assert "كَ الجَمُرْ" in shaped_iraqi
+    assert "بِ الگَلُبْ" in shaped_iraqi
     assert "چَبِدْ" in shaped_iraqi
     assert "دَمِعْ" in shaped_iraqi
     assert "وْگَفِتْ" in shaped_iraqi
     assert "عِفْتْنِي" in shaped_iraqi
+    assert "وَ يَا بُو فَاظِلْ" in shaped_iraqi
+    assert "بِ ظْلُوعِي" in shaped_iraqi
 
-    # Iraqi emphatic Dhaa option (Bug 3)
-    dhaa_res = engine.detect_and_shape_dialect("يا خويه يبوفاضل بضلوعي", enforce_iraqi_dhaa=True)
-    assert "يَا بُو فَاظِلْ" in dhaa_res["shaped_lyrics"]
-    assert "بِـ ظْلُوعِي" in dhaa_res["shaped_lyrics"]
-
-    # Tie / Hybrid case (iraqi_bahrani): does NOT silently force Iraqi گَلُبْ
-    hybrid_res = engine.detect_and_shape_dialect("قلب وصبر ودمع")
-    assert hybrid_res["detected_dialect"] == "iraqi_bahrani"
-    assert "گَلِبْ" in hybrid_res["shaped_lyrics"]
-    assert "گَلُبْ" not in hybrid_res["shaped_lyrics"]
-    assert "Hybrid Iraqi-Bahrani Fusion" in hybrid_res["maqam_articulation_rule"]
+    # 3. Tie / Neutral case (iraqi_bahrani on 'يا حسين ...'): 100% neutral vocalization (قَلْبْ، صَبْرْ، ض)
+    neutral_res = engine.detect_and_shape_dialect("ياحسين قلب وقلبي والصبر والجمرة ويبوفاضل بضلوعي")
+    shaped_neutral = neutral_res["shaped_lyrics"]
+    assert neutral_res["detected_dialect"] == "iraqi_bahrani"
+    assert neutral_res["dhad_articulation"] == "Balanced Neutral Dhad (ض)"
+    assert "قَلْبْ" in shaped_neutral
+    assert "قَلْبِي" in shaped_neutral
+    assert "وَ الصَبْرْ" in shaped_neutral
+    assert "وَ الجَمْرَه" in shaped_neutral
+    assert "وَ يَا بُو فَاضِلْ" in shaped_neutral
+    assert "بِ ضْلُوعِي" in shaped_neutral
+    assert "گَلُبْ" not in shaped_neutral
+    assert "گَلِبْ" not in shaped_neutral
 
 
 def test_idempotency_across_all_phonetic_compilers():
     """Verify f(f(x)) == f(x) for word separation, Tanween resolution, and dialect shaping."""
-    sample = "ياحسين يا خويه شلون قلب وقلبي وعينٍ تسيل ونارٍ يَصْلَى ودمعٍ ياحسين"
+    sample = "ياحسين يا خويه شلون قلب وقلبي والصبر والجمرة وعينٍ تسيل ونارٍ يَصْلَى ودمعٍ ياحسين"
     sep1 = engine.de_cliticize_and_separate_words(sample)
     sep2 = engine.de_cliticize_and_separate_words(sep1)
     assert sep1 == sep2
@@ -138,13 +153,13 @@ def test_module34_and_38_per_hemistich_syllable_validator():
     """Verify per-hemistich syllable segmentation passes balanced stanzas and rejects lopsided hemistichs."""
     balanced_stanzas = [
         "[المُسْتَهَلّ]",
-        "يَا بُو السَّجَّادْ دَلَّالِي تِفَطَّرْ .. عِفْتْنِي بِـ غُرْبِتِي وَ الدَّمِعْ يِسْهَرْ",
-        "عَيْنِنْ تِسِيلْ وَ الخِيَمْ تِسْعَرْ .. جَرْحِنْ چِبِيرْ بِـ گَلْبِي مَا يِفْتَرْ",
+        "يَا بُو السَّجَّادْ دَلَّالِي تِفَطَّرْ .. عِفْتْنِي بِ غُرْبِتِي وَ الدَّمِعْ يِسْهَرْ",
+        "عَيْنِنْ تِسِيلْ وَ الخِيَمْ تِسْعَرْ .. جَرْحِنْ چِبِيرْ بِ گَلْبِي مَا يِفْتَرْ",
         "إِشْ صَارْ بِنَه يَا ضَوَه المَحْشَرْ .. كِلِّنْ يِنَادِي يَا غَرِيبْ الطَّفْ",
         "يَا حْسَيْنْ يَا مَظْلُومْ يَا مَنْحُورْ",
         "[المَقْطَع الأَوَّل]",
         "عَلَى الرَّمْضَه وْگَفِتْ وَ العَيْنْ تِرْعَاكْ .. إِشْ نْگُولْ لِلْ ذَبْحَوْا ضَوَه مَلْگَاكْ",
-        "بِـ ضْلُوعِي جَمُرْ مَا طِفَه بْـ فَرْگَاكْ .. وَ الشَّمْسْ غَابَتْ يَا حِمَى بْلَيَّاكْ",
+        "بِ ظْلُوعِي جَمُرْ مَا طِفَه بْ فَرْگَاكْ .. وَ الشَّمْسْ غَابَتْ يَا حِمَى بْلَيَّاكْ",
         "عَلَى البَابْ أَنْتِظِرْ يَا خُويَه مَمْشَاكْ .. حَالِنْ يِفَطِّرْ صَخَرْ هَالوِدْيَانْ",
         "يَا حْسَيْنْ يَا مَظْلُومْ يَا مَنْحُورْ",
     ]
@@ -157,7 +172,7 @@ def test_module34_and_38_per_hemistich_syllable_validator():
 
     # Negative case: line with short 1st hemistich and very long 2nd hemistich must be rejected
     lopsided_stanzas = list(balanced_stanzas)
-    lopsided_stanzas[1] = "يَا حْسَيْنْ .. عِفْتْنِي بِـ غُرْبِتِي وَ الدَّمِعْ يِسْهَرْ طُولْ اللَّيَالِي وَ السِّنِينْ"
+    lopsided_stanzas[1] = "يَا حْسَيْنْ .. عِفْتْنِي بِ غُرْبِتِي وَ الدَّمِعْ يِسْهَرْ طُولْ اللَّيَالِي وَ السِّنِينْ"
     bad_report = engine.validate_stage1_iso_syllabic_lock(lopsided_stanzas)
     assert bad_report["internal_hemistich_balanced"] is False
     assert bad_report["passed"] is False
@@ -189,7 +204,6 @@ def test_dsp_rms_sidechain_spike_immunity_and_lufs():
     sample_rate = 16000
     t_vec = np.linspace(0.0, 2.0, 2 * sample_rate, endpoint=False)
 
-    # 0.0-0.5s: quiet noise floor (-48 dBFS), 0.5-0.52s: 1.0 clap spike, 0.7-1.8s: normal vocal (0.28 amp)
     signal = 0.004 * np.sin(2.0 * np.pi * 200.0 * t_vec)
     signal[int(0.5 * sample_rate) : int(0.52 * sample_rate)] = 1.0
     signal[int(0.7 * sample_rate) : int(1.8 * sample_rate)] = 0.28 * np.sin(
@@ -209,9 +223,86 @@ def test_dsp_rms_sidechain_spike_immunity_and_lufs():
     assert float(np.max(np.abs(mastered))) <= float(10.0 ** (-1.0 / 20.0)) + 1e-3
 
 
-def test_cli_flags_and_single_source_version():
-    """Verify CLI --compile-lyrics and --lint-poem flags and VERSION single source of truth."""
-    assert engine.main(["--compile-lyrics", "ياحسين يا خويه شلون قلب وقلبي وچبد ودمع"]) == 0
+def test_all_7_dsp_modes_24bit_wav_and_samples_dir(tmp_path):
+    """Verify 24-bit, 8-bit, and Stereo WAV inputs, all 7 CLI DSP modes, custom samples_dir, and session_log."""
+    sr = 8000
+    t_vec = np.linspace(0.0, 0.35, int(sr * 0.35), endpoint=False)
+    sine = 0.4 * np.sin(2.0 * np.pi * 220.0 * t_vec)
+
+    # 1) Create a 24-bit PCM WAV file (sampwidth=3, with negative & positive values)
+    wav_24bit = str(tmp_path / "input_24bit.wav")
+    int24_vals = np.clip(sine * ((1 << 23) - 1), -(1 << 23), (1 << 23) - 1).astype(np.int32)
+    packed_24 = bytearray()
+    for val in int24_vals:
+        uval = int(val) & 0xFFFFFF
+        packed_24.extend((uval & 0xFF, (uval >> 8) & 0xFF, (uval >> 16) & 0xFF))
+    with wave.open(wav_24bit, "wb") as wf:
+        wf.setnchannels(1)
+        wf.setsampwidth(3)
+        wf.setframerate(sr)
+        wf.writeframes(bytes(packed_24))
+
+    read_sr, read_mono = engine.read_wav_any_depth(wav_24bit)
+    assert read_sr == sr
+    assert len(read_mono) == len(sine)
+    assert np.allclose(read_mono, sine, atol=1e-3)
+
+    # 2) Create an 8-bit PCM WAV file (sampwidth=1) and a 16-bit Stereo WAV file
+    wav_8bit = str(tmp_path / "input_8bit.wav")
+    u8_vals = np.clip((sine * 127.0) + 128.0, 0, 255).astype(np.uint8)
+    with wave.open(wav_8bit, "wb") as wf:
+        wf.setnchannels(1)
+        wf.setsampwidth(1)
+        wf.setframerate(sr)
+        wf.writeframes(u8_vals.tobytes())
+
+    wav_stereo = str(tmp_path / "input_stereo.wav")
+    stereo_16 = np.column_stack(((sine * 16000).astype(np.int16), (sine * 14000).astype(np.int16)))
+    wavfile.write(wav_stereo, sr, stereo_16)
+
+    # 3) Create custom samples_dir with latm.wav, dammam.wav, zanjeel.wav, husseiniya_ir.wav
+    samples_dir = tmp_path / "custom_samples"
+    samples_dir.mkdir()
+    short_hit = (0.5 * np.sin(2.0 * np.pi * 90.0 * np.linspace(0, 0.08, int(sr * 0.08))) * 32767).astype(np.int16)
+    for name in ("latm.wav", "dammam.wav", "zanjeel.wav", "husseiniya_ir.wav"):
+        wavfile.write(str(samples_dir / name), sr, short_hit)
+
+    ledger_file = str(tmp_path / "session_ledger.json")
+
+    # 4) Run all 7 DSP modes via CLI main() across 24-bit, 8-bit, and Stereo inputs
+    modes_and_inputs = [
+        ("latm", wav_24bit, "saba", "60"),
+        ("zanjeel_iraqi", wav_stereo, "hijaz", "80"),
+        ("zanjeel_bahrani", wav_8bit, "bayati", "80"),
+        ("shoor", wav_24bit, "kurd", "130"),
+        ("bandari", wav_stereo, "rast", "105"),
+        ("mawal", wav_24bit, "lami", "0"),
+        ("nai", wav_8bit, "saba", "0"),
+    ]
+    for mode, in_wav, maqam, bpm in modes_and_inputs:
+        out_wav = str(tmp_path / f"out_{mode}.wav")
+        rc = engine.main([
+            "--input", in_wav,
+            "--output", out_wav,
+            "--mode", mode,
+            "--bpm", bpm,
+            "--maqam-drone", maqam,
+            "--swing", "0.2",
+            "--offset-ms", "20",
+            "--samples-dir", str(samples_dir),
+            "--session-log", ledger_file,
+        ])
+        assert rc == 0
+        assert os.path.isfile(out_wav)
+
+    assert os.path.isfile(ledger_file)
+    assert engine.main([]) == 1
+    assert engine.main(["--input", str(tmp_path / "nonexistent.wav"), "--output", str(tmp_path / "x.wav")]) == 1
+
+
+def test_cli_flags_version_and_compact_skill_router():
+    """Verify CLI flags, VERSION single source of truth, and compact SKILL.md router size (<= 10.5KB)."""
+    assert engine.main(["--compile-lyrics", "ياحسين يا خويه شلون قلب وقلبي وچبد ودمع", "--use-tatweel"]) == 0
     assert engine.main(["--lint-poem", "ياحسين يا خويه شلون قلب وقلبي"]) == 0
 
     repo_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
@@ -220,6 +311,13 @@ def test_cli_flags_and_single_source_version():
     with open(version_file, "r", encoding="utf-8") as handle:
         canonical_version = handle.read().strip()
     assert engine.SKILL_VERSION == canonical_version
+
+    skill_md_path = os.path.join(repo_root, "SKILL.md")
+    with open(skill_md_path, "r", encoding="utf-8") as handle:
+        skill_content = handle.read()
+    skill_bytes = len(skill_content.encode("utf-8"))
+    assert skill_bytes <= 10500, f"SKILL.md router must be <= 10.5KB (got {skill_bytes} bytes)"
+    assert "26bbb3d2-65f0-42c3-a167-37127631ef0a" not in skill_content
 
     for rel_path in (
         "SKILL.md",
