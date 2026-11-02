@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# pylint: disable=too-many-lines,line-too-long,too-many-branches,too-many-arguments,too-many-locals,too-many-statements,too-many-positional-arguments
 """Hussaini Audio Omni-Engine DSP, 5-Track DAW & Phonetics Compiler (V45.0 OMNI-ARCHITECT).
 
 Bridges poetic/phonetic engineering with procedural DSP audio mastering:
@@ -21,6 +22,7 @@ import json
 import os
 import re
 import sys
+import wave
 import numpy as np
 from scipy.io import wavfile
 from scipy.signal import butter, fftconvolve, iirnotch, lfilter, sosfilt
@@ -132,7 +134,6 @@ IRAQI_WORD_SHAPING_MAP = {
     "بقلبي": "بِـ گَلْبِي",
     "وقلبي": "وَ گَلْبِي",
     "قلبك": "گَلْبَكْ",
-    "وقلبك": "وَ گَلْبَكْ",
     "قلبچ": "گَلْبِچْ",
     "قلبه": "گَلْبَه",
     "صبر": "صَبُرْ",
@@ -143,6 +144,8 @@ IRAQI_WORD_SHAPING_MAP = {
     "جمر": "جَمُرْ",
     "وجمر": "وَ جَمُرْ",
     "بجمر": "بِـ جَمُرْ",
+    "جمرة": "جَمْرَه",
+    "جمره": "جَمْرَه",
     "درب": "دَرُبْ",
     "ودرب": "وَ دَرُبْ",
     "گبر": "گَبُرْ",
@@ -158,10 +161,17 @@ IRAQI_WORD_SHAPING_MAP = {
     "ودمع": "وَ دَمِعْ",
     "بدمع": "بِـ دَمِعْ",
     "دمعي": "دَمْعِي",
+    "دمعة": "دَمْعَه",
+    "دمعه": "دَمْعَه",
+    "حسرة": "حَسْرَه",
+    "ونة": "وِنَّه",
+    "ونّة": "وِنَّه",
     "وگفت": "وْگَفِتْ",
     "ووگفت": "وَ وْگَفِتْ",
     "عفتني": "عِفْتْنِي",
     "وعفتني": "وَ عِفْتْنِي",
+    "ضلوعي": "ضْلُوعِي",
+    "فاضل": "فَاضِلْ",
 }
 
 BAHRANI_WORD_SHAPING_MAP = {
@@ -172,7 +182,6 @@ BAHRANI_WORD_SHAPING_MAP = {
     "بقلبي": "بِـ گَلْبِي",
     "وقلبي": "وَ گَلْبِي",
     "قلبك": "گَلْبِكْ",
-    "وقلبك": "وَ گَلْبِكْ",
     "قلبچ": "گَلْبِچْ",
     "قلبه": "گَلْبَه",
     "صبر": "صَبِرْ",
@@ -182,39 +191,76 @@ BAHRANI_WORD_SHAPING_MAP = {
     "صبرك": "صَبْرِكْ",
     "جمر": "جَمِرْ",
     "وجمر": "وَ جَمِرْ",
+    "جمرة": "جَمْرَه",
+    "جمره": "جَمْرَه",
     "درب": "دَرِبْ",
     "قبر": "گَبِرْ",
     "گبر": "گَبِرْ",
+    "حرب": "حَرِبْ",
     "دمع": "دَمِعْ",
     "ودمع": "وَ دَمِعْ",
     "دمعي": "دَمْعِي",
+    "دمعة": "دَمْعَه",
+    "دمعه": "دَمْعَه",
+    "حسرة": "حَسْرَه",
+    "ونة": "وِنَّه",
+    "ونّة": "وِنَّه",
+    "ضلوعي": "ضْلُوعِي",
+    "فاضل": "فَاضِلْ",
 }
 
 HYBRID_WORD_SHAPING_MAP = {
-    **BAHRANI_WORD_SHAPING_MAP,
+    "قلب": "قَلْبْ",
+    "قلبي": "قَلْبِي",
+    "قلبك": "قَلْبَكْ",
+    "قلبچ": "گَلْبِچْ",
+    "قلبه": "قَلْبَه",
+    "صبر": "صَبْرْ",
+    "صبري": "صَبْرِي",
+    "صبرك": "صَبْرَكْ",
+    "جمر": "جَمْرْ",
+    "جمرة": "جَمْرَه",
+    "جمره": "جَمْرَه",
+    "درب": "دَرْبْ",
+    "قبر": "قَبْرْ",
+    "گبر": "گَبِرْ",
+    "حرب": "حَرْبْ",
+    "دمع": "دَمْعْ",
+    "دمعي": "دَمْعِي",
+    "دمعة": "دَمْعَه",
+    "دمعه": "دَمْعَه",
+    "حسرة": "حَسْرَه",
+    "ونة": "وِنَّه",
+    "ونّة": "وِنَّه",
     "چبد": "چَبِدْ",
-    "وچبد": "وَ چَبِدْ",
     "جبد": "چَبِدْ",
     "وگفت": "وْگَفِتْ",
-    "ووگفت": "وَ وْگَفِتْ",
     "عفتني": "عِفْتْنِي",
-    "وعفتني": "وَ عِفْتْنِي",
+    "ضلوعي": "ضْلُوعِي",
+    "فاضل": "فَاضِلْ",
 }
 
 
-def de_cliticize_and_separate_words(text, use_tatweel=True):
+def _format_tatweel(text_val, use_tatweel=False):
+    """Return text with Tatweel preserved if use_tatweel=True, else clean space-separated."""
+    if use_tatweel:
+        return text_val
+    return re.sub(r"\s+", " ", text_val.replace("ـ", "")).strip()
+
+
+def de_cliticize_and_separate_words(text, use_tatweel=False):
     """Module 41: Separate attached vocatives, prepositions, and clitics to prevent G2P slurring."""
     result = text
     for attached, separated in WORD_SEPARATION_MAP.items():
-        target = separated if use_tatweel else separated.replace("ـ", "")
+        target = _format_tatweel(separated, use_tatweel=use_tatweel)
         result = re.sub(rf"(?<!\S)و{re.escape(attached)}(?!\S)", f"وَ {target}", result)
         result = re.sub(rf"(?<!\S){re.escape(attached)}(?!\S)", target, result)
     return result
 
 
-def resolve_dialectal_and_prosodic_tanween(text, dialect="iraqi"):
+def resolve_dialectal_and_prosodic_tanween(text, dialect="iraqi", use_tatweel=False):
     """Module 40: Convert mid-line Tanween to phonetic Nunation safely without corrupting next word."""
-    processed = de_cliticize_and_separate_words(text)
+    processed = de_cliticize_and_separate_words(text, use_tatweel=use_tatweel)
     for raw_phrase, phonetic_phrase in COLLOQUIAL_TANWEEN_MAP.items():
         processed = processed.replace(raw_phrase, phonetic_phrase)
     for raw_fusha, phonetic_fusha in FUSHA_MIDLINE_TANWEEN_MAP.items():
@@ -247,19 +293,63 @@ def resolve_dialectal_and_prosodic_tanween(text, dialect="iraqi"):
     return "\n".join(lines)
 
 
-def shape_words_by_boundary(text, word_map, use_tatweel=True):
-    """Apply morphological word-level shaping strictly on whole whitespace-delimited tokens."""
-    shaped = text
-    for raw_word, vocalized_word in word_map.items():
-        target = vocalized_word if use_tatweel else vocalized_word.replace("ـ", "")
-        shaped = re.sub(rf"(?<!\S){re.escape(raw_word)}(?!\S)", target, shaped)
-        if not raw_word.startswith("و"):
-            shaped = re.sub(rf"(?<!\S)و{re.escape(raw_word)}(?!\S)", f"وَ {target}", shaped)
-    return shaped
+def shape_token_morphologically(token, word_map, use_tatweel=False):
+    """Decompose prefixes (ال، و، ب، ك، ل) and shape the stem if present in word_map."""
+    match = re.match(r"^([\(\[،]*)(.*?)([\)\]،]*)$", token)
+    if not match:
+        return token
+    lead_punct, core, trail_punct = match.groups()
+    if not core:
+        return token
+
+    if core in word_map:
+        return f"{lead_punct}{_format_tatweel(word_map[core], use_tatweel=use_tatweel)}{trail_punct}"
+
+    b_sep = "بِـ " if use_tatweel else "بِ "
+    k_sep = "كَـ " if use_tatweel else "كَ "
+    l_sep = "لِـ " if use_tatweel else "لِ "
+
+    prefix_rules = (
+        ("وبال", f"وَ {b_sep}ال"),
+        ("وكال", f"وَ {k_sep}ال"),
+        ("ولل", "وَ لِلْ"),
+        ("وال", "وَ ال"),
+        ("بال", f"{b_sep}ال"),
+        ("كال", f"{k_sep}ال"),
+        ("وب", f"وَ {b_sep}"),
+        ("وك", f"وَ {k_sep}"),
+        ("ول", f"وَ {l_sep}"),
+        ("لل", "لِلْ"),
+        ("ال", "ال"),
+        ("و", "وَ "),
+        ("ب", b_sep),
+        ("ك", k_sep),
+        ("ل", l_sep),
+    )
+    for raw_pref, vocalized_pref in prefix_rules:
+        if core.startswith(raw_pref):
+            stem = core[len(raw_pref) :]
+            if stem in word_map:
+                shaped_stem = _format_tatweel(word_map[stem], use_tatweel=use_tatweel)
+                return f"{lead_punct}{vocalized_pref}{shaped_stem}{trail_punct}"
+    return token
 
 
-def detect_and_shape_dialect(text, enforce_iraqi_dhaa=False, use_tatweel=True):
-    """Module 43: Identify Bahrani vs. Iraqi vs. Hybrid dialect and apply word-boundary CVC shaping."""
+def shape_words_by_boundary(text, word_map, use_tatweel=False):
+    """Apply prefix-aware morphological word shaping strictly on whitespace-delimited tokens."""
+    out_lines = []
+    for line in text.splitlines():
+        tokens = line.split(" ")
+        shaped_tokens = [
+            shape_token_morphologically(tok, word_map, use_tatweel=use_tatweel) if tok else tok
+            for tok in tokens
+        ]
+        out_lines.append(" ".join(shaped_tokens))
+    return "\n".join(out_lines)
+
+
+def detect_and_shape_dialect(text, enforce_iraqi_dhaa=None, use_tatweel=False):
+    """Module 43: Identify Bahrani vs. Iraqi vs. Neutral Hybrid and apply morphological shaping."""
     bahrani_hits = sum(1 for marker in BAHRANI_MARKERS if marker in text)
     iraqi_hits = sum(1 for marker in IRAQI_MARKERS if marker in text)
 
@@ -270,26 +360,39 @@ def detect_and_shape_dialect(text, enforce_iraqi_dhaa=False, use_tatweel=True):
     else:
         detected = "iraqi_bahrani"
 
+    if enforce_iraqi_dhaa is None:
+        enforce_iraqi_dhaa = detected == "iraqi"
+
     shaped = de_cliticize_and_separate_words(text, use_tatweel=use_tatweel)
     if detected == "bahrani":
         shaped = shape_words_by_boundary(shaped, BAHRANI_WORD_SHAPING_MAP, use_tatweel=use_tatweel)
+        if enforce_iraqi_dhaa:
+            shaped = shaped.replace("فَاضِلْ", "فَاظِلْ").replace("ضْلُوعِي", "ظْلُوعِي")
         maqam_rule = "3rd-Word Faizi Vibrato & Soft Bahrani Imala in Maqam Hijaz/Saba"
-        dhad_mode = "Standard/Bahrani Dhad (ض)"
+        dhad_mode = "Emphatic Iraqi Dhaa (ظ)" if enforce_iraqi_dhaa else "Standard/Bahrani Dhad (ض)"
     elif detected == "iraqi":
         shaped = shape_words_by_boundary(shaped, IRAQI_WORD_SHAPING_MAP, use_tatweel=use_tatweel)
         if enforce_iraqi_dhaa:
-            shaped = shaped.replace("فَاضِلْ", "فَاظِلْ").replace("ضْلُوعِي", "ظْلُوعِي")
+            shaped = (
+                shaped.replace("فَاضِلْ", "فَاظِلْ")
+                .replace("ضْلُوعِي", "ظْلُوعِي")
+                .replace("مَا ضَلْ", "مَا ظَلْ")
+            )
         maqam_rule = "Emphatic Iraqi Tafkheem & Final-Word Sudden Drop in Maqam Saba/Lami"
         dhad_mode = "Emphatic Iraqi Dhaa (ظ)" if enforce_iraqi_dhaa else "Dual Dhad/Dhaa Support"
     else:
         shaped = shape_words_by_boundary(shaped, HYBRID_WORD_SHAPING_MAP, use_tatweel=use_tatweel)
+        if enforce_iraqi_dhaa:
+            shaped = shaped.replace("فَاضِلْ", "فَاظِلْ").replace("ضْلُوعِي", "ظْلُوعِي")
         maqam_rule = (
-            "Hybrid Iraqi-Bahrani Fusion: Faizi 3rd-Word Vibrato + Karbalai Qarar Cadence "
+            "Neutral Iraqi-Bahrani Fusion: Faizi 3rd-Word Vibrato + Karbalai Qarar Cadence "
             "in Maqam Saba/Bayati"
         )
-        dhad_mode = "Balanced Iraqi-Bahrani Articulation"
+        dhad_mode = "Emphatic Iraqi Dhaa (ظ)" if enforce_iraqi_dhaa else "Balanced Neutral Dhad (ض)"
 
-    shaped = resolve_dialectal_and_prosodic_tanween(shaped, dialect=detected)
+    shaped = resolve_dialectal_and_prosodic_tanween(
+        shaped, dialect=detected, use_tatweel=use_tatweel
+    )
     return {
         "detected_dialect": detected,
         "bahrani_score": bahrani_hits,
@@ -726,6 +829,46 @@ def normalize_lufs_and_true_peak(stereo_signal, sample_rate, target_lufs=-14.0, 
     return scaled
 
 
+def read_wav_any_depth(input_path):
+    """Read 8-bit, 16-bit, 24-bit, or 32-bit Mono/Stereo WAV files into a 1D float64 mono array."""
+    try:
+        with wave.open(input_path, "rb") as wf:
+            sample_rate = wf.getframerate()
+            n_channels = wf.getnchannels()
+            sampwidth = wf.getsampwidth()
+            raw_bytes = wf.readframes(wf.getnframes())
+
+        if sampwidth == 1:
+            data = (np.frombuffer(raw_bytes, dtype=np.uint8).astype(np.float64) - 128.0) / 128.0
+        elif sampwidth == 2:
+            data = np.frombuffer(raw_bytes, dtype="<i2").astype(np.float64) / 32768.0
+        elif sampwidth == 3:
+            raw_u8 = np.frombuffer(raw_bytes, dtype=np.uint8).reshape(-1, 3)
+            signed_24 = (
+                raw_u8[:, 0].astype(np.int32)
+                | (raw_u8[:, 1].astype(np.int32) << 8)
+                | (raw_u8[:, 2].astype(np.int32) << 16)
+            )
+            neg_mask = (signed_24 & 0x800000) != 0
+            signed_24[neg_mask] -= 1 << 24
+            data = signed_24.astype(np.float64) / float(1 << 23)
+        elif sampwidth == 4:
+            data = np.frombuffer(raw_bytes, dtype="<i4").astype(np.float64) / float(1 << 31)
+        else:
+            raise wave.Error(f"Unsupported sample width: {sampwidth}")
+
+        if n_channels > 1:
+            data = data.reshape(-1, n_channels).mean(axis=1)
+        return sample_rate, data
+    except wave.Error:
+        sample_rate, raw_data = wavfile.read(input_path)
+        if raw_data.ndim > 1:
+            mono = np.mean(raw_data.astype(np.float64), axis=1)
+        else:
+            mono = raw_data.astype(np.float64)
+        return sample_rate, mono
+
+
 def process_audio_file(
     input_path,
     output_path,
@@ -737,11 +880,7 @@ def process_audio_file(
     samples_dir=None,
 ):
     """Load an input WAV file, apply 5-Track Husseiniya DSP montage & -14 LUFS mastering, and write WAV."""
-    sample_rate, raw_data = wavfile.read(input_path)
-    if raw_data.ndim > 1:
-        mono = np.mean(raw_data.astype(np.float64), axis=1)
-    else:
-        mono = raw_data.astype(np.float64)
+    sample_rate, mono = read_wav_any_depth(input_path)
 
     peak = np.max(np.abs(mono))
     if peak > 1e-8:
@@ -812,6 +951,24 @@ def parse_args(argv=None):
         help="Run pre-generation poem linter (word boundaries, dialect mix, hemistich syllables)",
     )
     parser.add_argument(
+        "--enforce-iraqi-dhaa",
+        action="store_true",
+        default=None,
+        help="Explicitly enforce Iraqi emphatic Dhaa (ظ) conversion",
+    )
+    parser.add_argument(
+        "--use-tatweel",
+        action="store_true",
+        default=False,
+        help="Use Arabic Tatweel (ـ) after single-letter prepositions instead of clean space",
+    )
+    parser.add_argument(
+        "--no-tatweel",
+        action="store_true",
+        default=False,
+        help="Force clean space separation without Tatweel (default behavior)",
+    )
+    parser.add_argument(
         "--mode",
         default="latm",
         choices=["latm", "zanjeel_iraqi", "zanjeel_bahrani", "shoor", "bandari", "mawal", "nai"],
@@ -841,14 +998,24 @@ def parse_args(argv=None):
         default=None,
         help="Optional directory containing real WAV samples (latm.wav, dammam.wav, zanjeel.wav, husseiniya_ir.wav)",
     )
+    parser.add_argument(
+        "--session-log",
+        default=None,
+        help="Optional JSON ledger file path to log the session",
+    )
     return parser.parse_args(argv)
 
 
 def main(argv=None):
     """CLI Entrypoint supporting --compile-lyrics, --lint-poem, and WAV DSP mastering."""
     args = parse_args(argv)
+    use_tatweel = bool(args.use_tatweel and not args.no_tatweel)
     if args.compile_lyrics is not None:
-        report = detect_and_shape_dialect(args.compile_lyrics)
+        report = detect_and_shape_dialect(
+            args.compile_lyrics,
+            enforce_iraqi_dhaa=args.enforce_iraqi_dhaa,
+            use_tatweel=use_tatweel,
+        )
         print(json.dumps(report, ensure_ascii=False, indent=2))
         return 0
 
@@ -874,6 +1041,13 @@ def main(argv=None):
         swing=args.swing,
         samples_dir=args.samples_dir,
     )
+    if args.session_log:
+        log_generation_session(
+            args.session_log,
+            prompt=f"DSP Montage mode={args.mode} bpm={args.bpm} maqam={args.maqam_drone}",
+            lyrics=args.input,
+            result_url=args.output,
+        )
     print(
         f"Successfully mastered Husseiniya audio ({args.mode}, {args.bpm} BPM, "
         f"Maqam {args.maqam_drone}) -> {args.output}"
