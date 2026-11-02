@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# pylint: disable=no-member
 """Comprehensive Unit, Negative-Edge, Idempotency, 24-Bit WAV & 7-Mode DSP Test Suite (V45.0).
 
 Validates:
