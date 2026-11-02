@@ -51,10 +51,10 @@ python3 scripts/hussaini_dsp_montage.py --lint-poem "ياحسين يا خويه 
 python3 scripts/hussaini_dsp_montage.py --compile-lyrics "ياحسين يا خويه شلون قلب وقلبي وقلبك والصبر والجمرة ويبوفاضل بضلوعي"
 ```
 
-### Workflow 2: Flow Music Studio UI (`New session`, `Compose` Panel, & `Remix > Extend / Trim / Replace`)
-1. **Step 1 (One New Poem = One Fresh `New session`)**: Always open a brand-new `New session` (`/session/<new-uuid>`) for every new poem (`references/modules/module_39_json_preconditioning.md`); never mix two different poems in the same session.
-2. **Step 2 (Direct `Compose` Panel — `Lyrics`, `Sound`, `Details`, `Generate`)**: Put 100% pure vocalized Arabic in `Lyrics` (zero English words, zero word-initial Sukun, 3–4 words per vertical line ending with `..`), put the Title in `Details`, and put the 40–50 word funeral prompt in `Sound`:
-   `Slow heavy Iraqi-Bahrani Husseini Latmiya, steady 58 BPM throughout, no tempo acceleration, passionate mourning solo Radood baritone with tearful inner sigh (Wannah), microtonal Maqam Saba with smooth modulation to Bayati and Lami, low-register Qarar human choral Ahaat drone, deep chest thud Latm, extended Husseiniya reverb, strictly non-musical, no instruments`
+### Workflow 2: 4-Stage Flow Music Studio Protocol (`New session` ➔ `JSON Pre-Conditioning` ➔ `Compose` ➔ `Remix > Extend`)
+1. **Step 1 (One New Poem = One Fresh `New session` + Mandatory JSON Pre-Conditioning)**: Open a fresh `New session` (`a[href="/session"]`) and **always** send the `Module 39` JSON constitution (`build_flowmusic_json_preconditioning`) in `Producer Chat` first (`"Lock in session memory ONLY — do NOT generate audio yet"`) before touching `Compose`.
+2. **Step 2 (Direct `Compose` Panel — `Lyrics`, `Sound`, `Details`, `Generate`)**: Once pre-conditioned, put 100% pure vocalized Arabic in `Lyrics` (`textarea[aria-label="Lyrics"]`, zero English words, zero initial Sukun, 3–4 words per line ending with `..`), Title in `Details`, and the funeral prompt in `Sound` (`textarea[aria-label="Sound description"]`):
+   `Slow heavy Iraqi-Bahrani Husseini Latmiya, steady 58 BPM throughout, passionate mourning solo Radood baritone with tearful inner sigh (Wannah), microtonal Maqam Saba with smooth modulation to Bayati and Lami, low-register Qarar human choral Ahaat drone, deep chest thud Latm, extended Husseiniya reverb, strictly non-musical, no instruments`
 3. **Step 3 (Extending, Trimming & In-Place Repair via `... -> Remix`)**:
    - **`Remix > Extend`**: Mandatory for adding Stanzas 3, 4, 5 to the same voice/melody (`SETTINGS` time range + `Instruction` + `Edit Lyrics` + `Generate`).
    - **`Remix > Trim` + `Extend`**: Cut at the exact timestamp where a track drifts (e.g. `1:27`), then `Extend` from there.
@@ -81,5 +81,5 @@ pylint scripts/hussaini_dsp_montage.py tests/test_hussaini_modules.py
 
 ## Critical Gotchas
 
-- **`New session` vs. `Spaces` in Flow Music**: Always use **`New session`** for generating, extending, or remixing audio tracks.
-- **100% Pure Arabic in `Lyrics`**: Use `[المُسْتَهَلّ]`, `[المَقْطَع الأَوَّل]` for section headers, ` .. ` for mid-verse breath pause, and reserve `(...)` **exclusively** for sung choir responses like `(مَوْلَايَ يَا حُسَيْنْ)`.
+- **One Poem = `New session` + JSON Pre-Conditioning**: Open `New session`, lock `Module 39` JSON in `Producer Chat` first, then generate via `Compose` (`Lyrics` + `Sound` + `Details`) and extend via `Remix > Extend`.
+- **100% Pure Arabic in `Lyrics`**: Use `[Chorus]`, `[Verse 1]`, ` .. ` for pause, zero initial Sukun, and `(...)` for choir responses.
