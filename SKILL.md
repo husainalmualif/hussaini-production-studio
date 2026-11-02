@@ -5,250 +5,79 @@ allowed-tools: execute_bash view_file write_to_file google
 ---
 # Hussaini Production Studio (V45.0 OMNI-ARCHITECT)
 
-Master Hussaini Audio DSP Engineer, Minbar Poetic Architect, and Cultural Sound Designer integrating the Unified Hussaini Audio Encyclopedia (`V26.0–V45.0 OMNI-ARCHITECT`, version-locked via the root `VERSION` file) and the Hussaini Prompt Constitution (`V5.5+`). This skill acts as a **structured router** that authors authentic Hussaini poetry, builds microtonal Maqam and Tor sequencer maps across regional schools, executes the **Two-Step JSON Session Pre-Conditioning Protocol in Flow Music `Producer Chat` (`Module 39`)**, enforces **Word-Boundary Morphological Dialect Shaping, Safe Tanween Resolution, and Anti-Slurring Word Separation (`Modules 40, 41 & 43`)**, runs **pre-generation poem linting (`lint_poem` / `--lint-poem`)**, enforces the **Mandatory Human, Poetic & Doctrinal Review Gate**, and performs **5-Track SOS/RMS/LUFS DSP audio montage (`-14.0 LUFS` & `-1.0 dBTP`)** on user-supplied vocal recordings. *(Note: `allowed-tools` in YAML frontmatter is an optional Antigravity IDE hint and is safely ignored by other agent runtimes.)*
+Structured router for authentic Hussaini poetic composition, microtonal Maqam/Tor architecture, **Flow Music `Producer Chat` Two-Step JSON Pre-Conditioning (`Module 39`)**, **Prefix-Aware Morphological Dialect Shaping, Safe Tanween & Anti-Slurring Word Separation (`Modules 40, 41 & 43`)**, **Pre-Generation Poem Linting (`--lint-poem`)**, and **5-Track SOS/RMS/LUFS Audio DSP Montage (`-14.0 LUFS` & `-1.0 dBTP`)**. Version-locked via root `VERSION` (`V45.0 OMNI-ARCHITECT`).
 
 ## When to Use
 
-- The user provides poem lyrics and asks to produce a Latmiya, Zanjeel, Shoor, Bandari, Mawal, Na'i, Abudhiyah, Qira'a Hussainiya, or Islamic Nasheed prompt with audio engineering.
-- The user asks to compose or write new Hussaini poetry (Qasida, Mustahal and Ghusn, Abudhiyah, Darmi, Mawal, or Na'i) tailored to a specific rhythm, Maqam, or tragic theme (`Lisan Al-Hal`).
-- The user requests a specific regional style: Iraqi (Nazla, Keadia, Fazaia, Karbalaei Shoor, Iraqi Zanjeel), Bahrani (Modern Tawshih, Fayzi, Muthakkal, Bahrani Triple-Strike Zanjeel), Iranian (Seena-Zani, Dashti/Shur), Bandari (6/8 syncopated), Ahwazi (Muhammarawi/Nassari), or Ahsa/Gulf.
-- The user wants to emulate the artistic school, Maqam transitions, multi-Tor blending, or rhythmic approach of renowned Radoods (Basim Al-Karbalaei, Murtadha Harb, Mohammed Jirtani/Al-Hujairat, Ahmed Al-Bawi, Mulla Jaleel Al-Karbalaei, Mahmood Karimi, Mahdi Rasouli, Sayed Salam Al-Husseini, Ameer Al-Mahyawi, Mohammed Baqir Al-Khaqani, Nooh Al-Muhammadawi, Amjad Al-Shaghanbi, Ammar Al-Kinani, Sheikh Hussain Al-Akraf, Madeen Al-Ayashi, Mohammed Bojbara, Sayed Hani Al-Wadaei, Saleh Al-Dirazi, Sayed Essam Al-Hashemi, Abbas Ajeed Al-Amiri, Hussain Khairuddin) or Khutaba in Na'i (Sheikh Abdul Wahab Al-Kashi, Dr. Ahmed Al-Waeli, Sayed Jasim Al-Tuwairjawi, Sheikh Abdul Hay Qambar, Sheikh Zaman Al-Hasnawi, Sayed Nusrat Qashaqish, Sheikh Haider Al-Mawla, Sheikh Zaman Al-Uqabi).
-- The user provides or references a voice recording and asks for Hussaini audio montage (adding Chest-Latm, Dammam, Zanjeel chains, Ahaat vocal pads, Dynacord echo, Husseiniya reverb, and sidechain ducking).
+- Producing a Latmiya, Zanjeel, Shoor, Bandari, Mawal, Na'i, Abudhiyah, or Hussaini chant in **Google Flow Music (`Lyria`)**, Suno, or Udio.
+- Composing or linting Hussaini poetry in Iraqi, Bahrani, Gulf, or Classical Arabic (Fusha) across traditional meters (`Nassari, Muwashah, Fayzi, Tajleeb, Maymar, Abudhiyah, Mawal, Hosa`).
+- Emulating the melodic/rhythmic school or multi-Tor blending of renowned Radoods or Minbar Khutaba ethically via acoustic descriptors.
+- Mastering raw vocal recordings (`8-bit, 16-bit, 24-bit, or 32-bit Mono/Stereo WAV` at `8kHz–48kHz`) with 5-Track DAW routing (`Latm, Dammam, Tasa, Zanjeel, Ahaat, Dynacord Echo, Husseiniya Reverb, -28 dBFS RMS Sidechain Ducking`).
 
-## Reference Files and Bundled Scripts
+## Modular Reference Map (Load Only What You Need)
 
-Consult the bundled references and scripts in this skill directory via `get_skill_resources` as needed:
+Do **not** load all reference files at once. Read only the specific module needed for the current task:
 
-- `references/radoods_and_khutaba_encyclopedia.md`: Detailed acoustic, melodic, Maqam, and rhythmic profiles for 20+ Radoods across 14 schools (including Basim Al-Karbalaei, Sheikh Hussain Al-Akraf, Sayed Salam Al-Husseini, Mulla Mohammed Bojbara, Murtadha Harb, Mohammed Jirtani/Al-Hujairat, Ahmed Al-Bawi, Mulla Jaleel Al-Karbalaei, Mahmood Karimi, and Mahdi Rasouli), the 8 Masters of Multi-Tor Blending matrix, 8 Minbar Khutaba, and the 7 Essential Vocal Timbres Matrix (using concise 40-word pure-English prompts).
-- `references/atwar_maqamat_and_poetry_guide.md`: Full encyclopedia of the 43 Hussaini Audio Modules, Maqam scales, regional Atwar, 7 Na'i Atwar, poetic meters, Colloquial Phonetic Orthography Dictionary (Module 35), 8-Archetype 40-Word Sound Prompt Library (Module 36), Post-Generation DSP Effect Graph (Module 37), Stage-2 Modulation Protocol (Module 38), QC1–QC12 troubleshooting matrix, the 23 Legendary Compositional Archetypes, **Section 13 (Jawhari Voice Physiology, Golden Larynx, and 5-Track Zanjeel/Bandari DAW Routing Matrix)**, **Section 14 (Minbar Na'i Phonetics & Sudden Drop Rule)**, **Section 15 (Maqam vs. Tor & 5 Standards of Multi-Tor Blending)**, **Section 16 (The 3 Pillars of Latmiya Success)**, **Section 17 / Module 39 (Two-Step JSON Session Pre-Conditioning Protocol in Flow Music `Producer Chat`)**, **Section 18 / Modules 40–42 (Dialect-Accurate & Prosodic Tanween Resolution, Anti-Slurring Word De-Cliticization Separation Matrix, the Art of Gireez, Rare Heritage Atwar, Iraqi Hosa/Arjooza Blueprint, and the 10 Nights of Muharram & Safar Calendar)**, and **Section 19 / Module 43 (Automatic Bahrani vs. Iraqi Dialect Identification, Phonological CVC Diacritics [`گَلْبِي/صَبِرْ` vs. `گَلُبْ/صَبُرْ/چَبِدْ`], Vowel Timbre [`Soft Imala` vs. `Emphatic Tafkheem`], and Melodic-Maqam Articulation [`3rd-Word Faizi Vibrato` vs. `Iraqi Sudden Drop`])**.
-- `VERSION`: Single-source version file (`V45.0 OMNI-ARCHITECT`) read by the Python engine, unit tests, and CI pipeline.
-- `references/modules/` (Modular On-Demand Reference Files):
-  - `references/modules/module_39_json_preconditioning.md`: Two-Step JSON Session Pre-Conditioning with optional `reference_clip_id` (`default None` for cross-account portability and Rule 5 compliance).
-  - `references/modules/module_40_41_43_phonetics_and_dialects.md`: Word-boundary morphological shaping (`prevents قلبي->گَلُبْي and الجمرة->الجَمُرْة`), safe mid-line Tanween resolution (`protects نارٍ يَصْلَى and دمعٍ ياحسين`), and space-vs-Tatweel separation (`use_tatweel=False`).
-  - `references/modules/module_42_gireez_hosa_and_muharram_calendar.md`: The Art of Gireez, Iraqi Hosa (`3+1 Arjooza`), and the 10 Nights of Muharram & Safar Calendar.
-  - `references/modules/experimental_ab_evaluation_and_human_review.md`: Empirical A/B evaluation matrix (`Verified` vs. `Working Hypotheses` for Flow Music / Lyria behavior) and the **Mandatory Human, Poetic & Doctrinal Review Gate (`بوابة المراجعة البشرية والشرعية وحفظ حقوق الشاعر`)**.
-- `scripts/hussaini_dsp_montage.py`: Executable Python DSP, Acoustic Phonetics, Poem Linter, and Procedural Montage Engine (`V45.0 OMNI-ARCHITECT` — `Pylint 10/10`) that processes raw vocal `.wav` files across all 7 modes (`latm`, `zanjeel_iraqi`, `zanjeel_bahrani`, `shoor`, `bandari`, `mawal`, `nai`) and 6 Maqamat (`bayati`, `saba`, `hijaz`, `lami`, `kurd`, `rast`), and exposes programmatic APIs for:
-  - **Module 41 (`de_cliticize_and_separate_words`)**: Anti-slurring word separation with optional `use_tatweel=False` (`ياحسين ⟵ يَا حْسَيْنْ`, `عالباب ⟵ عَلَى البَابْ`, `شصار ⟵ إِشْ صَارْ`).
-  - **Module 40 (`resolve_dialectal_and_prosodic_tanween`)**: Safe dialectal mid-line Kasra-Nun Tanween (`عينٍ تسيل ⟵ عَيْنِنْ تِسِيلْ` while protecting vocalized `نارٍ يَصْلَى` and vocative `دمعٍ ياحسين`), Fusha prosodic Tanween (`جِسْماً عَلَى الثَّرَى ⟵ جِسْمَنْ عَلَى الثَّرَى`, `ظَامِئاً ⟵ ظَامِئَا`), and Alif Maqsura (`ى`) exemption.
-  - **Module 43 (`detect_and_shape_dialect`)**: Word-boundary morphological dialect shaper supporting `bahrani` (`قلب ⟵ گَلِبْ`, `قلبي ⟵ گَلْبِي`, `صبر ⟵ صَبِرْ`), `iraqi` (`قلب ⟵ گَلُبْ`, `قلبي ⟵ گَلْبِي`, `قلبك ⟵ گَلْبَكْ`, `چبد ⟵ چَبِدْ`, `دمع ⟵ دَمِعْ`, optional `enforce_iraqi_dhaa=True` for `فَاظِلْ`), and explicit hybrid tie mode (`iraqi_bahrani`) without corrupting derived words like `الجمرة` or `المقلوب`.
-  - **Modules 34 & 38 (`count_arabic_syllables`, `validate_stage1_iso_syllabic_lock`, `lint_poem`, `build_multi_tor_melodic_bridge`)**: True per-hemistich Arabic prosodic syllable segmentation (`CV/CVV/CVC`), pre-generation poem linter (`--lint-poem`), and Stage-2 Common-Jins melodic bridge builder.
-  - **Module 39 (`build_flowmusic_json_preconditioning`, `log_generation_session`)**: Programmatic generator for Flow Music `Producer Chat` JSON Session Pre-Conditioning (`reference_clip_id=None` by default) and empirical session ledger logger.
-  - **5-Track SOS DAW Routing, Absolute `dBFS` RMS Sidechain Ducking (`-3.0 dB`), Vectorized Echo & `-14.0 LUFS` Mastering**: Numerically stable Second-Order Sections (`SOS`) Butterworth filters (`35Hz HPF`), absolute `dBFS` RMS sidechain ducking with `15ms/120ms` attack/release (immune to single-clap spikes and noise floor), fast vectorized multi-tap Dynacord echo, `-14.0 LUFS` (`ITU-R BS.1770-4`) + `-1.0 dBTP` true-peak limiter, vocal onset detection (`--offset-ms`), Bandari `--swing`, and optional real acoustic sample loading (`--samples-dir`).
-- `tests/test_hussaini_modules.py` & `requirements.txt`: Automated `pytest` unit, negative-edge, and idempotency test suite (`8 test suites`) and pinned dependency specification validated with coverage (`pytest --cov`) on every push via `.github/workflows/ci.yml`.
+1. **`references/modules/module_40_41_43_phonetics_and_dialects.md`**: Prefix-aware morphological word shaping (`ال، و، ب، ك، ل`), safe mid-line Tanween resolution, space-first de-cliticization (`use_tatweel=False`), Dhad/Dhaa (`ض/ظ`) dialect rules, and neutral tie handling (`iraqi_bahrani`).
+2. **`references/modules/module_39_json_preconditioning.md`**: Two-Step JSON Session Pre-Conditioning protocol for Flow Music `Producer Chat` with account-agnostic `reference_clip_id=None` default (`<OPTIONAL_USER_CLIP_UUID>`).
+3. **`references/modules/module_42_gireez_hosa_and_muharram_calendar.md`**: The Art of Gireez (`الگريز`), Iraqi Hosa (`3+1 Arjooza`), rare heritage Atwar (`Ushshaq, Huwaizawi, Shushtari, Dashti`), and the 10 Nights of Muharram & Safar calendar.
+4. **`references/modules/experimental_ab_evaluation_and_human_review.md`**: Empirical A/B evaluation matrix (`Verified` rules vs. `Working Hypotheses`) and the **Mandatory Human, Poetic & Doctrinal Review Gate**.
+5. **`references/radoods_and_khutaba_encyclopedia.md`**: Profiles of 20+ Radoods (14 schools), 8 Multi-Tor Blending Masters, 8 Minbar Khutaba, and the **7 Essential Vocal Timbres Matrix** (pure-English descriptors).
+6. **`references/atwar_maqamat_and_poetry_guide.md`**: Complete 43-Module encyclopedia, 8-Archetype 40-Word Sound Prompt Library (`Module 36`), 23 Compositional Archetypes (`Sections 10–12`), 5-Track Zanjeel/Bandari DAW Matrix (`Section 13`), Minbar Na'i Phonetics (`Section 14`), Multi-Tor Blending (`Section 15`), and `QC1–QC12` troubleshooting.
+7. **`scripts/hussaini_dsp_montage.py` & `tests/test_hussaini_modules.py`**: Executable Phonetics Compiler, Poem Linter, 5-Track DSP Montage Engine (`Pylint 10/10`), and automated `pytest` suite (`--cov-fail-under=70`).
 
-## Core Rules and Cultural Firewall
+## Hard Core Rules & Cultural Firewall
 
-1. **Acoustic Purity**: Default to 100% Acapella human and heritage percussion production (`Pure Minbar Acapella` or `Traditional Heritage Matam`). Permitted sounds include male lead vocal (Radood/Khateeb), male answering crowd (Raddada), wordless Ahaat vocal pads, organic human chest-slap (Latm), acoustic Dammam drum, brass Tasa/Kasat cymbals, and metallic Zanjeel chains. Only include mournful solo Nay/Duduk/Cello if the user explicitly requests `Cinematic Orchestral Ratha`. Never allow electric guitars, pop acoustic guitars, piano chords, EDM/808 kicks, trap snares, synth pads, or robotic auto-tune.
-2. **Microtonal Maqam Enforcement**: Always enforce Arabic quarter-tones (24-EDO microtonality) and disable Western 12-TET equal temperament pitch snapping for Maqam Saba, Bayati, Lami, Hijaz, Sikah, Hizam, Rast, and Dashti.
-3. **Dialect Commitment Lock, Phonetic Tanween Resolution & Anti-Slurring Word Separation (`قفل اللهجة الإملائي، هندسة التنوين اللهجي والفصيح، وفصل الكلمات لمنع التشبيك في النطق` — Modules 34, 35, 40 & 41)**:
-   - **Zero Fusha-Colloquial Mixing in Root Tracks**: Never mix Classical Arabic (Fusha) lines or Fusha refrains inside an Iraqi or Bahrani colloquial Latmiya. Every single word in a colloquial poem must belong to authentic Iraqi/Bahrani spoken vocabulary (and if a poem is Classical Fusha, keep it 100% Fusha without colloquial words).
-   - **Strict Phonetic Colloquial Spelling (`الكتابة العروضية الصوتية باللهجة الدارجة`)**: In Flow Music (where English tags in `Lyrics` are strictly forbidden), enforce Iraqi and Bahrani pronunciation purely through phonetic Arabic spelling and diacritics:
-     1. Write colloquial words exactly as pronounced on the Minbar (`شْلُونْ، چَبِدْ، گَلِبْ، عْيُونِچْ، بْچِيتْ، مْحَنِّيَه، وْگَفِتْ، يِمَّه، خُويَه، بْلَيَّاكْ، مَا ظَلْ، وْلِيدَاتِي`).
-     2. **Mandatory End-of-Phrase Sukun (`الوقف بالسكون الصارم في أواخر الكلمات والقوافي`)**: Always place a Sukun (`ْ`) or long open vowel (`ا، و، ي، ه`) at the end of hemistichs and colloquial words (`قُبُورْ، سُعُورْ، گَلِبْ`). In Classical Fusha, convert end-of-line Fathah Tanween (`-ً`) to open Alif (`ظَامِئاً ⟵ ظَامِئَا`) and drop Damma/Kasra Tanween (`ٌ / ٍ`) to pure Sukun (`ْ`) at every pause/rhyme.
-     3. **Dialect-Accurate & Prosodic Mid-Line Tanween (`هندسة التنوين في وسط الشطر حسب اللهجة والوزن — Module 40`)**:
-        - **Colloquial Dialectal Tanween (`تنوين التمكين الشعبي المكسور`)**: When mid-line Tanween is required for prosodic meter in Iraqi, Bahrani Faizi, or Gulf poetry (`عينٍ تسيل، كلٍ ينادي، جرحٍ چبير`), write it phonetically as a soft Kasra-Nun (`-ِنْ`) while keeping the following verb prefix in colloquial Kasra (`تِـ / يِـ`): **`عَيْنِنْ تِسِيلْ`**، **`كِلِّنْ يِنَادِي`**، **`جَرْحِنْ چِبِيرْ`**، **`حَالِنْ يِفَطِّرْ`** (so the G2P engine does not switch to a stiff Fusha accent).
-        - **Classical Fusha Mid-Line Tanween (`تنوين الوصل العروضي في الفصحى والتوشيح`)**: When mid-line Tanween in Classical Arabic is needed to preserve meter (`جِسْماً عَلَى الثَّرَى، دَامٍ بِلَا قُبُورْ، عِزٌّ لَنَا`), spell it phonetically (`جِسْمَنْ عَلَى الثَّرَى، دَامِنْ بِلَا قُبُورْ، عِزُّنْ لَنَا`) if the G2P tokenizer risks dropping the Nun and breaking the meter.
-     4. **Anti-Slurring Word Separation (`قانون فصل الكلمات وفكّ الالتصاق الصوتي لمنع تشبيك الكلمات في النطق — Module 41`)**:
-        - To prevent Flow Music (`Lyria`) from slurring or merging adjacent words (`يشبك الكلمات في النطق`), always separate attached prefixes, vocatives, prepositions, interrogatives, and conjunctions with explicit spaces or micro-commas (`،`):
-          - **Vocatives (`أدوات النداء`)**: Write **`يَا حْسَيْنْ`**، **`يَا بُو فَاضِلْ`**، **`يَا بُو السَّجَّادْ`**، **`يَا زَيْنَبْ`**، **`يَا أُمّ البَنِينْ`** (NEVER attached `ياحسين`, `يبوفاضل`, `يزينب`).
-          - **Prepositions (`حروف الجر المندمجة`)**: Write **`عَلَى البَابْ / عَ البَابْ`** (never `عالباب`), **`عَلَى الرَّمْضَه`** (never `عالرمضا`), **`بِـ غُرْبِتِي`** (never `بغربتي`), **`لِلْ ذَبْحَوْا`** (never `للذبحوا`).
-          - **Colloquial Interrogatives (`أدوات الاستفهام العراقية`)**: Write **`إِشْ صَارْ / شْ صَارْ`** (never `شصار`), **`إِشْ نْگُولْ`** (never `شنگول`), **`إِشْ أَحْچِي`** (never `شحچي`).
-          - **Conjunction Waw (`واو العطف قبل الـ التعريف`)**: Write **`وَ الشَّمْسُ / وْ الشَّمْسْ`**، **`وَ الخَيْلْ`**، **`وَ المَدْمَعْ`** (instead of attached `والشمس، والخيل`).
-          - **Micro-Boundary Comma (`،`)**: Insert a light Arabic comma (`،`) between any two words that `Lyria` tends to slur together in fast passages (`فِي أَسْرِهَا ، تَسِيرْ` / `نَادَاكَ ، الثَّقَلَيْنْ`).
-     5. **Automatic Bahrani vs. Iraqi Dialect Identification & Melodic-Maqam Articulation (`خوارزمية التمييز الصوتي واللحني بين البحرانية والعراقية — Module 43 / Section 19`)**:
-        - **Bahrani School (`المدرسة البحرانية`)**: Identified by lexical markers (`يَا بُويِي، يَا خُويِي، هَالگَفْرَه، اِمْسَاعَدْ اللّٰه، وِنِّتِي، عَفَارِمْ، إِشْحَالِكْ`). Diacritize CVC nouns with light Kasra/Sukun (`گَلْبِي / قَلْبِي، صَبِرْ، دَمْعَه، وِنَّه`), vocatives with final `-ِي` (`يَا بُويِي`), and feminine endings with soft `-َه` Imala (`الرَّاعِبِيَّه، مَصِيبَه`). In the melody and Maqam (`Hijaz, Saba, Nahawand`), hold and tremble the **3rd word of the hemistich (`الترجيع البحراني في الكلمة الثالثة`)** and resolve with the extended **Bahrani Wanna**.
-        - **Iraqi School (`المدرسة العراقية — الكربلائية والفراتية`)**: Identified by lexical markers (`يَا بُويَه، يَا خُويَه، يِمَّه، وْلِيدِي، دَلَّالِي، شْلُونْ، إِشْ صَارْ، إِشْ نْگُولْ، بْلَيَّاكْ، مَا ظَلْ`). Diacritize CVC nouns either with the **emphatic Iraqi medial Damma (`-ُ`)** (`گَلُبْ، صَبُرْ، گَبُرْ، دَرُبْ، جَمُرْ، حَرُبْ`) or **Euphrates Kasra (`-ِ`)** (`چَبِدْ، دَمِعْ، وْگَفِتْ، عِفْتْنِي`), vocatives with open `-َه` (`يَا بُويَه، يَا خُويَه، يِمَّه`), and Dhad/Dhaa as emphatic `ظ` (`ظَلْ، بْـ ظْلُوعِي، يَا بُو فَاظِلْ`). In the melody and Maqam (`Saba, Lami, Bayati`), articulate long `ا` vowels with deep velarized Tafkheem (`طَاحْ، رَاحْ، مَايْ، عَبَّاسْ`) and execute the **Sudden Drop (`قاعدة الكسر الفراتية`)** on the final word of the line.
-4. **Ethical Emulation (Module 24 & Rule R5)**: When the user asks for the style of a specific living Radood or Khateeb, translate their school into exact musical, rhythmic, Maqam, and vocal-trait descriptors in the output prompt (using `references/radoods_and_khutaba_encyclopedia.md`) rather than injecting a living person's name into the AI generator's voice-cloning field.
-5. **Strict Anti-Cloning & Bespoke Melodic/Maqam Creativity (`منع الاستنساخ الحرفي وحتمية الابتكار اللحني والمقامي والهندسي لكل قصيدة`)**:
-   - When the user shares AI-generated reference tracks (`تعب ممشى الظعن`, `عهد الدماء`, `عهد الوفا`, `عتاب الضعن`, `غريبه وحايره`), **NEVER blindly clone (`استنساخ`) their `sound_prompt`, `seed`, or `source_clip_ids` onto a new poem** unless explicitly asked to replicate that exact voice/track.
-   - Every new poem has its own **emotional soul (`روح القصيدة وموضوعها`)** and **prosodic meter (`البحر والوزن العروضي`)**. Design a bespoke melody, primary Stage-1 Maqam, custom tempo/rhythm, and tailored post-generation DSP mix specifically engineered for the poem's words.
+1. **Acoustic Purity (`100% Acapella & Heritage Matam Percussion`)**:
+   - Permitted: Male lead vocal (`Baritone / Bass-Baritone`), unison `Raddada` choir, wordless `Ahaat` pads, `55Hz` bare-palm chest thud (`Latm`), acoustic `Dammam`, brass `Tasa/Kasat`, and metallic `Zanjeel` chains.
+   - Strictly forbidden in `Sound`: Musical instruments (`piano, guitar, strings, synth, 808, trap`), the word `tenor`, transliterated Arabic terms (`bahha, tarjee', maddat, taqatee'`), or raw EQ numbers (`+4.5dB at 2.5kHz`). Apply EQ/filters post-generation via `audio__apply_effect`.
+2. **Microtonal 24-EDO Maqam & Stage-1 Iso-Syllabic Lock (`Modules 34 & 38`)**:
+   - Enforce Arabic 24-EDO quarter-tones (`Maqam Saba, Bayati, Hijaz, Lami, Kurd, Sikah, Rast`).
+   - Format **Stage 1 (`Root Track`)** as **12 lines max (3 stanzas × 4 hemistichs)** sharing the **exact same prosodic meter and syllable count** (`validate_stage1_iso_syllabic_lock`), resolving to the **identical 4th-line anchor refrain**.
+   - Lock **ONE single primary Maqam** in Stage 1 (`Rule B1`). Defer multi-Tor transitions (`Common Jins` melodic bridges) and Gireez shifts to **Stage 2 (`Extend`)**. Never mix Fusha and Colloquial in Stage 1.
+3. **Morphological Dialect Shaping, Safe Tanween & Anti-Slurring Separation (`Modules 40, 41 & 43`)**:
+   - **Space-First Anti-Slurring Separation (`Module 41`, `use_tatweel=False`)**: Separate attached vocatives, prepositions, interrogatives, and conjunctions with spaces (`ياحسين ⟵ يَا حْسَيْنْ`, `عالباب ⟵ عَلَى البَابْ`, `شصار ⟵ إِشْ صَارْ`).
+   - **Safe Mid-Line Tanween & Sukun (`Module 40`)**: Convert colloquial mid-line Tanween to `-ِنْ` with a Kasra verb prefix only when unvocalized and not followed by Alif (`عينٍ تسيل ⟵ عَيْنِنْ تِسِيلْ`). End every hemistich with Sukun (`ْ`) or open vowel (`ظَامِئاً ⟵ ظَامِئَا`, exempting `ى`).
+   - **Prefix-Aware Morphological Dialect Shaping (`Module 43`)**: Decompose prefixes (`ال، و، ب، ك، ل، وال، بال، كال، لل`) before matching stems (`الجمرة ⟵ الجَمْرَه`) while protecting derived passive participles (`المقلوب`):
+     - **Iraqi (`iraqi`)**: Medial Damma (`گَلُبْ`, `وَ الصَبُرْ`, `كَ الجَمُرْ`), Euphrates Kasra (`چَبِدْ`, `دَمِعْ`), suffixed `گَلْبِي / گَلْبَكْ`, automatic Iraqi Dhaa `ظ` (`وَ يَا بُو فَاظِلْ`, `بِ ظْلُوعِي`), and **Final-Word Sudden Drop (`قاعدة الكسر`)**.
+     - **Bahrani (`bahrani`)**: Light Kasra/Sukun (`گَلِبْ`, `وَ الصَبِرْ`, `گَلْبِي`, `گَلْبِكْ`), standard Dhad `ض` (`فَاضِلْ`), soft `-َه` Imala, and **3rd-Word Faizi Vibrato (`الترجيع الفايزي`)**.
+     - **Neutral Tie (`iraqi_bahrani`)**: When dialect markers tie, apply **100% neutral shaping** (`قَلْبْ`, `قَلْبِي`, `وَ الصَبْرْ`, `الجَمْرَه`, `فَاضِلْ`) without biasing toward Iraqi `-ُ` or Bahrani `-ِ`.
+4. **Ethical Emulation (`Module 24`)**: Translate living Radood/Khateeb styles into acoustic/Maqam descriptors (`references/radoods_and_khutaba_encyclopedia.md`); never inject a living person's name into voice-cloning fields.
+5. **Strict Anti-Cloning & Account-Scoped Reference Clip Policy (`Rule 5 & Module 39`)**:
+   - Never clone a previous track's `seed` or `reference_clip_id` onto an unrelated poem.
+   - Flow Music clip UUIDs (`<OPTIONAL_USER_CLIP_UUID>`) are private to the account that created them; `reference_clip_id` defaults to `None` in `build_flowmusic_json_preconditioning`.
+6. **Mandatory Human, Poetic & Doctrinal Review Gate**: Verify historical accuracy (`مقتل معتبر`), preserve poet attribution, and avoid repetitive opening clichés.
 
-## Step-by-Step Workflows
+## Core Workflows
 
-### Workflow 1: Poetic Composition (تأليف القصيدة والمنظومات الحسينية)
+### Workflow 1: Pre-Generation Poem Linting & Phonetic Compilation
+```bash
+python3 scripts/hussaini_dsp_montage.py --lint-poem "ياحسين يا خويه شلون قلب وقلبي .. عينٍ تسيل بدمعي"
+python3 scripts/hussaini_dsp_montage.py --compile-lyrics "ياحسين يا خويه شلون قلب وقلبي وقلبك والصبر والجمرة ويبوفاضل بضلوعي"
+```
 
-When asked to write or complete Hussaini lyrics, select the poetic form and meter matching the emotional and regional goal:
+### Workflow 2: Two-Step JSON Pre-Conditioning & 40-Word Sound Prompt in Flow Music
+1. **Step 1 (Pre-Conditioning in `New session` -> `Producer Chat`)**: Generate the JSON constitution via `build_flowmusic_json_preconditioning(dialect, maqam, bpm, reference_clip_id=None)` (`references/modules/module_39_json_preconditioning.md`) and lock it in session memory before calling `lyrics__register`.
+2. **Step 2 (Register Pure-Arabic Lyrics & Generate with 40–50 Word English `Sound` Prompt)**:
+   - Master 40-Word `Sound` Prompt (`58 BPM Maqam Saba` — see `Module 36` in `references/atwar_maqamat_and_poetry_guide.md`):
+     `Traditional Iraqi and Bahrani Hussaini Latmiya, Thaqeel Faizi and Nazla style, Maqam Saba, 58 BPM, authentic Iraqi and Bahrani colloquial dialect, commanding deep resonant Baritone lead vocal, powerful high chest-voice climbs, natural vocal rasp, emotional weep cracks, heavy 55Hz bare-palm chest thud, 285ms analog tape echo, 3.2s Husseiniya hall reverb, wide unison male Raddada choir response, Pure Acapella No Instruments`
+   - Pass `reference_clip_id="<OPTIONAL_USER_CLIP_UUID>"` only when anchoring to a personal workspace clip.
+3. **Step 3 (Post-Generation DSP via `audio__apply_effect`)**:
+   `Apply audio__apply_effect on the generated clip: HighPass filter at 85Hz, AdvancedEqualizer (cut 450Hz by -2.5dB, boost mid 1200Hz by +1.5dB, boost high-mid presence 2500Hz by +4.5dB), Compressor (ratio 3:1, threshold -12dB), Reverb (room_size 0.55, wet mix 0.18), and Limiter at -1.0dB.`
 
-1. **بحر النصاري (Bahr Al-Nassari)**: The king of grief and lamentation (`أَنَا الوَالْدَه وْالتَّعَبْ رَبَّانِي`). Use for Na'i, Muhammarawi/Ahwazi, and Bahrani Fayzi weeping.
-2. **بحر الموشح (Bahr Al-Muwashah)**: Calm, reflective, multi-stanza structure ideal for Iraqi Nazla (55–60 BPM) and Bahrani Modern Tawshih (66–80 BPM).
-3. **البحر الطويل / الفايزي (Bahr Al-Fayzi / Al-Taweel)**: Wide vowel space for long Ahaat and `Lisan Al-Hal` narratives (Lady Zainab, Imam Sajjad, Umm Al-Baneen).
-4. **بحر التجليب / الگعدية (Bahr Al-Tajleeb)** and **بحر الميمر (Bahr Al-Maymar)**: Medium-to-fast Iraqi Keadia (70–75 BPM) and Nazla climaxes.
-5. **الأبوذية العراقية (Abudhiyah)**: Four hemistichs where the first three share a homophonous rhyming word with three distinct meanings (جناس لفظي), and the fourth ends with the signature `-يَّه` (`يه`) suffix in Maqam Lami or Saba (Tor Fartousi / A'raji).
-6. **الموال الحسيني (Mawal Hussaini)**: 5-line or 7-line colloquial or Fusha stanza (Sab'awi / Nu'mani) designed for 0 BPM Rubato vocal melisma (Oroub).
-
-Apply the **MODE M & MODE C Structural Blueprint (Hussaini Prompt Constitution V5.5+)** when composing verses:
-
-- **Dynamic Poem-Specific Opening (`منع الكليشيهات الجاهزة في المستهل`)**:
-  - **NEVER** hardcode or repeat generic opening sighs such as `آآآه يَا حُسَيْنَا .. آآآه يَا مَظْلُومْ` across poems.
-  - Enter directly into the first hemistich of the Mustahal, ensuring the opening words naturally contain long open vowels (`ا، و، ي`) derived from the poem's specific theme and colloquial dialect (e.g., `يَا طَارِشْ الظَّعَنْ بْاللّٰه ..`, `بْاللّٰه اسْتَعِدِّي يَمّ البَنِينْ ..`, `عَلَى رَمْلِ الطَّفْ عْيُونِي تِرْعَاكْ ..`).
-- **قاعدة الـ 4 أشطر لكل مقطع (Rule B2 — 4-Line Stanza Lock)**: Structure every verse into **4 hemistich lines of identical prosodic meter and syllable count** (never stack 10–14 lines in a single section).
-- **اللازمة الموحدة في الشطر الرابع (Rule B4 — Identical 4th-Line Anchor Refrain)**: Make the **4th line of every 4-line stanza identical word-for-word** (or returning to the exact same Mustahal lock). This forces the audio generator to resolve every stanza back to the same memorable melodic cadence.
-- **قوس الطبقات الصوتية (Rule B3 — Register Arc Across Sections)**:
-  1. `المستهل`: **القرار (`Qarar`)** — deep, calm, velvety chest voice.
-  2. `المقطع الأول`: **الوسط / الجواب الأول (`Mayan / Jawab`)** — rising sorrow and natural vocal rasp.
-  3. `المقطع الثاني (ذروة الشجن)`: **جواب الجواب (`Jawab-al-Jawab`)** — powerful high chest-voice climb (`powerful high chest-voice climbs`).
-  4. `المقطع الختامي (القفلة)`: Returning gradually to **القرار (`Qarar`)** with the classic Iraqi/Bahrani weeping cadence (`Waqf bi-s-Sukun`).
-- **Performance and Pause Tags (Platform-Aware)**: For **Google Flow Music (`Lyria`)**, keep the `Lyrics` box **100% pure Arabic** (`[المُسْتَهَلّ]`, `[المَقْطَع الأَوَّل]`) with zero Latin characters so no English tags are read aloud. Separate the two hemistichs of each verse with ` .. ` (`الشطر الأول .. الشطر الثاني`).
-
-### Workflow 1.5: Bespoke Melodic, Prosodic & Stage-Locked Maqam Engineering Matrix (منظومة ابتكار اللحن وقفل التوازن العروضي والمقامي)
-
-Before generating any audio prompt or sequencer map, perform a **4-Dimensional Musical & Prosodic Diagnosis**:
-
-1. **Strict Iso-Syllabic Balance in Stage 1 (`قفل تساوي التفعيلات الصارم لضمان توازن اللحن في المرحلة الأولى` — Module 38)**:
-   - To guarantee a 100% balanced, memorable melody in Stage 1 (`Root Track — 12 lines`), ALL 12 lines (both the Mustahal and the Stanzas, including the 4th-line anchor refrain) MUST share the **exact same prosodic meter (`بحر عروضي واحد`) and identical syllable count per hemistich**.
-   - **NEVER** mix long hemistichs (14 syllables) with short hemistichs (7 syllables) inside the initial Root Track, as changing syllable counts mid-generation causes `Lyria` to lose melodic memory and produce a broken, unbalanced tune.
-   - Introduce rhythmic shifts, multi-meter movements, or internal Gireez couplets **only in Stage 2 (`Extend`)** after the core melody of Stage 1 is locked!
-
-2. **Single-Maqam Lock in Stage 1 vs. Stage-2 Multi-Tor & Maqam Blending (`تثبيت مقام وطور واحد في التوليد الأولي، ومزج الأطوار عبر الجسور اللحنية في التمديد` — Section 15 of `references/atwar_maqamat_and_poetry_guide.md`)**:
-   - **Difference Between `Maqam` («القماشة») and `Tor` («الثوب المُفصّل»)**: The `Maqam` is the general 7-note pitch scale (`Saba, Bayati, Lami, Hijaz, Rast, Kurd`), whereas the `Tor` is the regional Hussaini performance mold that dictates where the Radood stretches vowels, pauses, weeps, or locks with the chest-slap (e.g., `Maqam Saba` becomes `Tor Al-Hayawi` when sung with rural Iraqi extended sighs, `Tor Al-Muhammarawi` in southern Nassari, or `Tor Al-Faizi` in Bahrani third-word vibrato).
-   - **The 5 Standards of Multi-Tor & Melodic Blending (`معايير مزج الأطوار الخمسة`)**:
-     1. **Common Jins / Tetrachord Proximity (`التوافق المقامي والقرابة النغمية`)**: Transition only between closely related Maqamat sharing a common root/tetrachord (`Bayati ⟷ Shoor/Kurd`, `Bayati ⟷ Saba`, `Rast ⟷ Saba`, `Saba ⟷ Ushshaq`) to prevent dissonance (`نشاز`).
-     2. **Gradual Melodic Bridge (`سلاسة الانتقال عبر الجسر اللحني`)**: Build a preparatory cadence/bridge when shifting from a slow elegiac Tor (`Darj / Thaqeel / Lami`) to a fast epic Tor (`Rukban / Hosa / Shoor`), as exemplified in Murtadha Harb's `يا يمة شلون` (`Thaqeel/Darj ⟵ Shoor`) and Sheikh Hussain Al-Akraf's `يا بوفاضل` (`Calm Bahrani Tawshih Qarar ⟵ Soaring Epic Jawab`).
-     3. **Wide Vocal Span (`المساحة الصوتية / الفوكاليز`)**: Require a wide `Qarar-to-Jawab` span (`commanding deep resonant Baritone lead vocal, powerful high chest-voice climbs`).
-     4. **Dramatic Word-Painting (`تطابق اللحن مع النص وتجسيد المعنى`)**: Pair grief/farewell/captivity verses with **Sorrowful Atwar** (`طور اللامي` as in Basim's `أنا زينب البطلة` & `يا ليل طول ساعتك`, `طور الصبا`, or `طور الحياوي`), and pair battlefield/courage verses with **Epic/Kinetic Atwar** (`طور الركبان` as in `صليت لو بعدك` & `يا عباس جيب الماي`, `طور الهوسة/الفالة`, or `طور الموشح الحماسي`).
-     5. **Prosodic Meter Compatibility (`مراعاة البحر الشعري`)**: Match the poetic meter (`مستفعلن، فاعلاتن، مفاعيلن`) to compatible regional Atwar (Euphrates Rukban/Tajleeb vs. Bahrani Tawshih).
-   - **AI Execution Rule (`Rule B1`)**: In the initial `Sound` prompt (Stage 1), lock **ONE single primary Maqam and Tor** matching the poem's opening theme. Never stack 3 Maqamat (`in Maqam Saba, Hijaz, and Lami`) inside a single Stage-1 `Sound` prompt; execute the multi-Tor bridge transition in **Stage 2 (`Extend`)**!
-   - Choose the primary Stage-1 Maqam by theme:
-     - **مقام الصبا (`Maqam Saba`)**: Acute tragedy, broken ribs, slaughtering at Karbala, captivity, and weeping collapse (`الفاجعة والانكسار العاشورائي`).
-     - **مقام البياتي (`Maqam Bayati`)**: Warm, grounded Iraqi-Bahrani storytelling, classic heavy Latmiya (`السهل الممتنع واللطم الثقيل الأصيل`).
-     - **مقام الحجاز (`Maqam Hijaz`)**: Passionate distant calling (`النداء والاستغاثة`), Bahrani Tawshih/Faizi, and epic Abbasid marches.
-     - **مقام اللامي (`Maqam Lami`)**: Deep Iraqi estrangement (`الغربة والضياع واليتم`), `Bahr Al-Nassari`, and `Abudhiyah`.
-     - **مقام الكرد والنهاوند (`Maqam Kurd / Nahawand`)**: Flowing emotional sorrow, youth elegies (`علي الأكبر والقاسم ع`), `Keadia`, and `Shoor`.
-     - **مقام السيكاه (`Maqam Sikah`)**: Spiritual longing, Mahdavi `Munajat`, and Ahsa/Gulf warm elegies.
-
-3. **معادلة التناسب بين طول التفعيلة وسرعة الإيقاع وشكل اللطمة (`Syllable-to-Tempo & Chest-Slap Physics`)**:
-   - **`0 BPM Rubato`**: Pure Minbar `Na'i`, `Mawal`, `Abudhiyah`, and standalone `Qafla` cries (zero rhythmic grid).
-   - **`56–58 BPM` (Slow Meditative / Faizi & Long Meters)**: Heavy Bahrani-Iraqi Faizi/Nazla or intimate `Munajat` leaving wide breathing space.
-   - **`60–66 BPM` (Classic Heavy Latmiya / Thaqeel & Nassari)**: Heavy physical bare-palm chest thud (`55Hz` somatic impact) with unhurried pause phrasing (`..`).
-   - **`68–76 BPM` (Iraqi Keadia & Bahrani Muwashah)**: Medium-tempo rhythmic lock for short, rhyming quatrains.
-   - **`76–84 BPM` (Processional Zanjeel March) & `100–110 BPM` (Golden Active Zanjeel/Bandari Strike Sync)**: Iraqi steady march (`76–84 BPM`) or active synchronized Zanjeel/Bandari shoulder strike (`100–110 BPM`, `4/4` with Dammam on beats `1` & `3`, micro-silences for reverb tails, and `5-Track DAW Routing Matrix`: `Track_01_Dammam_Sub_Bass` Mono Center `HPF < 35Hz` + `+2dB @ 90Hz`, `Track_02_Kasat_Brass_Cymbals` `15% L/R` `HPF < 1000Hz` + `De-esser @ 5–8kHz`, `Track_03_Zanjeel_Chain_FX` `120% Ultra-Wide` `HPF < 200Hz` + `Boost @ 3kHz`, `Track_04_Ahaat_Vocal_Choir_Pads` `100% Hard L/R` `Bandpass 150Hz–12kHz`, and `Track_05_Master_Mix_Bus` `1.5:1 Glue Compressor`).
-   - **`125–145 BPM` (Shoor & Fazaia)**: High-energy chest-slap surge with sub-harmonic `Hu-Ssein` Dhikr drone.
-   - **Minbar Na'i Phonetics & `Sudden Drop Rule` (`قاعدة الكسر في النعي المنبري` — Section 14 of `references/atwar_maqamat_and_poetry_guide.md`)**:
-     - Use guttural constriction on `ع، ح، هـ` for natural sorrowful rasp, nasal-chest sustain on `م، ن` in rhymes, and `>6-beat` microtonal vowel elongation (`Tarjee'`) on grief pivot words (`طاح، حسين، مظلوم`).
-     - Maintain single-breath hemistich delivery (`>15 seconds` via diaphragmatic control), decelerate suddenly on visual tragedy nouns (`العطش، السهم، الخيل، الخيام، الرمضاء`), and apply the **Sudden Drop Rule (`قاعدة الكسر`)** on the final word of the verse by dropping immediately from the highest `Jawab` peak back to the low `Qarar` tonic.
-
-4. **البرومبت القياسي المعتمد لخانة `Sound` (مركّز من 40 كلمة ومقفل اللهجة والمقام الواحد — Module 36)**:
-   - **قواعد صارمة لحقل `Sound` في Google Flow Music (`Lyria`)**:
-     1. **40–50 Words Max**: لا تتجاوز 40 إلى 50 كلمة من الواصفات الصوتية الإنجليزية الصرفة والواضحة.
-     2. **Explicit Dialect in Line 1**: اذكر اللهجة صراحةً في أول سطر (`authentic Iraqi and Bahrani colloquial dialect` أو `authentic Iraqi colloquial dialect`).
-     3. **Single Maqam Lock (`Rule B1`)**: ثبّت مقاماً أساسياً واحداً فقط في التوليد التأسيسي (`Maqam Saba` أو `Maqam Bayati` أو `Maqam Hijaz`) لضمان توازن اللحن واستقراره.
-     4. **Zero Transliterated Arabic & Zero Raw EQ Numbers in `Sound`**: يُمنع وضع الكلمات المعرّبة (`maddat sawtiya`, `taqatee'`, `bahha`, `tarjee'`) أو أرقام المعادل الصوتي (`+4.5dB at 2.5kHz`, `HPF at 85Hz`) أو كلمة `tenor` داخل حقل `Sound`؛ لأن مكان الفلاتر التقنية هو أداة `audio__apply_effect` بعد التوليد.
-   - **النموذج المعتمد للدمج العراقي-البحراني الحزين والفخم (`58 BPM` — Master Standard)**:
-     ```text
-     Traditional Iraqi and Bahrani Hussaini Latmiya, Thaqeel Faizi and Nazla style, Maqam Saba, 58 BPM, authentic Iraqi and Bahrani colloquial dialect, commanding deep resonant Baritone lead vocal, powerful high chest-voice climbs, natural vocal rasp, emotional weep cracks, heavy 55Hz bare-palm chest thud, 285ms analog tape echo, 3.2s Husseiniya hall reverb, wide unison male Raddada choir response, Pure Acapella No Instruments
-     ```
-
-4.5. **موسوعة الطبقات والخامات الصوتية الجوهرية السبعة (ببرومتات قياسية مركّزة من 40 كلمة وبدون `tenor` — `7 Essential Vocal Timbres`)**:
-   - **CRITICAL RULE (Zero `tenor` & Zero Arabic Transliteration)**: Never use `tenor` (which makes the voice soft/thin) or transliterated Arabic terms in `Sound`. Use these concise, pure-English vocal descriptors:
-     1. **الباريتون الجوهري الفخم ذو الجوابات الصاعدة (`Commanding Deep Resonant Baritone + Powerful High Chest-Voice Climbs` — دمج باسم الكربلائي + عمار الكناني + صالح الدرازي)**:
-        `commanding deep resonant Baritone lead vocal, powerful high chest-voice climbs, natural vocal rasp, emotional weep cracks`
-     2. **الباريتون المنبري الرخيم ذو البحة الشجية (`Deep Velvet Minbari Baritone` — الطويرجاوي، حمزة الزغير، العلوي، مرتضى حرب)**:
-        `deep velvet mournful Baritone lead vocal, heavy chest resonance, raw vocal rasp, tearful weeping cracks, descending mournful cadences`
-     3. **الباص-باريتون الملحمي الحماسي المجلجل (`Thunderous Heroic Bass-Baritone` — قحطان البديري، حيدر البياتي، مهدي رسولي)**:
-        `thunderous heroic Bass-Baritone lead vocal, massive deep chest authority, commanding epic projection, powerful high chest-voice leaps`
-     4. **الحنجرة البحرانية التوشيحية العريضة (`Wide Majestic Bahrani Baritone` — الشيخ حسين الأكرف، السيد عصام الهاشمي، الدرازي)**:
-        `wide majestic Bahrani Baritone lead vocal, warm velvety chest resonance, trembling microtonal vowel elongations, soaring high chest-voice climaxes`
-     5. **الحنجرة الفراتية الشجية المخنوقة بالعَبرة (`Weeping Euphrates Baritone` — مدين العياشي، عباس عجيد العامري، داخل حسن)**:
-        `raw grieving southern Iraqi Baritone lead vocal, exhausted tear-choked chest timbre, natural weep cracks, prolonged high mournful vowel cries`
-     6. **الصوت الصدري الجبلي الصاعد (`High-Power Full-Chest Belted Baritone` — السيد سلام الحسيني، مسلم الوائلي، الملا جليل الكربلائي)**:
-        `high-power full-chest belted Baritone lead vocal, intense gritty upper-register projection, emotional weep cracks, commanding congregation delivery`
-     7. **الكورال الحسيني المهيب (`Wide Unison Male Raddada Choir`)**:
-        `wide unison male Raddada choir response, deep masculine congregation chanting`
-
-5. **المدارس التلحينية والعروضية الثلاث والعشرون الأسطورية (`23 Legendary Compositional Archetypes` — see Sections 10, 11 & 12 of `references/atwar_maqamat_and_poetry_guide.md`)**:
-   - **IMPORTANT STAGE-LOCK RULE**: When applying any of the multi-movement schools below (`أين أنت يا جابر`, `الذكريات`, `أوتار التكبير`, `صلاة الليل`, `نوح الراعبية`, `مشهد حلم`), generate **Stage 1 (`Root Track — 12 lines`)** using a **single uniform meter (`Iso-Syllabic Lock`) and a single primary Maqam**, then introduce the second movement (internal Gireez triplet, Nazla shift, or Fusha/Colloquial alternation) in **Stage 2 (`Extend`)** via `Producer Chat`!
-   - **1–3 (`وجود لوجودي` 1428 AH)**: `أين أنت يا جابر` (Karbalai Musabba' with Stage-2 Gireez), `أم البنين` (Bahrani Fayzi `AAAB` + `58 BPM` heavy Latm), `وجود لوجودي` (Alternating Muwashah closing every stanza with `وهو الماضي والآتي` — never mix Fusha and Colloquial in the same Stage-1 generation).
-   - **4–10 (`قل ما تشاء` 1432 AH)**: `حلم مذبوح` (3-Act escalation on `-يتي`), `أقول اسمك` (`AAAAA` + couplet lock `ملاذ وتنتهي يمك جراحاتي`), `علامات الحزن` (double-word echo cadence `يا يوم يا يوم` / `يعباس يعباس`), `ألم وعتاب` (internal double-rhyme + question lock `على الچفين اسألك وين دليني`), `يا حبيبي يا حسين` (compact Fusha `فاعلاتن فاعلاتن`), `يا أكبر جبل` (youth farewell triplets on `-رك`), `لسان الوحي` (classical `Bahr Al-Wafir`).
-   - **11–14 (Sayed Salam Al-Husseini)**: `الذكريات` (`خويه حسين` antiphony), `مو انه يا حزن` (3x anaphora `ما نسيته`), `سلام وعن بعد` (farewell escalation), `بندرية عرس بارض الطفوف` (`6/8` Bandari).
-   - **15–18 (Basim Al-Karbalaei 1447–1448 AH)**: `إن شاء الله` (dramatic irony + suspended calls `أحوالكم / أخباركم`), `شاب وطفل` (father-son duet + `يا حسين` Waqf), `أوتار التكبير` (short triplets + `آه عطشان والماي إشيجيبه`), `بعيونك حزن ينشاف` (narrative + praise + return).
-   - **19–23 (Bahrani, Euphrates & Resistance Masters)**: `نوح الراعبية` (Sayed Essam Al-Hashemi), `صلاة الليل` (Sheikh Hussain Al-Akraf), `يمه اكعديلي` (Madeen Al-Ayashi Euphrates `AAAA` + mid-paused `ABCB`), `مشهد حلم` (Abbas Ajeed Al-Amiri), `في درب فاطمة` (Hussain Khairuddin).
-
-### Workflow 2: Regional and Form-Specific Audio Production Prompts (40-Word Standard)
-
-Select the concise 40–45 word `Sound` prompt from `references/atwar_maqamat_and_poetry_guide.md` (Module 36) matching the requested form:
-
-1. **الدمج العراقي-البحراني الثقيل والفخم (`58 BPM — Maqam Saba`)**:
-   `Traditional Iraqi and Bahrani Hussaini Latmiya, Thaqeel Faizi and Nazla style, Maqam Saba, 58 BPM, authentic Iraqi and Bahrani colloquial dialect, commanding deep resonant Baritone lead vocal, powerful high chest-voice climbs, natural vocal rasp, emotional weep cracks, heavy 55Hz bare-palm chest thud, 285ms analog tape echo, 3.2s Husseiniya hall reverb, wide unison male Raddada choir response, Pure Acapella No Instruments`
-2. **اللطمية العراقية الثقيلة / النزلة الكربلائية (`60 BPM — Maqam Bayati`)**:
-   `Traditional Iraqi Hussaini Latmiya, heavy Karbalai Nazla style, Maqam Bayati, 60 BPM, authentic Iraqi colloquial dialect, commanding deep resonant Baritone lead vocal, powerful high chest-voice climbs, natural vocal rasp, emotional weep cracks, heavy 55Hz bare-palm chest thud, 285ms analog tape echo, 3.2s Husseiniya hall reverb, wide unison male Raddada choir response, Pure Acapella No Instruments`
-3. **الموشح البحراني الرزين والطور الفائزي (`66 BPM — Maqam Hijaz`)**:
-   `Traditional Bahrani Hussaini Tawshih and Faizi Latmiya, Maqam Hijaz, 66 BPM, authentic Bahrani colloquial dialect, wide majestic Baritone lead vocal, trembling microtonal vowel elongations, powerful high chest-voice climbs, synchronous 55Hz bare-palm chest thud, 260ms analog tape delay, 2.8s Matam hall reverb, wide unison male Raddada choir response, Pure Acapella No Instruments`
-4. **بحر النصاري والنعي اللطمي الفراتي (`56 BPM — Maqam Lami`)**:
-   `Traditional Southern Iraqi Euphrates Hussaini Latmiya, Bahr Al-Nassari style, Maqam Lami, 56 BPM, authentic Southern Iraqi colloquial dialect, raw grieving Baritone lead vocal, natural weep cracks, prolonged mournful vowel cries, slow heavy 55Hz bare-palm chest thud, 285ms analog tape echo, 3.2s Husseiniya hall reverb, unison male Raddada response, Pure Acapella No Instruments`
-5. **الگعدية العراقية والمتوسط السريع (`74 BPM — Maqam Kurd`)**:
-   `Traditional Iraqi Hussaini Keadia Latmiya, Maqam Kurd, 74 BPM, authentic Iraqi colloquial dialect, high-power full-chest belted Baritone lead vocal, natural vocal rasp, emotional weep cracks, rhythmic 55Hz bare-palm chest-slap pulse, 250ms analog slapback echo, 2.5s Husseiniya hall reverb, energetic unison male Raddada choir response, Pure Acapella No Instruments`
-6. **الزنجيل الموكبي العراقي/البحراني (`80 BPM — Maqam Hijaz`)**:
-   `Traditional Hussaini Zanjeel procession chant, Maqam Hijaz, 80 BPM, authentic Iraqi and Bahrani colloquial dialect, thunderous heroic Bass-Baritone lead vocal, commanding epic chest projection, deep acoustic Dammam drum strikes locked with metallic shoulder Zanjeel chains and brass Tasa cymbals, 1.2s open-air street slapback echo, massive unison male Raddada response, No Melodic Instruments`
-7. **الشور الحسيني الحماسي (`132 BPM — Maqam Kurd`)**:
-   `Traditional Iraqi Karbalaei Shoor Latmiya, Maqam Kurd, 132 BPM, authentic Iraqi colloquial dialect, impassioned raspy Baritone lead vocal, powerful high chest-voice cries, rapid driving 55Hz bare-palm chest slaps, continuous deep male congregation rhythmic Hussain chant drone, 1.5s tight Husseiniya hall reverb, Pure Acapella No Instruments`
-8. **النعي المنبري والموال الحر بلا إيقاع (`0 BPM Rubato — Maqam Saba`)**:
-   `Traditional Iraqi and Bahrani Minbar Na'i vocal lament, strict Rubato free tempo with zero rhythmic grid, Maqam Saba, authentic Iraqi and Bahrani colloquial dialect, deep velvet mournful Baritone solo voice, raw weeping cracks, prolonged microtonal vowel cries, 450ms analog tape echo, 3.8s large Husseiniya cathedral reverb, Pure Solo Acapella No Percussion No Instruments`
-
-### Workflow 3: Audio Montage, 5-Track DAW Processing, Phonetic Compilation, Poem Linting & Automated Unit Testing
-
-1. **Direct In-Sandbox 5-Track Audio Montage (`SOS Filters` + `-28 dBFS` RMS Sidechain Ducking + `-14.0 LUFS` & `-1.0 dBTP` Mastering)**: Run `scripts/hussaini_dsp_montage.py`:
+### Workflow 3: 5-Track SOS/RMS/LUFS Audio Montage & Automated CI Testing
 ```bash
 python3 scripts/hussaini_dsp_montage.py \
-  --input "<input_wav_path>" \
-  --output "<output_wav_path>" \
+  --input "<input_wav_path>" --output "<output_wav_path>" \
   --mode "<latm|zanjeel_iraqi|zanjeel_bahrani|shoor|bandari|mawal|nai>" \
-  --bpm <bpm_value> \
-  --maqam-drone "<saba|bayati|hijaz|lami|kurd|rast>" \
-  [--samples-dir "<optional_real_samples_folder>"] \
-  [--offset-ms <optional_manual_onset_ms>] \
-  [--swing <0.0_to_0.35_bandari_swing>] \
-  [--session-log "<optional_jsonl_path>"]
-```
-2. **Programmatic & CLI Phonetic Compilation, Pre-Generation Poem Linter, Dialect Detection & JSON Pre-Conditioning API (`V45.0`)**:
-   - **Direct CLI Lyrics Compilation (`--compile-lyrics`) & Pre-Generation Poem Linting (`--lint-poem`)**:
-     ```bash
-     python3 scripts/hussaini_dsp_montage.py --compile-lyrics "ياحسين يا خويه شلون قلب وقلبي وقلبك وچبد ودمع وعينٍ تسيل" [--enforce-iraqi-dhaa] [--no-tatweel]
-     python3 scripts/hussaini_dsp_montage.py --lint-poem "ياحسين يا خويه شلون قلب وقلبي .. عينٍ تسيل بدمعي"
-     ```
-   - **Python API**: Use the helper functions in `scripts/hussaini_dsp_montage.py` to preprocess lyrics and build Flow Music payloads programmatically:
-     - `de_cliticize_and_separate_words(text, use_tatweel=True)` (**Module 41** — splits attached vocatives/prepositions/clitics such as `ياحسين ⟵ يَا حْسَيْنْ`, `ويبوفاضل ⟵ وَ يَا بُو فَاضِلْ`, `عالباب ⟵ عَلَى البَابْ`, `شصار ⟵ إِشْ صَارْ`).
-     - `resolve_dialectal_and_prosodic_tanween(text, dialect)` (**Module 40** — converts mid-line colloquial Tanween `عينٍ تسيل ⟵ عَيْنِنْ تِسِيلْ` safely without corrupting vocalized verbs `نارٍ يَصْلَى` or vocatives `دمعٍ ياحسين`, Fusha prosodic Tanween `جِسْماً عَلَى الثَّرَى ⟵ جِسْمَنْ عَلَى الثَّرَى`, converts final Fathah Tanween `ظَامِئاً ⟵ ظَامِئَا`, and enforces end-of-phrase Sukun `ْ` while exempting Alif Maqsura `ى`).
-     - `detect_and_shape_dialect(text, enforce_iraqi_dhaa=False, use_tatweel=True)` (**Module 43** — word-boundary morphological dialect shaper for `bahrani`, `iraqi`, and hybrid `iraqi_bahrani`; shapes `قلب/قلبي/قلبك` without corrupting derived words like `الجمرة` or `المقلوب`).
-     - `count_arabic_syllables(hemistich)`, `validate_stage1_iso_syllabic_lock(stanzas)`, `lint_poem(text, stage=1)`, & `build_multi_tor_melodic_bridge(from_maqam, to_maqam, from_tor, to_tor)` (**Modules 34 & 38**).
-     - `build_flowmusic_json_preconditioning(dialect, maqam, bpm, reference_clip_id=None)` & `log_generation_session(...)` (**Module 39**).
-3. **Automated Unit Testing with Coverage & Pylint Verification (`CI/CD Pipeline`)**:
-```bash
-pytest -v --cov=scripts tests/test_hussaini_modules.py
+  --bpm <bpm_value> --maqam-drone "<saba|bayati|hijaz|lami|kurd|rast>" \
+  [--samples-dir "<folder>"] [--offset-ms <ms>] [--swing <0.0_to_0.35>] [--session-log "<json>"]
+
+pytest -v --cov=scripts --cov-fail-under=70 tests/test_hussaini_modules.py
 pylint scripts/hussaini_dsp_montage.py tests/test_hussaini_modules.py
 ```
-4. **Post-Generation DSP Mastering in Google Flow Music (`audio__apply_effect` — Module 37)**:
-   - Never put raw EQ/filter numbers (`+4.5dB at 2.5kHz`, `HPF at 85Hz`) inside the initial `Sound` box. Instead, apply them **after generation** via `Producer Chat`:
-     `Apply audio__apply_effect on the generated clip: HighPass filter at 85Hz, AdvancedEqualizer (cut 450Hz by -2.5dB, boost mid 1200Hz by +1.5dB, boost high-mid presence 2500Hz by +4.5dB), Compressor (ratio 3:1, threshold -12dB), Reverb (room_size 0.55, wet mix 0.18), and Limiter at -1.0dB.`
 
-## Gotchas
+## Critical Gotchas
 
-- **Google Flow Music Architecture (`New session` vs. `Spaces`)**:
-  - **`New session` (`+ New session` / جلسة جديدة — The Direct Generative Audio Studio)**: Always use **`New session`** for generating, editing, remixing, or extending poems, Latmiyat, Mawals, and audio clips (`Lyrics` box + `Sound` prompt + `AI Producer` chat + `Remix/Extend` + `MP3/WAV/Stems` export).
-  - **`Spaces` (`/library/spaces` — المساحات البرمجية والتفاعلية)**: Never use `Spaces` for direct song/Latmiya audio generation. Use `Spaces` **only** when the user explicitly wants to build a custom interactive web tool or mini-application (`App/Tool` via Vibe-coding inside the browser).
-- **The 5 Golden Engineering Locks for Dialect, Melodic Balance, and Vocal Majesty in Flow Music**:
-  1. **Concise 40-Word `Sound` Prompt with Explicit Dialect & Single Maqam Lock**:
-     - Keep `Sound` between **40 and 50 pure English words**.
-     - Always state `authentic Iraqi and Bahrani colloquial dialect` (or `authentic Iraqi colloquial dialect`) in the first line.
-     - Lock **ONE single Maqam** (`Maqam Saba` or `Maqam Bayati`) in Stage 1 (`Rule B1`) — never list 3 Maqamat at once.
-     - Never include transliterated Arabic terms (`maddat sawtiya`, `taqatee'`, `bahha`, `tarjee'`), raw EQ numbers (`+4.5dB at 2.5kHz`, `HPF at 85Hz`), or the word `tenor` inside `Sound`.
-  2. **Strict Iso-Syllabic Balance in Stage 1 (`قفل تساوي التفعيلات الصارم في المرحلة الأولى`)**:
-     - Format Stage 1 (`Root Track`) as **12 lines max (3 stanzas of 4 lines each)**.
-     - All 12 lines (Mustahal + Stanzas + 4th-line anchor refrain) MUST share the **exact same prosodic meter and syllable count per hemistich**. Never mix long (14-syllable) and short (7-syllable) lines in Stage 1; introduce rhythmic/Gireez shifts only in Stage 2 (`Extend`).
-  3. **Dialect Commitment Lock & Phonetic Colloquial Orthography (`قفل اللهجة الإملائي والوقف بالسكون`)**:
-     - Never mix Fusha and Colloquial lines in Stage 1.
-     - Write colloquial words phonetically (`شْلُونْ، چَبِدْ، گَلِبْ، عْيُونِچْ، بْچِيتْ، مْحَنِّيَه، وْگَفِتْ، يِمَّه، خُويَه، بْلَيَّاكْ، مَا ظَلْ`) and place a mandatory **Sukun (`ْ`)** or long open vowel (`ا، و، ي، ه`) at the end of words and hemistichs (zero Fusha case endings `ُ / ِ` or Tanween `ٌ / ٍ`).
-  4. **Dynamic Poem-Specific Opening (`منع كليشيه آآآه يَا حُسَيْنَا .. آآآه يَا مَظْلُومْ`)**:
-     - Never prepend generic repeated clichés like `آآآه يَا حُسَيْنَا .. آآآه يَا مَظْلُومْ` to poems. Start directly with the poem's own first hemistich containing natural long vowels (`يَا طَارِشْ الظَّعَنْ بْاللّٰه ..`, `بْاللّٰه اسْتَعِدِّي يَمّ البَنِينْ ..`).
-  5. **Two-Step JSON Session Pre-Conditioning Protocol + 100% Vocal Timbre Lock in `Producer Chat` (`Module 39` — Section 17 of `references/atwar_maqamat_and_poetry_guide.md`)**:
-     - **Step 1 (JSON Session Pre-Conditioning before entering any lyrics)**: At the start of every `New session` in `https://www.flowmusic.app/`, send the **Hussaini Production Studio OS V45.0 JSON Constitution** (generated via `build_flowmusic_json_preconditioning` or copied from Section 17) in `Producer Chat` with the instruction: `Read and lock the following JSON production constitution in your active session memory. DO NOT call lyrics__register or audio__create_song yet—simply acknowledge that you have locked these rules and are ready to receive the Arabic poem in Step 2.`
-     - **Step 2 (Register Lyrics & Create Song with Golden Reference Clip `26bbb3d2-65f0-42c3-a167-37127631ef0a` following the locked V45.0 JSON Constitution)**: Only after `Producer Chat` acknowledges the V45.0 JSON constitution, send Step 2:
-       `Now execute Step 2 following the locked V45.0 JSON constitution: Register the lyrics using lyrics__register and create the track using audio__create_song referencing clip ID "26bbb3d2-65f0-42c3-a167-37127631ef0a" at 58 BPM with this sound prompt: "Traditional Iraqi and Bahrani Hussaini Latmiya, Thaqeel Faizi and Nazla style, Maqam Saba, 58 BPM, authentic Iraqi and Bahrani colloquial dialect, commanding deep resonant Baritone lead vocal, powerful high chest-voice climbs, natural vocal rasp, emotional weep cracks, heavy 55Hz bare-palm chest thud, 285ms analog tape echo, 3.2s Husseiniya hall reverb, wide unison male Raddada choir response, Pure Acapella No Instruments"`
-- **Master Reference Clips in Flow Music (Acoustic Building Blocks)**:
-  - `["34d27fb5-9fdc-4923-a260-9d14edba6313"]` (`عهد الدماء - نسخة ثانية`, parent of stem `785f8230-757e-49b1-a093-4883888cd1ef`)
-  - `["26bbb3d2-65f0-42c3-a167-37127631ef0a"]` (`عهد الوفا V33.0 Grand Master`)
-  - `["c5c2291b-5261-4358-a826-62df0f06a972"]` (`عهد الصدور`)
-  - `["38e14d1c-f452-41b5-af3d-589a526961e8"]` (`يا حسين - الدمعة ماتروح`)
-  - `["94098363-76cc-4bea-87c2-4bd0b1b4e649"]` (`عتاب الضعن`)
-  - `["2ed9b98c-dac9-427d-809f-d1b202f82bb5"]` (`غريبه وحايره - بحر النصاري V36.0` — `seed: 562968419`, zero bracket tags in lyrics, 4-line alternating Mustahal `ABABABA`)
-- **Zero English Characters & Zero Stage Directions in Parentheses inside `Lyrics`**: Keep `Lyrics` 100% pure Arabic (`[المُسْتَهَلّ]`, `[المَقْطَع الأَوَّل]`). Never put structural labels like `(الرابط والقفلة)` inside parentheses `(...)` because `Lyria` sings anything inside `(...)` as a choir response; use square brackets `[...]` or blank lines for structure, and reserve `(...)` strictly for actual choral words like `(مَوْلَايَ يَا حُسَيْنْ)`.
-- **Never Put `--no <instruments>` Inside Flow Music's Positive `Sound` Box**: State only positive acoustic cues (`Pure Acapella No Instruments`).
+- **`New session` vs. `Spaces` in Flow Music**: Always use **`New session`** for generating, extending, or remixing audio tracks. Use **`Spaces`** only for interactive web mini-apps (`Vibe-coding`).
+- **100% Pure Arabic in `Lyrics`**: Use `[المُسْتَهَلّ]`, `[المَقْطَع الأَوَّل]` for headers, ` .. ` for breath pause, and reserve `(...)` **exclusively** for sung choir responses like `(مَوْلَايَ يَا حُسَيْنْ)`.
