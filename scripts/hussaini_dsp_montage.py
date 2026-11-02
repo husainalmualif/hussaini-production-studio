@@ -555,6 +555,35 @@ def lint_poem(text, stage=1):
     }
 
 
+def split_long_lines_for_steady_pacing(text, max_words_per_line=5):
+    """Module 44: Split long narrative lines (>max_words_per_line) vertically into short 3-4 word lines.
+
+    Prevents Flow Music / Lyria from rushing 14-16 syllable lines into a fast, bouncy song-like cadence
+    after 1:27 by allocating a full musical bar (3.5-4s) to each short hemistich.
+    """
+    out_lines = []
+    for line in text.splitlines():
+        stripped = line.strip()
+        if not stripped or stripped.startswith("["):
+            out_lines.append(line)
+            continue
+        words_only = [w for w in stripped.split() if w != ".." and not w.startswith("(")]
+        if len(words_only) > max_words_per_line:
+            if ".." in stripped:
+                parts = [p.strip() for p in stripped.split("..") if p.strip()]
+                for idx, part in enumerate(parts):
+                    suffix = " .." if idx < len(parts) - 1 else ""
+                    out_lines.append(f"{part}{suffix}")
+                continue
+            tokens = stripped.split()
+            mid = len(tokens) // 2
+            out_lines.append(" ".join(tokens[:mid]) + " ..")
+            out_lines.append(" ".join(tokens[mid:]))
+        else:
+            out_lines.append(stripped)
+    return "\n".join(out_lines)
+
+
 def build_multi_tor_melodic_bridge(from_maqam, to_maqam, from_tor="thaqeel", to_tor="shoor"):
     """Section 15 & Module 38: Validate Common Jins and build Stage-2 Extend bridge prompt."""
     f_key = from_maqam.lower()
