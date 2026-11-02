@@ -185,11 +185,8 @@ System Context Injection (Hussaini Production Studio OS V45.0): Read and lock th
     "word_count_limit": "Strictly 40 to 50 pure English words",
     "master_iraqi_bahrani_58bpm_saba": "Traditional Iraqi and Bahrani Hussaini Latmiya, Thaqeel Faizi and Nazla style, Maqam Saba, 58 BPM, authentic Iraqi and Bahrani colloquial dialect, commanding deep resonant Baritone lead vocal, powerful high chest-voice climbs, natural vocal rasp, emotional weep cracks, heavy 55Hz bare-palm chest thud, 285ms analog tape echo, 3.2s Husseiniya hall reverb, wide unison male Raddada choir response, Pure Acapella No Instruments"
   },
-  "5_golden_reference_clip_ids": {
-    "iraqi_bahrani_jawhari_baritone_master": "26bbb3d2-65f0-42c3-a167-37127631ef0a",
-    "heavy_karbalai_latm_master": "34d27fb5-9fdc-4923-a260-9d14edba6313",
-    "nassari_saba_master": "2ed9b98c-dac9-427d-809f-d1b202f82bb5"
-  },
+  "5_optional_reference_clip_id": null,
+  "5_note": "Flow Music clip UUIDs (<OPTIONAL_USER_CLIP_UUID>) are private to the specific user account that created them; keep null by default for cross-account portability and Rule 5 (Anti-Cloning) compliance.",
   "6_post_generation_dsp_chain_via_apply_effect": {
     "tool": "audio__apply_effect",
     "high_pass_filter_hz": 85,
@@ -205,10 +202,10 @@ System Context Injection (Hussaini Production Studio OS V45.0): Read and lock th
 }
 ```
 
-2. **الخطوة الثانية (إرسال القصيدة وأمر التوليد بعد تأكيد الـ `Producer`):**
+2. **الخطوة الثانية (إرسال القصيدة وأمر التوليد بعد تأكيد الـ `Producer` — مع ملاحظة أن تمرير `<OPTIONAL_USER_CLIP_UUID>` اختياري ويخص المقاطع الموجودة داخل حسابك الشخصي فقط):**
 ```text
 Now execute Step 2 following the locked V45.0 JSON constitution:
-Register the lyrics using lyrics__register and create the track using audio__create_song referencing clip ID "26bbb3d2-65f0-42c3-a167-37127631ef0a" at 58 BPM with this sound prompt:
+Register the lyrics using lyrics__register and create the track using audio__create_song at 58 BPM (optionally referencing your own workspace clip ID "<OPTIONAL_USER_CLIP_UUID>" if desired) with this sound prompt:
 "Traditional Iraqi and Bahrani Hussaini Latmiya, Thaqeel Faizi and Nazla style, Maqam Saba, 58 BPM, authentic Iraqi and Bahrani colloquial dialect, commanding deep resonant Baritone lead vocal, powerful high chest-voice climbs, natural vocal rasp, emotional weep cracks, heavy 55Hz bare-palm chest thud, 285ms analog tape echo, 3.2s Husseiniya hall reverb, wide unison male Raddada choir response, Pure Acapella No Instruments"
 ```
 3. **الخطوة التكميلية بعد التوليد (تطبيق المعادل الصوتي والفلاتر عبر `audio__apply_effect`):**
@@ -294,15 +291,17 @@ from scripts.hussaini_dsp_montage import (
 clean_text = de_cliticize_and_separate_words("ياحسين ويبوفاضل عالباب شصار بغربتي", use_tatweel=False)
 # النتيجة: "يَا حْسَيْنْ وَ يَا بُو فَاضِلْ عَلَى البَابْ إِشْ صَارْ بِ غُرْبِتِي"
 
-# 2) التعرف التلقائي على اللهجة (البحرانية / العراقية / الهجينة) بحدود الكلمة الصرفية (Modules 40 & 43):
-bahrani_res = detect_and_shape_dialect("يا بويي ونتي بقلبي وقلب وصبر عيني")
-# bahrani_res["detected_dialect"] -> "bahrani" (تشكيل گَلْبِي / گَلِبْ / صَبِرْ + الترجيع الفايزي في الكلمة الثالثة)
+# 2) التعرف التلقائي على اللهجة (البحرانية / العراقية / التعادل الحيادي) وتفكيك البادئات (ال، و، ب، ك، ل) (Modules 40 & 43):
+bahrani_res = detect_and_shape_dialect("يا بويي ونتي بقلبي وقلب والصبر والجمرة ويبوفاضل")
+# bahrani_res["detected_dialect"] -> "bahrani" (تشكيل گَلْبِي / گَلِبْ / وَ الصَبِرْ / وَ الجَمْرَه + بقاء الضاد فَاضِلْ)
 
 iraqi_res = detect_and_shape_dialect(
-    "يا بويه شلون دلالي بقلب وقلبي وقلبك والجمرةيبوفاضل",
-    enforce_iraqi_dhaa=True,
+    "يا بويه شلون دلالي بقلب وقلبي وقلبك والصبر وكالجمر والجمرة والمقلوب ويبوفاضل بضلوعي"
 )
-# iraqi_res["detected_dialect"] -> "iraqi" (تشكيل گَلُبْ / گَلْبِي / وَ گَلْبَكْ + حماية "الجمرة" من التحريف + ظاء عراقية مفخمة)
+# iraqi_res["detected_dialect"] -> "iraqi" (تشكيل گَلُبْ / گَلْبِي / وَ گَلْبَكْ / وَ الصَبُرْ / كَ الجَمُرْ / وَ الجَمْرَه + حماية "المقلوب" + ظاء عراقية تلقائية فَاظِلْ / ظْلُوعِي)
+
+neutral_res = detect_and_shape_dialect("ياحسين قلب وقلبي والصبر والجمرة ويبوفاضل بضلوعي")
+# neutral_res["detected_dialect"] -> "iraqi_bahrani" (تشكيل حيادي 100%: قَلْبْ / قَلْبِي / وَ الصَبْرْ / وَ الجَمْرَه / فَاضِلْ)
 
 # 3) عدّ المقاطع الصوتية العروضية (CV/CVV/CVC) وفحص توازن الشطرين (Module 34 & 38):
 syllables = count_arabic_syllables("يَا حْسَيْنْ بْضَمِيرِي")
@@ -342,8 +341,8 @@ python3 scripts/hussaini_dsp_montage.py --compile-lyrics "يبوفاضل يا ب
 # 3) فحص القصيدة الشامل قبل التوليد (Pre-Generation Poem Linter: يرصد الكلمات المتصلة، التنوين، وتوازن مقاطع كل شطر)
 python3 scripts/hussaini_dsp_montage.py --lint-poem "ياحسين يا خويه شلون قلب وقلبي .. عينٍ تسيل بدمعي"
 
-# 4) تشغيل اختبارات الوحدات الـ 8 شاملة الحالات السلبية واختبارات الثبات التكراري (Idempotency) مع نسبة التغطية
-pytest -v --cov=scripts tests/test_hussaini_modules.py
+# 4) تشغيل اختبارات الوحدات الشاملة (الحالات السلبية، 24-bit WAV، الأوضاع السبعة، واختبار الثبات Idempotency) مع فرض تغطية >= 70%
+pytest -v --cov=scripts --cov-fail-under=70 tests/test_hussaini_modules.py
 
 # 5) فحص جودة الكود بمعايير Pylint الصارمة (10.00/10)
 pylint scripts/hussaini_dsp_montage.py tests/test_hussaini_modules.py
@@ -375,7 +374,7 @@ pylint scripts/hussaini_dsp_montage.py tests/test_hussaini_modules.py
 ```text
 hussaini-production-studio/
 ├── VERSION                                          # مصدر الحقيقة الموحد لرقم الإصدار (V45.0 OMNI-ARCHITECT)
-├── SKILL.md                                         # ملف التعليمات الرئيسي والموجه المهيكل (Workflows 1, 1.5, 2, 3 & Gotchas — V45.0)
+├── SKILL.md                                         # الموجّه المهيكل الرشيق (~9KB Router: متى تُستدعى المهارة، القواعد الصلبة، وروابط الوحدات)
 ├── README.md                                        # دليل وتعليمات الاستخدام الشاملة (هذا الملف)
 ├── requirements.txt                                 # متطلبات مكتبات المعالجة الرقمية والفحص (numpy, scipy, pylint, pytest, pytest-cov)
 ├── references/
@@ -384,13 +383,13 @@ hussaini-production-studio/
 │   └── modules/                                     # الوحدات المرجعية المقسّمة للتحميل الانتقائي السريع والحوكمة التجريبية:
 │       ├── experimental_ab_evaluation_and_human_review.md # مصفوفة التقييم التجريبي (A/B) وبوابة المراجعة البشرية والشرعية وحفظ حقوق الشاعر
 │       ├── module_39_json_preconditioning.md        # بروتوكول التهيئة المسبقة بصيغة JSON لـ Producer Chat (مع reference_clip_id اختياري)
-│       ├── module_40_41_43_phonetics_and_dialects.md # هندسة النطق بحدود الكلمات، التنوين المحمي، والتمييز بين البحرانية والعراقية والهجينة
+│       ├── module_40_41_43_phonetics_and_dialects.md # هندسة النطق بتفكيك البادئات (ال، و، ب، ك، ل)، التنوين المحمي، والتمييز بين البحرانية والعراقية والتعادل
 │       └── module_42_gireez_hosa_and_muharram_calendar.md # فن الگريز، الهوسة العراقية (3+1)، وتقويم الليالي العشر لمحرم وصفر
 ├── scripts/
-│   └── hussaini_dsp_montage.py                      # محرك الـ DSP (SOS Filters, -28dBFS RMS Ducking, -14 LUFS)، المدقق، ومُترجم اللهجات (Pylint 10/10)
+│   └── hussaini_dsp_montage.py                      # محرك الـ DSP (8/16/24/32-bit WAV, SOS Filters, -28dBFS RMS Ducking, -14 LUFS) ومُترجم اللهجات (Pylint 10/10)
 ├── tests/
-│   └── test_hussaini_modules.py                     # اختبارات الوحدات الآلية (8 مجموعات شاملة الحالات السلبية واختبار الثبات Idempotency)
+│   └── test_hussaini_modules.py                     # اختبارات الوحدات الآلية (تغطية >85% مع شرط --cov-fail-under=70)
 └── .github/
     └── workflows/
-        └── ci.yml                                   # الفحص الآلي (GitHub Actions CI): Pylint + Pytest (--cov) + Multi-Rate/Stereo 7-Mode DSP
+        └── ci.yml                                   # الفحص الآلي (GitHub Actions CI عبر مصفوفة Python 3.10, 3.11, 3.12): Pylint + Pytest + 7-Mode DSP
 ```
