@@ -57,7 +57,10 @@
 > **لماذا قد ينحرف المقطع الثاني في `Flow Music` إلى "لحن غنائي" وكيف نمنعه؟**
 > 1. **حظر كلمات `strings` و`synth` و`Nahawand` داخل حقل `Sound` في `Flow Music`:** حتى لو كتبتَ `vocal-synth strings pad` أو `Nahawand`، فإن مُرمِّز النصوص في نموذج `Lyria` يقرأ كلمتي `strings` و`synth` كآلات موسيقية غربية ويقرأ `Nahawand` كسلّم `Minor Pop Ballad`، فينحرف اللحن تدريجياً إلى مسار غنائي راقص.
 >    - **البديل الصحيح في `Sound Prompt`:** اكتب دائماً **`sustained pharyngeal Ahaat vocal humming drone, wordless male mourning choir pad`**، واحصر المقام في **`funeral Maqam Saba Zamzam and Bayati, strictly non-musical mourning recitative, no pop melody, no melodic leaps`** (بينما تُولَّد طبقة الـ `Vocal Synth` برمجياً في المحرك المحلي [`synthesize_vocal_synth_strings_pad`](file:///C:/Users/husai/.gemini/config/skills/hussaini-production-studio/scripts/hussaini_dsp_montage.py#L852-L870)).
-> 2. **عدم تكديس أكثر من مقطعين (`16–20 شطراً كحد أقصى`) في التوليد الواحد:** إدخال 3 مقاطع طويلة (أكثر من 28 شطراً) في توليد واحد يجبر النموذج على تسريع اللفظ والقفز بالنغمات (`Bouncy Song Cadence`) لإنهاء الكلمات قبل انتهاء المدة. قسّم القصائد الطويلة إلى أجزاء من مقطعين فقط بسرعة `60–64 BPM`.
+> 2. **قاعدة الكسر العمودي للأسطر الطويلة (`Vertical Short-Line Splitting — split_long_lines_for_steady_pacing`) وصناعة «متعة الحزن»:**
+>    - **لماذا ينحرف الأداء بعد الدقيقة `1:27` إلى أسلوب سريع ومزعج، بينما يكون رائعاً وشجياً في الأسطر القصيرة (مثل `0:00–1:27` أو `1:40–النهاية`)؟**
+>      لأن نموذج `Lyria` يخصص لكل **سطر مكتوب (`\n`)** دورةً إيقاعية واحدة (`Bar ≈ 3.8s`). فإذا كان السطر قصيراً (`3–4 كلمات / 6–8 مقاطع`)، يمدّ الرادود حروف العلة بشجن وهدوء يشدّ الأذن (**متعة الحزن**). أما إذا واجه سطراً طويلاً (`8–10 كلمات / 16 مقطعاً` في سطر واحد مثل الثلاثيات السردية)، فإنه يضاعف سرعة النطق فجأة لحشر الكلمات في نفس الدورة، فيتحول إلى إلقاء سريع ومزعج!
+>    - **الحل الإلزامي:** استخدام الدالة [`split_long_lines_for_steady_pacing`](file:///C:/Users/husai/.gemini/config/skills/hussaini-production-studio/scripts/hussaini_dsp_montage.py#L558-L584) لكسر كل بيت طويل عمودياً إلى **سطرين مستقلين قصيرين (`3–4 كلمات في السطر الواحد`)** ينتهي كلٌّ منهما بوقفة `..`، مع إدراج جواب الكورال `(ذِبْحَوْا أَحْلَامِي)` أو `(آهْ يَا زَيْنَبْ)` بانتظام بعد كل رباعية قصيرة.
 
 ### أ) قالب الكليب الاستوديوي الثقيل الجنائزي المحافظ (`Funeral Heavy Studio Clip 3D — Zero Song Drift`):
 ```text
