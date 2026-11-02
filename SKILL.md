@@ -16,9 +16,9 @@ Structured router for authentic Hussaini poetic composition, microtonal Maqam/To
 
 ## Modular Reference Map (Load Only What You Need)
 
-1. **`references/modules/module_40_41_43_phonetics_and_dialects.md`**: Prefix-aware word shaping (`ال، و، ب، ك، ل`), Iraqi `كَـ ⟵ گ` & `آنَه`, safe Tanween, space-first de-cliticization (`use_tatweel=False`), Dhad/Dhaa (`ض/ظ`), neutral tie (`iraqi_bahrani`), and the **4-Movement Melodic Wave (`التيفال اللحني`)**.
-2. **`references/modules/module_44_studio_production_and_heavy_clips.md`**: 3 Studio Tiers (`Pure Acapella`, `Vocal Synth Strings & Ambient Pads`, `Heavy Studio Clips 60–75 BPM`), Double-Layered Beat (`Chest + Palm Snap + Human Sub-Bass`), Sorrowful Woodwind Bridges (`Ney, Duduk, Clarinet`), `3D Soundstage` (`Center Dry Lead` vs. `Extreme L/R Choir & Convolution Reverb`), Foley (`wind, water, horses`), and `Audio Drop`.
-3. **`references/modules/module_39_json_preconditioning.md`**: Two-Step JSON Session Pre-Conditioning for Flow Music `Producer Chat` (`reference_clip_id=None` default).
+1. **`references/modules/module_40_41_43_phonetics_and_dialects.md`**: Prefix-aware shaping (`ال، و، ب، ك، ل`), Iraqi `كَـ ⟵ گ` & `آنَه`, zero initial Sukun, safe Tanween, Dhad/Dhaa (`ض/ظ`), and **4-Movement Melodic Wave (`التيفال اللحني`)**.
+2. **`references/modules/module_44_studio_production_and_heavy_clips.md`**: 3 Studio Tiers (`Pure Acapella`, `Vocal Synth Pads`, `Heavy Studio Clips 60–75 BPM`), Double Beat (`Chest + Palm + Sub-Bass`), `3D Soundstage`, Foley, and `Audio Drop`.
+3. **`references/modules/module_39_json_preconditioning.md`**: Flow Music Studio UI (`New session`, `Compose` panel, `Remix > Extend / Trim / Replace / Split stems`) & JSON Pre-Conditioning (`reference_clip_id=None`).
 4. **`references/modules/module_42_gireez_hosa_and_muharram_calendar.md`**: The Art of Gireez (`الگريز`), Iraqi Hosa (`3+1 Arjooza`), rare heritage Atwar (`Ushshaq, Huwaizawi, Shushtari, Dashti`), and the 10 Nights of Muharram & Safar calendar.
 5. **`references/modules/experimental_ab_evaluation_and_human_review.md`**: Empirical A/B evaluation matrix (`Verified` vs. `Working Hypotheses`) and **Human, Poetic & Doctrinal Review Gate**.
 6. **`references/radoods_and_khutaba_encyclopedia.md`**: 20+ Radoods (14 schools), 8 Multi-Tor Masters, 8 Khutaba, and **7 Vocal Timbres Matrix**.
@@ -28,15 +28,14 @@ Structured router for authentic Hussaini poetic composition, microtonal Maqam/To
 ## Hard Core Rules & Cultural Firewall
 
 1. **Acoustic Purity, 3-Tier Studio & Anti-Song-Drift Lock (`Module 44`)**:
-   - **Tier 1 & 2 (`Pure Acapella & Vocal Humming` — Default)**: Lead vocal (`Baritone`), `Raddada` choir (`Jawab & Qarar`), pharyngeal `Ahaat` humming drone, `Ya Hussain` cries, `55Hz` chest thud + palm snap (`Latm`), `Dammam`, `Tasa`, `Zanjeel`. **Never** write `strings`, `synth`, or `Nahawand` in Flow Music `Sound` prompts (triggers pop-song drift); use `pharyngeal Ahaat vocal humming choir drone` and `strictly non-musical mourning recitative, no pop melody, no melodic leaps` in `Sound`, and generate `Vocal Synth` via local DSP (`--mode heavy_clip`).
-   - **Tier 3 (`Heavy Studio Clips 60–66 BPM`)**: Double-layered chest+palm beat + human `Sub-Bass` hum, `3D Soundstage` (`100% Center Dry` lead + extreme `L/R` choir/pads + `Convolution Reverb`), Foley (`wind, water, horses`), `Audio Drop`, and max **2 stanzas (`16–20 lines`) per clip**.
+   - **Tier 1 & 2 (`Pure Acapella & Vocal Humming` — Default)**: Lead vocal (`Baritone`), `Raddada` choir (`Jawab & Qarar`), pharyngeal `Ahaat` humming drone, `Ya Hussain` cries, `55Hz` chest thud + palm snap (`Latm`), `Dammam`, `Tasa`, `Zanjeel`. **Never** write `strings`, `synth`, or `Nahawand` in Flow Music `Sound` prompts (triggers pop-song drift); use `pharyngeal Ahaat vocal humming choir drone` and `strictly non-musical, no instruments` in `Sound`, and generate `Vocal Synth` via local DSP (`--mode heavy_clip`).
+   - **Tier 3 (`Heavy Studio Clips 60–66 BPM`)**: Double-layered chest+palm beat + human `Sub-Bass` hum, `3D Soundstage` (`Center Dry` lead + `L/R` choir/pads + `Convolution Reverb`), Foley (`wind, water, horses`), and `Audio Drop`.
 2. **Microtonal 24-EDO Maqam & Stage-1 Iso-Syllabic Lock (`Modules 34 & 38`)**:
    - Enforce Arabic 24-EDO quarter-tones (`Maqam Saba, Bayati, Hijaz, Lami, Kurd, Sikah, Rast`) with smooth `Qarar-to-Jawab` legato transitions.
-   - Format **Stage 1 (`Root Track`)** as **12 lines max (3 stanzas × 4 hemistichs)** sharing the **same meter and syllable count** (`validate_stage1_iso_syllabic_lock`) and resolving to the **identical 4th-line refrain**.
-   - Lock **ONE primary Maqam** in Stage 1 (`Rule B1`). Defer multi-Tor bridges (`Common Jins`) to **Stage 2 (`Extend`)**. Never mix Fusha and Colloquial in Stage 1.
-3. **Morphological Dialect Shaping, Safe Tanween & Anti-Slurring (`Modules 40, 41 & 43`)**:
-   - **Space-First Separation (`Module 41`, `use_tatweel=False` default)**: Separate attached vocatives, prepositions, and interrogatives (`ياحسين ⟵ يَا حْسَيْنْ`, `عالباب ⟵ عَلَى البَابْ`, `بغربتي ⟵ بِ غُرْبِتِي`, `شصار ⟵ إِشْ صَارْ`) and normalize Iraqi `كَـ ⟵ گ` (`اشكَـد ⟵ إِشْگَدْ`).
-   - **Safe Mid-Line Tanween & End Sukun (`Module 40`)**: Convert mid-line Tanween to `-ِنْ` (`عينٍ تسيل ⟵ عَيْنِنْ تِسِيلْ`, protecting vocalized `نارٍ يَصْلَى` and vocative `دمعٍ ياحسين`). End every hemistich with Sukun (`ْ`) or long vowel (`ظامِئاً ⟵ ظَامِئَا`, exempting `ى`).
+   - Format **Stage 1 (`Root Track`)** as **3–4 words per vertical line ending with `..`** (`split_long_lines_for_steady_pacing`) and resolving to the **identical refrain**. Defer multi-Tor bridges (`Common Jins`) to **Stage 2 (`Remix > Extend`)**.
+3. **Morphological Dialect Shaping, Zero Initial Sukun & Anti-Slurring (`Modules 40, 41 & 43`)**:
+   - **Zero Word-Initial Sukun & Space-First Separation (`Module 41`)**: Never start a word with Sukun (`ْ`); preserve Iraqi prosthetic Alif (`إِتْبَشْرِي، إِمْوَذَّرْ، إِچْفُوفْ`), write `بِأَرْضِ، شِيجِيبَه، مُدَمَّه`, separate clitics (`ياحسين ⟵ يَا حُسَيْنْ`, `عالباب ⟵ عَلَى البَابْ`), and normalize `كَـ ⟵ گ` (`اشكَـد ⟵ إِشْگَدْ`).
+   - **Safe Mid-Line Tanween & End Sukun (`Module 40`)**: Convert mid-line Tanween to `-ِنْ` (`عينٍ تسيل ⟵ عَيْنِنْ تِسِيلْ`, protecting vocalized `نارٍ يَصْلَى` and vocative `دمعٍ ياحسين`). End every hemistich with Sukun (`ْ`) or long vowel (`ظَامِئاً ⟵ ظَامِئَا`, exempting `ى`).
    - **Prefix-Aware Dialect Shaping (`Module 43`)**: Decompose prefixes (`ال، و، ب، ك، ل، وال، بال، كال، لل`) before matching stems (`الجمرة ⟵ الجَمْرَه`, protecting `المقلوب`):
      - **Iraqi (`iraqi`)**: Medial Damma (`قلب ⟵ گَلُبْ`, `والصبر ⟵ وَ الصَبُرْ`), Kasra (`چبد ⟵ چَبِدْ`, `دمع ⟵ دَمِعْ`, `صرت ⟵ صِرِتْ`, `كثر ⟵ كِثِرْ`), open `أنه ⟵ آنَه`, `قلبي ⟵ گَلْبِي`, `قلبك ⟵ گَلْبَكْ`, Iraqi Dhaa `ظ` (`ويبوفاضل ⟵ وَ يَا بُو فَاظِلْ`, `بضلوعي ⟵ بِ ظْلُوعِي`), and **Final-Word Drop (`قاعدة الكسر`)**.
      - **Bahrani (`bahrani`)**: Light Kasra (`قلب ⟵ گَلِبْ`, `والصبر ⟵ وَ الصَبِرْ`, `قلبي ⟵ گَلْبِي`, `قلبك ⟵ گَلْبِكْ`), Dhad `ض` (`فَاضِلْ`, `ضْلُوعِي`), and **3rd-Word Faizi Vibrato (`الترجيع الفايزي`)**.
@@ -52,12 +51,14 @@ python3 scripts/hussaini_dsp_montage.py --lint-poem "ياحسين يا خويه 
 python3 scripts/hussaini_dsp_montage.py --compile-lyrics "ياحسين يا خويه شلون قلب وقلبي وقلبك والصبر والجمرة ويبوفاضل بضلوعي"
 ```
 
-### Workflow 2: Two-Step JSON Pre-Conditioning & 40-Word Sound Prompt in Flow Music
-1. **Step 1 (`New session` -> `Producer Chat`)**: Generate JSON constitution via `build_flowmusic_json_preconditioning(dialect, maqam, bpm, reference_clip_id=None)` (`references/modules/module_39_json_preconditioning.md`) and lock in session memory before registering lyrics.
-2. **Step 2 (Register Pure-Arabic Lyrics & Generate with 40–50 Word Funeral `Sound` Prompt)**:
-   `Solemn Funeral Iraqi Hussaini Latmiya, mournful Maqam Saba Zamzam and Bayati on D, 62 BPM, strictly non-musical Husseiniya mourning recitative, no pop melody, no melodic leaps, dry intimate center Baritone lead vocal, slow weeping legato phrasing, double-layered chest thud and palm snap with deep human vocal sub-bass hum, wide 3D stereo pharyngeal Ahaat vocal humming choir drone, Husseiniya convolution reverb, Pure Acapella Matam No Instruments`
-3. **Step 3 (Post-Generation DSP via `audio__apply_effect`)**:
-   `Apply audio__apply_effect on the generated clip: HighPass filter at 85Hz, AdvancedEqualizer (cut 450Hz by -2.5dB, boost mid 1200Hz by +1.5dB, boost high-mid presence 2500Hz by +4.5dB), Compressor (ratio 3:1, threshold -12dB), Reverb (room_size 0.55, wet mix 0.18), and Limiter at -1.0dB.`
+### Workflow 2: Flow Music Studio UI (`New session`, `Compose` Panel, & `Remix > Extend / Trim / Replace`)
+1. **Step 1 (One New Poem = One Fresh `New session`)**: Always open a brand-new `New session` (`/session/<new-uuid>`) for every new poem (`references/modules/module_39_json_preconditioning.md`); never mix two different poems in the same session.
+2. **Step 2 (Direct `Compose` Panel — `Lyrics`, `Sound`, `Details`, `Generate`)**: Put 100% pure vocalized Arabic in `Lyrics` (zero English words, zero word-initial Sukun, 3–4 words per vertical line ending with `..`), put the Title in `Details`, and put the 40–50 word funeral prompt in `Sound`:
+   `Slow heavy Iraqi-Bahrani Husseini Latmiya, steady 58 BPM throughout, no tempo acceleration, passionate mourning solo Radood baritone with tearful inner sigh (Wannah), microtonal Maqam Saba with smooth modulation to Bayati and Lami, low-register Qarar human choral Ahaat drone, deep chest thud Latm, extended Husseiniya reverb, strictly non-musical, no instruments`
+3. **Step 3 (Extending, Trimming & In-Place Repair via `... -> Remix`)**:
+   - **`Remix > Extend`**: Mandatory for adding Stanzas 3, 4, 5 to the same voice/melody (`SETTINGS` time range + `Instruction` + `Edit Lyrics` + `Generate`).
+   - **`Remix > Trim` + `Extend`**: Cut at the exact timestamp where a track drifts (e.g. `1:27`), then `Extend` from there.
+   - **`Remix > Replace` & `Split stems`**: Fix mispronounced phrases in-place (`Replace`) or isolate vocal stems (`Split stems`).
 
 ### Workflow 3: 5-Track SOS/RMS/LUFS Audio Montage & Heavy Studio Clips (`Module 44`)
 ```bash
