@@ -9,24 +9,28 @@ on:
 
 jobs:
   validate-skill-and-dsp:
-    name: Validate Skill Docs, Pylint, Unit Tests & DSP Montage Engine
+    name: Validate Skill Docs, Pylint, Unit Tests & DSP Engine (Py ${{ matrix.python-version }})
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.11", "3.12"]
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Python 3.11
+      - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
+          python-version: ${{ matrix.python-version }}
 
       - name: Install DSP, Lint & Test dependencies from requirements.txt
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Validate Skill Structure & Single-Source VERSION Consistency
+      - name: Validate Skill Structure, Router Size (<=10.5KB) & Single-Source VERSION
         run: |
           test -f VERSION
           test -f SKILL.md
@@ -40,6 +44,9 @@ jobs:
           test -f references/modules/module_42_gireez_hosa_and_muharram_calendar.md
           test -f scripts/hussaini_dsp_montage.py
           test -f tests/test_hussaini_modules.py
+          SKILL_BYTES="$(wc -c < SKILL.md)"
+          echo "SKILL.md size: ${SKILL_BYTES} bytes"
+          test "$SKILL_BYTES" -le 10500
           VER="$(tr -d '\r\n' < VERSION)"
           grep -q "^name: hussaini-production-studio" SKILL.md
           grep -q "$VER" SKILL.md
@@ -51,13 +58,13 @@ jobs:
         run: |
           pylint --disable=C0301,R0912,R0913,R0914,R0915,R0917 scripts/hussaini_dsp_montage.py tests/test_hussaini_modules.py
 
-      - name: Run Unit, Negative-Edge & Idempotency Tests with Coverage
+      - name: Run Unit, Negative-Edge, 24-Bit WAV & Idempotency Tests (Enforce >=70% Coverage)
         run: |
-          pytest -v --cov=scripts tests/test_hussaini_modules.py
+          pytest -v --cov=scripts --cov-fail-under=70 tests/test_hussaini_modules.py
 
-      - name: Test CLI Lyrics Compiler, Poem Linter & Multi-Rate/Stereo DSP Engine
+      - name: Test CLI Lyrics Compiler, Poem Linter & Multi-Rate/Stereo/24-Bit 7-Mode DSP Engine
         run: |
-          python scripts/hussaini_dsp_montage.py --compile-lyrics "ياحسين يا خويه شلون قلب وقلبي وچبد ودمع وعينٍ تسيل"
+          python scripts/hussaini_dsp_montage.py --compile-lyrics "ياحسين يا خويه شلون قلب وقلبي والصبر والجمرة ويبوفاضل بضلوعي"
           python scripts/hussaini_dsp_montage.py --lint-poem "ياحسين يا خويه شلون قلب وقلبي"
           python -c "import numpy as np; from scipy.io import wavfile
           for sr in (8000, 16000, 44100, 48000):
