@@ -16,14 +16,14 @@ Structured router for authentic Hussaini poetic composition, microtonal Maqam/To
 
 ## Modular Reference Map (Load Only What You Need)
 
-1. **`references/modules/module_40_41_43_phonetics_and_dialects.md`**: Prefix-aware shaping (`ال، و، ب، ك، ل`), Iraqi `كَـ ⟵ گ` & `آنَه`, zero initial Sukun, safe Tanween, Dhad/Dhaa (`ض/ظ`), and **4-Movement Melodic Wave (`التيفال اللحني`)**.
-2. **`references/modules/module_44_studio_production_and_heavy_clips.md`**: 3 Studio Tiers (`Pure Acapella`, `Vocal Synth Pads`, `Heavy Studio Clips 60–75 BPM`), Double Beat (`Chest + Palm + Sub-Bass`), `3D Soundstage`, Foley, and `Audio Drop`.
-3. **`references/modules/module_39_json_preconditioning.md`**: Flow Music Studio UI (`New session`, `Compose` panel, `Remix > Extend / Trim / Replace / Split stems`) & JSON Pre-Conditioning (`reference_clip_id=None`).
-4. **`references/modules/module_42_gireez_hosa_and_muharram_calendar.md`**: The Art of Gireez (`الگريز`), Iraqi Hosa (`3+1 Arjooza`), rare heritage Atwar (`Ushshaq, Huwaizawi, Shushtari, Dashti`), and the 10 Nights of Muharram & Safar calendar.
-5. **`references/modules/experimental_ab_evaluation_and_human_review.md`**: Empirical A/B evaluation matrix (`Verified` vs. `Working Hypotheses`) and **Human, Poetic & Doctrinal Review Gate**.
-6. **`references/radoods_and_khutaba_encyclopedia.md`**: 20+ Radoods (14 schools), 8 Multi-Tor Masters, 8 Khutaba, and **7 Vocal Timbres Matrix**.
-7. **`references/atwar_maqamat_and_poetry_guide.md`**: 43-Module encyclopedia, 8-Archetype 40-Word Sound Prompts (`Module 36`), 23 Archetypes, 5-Track DAW Matrix, and `QC1–QC12`.
-8. **`scripts/hussaini_dsp_montage.py` & `tests/test_hussaini_modules.py`**: Phonetics Compiler, Linter, 8-Mode DSP Engine (`Pylint 10/10`), and `pytest` (`--cov-fail-under=70`).
+1. **`references/modules/module_40_41_43_phonetics_and_dialects.md` & `module_45_dialect_orthoepy_and_tashkeel_mastery.md`**: Prefix-aware shaping (`ال، و، ب، ك، ل`), Iraqi `كَـ ⟵ گ` & `آنَه`, demonstrative separation (`غَرِيبَه هَلْ حِچَايَه` without Sukun on feminine `ه`), zero initial Sukun, safe Tanween, Dhad/Dhaa (`ض/ظ`), and **4-Movement Melodic Wave**.
+2. **`references/modules/module_44_studio_production_and_heavy_clips.md` & `module_46_rhythm_choir_and_tor_diversity.md`**: Studio Tiers (`Pure Acapella`, `Heavy Clips`), 20 Reference Tracks, Dynamic Tor Selector, and `3D Soundstage`.
+3. **`references/modules/module_47_genre_taxonomy_latmiya_nasheed_ibtihalat_tawashih.md` & `module_48_secrets_of_legendary_latmiyat.md`**: 5-Genre Taxonomy (`Latmiya/Nasheed/Ibtihalat/Tawashih/Song`), Song-Leakage Blacklist, and **5 Pillars of Legendary Latmiyat** (`Estehlal`, `Authentic Scene`, `8-Line Nazla + 4-Line Kaser`, `Theme-to-Tor Match`, `Natural Diction`).
+4. **`references/modules/module_39_json_preconditioning.md`**: Flow Music UI (`New session`, `Compose`, `Remix > Extend / Trim / Replace / Split stems`) & JSON Pre-Conditioning (`reference_clip_id=None`).
+5. **`references/modules/module_42_gireez_hosa_and_muharram_calendar.md`**: Gireez (`الگريز`), Iraqi Hosa (`3+1 Arjooza`), heritage Atwar (`Ushshaq, Huwaizawi, Shushtari, Dashti`), and 10 Nights of Muharram & Safar.
+6. **`references/modules/experimental_ab_evaluation_and_human_review.md`**: Empirical A/B evaluation matrix and **Human, Poetic & Doctrinal Review Gate**.
+7. **`references/radoods_and_khutaba_encyclopedia.md` & `references/atwar_maqamat_and_poetry_guide.md`**: 20+ Radoods, 8 Khutaba, 7 Vocal Timbres Matrix, 48-Module encyclopedia, and `QC1–QC12`.
+8. **`scripts/hussaini_dsp_montage.py` & `tests/test_hussaini_modules.py`**: Phonetics Compiler, Genre Profiler (`--genre`), Linter, 8-Mode DSP Engine, and `pytest`.
 
 ## Hard Core Rules & Cultural Firewall
 
