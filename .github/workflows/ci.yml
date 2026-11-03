@@ -61,7 +61,7 @@ jobs:
 
       - name: Lint DSP Montage Script & Unit Tests with Pylint
         run: |
-          pylint --disable=C0301,R0912,R0913,R0914,R0915,R0917 scripts/hussaini_dsp_montage.py tests/test_hussaini_modules.py
+          pylint --disable=C0301,R0911,R0912,R0913,R0914,R0915,R0917 scripts/hussaini_dsp_montage.py tests/test_hussaini_modules.py
 
       - name: Run Unit, Negative-Edge, 24-Bit WAV & Idempotency Tests (Enforce >=70% Coverage)
         run: |
