@@ -43,7 +43,10 @@ jobs:
           test -f references/modules/module_40_41_43_phonetics_and_dialects.md
           test -f references/modules/module_42_gireez_hosa_and_muharram_calendar.md
           test -f references/modules/module_44_studio_production_and_heavy_clips.md
-          test -f references/modules/module_45_golden_larynx_and_reverse_engineering.md
+          test -f references/modules/module_45_dialect_orthoepy_and_tashkeel_mastery.md
+          test -f references/modules/module_46_rhythm_choir_and_tor_diversity.md
+          test -f references/modules/module_47_genre_taxonomy_latmiya_nasheed_ibtihalat_tawashih.md
+          test -f references/modules/module_48_secrets_of_legendary_latmiyat.md
           test -f scripts/hussaini_dsp_montage.py
           test -f tests/test_hussaini_modules.py
           SKILL_BYTES="$(wc -c < SKILL.md)"
