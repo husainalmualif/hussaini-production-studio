@@ -125,17 +125,110 @@ FUSHA_MIDLINE_TANWEEN_MAP = {
 BAHRANI_MARKERS = (
     "بويي", "خويي", "ونتي", "هالگفره", "امساعد", "عفارم",
     "إشحالك", "اشحالك", "لچن", "الراعبية", "الراعبيه", "يا بويي",
+    "إشحالش", "اشحالش", "گلبش", "عفتش", "هالمسيه", "هالمسية",
 )
 
 IRAQI_MARKERS = (
     "بويه", "خويه", "يمه", "وليدي", "دلالي", "شلون", "إش صار",
     "شصار", "شنگول", "بلياك", "ما ظل", "چلبت", "وگفت", "هسه",
+    "هالحچايه", "هالحچاية", "مشبوگه", "يبچي", "تشتاگ", "تگله",
+    "متوني", "زرگ", "تراچي", "ذيچ", "البچت", "خذتني", "أگلكم",
+    "الحريگ", "الطريگ", "هنيالي", "أخدمنك", "خدمنك", "يلحگ", "ينخونك",
 )
 
 FUSHA_MARKERS = (
     "إنما", "إِنَّمَا", "ليس", "لَيْسَ", "كأنما", "كَأَنَّمَا", "فهو", "فَهُوَ",
     "لعل", "لَعَلَّ", "حيثما", "الودجين", "القبلتين",
 )
+
+DEMONSTRATIVE_HAL_IRAQI_MAP = {
+    "هالحچايه": "هَلْ حِچَايَه",
+    "هالحچاية": "هَلْ حِچَايَه",
+    "هَالْحِچَايَه": "هَلْ حِچَايَه",
+    "هَالْحِچَايَهْ": "هَلْ حِچَايَه",
+    "هَلِحْچَايَهْ": "هَلْ حِچَايَه",
+    "هالحكايه": "هَلْ حِچَايَه",
+    "هالحكاية": "هَلْ حِچَايَه",
+    "هالتعب": "هَلْ تَعَبْ",
+    "هَالْتَّعَبْ": "هَلْ تَعَبْ",
+    "هالليله": "هَلْ لَيْلَه",
+    "هالليلة": "هَلْ لَيْلَه",
+    "هَاللَّيْلَه": "هَلْ لَيْلَه",
+    "هالشام": "هَلْ شَامْ",
+    "هَالشَّامْ": "هَلْ شَامْ",
+    "هالناس": "هَلْ نَاسْ",
+    "هَالنَّاسْ": "هَلْ نَاسْ",
+    "هالزمان": "هَلْ زَمَانْ",
+    "هَالزَّمَانْ": "هَلْ زَمَانْ",
+    "هالدار": "هَلْ دَارْ",
+    "هَالدَّارْ": "هَلْ دَارْ",
+    "هالدرب": "هَلْ دَرُبْ",
+    "هالغرب": "هَلْ غُرَبْ",
+    "هَالْغُرَبْ": "هَلْ غُرَبْ",
+    "هالگفره": "هَلْ گُفْرَه",
+    "هالگفرة": "هَلْ گُفْرَه",
+    "هالمسيه": "هَلْ مَسِيَّه",
+    "هالمسية": "هَلْ مَسِيَّه",
+}
+
+DEMONSTRATIVE_HAL_BAHRANI_MAP = {
+    "هالحچايه": "هَلْ حِچَايَه",
+    "هالحچاية": "هَلْ حِچَايَه",
+    "هَالْحِچَايَه": "هَلْ حِچَايَه",
+    "هَالْحِچَايَهْ": "هَلْ حِچَايَه",
+    "هالحكايه": "هَلْ حِكَايَه",
+    "هالحكاية": "هَلْ حِكَايَه",
+    "هالتعب": "هَلْ تَعَبْ",
+    "هَالْتَّعَبْ": "هَلْ تَعَبْ",
+    "هالليله": "هَلْ لَيْلَه",
+    "هالليلة": "هَلْ لَيْلَه",
+    "هَاللَّيْلَه": "هَلْ لَيْلَه",
+    "هالشام": "هَلْ شَامْ",
+    "هالناس": "هَلْ نَاسْ",
+    "هالزمان": "هَلْ زَمَانْ",
+    "هالدار": "هَلْ دَارْ",
+    "هالدرب": "هَلْ دَرِبْ",
+    "هالغرب": "هَلْ غُرَبْ",
+    "هالگفره": "هَلْ گُفْرَه",
+    "هالگفرة": "هَلْ گُفْرَه",
+    "هالمسيه": "هَلْ مَسِيَّه",
+    "هالمسية": "هَلْ مَسِيَّه",
+}
+
+WORD_INITIAL_SUKUN_REPAIR_MAP = {
+    "إِدْمُوعْ": "دْمُوعْ",
+    "إِجْرُوحْ": "جْرُوحْ",
+    "إِمْتُونِي": "مْتُونِي",
+    "إِسْنِينِي": "سْنِينِي",
+    "إِسْكِينَهْ": "سْكِينَه",
+    "إِسْكِينَه": "سْكِينَه",
+    "إِعْيُونَكْ": "عْيُونَكْ",
+    "إِعْيُونِكْ": "عْيُونِكْ",
+    "إِتْگِلَّهْ": "تْگِلَّه",
+    "إِتْگِلَّه": "تْگِلَّه",
+    "إِتْسُولِفْ": "تْسُولِفْ",
+    "إِهْمُومْ": "هْمُومْ",
+}
+
+DIALECTAL_DIPHTHONG_AND_VOWEL_MAP = {
+    "هَنِيَالِي": "هَنْيَالِي",
+    "غَرِيبَهْ": "غَرِيبَه",
+    "حِچَايَهْ": "حِچَايَه",
+    "خَرَابَهْ": "خَرَابَه",
+    "سَبِيَّهْ": "سَبِيَّه",
+    "عَجِيبَهْ": "عَجِيبَه",
+    "حَبِيبَهْ": "حَبِيبَه",
+    "أَمِيرَهْ": "أَمِيرَه",
+    "أَسِيرَهْ": "أَسِيرَه",
+    "عَزِيزَهْ": "عَزِيزَه",
+    "سَاعَهْ": "سَاعَه",
+    "خِدْمَهْ": "خِدْمَه",
+    "زَلْمَهْ": "زَلْمَه",
+    "مَسِيَّهْ": "مَسِيَّه",
+    "رَزِيَّهْ": "رَزِيَّه",
+    "عَطِيَّهْ": "عَطِيَّه",
+    "شِفِيَّهْ": "شِفِيَّه",
+}
 
 IRAQI_WORD_SHAPING_MAP = {
     "قلب": "گَلُبْ",
@@ -230,9 +323,115 @@ IRAQI_WORD_SHAPING_MAP = {
     "گنة": "گِلْنَه",
     "حكنه": "حَگْنَه",
     "يلحك": "يِلْحَگْ",
-    "ابجلمة": "إِبْچِلْمَه",
+    "ابجلمة": "بْچِلْمَه",
     "خدمنك": "أَخْدِمَنَّكْ",
     "اخدمنك": "أَخْدِمَنَّكْ",
+    "غريبه": "غَرِيبَه",
+    "غريبة": "غَرِيبَه",
+    "هالحچايه": "هَلْ حِچَايَه",
+    "هالحچاية": "هَلْ حِچَايَه",
+    "هالحكايه": "هَلْ حِچَايَه",
+    "هالحكاية": "هَلْ حِچَايَه",
+    "ماتت": "مَاتَتْ",
+    "مشبوگه": "مَشْبُوگَه",
+    "مشبوگة": "مَشْبُوگَه",
+    "مشبوكه": "مَشْبُوگَه",
+    "اديها": "إِدَيْهَا",
+    "إديها": "إِدَيْهَا",
+    "ايديها": "إِدَيْهَا",
+    "خرابه": "خَرَابَه",
+    "خرابة": "خَرَابَه",
+    "ابوها": "أَبُوهَا",
+    "أبوها": "أَبُوهَا",
+    "مثلي": "مِثْلِي",
+    "يبچي": "يِبْچِي",
+    "يبكي": "يِبْچِي",
+    "عليها": "عَلَيْهَا",
+    "روت": "رَوَتْ",
+    "قصه": "قِصَّه",
+    "قصة": "قِصَّه",
+    "عجيبه": "عَجِيبَه",
+    "عجيبة": "عَجِيبَه",
+    "دموع": "دْمُوعْ",
+    "زچيه": "زَچِيَّه",
+    "زچية": "زَچِيَّه",
+    "تسولف": "تْسُولِفْ",
+    "هموم": "هْمُومْ",
+    "رزيه": "رَزِيَّه",
+    "رزية": "رَزِيَّه",
+    "طفله": "طِفْلَه",
+    "طفلة": "طِفْلَه",
+    "شافت": "شَافَتْ",
+    "تحن": "تِحِنْ",
+    "تشتاگ": "تِشْتَاگْ",
+    "تشتاك": "تِشْتَاگْ",
+    "ربطوها": "رِبْطُوهَا",
+    "حيف": "حَيْفْ",
+    "تصيح": "تِصِيحْ",
+    "عمه": "عَمَّه",
+    "عمة": "عَمَّه",
+    "وين": "وَيْنْ",
+    "وينك": "وَيْنَكْ",
+    "ابويه": "أَبُويَه",
+    "أبويه": "أَبُويَه",
+    "بويه": "بُويَه",
+    "خويه": "خُويَه",
+    "يمه": "يُمَّه",
+    "گعدت": "گَعْدَتْ",
+    "تگله": "تْگِلَّه",
+    "گوم": "گُومْ",
+    "شوف": "شُوفْ",
+    "حزينه": "حَزِينَه",
+    "حزينة": "حَزِينَه",
+    "متوني": "مْتُونِي",
+    "زرگ": "زُرُگْ",
+    "زرك": "زُرُگْ",
+    "تراچي": "تَرَاچِي",
+    "جروح": "جْرُوحْ",
+    "يتيمه": "يَتِيمَه",
+    "يتيمة": "يَتِيمَه",
+    "حضنت": "حِظْنَتْ",
+    "شبگت": "شَبْگَتْ",
+    "نحره": "نَحْرَه",
+    "سكتت": "سِكْتَتْ",
+    "ذيچ": "ذِيچْ",
+    "بنية": "بْنَيَّه",
+    "بنيه": "بْنَيَّه",
+    "كفيلي": "كَفِيلِي",
+    "حيلي": "حَيْلِي",
+    "حيل": "حَيْلْ",
+    "ليل": "لَيْلْ",
+    "خذتني": "خِذَتْنِي",
+    "احتاجيت": "إِحْتَاجَيْتْ",
+    "غلاتي": "غَلَاتِي",
+    "چم": "چَمْ",
+    "ساعه": "سَاعَه",
+    "ساعة": "سَاعَه",
+    "حياتي": "حَيَاتِي",
+    "أگلكم": "أَگِلْكُمْ",
+    "اگلكم": "أَگِلْكُمْ",
+    "لوعه": "لَوْعَه",
+    "لوعة": "لَوْعَه",
+    "تچوي": "تِچْوِي",
+    "ناديت": "نَادَيْتْ",
+    "حريگ": "حَرِيگْ",
+    "طريگ": "طَرِيگْ",
+    "مدلل": "مُدَلَّلْ",
+    "عليك": "عَلَيْكْ",
+    "سكينه": "سْكِينَه",
+    "سكينة": "سْكِينَه",
+    "هنيالي": "هَنْيَالِي",
+    "خادم": "خَادِمْ",
+    "مولاي": "مَوْلَايْ",
+    "سنيني": "سْنِينِي",
+    "عيني": "عَيْنِي",
+    "عيونك": "عْيُونَكْ",
+    "شده": "شِدَّه",
+    "شدة": "شِدَّه",
+    "ينخونك": "يِنْخُونَكْ",
+    "مضيع": "مْظَيِّعْ",
+    "ندمان": "نَدْمَانْ",
+    "يلحگ": "يِلْحَگْ",
 }
 
 BAHRANI_WORD_SHAPING_MAP = {
@@ -244,6 +443,7 @@ BAHRANI_WORD_SHAPING_MAP = {
     "وقلبي": "وَ گَلْبِي",
     "قلبك": "گَلْبِكْ",
     "قلبچ": "گَلْبِچْ",
+    "گلبش": "گَلْبِشْ",
     "قلبه": "گَلْبَه",
     "صبر": "صَبِرْ",
     "وصبر": "وَ صَبِرْ",
@@ -268,6 +468,39 @@ BAHRANI_WORD_SHAPING_MAP = {
     "ونّة": "وِنَّه",
     "ضلوعي": "ضْلُوعِي",
     "فاضل": "فَاضِلْ",
+    "بويي": "بُويِي",
+    "خويي": "خُويِي",
+    "ونتي": "وَنِّتِي",
+    "امساعد": "إِمْسَاعَدْ",
+    "اشحالك": "إِشْحَالِكْ",
+    "إشحالك": "إِشْحَالِكْ",
+    "اشحالش": "إِشْحَالِشْ",
+    "إشحالش": "إِشْحَالِشْ",
+    "عفتش": "عِفْتِشْ",
+    "لچن": "لَچِنْ",
+    "الراعبية": "الرَّاعِبِيَّه",
+    "الراعبيه": "الرَّاعِبِيَّه",
+    "غريبه": "غَرِيبَه",
+    "غريبة": "غَرِيبَه",
+    "هالحچايه": "هَلْ حِچَايَه",
+    "هالحچاية": "هَلْ حِچَايَه",
+    "هالحكايه": "هَلْ حِكَايَه",
+    "هالحكاية": "هَلْ حِكَايَه",
+    "هالگفره": "هَلْ گُفْرَه",
+    "هالگفرة": "هَلْ گُفْرَه",
+    "هالمسيه": "هَلْ مَسِيَّه",
+    "هالمسية": "هَلْ مَسِيَّه",
+    "دموع": "دْمُوعْ",
+    "جروح": "جْرُوحْ",
+    "متوني": "مْتُونِي",
+    "سنيني": "سْنِينِي",
+    "عيونك": "عْيُونِكْ",
+    "وينك": "وَيْنِكْ",
+    "عليها": "عَلَيْهَا",
+    "اديها": "إِيْدَيْهَا",
+    "ايديها": "إِيْدَيْهَا",
+    "حيل": "حَيْلْ",
+    "ليل": "لَيْلْ",
 }
 
 HYBRID_WORD_SHAPING_MAP = {
@@ -312,6 +545,29 @@ def _format_tatweel(text_val, use_tatweel=False):
 def normalize_iraqi_orthographic_gaf(text):
     """Normalize Iraqi orthographic 'كَـ' (Kaf + Fatha + Tatweel) into 'گ' (Gaf)."""
     return re.sub(r"ك(?:\u064e\u0640|\u0640\u064e)", "گ", text)
+
+
+def normalize_demonstrative_hal(text, dialect="iraqi"):
+    """Normalize attached demonstrative 'هالـ / هَالْـ' into authentic Iraqi/Bahrani phonetic forms."""
+    dem_map = (
+        DEMONSTRATIVE_HAL_BAHRANI_MAP if dialect == "bahrani" else DEMONSTRATIVE_HAL_IRAQI_MAP
+    )
+    result = text
+    for raw_dem, phonetic_dem in dem_map.items():
+        result = re.sub(rf"(?<!\S){re.escape(raw_dem)}(?!\S)", phonetic_dem, result)
+    # Also fix 'يهل الغرب' / 'يَا هَلْ الغُرَبْ' liaison Kasra
+    result = result.replace("يهل الغرب", "يَا هَلِ الغُرَبْ").replace("يَا هَلْ الغُرَبْ", "يَا هَلِ الغُرَبْ")
+    return result
+
+
+def repair_word_initial_sukun_and_diphthongs(text):
+    """Repair word-initial Sukun violations (مْتُونِي -> إِمْتُونِي) and Fusha diphthongs in colloquial text."""
+    result = text
+    for bad_sukun, repaired in WORD_INITIAL_SUKUN_REPAIR_MAP.items():
+        result = re.sub(rf"(?<!\S){re.escape(bad_sukun)}(?!\S)", repaired, result)
+    for fusha_diph, coll_mono in DIALECTAL_DIPHTHONG_AND_VOWEL_MAP.items():
+        result = re.sub(rf"(?<!\S){re.escape(fusha_diph)}(?!\S)", coll_mono, result)
+    return result
 
 
 def de_cliticize_and_separate_words(text, use_tatweel=False):
@@ -430,6 +686,8 @@ def detect_and_shape_dialect(text, enforce_iraqi_dhaa=None, use_tatweel=False):
         enforce_iraqi_dhaa = detected == "iraqi"
 
     shaped = de_cliticize_and_separate_words(text, use_tatweel=use_tatweel)
+    shaped = normalize_demonstrative_hal(shaped, dialect=detected)
+    shaped = repair_word_initial_sukun_and_diphthongs(shaped)
     if detected == "bahrani":
         shaped = shape_words_by_boundary(shaped, BAHRANI_WORD_SHAPING_MAP, use_tatweel=use_tatweel)
         if enforce_iraqi_dhaa:
@@ -620,6 +878,229 @@ def build_multi_tor_melodic_bridge(from_maqam, to_maqam, from_tor="thaqeel", to_
     }
 
 
+def recommend_tor_and_rhythm_for_poem(text):
+    """Module 46: Match poetic meter, syllable count, and theme to optimal Tor, Maqam Arc, Rhythm & BPM."""
+    dialect_info = detect_and_shape_dialect(text)
+    clean_lines = [
+        ln.strip() for ln in dialect_info["shaped_lyrics"].splitlines()
+        if ln.strip() and not ln.strip().startswith("[") and not ln.strip().startswith("(")
+    ]
+    syllables = []
+    for ln in clean_lines:
+        parts = [p.strip() for p in ln.split("..") if p.strip()]
+        for part in parts:
+            syllables.append(count_arabic_syllables(part))
+    avg_syllables = float(np.mean(syllables)) if syllables else 7.5
+
+    bandari_markers = ("خدمنك", "أخدمنك", "خادم", "وافتخر", "تجاره الخدمه", "مشاية", "مشايه", "زوار")
+    bahrani_fast_markers = ("يا بويي", "امساعد", "الراعبية", "وقفة", "شيلة")
+    shoor_markers = ("شور", "لبيك", "حيدر حيدر", "مجنونك")
+    rukbani_markers = ("الغرب خذتني", "گلبی ذاب", "گلبي ذاب", "سياط", "طاح الحيل", "ضعن", "سبايا")
+
+    if any(m in text for m in shoor_markers) or avg_syllables <= 5.2:
+        tor_name = "Karbalai_Shoor_Climactic"
+        rhythm_mode = "shoor"
+        bpm = 128
+        maqam_arc = "Saba_Qarar -> Hijaz_Jawab -> Saba_Chorus"
+        sound_prompt = (
+            "Mournful Iraqi Karbalaei Shoor Latmiya chant, 128 BPM, impassioned Maqam Saba and "
+            "Bayati melodic arc, raspy grieving Baritone Radood vocal, rapid driving 55Hz bare-chest "
+            "Latm thuds with rhythmic congregation Matam breath, unison male Raddada responses, "
+            "Husseiniya hall acoustics, Pure Acapella No Instruments"
+        )
+    elif any(m in text for m in bandari_markers):
+        tor_name = "Karbalai_Mawkib_Daraj_and_Mashaya"
+        rhythm_mode = "bandari"
+        bpm = 74
+        maqam_arc = "Bayati_Wasat -> Hijaz_Jawab -> Bayati_Refrain"
+        sound_prompt = (
+            "Passionate Iraqi Karbalaei Hussaini Mawkib Daraj Latmiya chant, 74 BPM, dignified "
+            "Maqam Bayati and Hijaz on D rising to powerful Jawab, strong resonant Karbalaei "
+            "Baritone Radood vocal with proud Husseini service devotion, booming unison male "
+            "Mawkib congregation Raddada responses, deep synchronized 55Hz bare-chest Latm thud "
+            "and Matam breath in Husseiniya hall, Pure Acapella No Instruments"
+        )
+    elif dialect_info["detected_dialect"] == "bahrani" or any(m in text for m in bahrani_fast_markers):
+        tor_name = "Bahrani_Waqfa_and_Faizi_Tawshih"
+        rhythm_mode = "bahrani_fast"
+        bpm = 84
+        maqam_arc = "Hijaz_and_Bayati_Tawshih -> Saba_Faizi_Jawab -> Hijaz_Waqfa"
+        sound_prompt = (
+            "Mournful Bahrani Hussaini Waqfa Latmiya chant, 84 BPM, solemn Maqam Hijaz and Bayati "
+            "with Faizi microtonal vibrato, grieving resonant Baritone Radood, strong synchronized "
+            "Bahrani 55Hz bare-chest slaps, unison male Matam congregation responses, "
+            "Pure Acapella No Instruments"
+        )
+    elif any(m in text for m in rukbani_markers) or (6.0 <= avg_syllables <= 7.3):
+        tor_name = "Rukbani_Nassari_Karbalai_Lament"
+        rhythm_mode = "studio_arranged"
+        bpm = 64
+        maqam_arc = "Lami_and_Bayati_Wasat -> Hijaz_and_Saba_Jawab -> Lami_Kasra"
+        sound_prompt = (
+            "Mournful Iraqi Karbalaei Hussaini Rukbani Latmiya chant, 64 BPM, solemn weeping Maqam "
+            "Lami and Saba on D, authentic Karbalaei Iraqi dialect articulation, grieving solo "
+            "Baritone Radood vocal with tearful Wannah and weeping voice cracks, unison male "
+            "congregation Raddada responses, deep 55Hz bare-chest Latm thud in Husseiniya hall, "
+            "Pure Acapella No Instruments"
+        )
+    else:
+        tor_name = "Thaqeel_Muwazza_and_Faizi_Nai"
+        rhythm_mode = "thaqeel_muwazza"
+        bpm = 55
+        maqam_arc = "Bayati_Qarar -> Saba_Zamzam_Jawab -> Lami_Faizi_Kasra"
+        sound_prompt = (
+            "Mournful Iraqi Karbalaei Hussaini Latmiya chant, 55 BPM, solemn weeping Maqam Saba "
+            "Zamzam and Lami on D, authentic Karbalaei Iraqi dialect articulation, grieving solo "
+            "Baritone Radood vocal with tearful Wannah and weeping voice cracks, unison male "
+            "congregation Raddada responses, deep 55Hz bare-chest Latm thud in Husseiniya hall, "
+            "Pure Acapella No Instruments"
+        )
+
+    return {
+        "recommended_tor": tor_name,
+        "rhythm_mode": rhythm_mode,
+        "recommended_bpm": bpm,
+        "avg_hemistich_syllables": round(avg_syllables, 2),
+        "detected_dialect": dialect_info["detected_dialect"],
+        "maqam_arc": maqam_arc,
+        "flowmusic_sound_prompt": sound_prompt,
+    }
+
+
+def audit_legendary_latmiya_pillars(text):
+    """Module 48: Audit a Latmiya poem against the 5 Pillars of Legendary Hussaini Latmiya Success."""
+    blocks = re.split(r"([(?:Chorus|Verse[^]]*|Outro|Intro)])", text)
+    current_tag = ""
+    mid_verse_parentheticals = []
+    chorus_line_counts = []
+    verse_line_counts = []
+
+    for chunk in blocks:
+        if chunk.startswith("[") and chunk.endswith("]"):
+            current_tag = chunk
+            continue
+        lines = [ln.strip() for ln in chunk.splitlines() if ln.strip()]
+        if not lines:
+            continue
+        if "Verse" in current_tag:
+            verse_line_counts.append(len(lines))
+            for ln in lines:
+                if "(" in ln or ")" in ln:
+                    mid_verse_parentheticals.append(ln)
+        elif "Chorus" in current_tag:
+            chorus_line_counts.append(len(lines))
+
+    feminine_haa_sukun_hits = re.findall(r"S+هْ(?!S)", text)
+    glottal_cluster_hits = re.findall(
+        r"(?<!S)(?:إِدْمُوعْ|إِمْتُونِي|إِسْنِينِي|إِجْرُوحْ|إِتْگِلَّه|إِتْسُولِفْ|إِهْمُومْ)(?!S)",
+        text,
+    )
+    has_kaser_bridge = any(c >= 8 for c in chorus_line_counts[1:]) if len(chorus_line_counts) > 1 else False
+    clean_8_line_nazlas = bool(verse_line_counts) and all(v == 8 for v in verse_line_counts)
+
+    return {
+        "module": "Module_48_Legendary_Latmiya_Success_Pillars",
+        "has_opening_estehlal_chorus": bool(chorus_line_counts and chorus_line_counts[0] >= 4),
+        "clean_8_hemistich_nazlas": clean_8_line_nazlas,
+        "zero_mid_verse_parenthetical_interruptions": len(mid_verse_parentheticals) == 0,
+        "has_kaser_bridge_in_subsequent_choruses": has_kaser_bridge,
+        "zero_feminine_haa_sukun": len(feminine_haa_sukun_hits) == 0,
+        "zero_artificial_glottal_cluster_hamza": len(glottal_cluster_hits) == 0,
+        "mid_verse_parentheticals_found": mid_verse_parentheticals,
+        "feminine_haa_sukun_found": feminine_haa_sukun_hits,
+        "passed_all_5_pillars": bool(
+            chorus_line_counts
+            and clean_8_line_nazlas
+            and not mid_verse_parentheticals
+            and has_kaser_bridge
+            and not feminine_haa_sukun_hits
+            and not glottal_cluster_hits
+        ),
+    }
+
+
+LATMIYA_SONG_LEAKAGE_BLACKLIST = (
+    "studio-arranged",
+    "studio-mixed",
+    "humming",
+    "pads",
+    "sub-bass",
+    "groove",
+    "bandari",
+    "harmonic",
+    "dammam",
+    "syncopated",
+    "arranged studio",
+)
+
+
+def build_vocal_genre_profile(genre="latmiya", dialect="iraqi", maqam=None, bpm=None):
+    """Module 47: Strictly separate Latmiya, Islamic Nasheed, Ibtihalat, and Tawashih profiles."""
+    g_key = genre.strip().lower()
+    if g_key == "nasheed":
+        target_maqam = maqam or "bayati_and_rast"
+        target_bpm = 88 if bpm is None else int(bpm)
+        prompt = (
+            f"Uplifting Islamic Nasheed vocal arrangement, {target_bpm} BPM, warm melodic Munshid "
+            f"baritone lead vocal, Maqam {target_maqam}, polished multi-layered harmonic male "
+            "Nasheed choir with gentle vocal humming pads, rhythmic traditional Daf frame drum "
+            "pulse, clean studio acoustics, Islamic Vocal Nasheed"
+        )
+        rhythm_type = "daf_and_harmonic_choir_arrangement"
+        chest_latm = False
+    elif g_key == "ibtihalat":
+        target_maqam = maqam or "saba_and_rast"
+        target_bpm = 0
+        prompt = (
+            "Free-tempo non-metric Islamic Religious Ibtihalat and spiritual Munajat supplication, "
+            f"rubato 0 BPM, reverent weeping supplicating solo Mubtahil Baritone vocal, long "
+            f"breath-sustained melismatic Maqam {target_maqam} improvisation, emotional spiritual "
+            "Qafla cadences, spacious Mosque hall reverb, Pure Solo Vocal No Instruments"
+        )
+        rhythm_type = "free_tempo_rubato_non_metric"
+        chest_latm = False
+    elif g_key == "tawashih":
+        target_maqam = maqam or "hijaz_and_bayati"
+        target_bpm = 72 if bpm is None else int(bpm)
+        prompt = (
+            f"Traditional Islamic Religious Tawashih and Muwashahat vocal ensemble, {target_bpm} BPM "
+            f"measured classical Arabic poetic cadence, ornate Maqam {target_maqam} microtonal "
+            "melismas, antiphonal call-and-response between expressive solo Munshid and unison "
+            "male Tawashih Bitanah choir, traditional spiritual hall acoustics, "
+            "Pure Vocal Ensemble No Instruments"
+        )
+        rhythm_type = "measured_classical_muwashah_antiphonal"
+        chest_latm = False
+    else:
+        g_key = "latmiya"
+        target_maqam = maqam or "saba_and_bayati"
+        target_bpm = 60 if bpm is None else int(bpm)
+        dialect_label = "Bahrani" if dialect == "bahrani" else "Iraqi Karbalaei"
+        prompt = (
+            f"Mournful {dialect_label} Hussaini Latmiya chant, {target_bpm} BPM, solemn weeping "
+            f"Maqam {target_maqam} on D, authentic {dialect_label} dialect articulation, grieving "
+            "solo Baritone Radood vocal with tearful Wannah and weeping voice cracks, unison male "
+            "congregation Raddada responses, deep 55Hz bare-chest Latm thud in Husseiniya hall, "
+            "Pure Acapella No Instruments"
+        )
+        rhythm_type = "55hz_bare_chest_latm_and_matam_breath"
+        chest_latm = True
+
+    leakage_found = [
+        bad for bad in LATMIYA_SONG_LEAKAGE_BLACKLIST if g_key == "latmiya" and bad in prompt.lower()
+    ]
+    return {
+        "genre": g_key,
+        "dialect": dialect,
+        "maqam": target_maqam,
+        "bpm": target_bpm,
+        "rhythm_type": rhythm_type,
+        "uses_chest_latm": chest_latm,
+        "song_leakage_terms_detected": leakage_found,
+        "flowmusic_sound_prompt": prompt,
+    }
+
+
 def build_flowmusic_json_preconditioning(
     dialect="iraqi_bahrani", maqam="saba", bpm=58, reference_clip_id=None
 ):
@@ -674,6 +1155,20 @@ def butter_filter(data, cutoff, sample_rate, btype="high", order=4):
     norm_cutoff = np.clip(np.asarray(cutoff, dtype=np.float64) / nyq, 1e-4, 0.999)
     sos = butter(order, norm_cutoff, btype=btype, output="sos")
     return sosfilt(sos, data)
+
+
+def apply_noise_print_restoration(signal, sample_rate, gate_threshold_dbfs=-42.0, reduction_db=-10.0):
+    """Module 46 (Adobe Audition Step 1 — k-7KPSudf28): Smooth noise-print floor attenuation."""
+    if len(signal) == 0:
+        return signal
+    win_len = max(1, int(0.02 * sample_rate))
+    kernel = np.ones(win_len, dtype=np.float64) / win_len
+    rms = np.sqrt(np.maximum(np.convolve(signal ** 2, kernel, mode="same"), 1e-16))
+    rms_db = 20.0 * np.log10(rms + 1e-12)
+    open_ratio = np.clip((rms_db - gate_threshold_dbfs) / 8.0, 0.0, 1.0)
+    floor_gain = float(10.0 ** (reduction_db / 20.0))
+    gain_env = floor_gain + open_ratio * (1.0 - floor_gain)
+    return signal * gain_env
 
 
 def apply_vocal_eq(signal, sample_rate):
@@ -825,20 +1320,39 @@ def synthesize_percussion_hit(sample_rate, kind="latm", samples_dir=None):
             metallic = noise
         return 0.45 * metallic * np.exp(-22.0 * t_vec)
 
-    if kind == "heavy_clip":
+    if kind in ("heavy_clip", "thaqeel_muwazza"):
         # Double-Layered Beat (Chest Low-End + Crisp Palm Snap) + Beat-Synced Human Sub-Bass Hum
-        chest_low = np.sin(2.0 * np.pi * 54.0 * t_vec) * np.exp(-13.0 * t_vec)
+        chest_low = np.sin(2.0 * np.pi * 54.0 * t_vec) * np.exp(-12.0 * t_vec)
         human_sub_hum = (
             np.sin(2.0 * np.pi * 44.0 * t_vec)
             * (1.0 - np.exp(-38.0 * t_vec))
-            * np.exp(-8.5 * t_vec)
+            * np.exp(-7.5 * t_vec)
         )
         palm_snap = rng.normal(0.0, 1.0, num_samples) * np.exp(-48.0 * t_vec)
         if 0.5 * sample_rate > 3400.0:
             palm_snap = butter_filter(palm_snap, [1600.0, 3200.0], sample_rate, btype="band", order=2)
         elif 0.5 * sample_rate > 1200.0:
             palm_snap = butter_filter(palm_snap, [300.0, 1100.0], sample_rate, btype="band", order=2)
-        return 0.65 * chest_low + 0.42 * human_sub_hum + 0.35 * palm_snap
+        return 0.68 * chest_low + 0.45 * human_sub_hum + 0.35 * palm_snap
+
+    if kind == "bahrani_fast":
+        # Studio 44 (Rm0gQkZLQao): Strong fast Bahrani chest+palm slap with high transient energy
+        chest_core = np.sin(2.0 * np.pi * 62.0 * t_vec) * np.exp(-18.0 * t_vec)
+        sharp_slap = rng.normal(0.0, 1.0, num_samples) * np.exp(-34.0 * t_vec)
+        if 0.5 * sample_rate > 3800.0:
+            sharp_slap = butter_filter(sharp_slap, [1400.0, 3600.0], sample_rate, btype="band", order=2)
+        return 0.70 * chest_core + 0.50 * sharp_slap
+
+    if kind == "studio_arranged":
+        # Ammar Al-Hujaimi (AHKVHPS51Sc): 4-Layer Studio Latm (Sub-Kick + Crowd Chest + Palm + Breath)
+        sub_kick = np.sin(2.0 * np.pi * 56.0 * t_vec) * np.exp(-15.0 * t_vec)
+        crowd_mid = rng.normal(0.0, 1.0, num_samples) * np.exp(-26.0 * t_vec)
+        if 0.5 * sample_rate > 1000.0:
+            crowd_mid = butter_filter(crowd_mid, [180.0, 650.0], sample_rate, btype="band", order=2)
+        palm_click = rng.normal(0.0, 1.0, num_samples) * np.exp(-52.0 * t_vec)
+        if 0.5 * sample_rate > 3200.0:
+            palm_click = butter_filter(palm_click, [1800.0, 3100.0], sample_rate, btype="band", order=2)
+        return 0.65 * sub_kick + 0.32 * crowd_mid + 0.30 * palm_click
 
     sub_thud = np.sin(2.0 * np.pi * 55.0 * t_vec) * np.exp(-16.0 * t_vec)
     skin_slap = rng.normal(0.0, 1.0, num_samples) * np.exp(-42.0 * t_vec)
@@ -863,6 +1377,8 @@ def build_rhythm_bed(
     heavy_hit = synthesize_percussion_hit(sample_rate, "heavy_clip", samples_dir=samples_dir)
     dammam_hit = synthesize_percussion_hit(sample_rate, "dammam", samples_dir=samples_dir)
     zanjeel_hit = synthesize_percussion_hit(sample_rate, "zanjeel", samples_dir=samples_dir)
+    bahrani_hit = synthesize_percussion_hit(sample_rate, "bahrani_fast", samples_dir=samples_dir)
+    studio_hit = synthesize_percussion_hit(sample_rate, "studio_arranged", samples_dir=samples_dir)
 
     cursor = max(0, int(offset_samples))
     beat_idx = 0
@@ -879,7 +1395,21 @@ def build_rhythm_bed(
                 end_sw = min(num_samples, swing_pos + len(primary_hit))
                 if swing_pos < num_samples:
                     bed[swing_pos:end_sw] += 0.45 * primary_hit[: end_sw - swing_pos]
-        elif mode == "heavy_clip":
+        elif mode == "bahrani_fast":
+            hit = bahrani_hit
+            if beat_idx % 2 == 1:
+                sub_pos = cursor + beat_interval // 2
+                end_sub = min(num_samples, sub_pos + len(bahrani_hit))
+                if sub_pos < num_samples:
+                    bed[sub_pos:end_sub] += 0.52 * bahrani_hit[: end_sub - sub_pos]
+        elif mode == "studio_arranged":
+            hit = studio_hit
+            if beat_idx % 4 == 3:
+                sub_pos = cursor + beat_interval // 2
+                end_sub = min(num_samples, sub_pos + len(primary_hit))
+                if sub_pos < num_samples:
+                    bed[sub_pos:end_sub] += 0.38 * primary_hit[: end_sub - sub_pos]
+        elif mode in ("heavy_clip", "thaqeel_muwazza"):
             hit = heavy_hit
         else:
             hit = primary_hit
@@ -1083,14 +1613,15 @@ def process_audio_file(
     if peak > 1e-8:
         mono = mono / peak
 
-    eq_vocal = apply_vocal_eq(mono, sample_rate)
+    restored_vocal = apply_noise_print_restoration(mono, sample_rate)
+    eq_vocal = apply_vocal_eq(restored_vocal, sample_rate)
     is_rubato = mode in ("mawal", "nai")
     delay_ms = 450.0 if is_rubato else 285.0
     rt60 = 3.8 if is_rubato else 3.2
 
     ir_file = os.path.join(samples_dir, "husseiniya_ir.wav") if samples_dir else None
     echoed_vocal = apply_dynacord_echo(eq_vocal, sample_rate, delay_ms=delay_ms, feedback=0.32, mix=0.22)
-    wet_mix_val = 0.14 if mode == "heavy_clip" else 0.26
+    wet_mix_val = 0.14 if mode in ("heavy_clip", "thaqeel_muwazza") else 0.26
     wet_vocal = apply_husseiniya_reverb(
         echoed_vocal, sample_rate, rt60=rt60, wet_mix=wet_mix_val, ir_path=ir_file
     )
@@ -1109,7 +1640,7 @@ def process_audio_file(
         swing=swing,
         samples_dir=samples_dir,
     )
-    if mode == "heavy_clip":
+    if mode in ("heavy_clip", "thaqeel_muwazza", "studio_arranged"):
         ahaat_pad = synthesize_vocal_synth_strings_pad(len(mono), sample_rate, maqam_drone)
         rhythm_bed = apply_husseiniya_reverb(
             rhythm_bed, sample_rate, rt60=2.8, wet_mix=0.22, ir_path=ir_file
@@ -1164,6 +1695,17 @@ def parse_args(argv=None):
         help="Run pre-generation poem linter (word boundaries, dialect mix, hemistich syllables)",
     )
     parser.add_argument(
+        "--recommend-tor",
+        default=None,
+        help="Module 46: Recommend optimal Tor, Maqam Arc, Rhythm Mode, BPM, and Sound Prompt for poem",
+    )
+    parser.add_argument(
+        "--genre",
+        default=None,
+        choices=["latmiya", "nasheed", "ibtihalat", "tawashih"],
+        help="Module 47: Build strict vocal genre profile (latmiya, nasheed, ibtihalat, tawashih)",
+    )
+    parser.add_argument(
         "--enforce-iraqi-dhaa",
         action="store_true",
         default=None,
@@ -1187,6 +1729,9 @@ def parse_args(argv=None):
         choices=[
             "latm",
             "heavy_clip",
+            "thaqeel_muwazza",
+            "studio_arranged",
+            "bahrani_fast",
             "zanjeel_iraqi",
             "zanjeel_bahrani",
             "shoor",
@@ -1194,7 +1739,7 @@ def parse_args(argv=None):
             "mawal",
             "nai",
         ],
-        help="Husseiniya rhythmic and acoustic processing mode (including heavy_clip for 3D Studio Clips)",
+        help="Husseiniya rhythmic and acoustic processing mode (including Module 46 studio modes)",
     )
     parser.add_argument("--bpm", type=float, default=60.0, help="Tempo in BPM (0 for Rubato)")
     parser.add_argument(
@@ -1255,6 +1800,20 @@ def main(argv=None):
 
     if args.lint_poem is not None:
         report = lint_poem(args.lint_poem)
+        print(json.dumps(report, ensure_ascii=False, indent=2))
+        return 0
+
+    if args.recommend_tor is not None:
+        report = recommend_tor_and_rhythm_for_poem(args.recommend_tor)
+        print(json.dumps(report, ensure_ascii=False, indent=2))
+        return 0
+
+    if args.genre is not None:
+        report = build_vocal_genre_profile(
+            genre=args.genre,
+            maqam=args.maqam_drone,
+            bpm=args.bpm if args.bpm else None,
+        )
         print(json.dumps(report, ensure_ascii=False, indent=2))
         return 0
 
