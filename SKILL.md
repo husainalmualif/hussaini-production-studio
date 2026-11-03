@@ -5,14 +5,14 @@ allowed-tools: execute_bash view_file write_to_file google
 ---
 # Hussaini Production Studio (V45.0 OMNI-ARCHITECT)
 
-Structured router for authentic Hussaini poetic composition, microtonal Maqam/Tor architecture, **Flow Music `Producer Chat` Two-Step JSON Pre-Conditioning (`Module 39`)**, **Prefix-Aware Morphological Dialect Shaping, Safe Tanween & Anti-Slurring Word Separation (`Modules 40, 41 & 43`)**, **Studio Vocal-Synth, 3D Soundstage, Foley & Heavy Clips (`Module 44`)**, **Pre-Generation Poem Linting (`--lint-poem`)**, and **8-Mode 5-Track SOS/RMS/LUFS Audio DSP Montage (`-14.0 LUFS` & `-1.0 dBTP`)**. Version-locked via root `VERSION` (`V45.0 OMNI-ARCHITECT`).
+Structured router for authentic Hussaini composition, microtonal Maqam/Tor architecture, **Flow Music JSON Pre-Conditioning (`Module 39`)**, **Morphological Dialect Shaping, Safe Tanween & Word Separation (`Modules 40, 41 & 43`)**, **Studio Vocal-Synth, Foley & Heavy Clips (`Module 44`)**, **Poem Linter (`--lint-poem`)**, and **8-Mode 5-Track Audio DSP Montage (`-14.0 LUFS` & `-1.0 dBTP`)**. Version-locked via root `VERSION` (`V45.0 OMNI-ARCHITECT`).
 
 ## When to Use
 
 - Producing a Latmiya, Heavy Studio Clip (`60–75 BPM`), Zanjeel, Shoor, Bandari, Mawal, Na'i, or Abudhiyah in **Flow Music (`Lyria`)**, Suno, or Udio.
 - Composing or linting Hussaini poetry in Iraqi, Bahrani, Gulf, or Fusha across traditional meters (`Ruba'i, Nassari, Muwashah, Fazza'iya, Fayzi, Tajleeb, Maymar, Abudhiyah, Mawal, Hosa`).
 - Emulating renowned Radoods or Minbar Khutaba ethically via acoustic descriptors.
-- Mastering raw vocal WAVs (`8/16/24/32-bit Mono/Stereo, 8k–48kHz`) with 5-Track DAW routing (`Double-Layered Latm + Human Sub-Bass, Dammam, Tasa, Zanjeel, Vocal Synth Strings, 3D Soundstage, Convolution Reverb, Foley, Audio Drop, -28 dBFS RMS Ducking`).
+- Mastering raw vocal WAVs (`8/16/24/32-bit Mono/Stereo`) with 5-Track DAW routing (`Latm + Human Sub-Bass, Dammam, Tasa, Zanjeel, Vocal Synth Strings, 3D Soundstage, Convolution Reverb, Foley, Audio Drop, -28 dBFS RMS Ducking`).
 
 ## Modular Reference Map (Load Only What You Need)
 
@@ -28,7 +28,7 @@ Structured router for authentic Hussaini poetic composition, microtonal Maqam/To
 ## Hard Core Rules & Cultural Firewall
 
 1. **Acoustic Purity, 3-Tier Studio & Anti-Song-Drift Lock (`Module 44`)**:
-   - **Tier 1 & 2 (`Pure Acapella & Vocal Humming` — Default)**: Lead vocal (`Baritone`), `Raddada` choir (`Jawab & Qarar`), pharyngeal `Ahaat` humming drone, `Ya Hussain` cries, `55Hz` chest thud + palm snap (`Latm`), `Dammam`, `Tasa`, `Zanjeel`. **Never** write `strings`, `synth`, or `Nahawand` in Flow Music `Sound` prompts (triggers pop-song drift); use `pharyngeal Ahaat vocal humming choir drone` and `strictly non-musical, no instruments` in `Sound`, and generate `Vocal Synth` via local DSP (`--mode heavy_clip`).
+   - **Tier 1 & 2 (`Pure Acapella & Vocal Humming` — Default)**: Lead vocal (`Baritone`), `Raddada` choir (`Jawab & Qarar`), pharyngeal `Ahaat` humming drone, `Ya Hussain` cries, `55Hz` chest thud + palm snap (`Latm`), `Dammam`, `Tasa`, `Zanjeel`. **Never** write `strings`, `synth`, or `Nahawand` in Flow Music `Sound` prompts; use `pharyngeal Ahaat drone` and `strictly non-musical, no instruments` in `Sound`, generating `Vocal Synth` via DSP (`--mode heavy_clip`).
    - **Tier 3 (`Heavy Studio Clips 60–66 BPM`)**: Double-layered chest+palm beat + human `Sub-Bass` hum, `3D Soundstage` (`Center Dry` lead + `L/R` choir/pads + `Convolution Reverb`), Foley (`wind, water, horses`), and `Audio Drop`.
 2. **Microtonal 24-EDO Maqam & Stage-1 Iso-Syllabic Lock (`Modules 34 & 38`)**:
    - Enforce Arabic 24-EDO quarter-tones (`Maqam Saba, Bayati, Hijaz, Lami, Kurd, Sikah, Rast`) with smooth `Qarar-to-Jawab` legato transitions.
@@ -54,7 +54,7 @@ python3 scripts/hussaini_dsp_montage.py --compile-lyrics "ياحسين يا خو
 ### Workflow 2: 4-Stage Flow Music Studio Protocol (`New session` ➔ `JSON Pre-Conditioning` ➔ `Compose` ➔ `Remix > Extend`)
 1. **Step 1 (One New Poem = One Fresh `New session` + Mandatory JSON Pre-Conditioning)**: Open a fresh `New session` (`a[href="/session"]`) and **always** send the `Module 39` JSON constitution (`build_flowmusic_json_preconditioning`) in `Producer Chat` first (`"Lock in session memory ONLY — do NOT generate audio yet"`) before touching `Compose`.
 2. **Step 2 (Direct `Compose` Panel — `Lyrics`, `Sound`, `Details`, `Generate`)**: Once pre-conditioned, put 100% pure vocalized Arabic in `Lyrics` (`textarea[aria-label="Lyrics"]`, zero English words, zero initial Sukun, 3–4 words per line ending with `..`), Title in `Details`, and the funeral prompt in `Sound` (`textarea[aria-label="Sound description"]`):
-   `Slow heavy Iraqi-Bahrani Husseini Latmiya, steady 58 BPM throughout, passionate mourning solo Radood baritone with tearful inner sigh (Wannah), microtonal Maqam Saba with smooth modulation to Bayati and Lami, low-register Qarar human choral Ahaat drone, deep chest thud Latm, extended Husseiniya reverb, strictly non-musical, no instruments`
+   `Slow heavy Iraqi-Bahrani Husseini Latmiya, 58 BPM, mourning solo Radood baritone with Wannah, Maqam Saba, Qarar human Ahaat drone, deep chest thud Latm, Husseiniya reverb, strictly non-musical, no instruments`
 3. **Step 3 (Extending, Trimming & In-Place Repair via `... -> Remix`)**:
    - **`Remix > Extend`**: Mandatory for adding Stanzas 3, 4, 5 to the same voice/melody (`SETTINGS` time range + `Instruction` + `Edit Lyrics` + `Generate`).
    - **`Remix > Trim` + `Extend`**: Cut at the exact timestamp where a track drifts (e.g. `1:27`), then `Extend` from there.
