@@ -385,6 +385,7 @@ IRAQI_WORD_SHAPING_MAP = {
     "حزينة": "حَزِينَه",
     "متوني": "مْتُونِي",
     "زرگ": "زُرُگْ",
+    "زُرَگْ": "زُرُگْ",
     "زرك": "زُرُگْ",
     "تراچي": "تَرَاچِي",
     "جروح": "جْرُوحْ",
@@ -969,7 +970,7 @@ def recommend_tor_and_rhythm_for_poem(text):
 
 def audit_legendary_latmiya_pillars(text):
     """Module 48: Audit a Latmiya poem against the 5 Pillars of Legendary Hussaini Latmiya Success."""
-    blocks = re.split(r"([(?:Chorus|Verse[^]]*|Outro|Intro)])", text)
+    blocks = re.split(r"(\[(?:Chorus|Verse[^\]]*|Outro|Intro)\])", text)
     current_tag = ""
     mid_verse_parentheticals = []
     chorus_line_counts = []
@@ -990,9 +991,9 @@ def audit_legendary_latmiya_pillars(text):
         elif "Chorus" in current_tag:
             chorus_line_counts.append(len(lines))
 
-    feminine_haa_sukun_hits = re.findall(r"S+هْ(?!S)", text)
+    feminine_haa_sukun_hits = re.findall(r"\S+هْ(?!\S)", text)
     glottal_cluster_hits = re.findall(
-        r"(?<!S)(?:إِدْمُوعْ|إِمْتُونِي|إِسْنِينِي|إِجْرُوحْ|إِتْگِلَّه|إِتْسُولِفْ|إِهْمُومْ)(?!S)",
+        r"(?<!\S)(?:إِدْمُوعْ|إِمْتُونِي|إِسْنِينِي|إِجْرُوحْ|إِتْگِلَّه|إِتْسُولِفْ|إِهْمُومْ)(?!\S)",
         text,
     )
     has_kaser_bridge = any(c >= 8 for c in chorus_line_counts[1:]) if len(chorus_line_counts) > 1 else False
