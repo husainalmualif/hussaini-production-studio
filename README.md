@@ -384,7 +384,12 @@ hussaini-production-studio/
 │       ├── experimental_ab_evaluation_and_human_review.md # مصفوفة التقييم التجريبي (A/B) وبوابة المراجعة البشرية والشرعية وحفظ حقوق الشاعر
 │       ├── module_39_json_preconditioning.md        # بروتوكول التهيئة المسبقة بصيغة JSON لـ Producer Chat (مع reference_clip_id اختياري)
 │       ├── module_40_41_43_phonetics_and_dialects.md # هندسة النطق بتفكيك البادئات (ال، و، ب، ك، ل)، التنوين المحمي، والتمييز بين البحرانية والعراقية والتعادل
-│       └── module_42_gireez_hosa_and_muharram_calendar.md # فن الگريز، الهوسة العراقية (3+1)، وتقويم الليالي العشر لمحرم وصفر
+│       ├── module_42_gireez_hosa_and_muharram_calendar.md # فن الگريز، الهوسة العراقية (3+1)، وتقويم الليالي العشر لمحرم وصفر
+│       ├── module_44_studio_production_and_heavy_clips.md # الإنتاج الاستوديوي الحديث، دمج الأوركسترا الصوتية البشرية، واللطميات الثقيلة (60–75 BPM)
+│       ├── module_45_dialect_orthoepy_and_tashkeel_mastery.md # الإتقان الصوتي والفونيمي للهجتين العراقية والبحرانية وفصل اسم الإشارة (غَرِيبَه هَلْ حِچَايَه)
+│       ├── module_46_rhythm_choir_and_tor_diversity.md # هندسة تنوع الأطوار والإيقاعات الحسينية والآهات (تحليل 20 مرجعاً صوتياً وإيقاعياً)
+│       ├── module_47_genre_taxonomy_latmiya_nasheed_ibtihalat_tawashih.md # التفريق الصارم بين اللطمية الحسينية والنشيد الإسلامي والابتهالات والتواشيح والأغنية
+│       └── module_48_secrets_of_legendary_latmiyat.md # دراسة مقومات نجاح اللطمية الحسينية الخالدة (المستهل الخاطف، صدق المشهد، النزلة والكسر، ومطابقة الطور للموضوع)
 ├── scripts/
 │   └── hussaini_dsp_montage.py                      # محرك الـ DSP (8/16/24/32-bit WAV, SOS Filters, -28dBFS RMS Ducking, -14 LUFS) ومُترجم اللهجات (Pylint 10/10)
 ├── tests/
