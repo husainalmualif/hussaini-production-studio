@@ -301,6 +301,9 @@ def test_all_7_dsp_modes_24bit_wav_and_samples_dir(tmp_path):
     modes_and_inputs = [
         ("latm", wav_24bit, "saba", "60", "none"),
         ("heavy_clip", wav_24bit, "nahawand", "66", "wind"),
+        ("thaqeel_muwazza", wav_24bit, "saba", "60", "none"),
+        ("studio_arranged", wav_stereo, "lami", "74", "none"),
+        ("bahrani_fast", wav_8bit, "hijaz", "88", "none"),
         ("zanjeel_iraqi", wav_stereo, "hijaz", "80", "horses"),
         ("zanjeel_bahrani", wav_8bit, "bayati", "80", "water"),
         ("shoor", wav_24bit, "kurd", "130", "none"),
@@ -335,6 +338,86 @@ def test_cli_flags_version_and_compact_skill_router():
     """Verify CLI flags, VERSION single source of truth, and compact SKILL.md router size (<= 10.5KB)."""
     assert engine.main(["--compile-lyrics", "ياحسين يا خويه شلون قلب وقلبي وچبد ودمع", "--use-tatweel"]) == 0
     assert engine.main(["--lint-poem", "ياحسين يا خويه شلون قلب وقلبي"]) == 0
+    assert engine.main(["--recommend-tor", "هنيالي من خدمنك .. خادم وافتخر مولاي"]) == 0
+
+    rec_bandari = engine.recommend_tor_and_rhythm_for_poem("هنيالي من خدمنك .. خادم وافتخر مولاي")
+    assert rec_bandari["rhythm_mode"] == "bandari"
+    assert rec_bandari["recommended_bpm"] == 74
+    assert "Bandari" not in rec_bandari["flowmusic_sound_prompt"]
+    assert "groove" not in rec_bandari["flowmusic_sound_prompt"]
+
+    rec_rukbani = engine.recommend_tor_and_rhythm_for_poem("يا هل الغرب خذتني .. احتاجيت احس غلاتي")
+    assert rec_rukbani["rhythm_mode"] == "studio_arranged"
+    assert rec_rukbani["recommended_bpm"] == 64
+    assert "humming" not in rec_rukbani["flowmusic_sound_prompt"]
+    assert "pads" not in rec_rukbani["flowmusic_sound_prompt"]
+
+    rec_bahrani = engine.recommend_tor_and_rhythm_for_poem("يا بويي ونتي وامساعد")
+    assert rec_bahrani["rhythm_mode"] == "bahrani_fast"
+    assert rec_bahrani["recommended_bpm"] == 84
+
+    rec_shoor = engine.recommend_tor_and_rhythm_for_poem("شور لبيك حيدر حيدر")
+    assert rec_shoor["rhythm_mode"] == "shoor"
+
+    rec_thaqeel = engine.recommend_tor_and_rhythm_for_poem(
+        "غريبه هالحچايه ماتت ومشبوگه اديها .. ماتت بخرابه ابوها مثلي يبچي عليها"
+    )
+    assert rec_thaqeel["rhythm_mode"] == "thaqeel_muwazza"
+    assert rec_thaqeel["recommended_bpm"] == 55
+    assert "humming" not in rec_thaqeel["flowmusic_sound_prompt"]
+
+    # Module 47: Verify strict separation of Latmiya, Nasheed, Ibtihalat, and Tawashih
+    for g_name in ("latmiya", "nasheed", "ibtihalat", "tawashih"):
+        assert engine.main(["--genre", g_name]) == 0
+
+    prof_latmiya = engine.build_vocal_genre_profile("latmiya", dialect="iraqi")
+    assert prof_latmiya["uses_chest_latm"] is True
+    assert prof_latmiya["song_leakage_terms_detected"] == []
+    assert "Pure Acapella No Instruments" in prof_latmiya["flowmusic_sound_prompt"]
+
+    prof_nasheed = engine.build_vocal_genre_profile("nasheed")
+    assert prof_nasheed["uses_chest_latm"] is False
+    assert "Islamic Vocal Nasheed" in prof_nasheed["flowmusic_sound_prompt"]
+
+    prof_ibtihalat = engine.build_vocal_genre_profile("ibtihalat")
+    assert prof_ibtihalat["bpm"] == 0
+    assert prof_ibtihalat["uses_chest_latm"] is False
+    assert "rubato 0 BPM" in prof_ibtihalat["flowmusic_sound_prompt"]
+
+    prof_tawashih = engine.build_vocal_genre_profile("tawashih")
+    assert prof_tawashih["uses_chest_latm"] is False
+    assert "Tawashih and Muwashahat" in prof_tawashih["flowmusic_sound_prompt"]
+
+    # Verify exact Iraqi and Bahrani phonetic fix for 'غَرِيبَه هَالْحِچَايَه' (without feminine Haa Sukun)
+    iraqi_hal = engine.detect_and_shape_dialect(
+        "غَرِيبَه هَالْحِچَايَه ماتت ومشبوگه إِدَيْهَا يبچي عَلَيْهَا إِمْتُونِي زُرَگْ هَنِيَالِي إِسْنِينِي مِنْ هَالْتَّعَبْ"
+    )
+    assert iraqi_hal["detected_dialect"] == "iraqi"
+    assert "غَرِيبَه هَلْ حِچَايَه" in iraqi_hal["shaped_lyrics"]
+    assert "مْتُونِي" in iraqi_hal["shaped_lyrics"]
+    assert "زُرُگْ" in iraqi_hal["shaped_lyrics"]
+    assert "هَنْيَالِي" in iraqi_hal["shaped_lyrics"]
+    assert "سْنِينِي" in iraqi_hal["shaped_lyrics"]
+    assert "هَلْ تَعَبْ" in iraqi_hal["shaped_lyrics"]
+
+    bahrani_hal = engine.detect_and_shape_dialect(
+        "يا بويي ونتي اشحالش غريبه هالحچايه بهالگفره هالمسيه"
+    )
+    assert bahrani_hal["detected_dialect"] == "bahrani"
+    assert "غَرِيبَه هَلْ حِچَايَه" in bahrani_hal["shaped_lyrics"]
+    assert "إِشْحَالِشْ" in bahrani_hal["shaped_lyrics"]
+    assert "هَلْ مَسِيَّه" in bahrani_hal["shaped_lyrics"]
+
+    # Module 48: Verify audit_legendary_latmiya_pillars
+    authentic_sample = (
+        "[Chorus]\nغَرِيبَه هَلْ حِچَايَه ..\nسَبِيَّه مِنِ السَّبَايَا ..\nكِتَلْهَا رَاسْ أَبُوهَا ..\nبِخَرَابَه شَيِّعُوهَا ..\n"
+        "[Verse 1]\nمَاتَتْ وَ مَشْبُوگَه إِدَيْهَا ..\nبِلَهْفَه چَانَتْ شَابْگَه ..\nطَابْعَه شْفَافَه عَلَى خَدْهَا ..\nبِرَاسْ أَبُوهَا مْفَارْگَه ..\n"
+        "مَيِّتَه وَ الفَرْحَه بْثَغُرْهَا ..\nشْحَاچِي يَمْهَا وَ شَاهْگَه ..\nجْفُونْهَا المَا تِرْضَى تِنْسَدْ ..\nمِنْ شَهَرْ مَا طَابْگَه ..\n"
+        "[Chorus]\nرَوَتْ قِصَّه عَجِيبَه ..\nمُحِبْ كَاتِلْ حَبِيبَه ..\nعَلَى طَشْتَه لِگُوهَا ..\nبِخَرَابَه شَيِّعُوهَا ..\n"
+        "غَرِيبَه هَلْ حِچَايَه ..\nسَبِيَّه مِنِ السَّبَايَا ..\nكِتَلْهَا رَاسْ أَبُوهَا ..\nبِخَرَابَه شَيِّعُوهَا .."
+    )
+    pillar_audit = engine.audit_legendary_latmiya_pillars(authentic_sample)
+    assert pillar_audit["passed_all_5_pillars"] is True
 
     repo_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
     version_file = os.path.join(repo_root, "VERSION")
