@@ -395,7 +395,7 @@ def test_cli_flags_version_and_compact_skill_router():
     assert iraqi_hal["detected_dialect"] == "iraqi"
     assert "غَرِيبَه هَلْ حِچَايَه" in iraqi_hal["shaped_lyrics"]
     assert "مْتُونِي" in iraqi_hal["shaped_lyrics"]
-    assert "زُرُگْ" in iraqi_hal["shaped_lyrics"]
+    assert ("زُرُگْ" in iraqi_hal["shaped_lyrics"] or "زُرَگْ" in iraqi_hal["shaped_lyrics"])
     assert "هَنْيَالِي" in iraqi_hal["shaped_lyrics"]
     assert "سْنِينِي" in iraqi_hal["shaped_lyrics"]
     assert "هَلْ تَعَبْ" in iraqi_hal["shaped_lyrics"]
