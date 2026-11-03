@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# pylint: disable=too-many-lines
+# pylint: disable=too-many-lines,too-many-return-statements
 """Hussaini Audio Omni-Engine DSP, 5-Track DAW & Phonetics Compiler (V45.0 OMNI-ARCHITECT).
 
 Bridges poetic/phonetic engineering with procedural DSP audio mastering:
