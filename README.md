@@ -1,9 +1,9 @@
-# استوديو الإنتاج الحسيني الشامل — Hussaini Production Studio (V45.0 OMNI-ARCHITECT)
+# استوديو الإنتاج الحسيني الشامل — Hussaini Production Studio (V48.0 OMNI-ARCHITECT)
 
 مهارة متكاملة للتأليف الشعري الحسيني، وهندسة الألحان والمقامات والأطوار المنبرية ومزجها (`Multi-Tor & Melodic Blending`)، وتوليد القصائد واللطميات بالذكاء الاصطناعي (**Google Flow Music / Lyria 3.5, Suno, Udio**) عبر **بروتوكول التهيئة المسبقة للجلسة بصيغة `JSON` (`Module 39`)** و**مُترجم النطق الصوتي الآلي وفصل الكلمات وضبط التنوين اللهجي/العروضي والتمييز الصوتي واللحني بين اللهجتين البحرانية والعراقية (`Modules 40, 41 & 43`)**، والمونتاج الصوتي الاحترافي (**5-Track DAW Routing, Smart `-3.0 dB` Dynamic Sidechain Ducking & Automated CI/Unit Testing**) للتسجيلات الصوتية والمجالس.
 
 تدمج هذه المهارة:
-- **الموسوعة الصوتية الحسينية الموحدة (`V26.0 – V45.0 OMNI-ARCHITECT`)**
+- **الموسوعة الصوتية الحسينية الموحدة (`V26.0 – V48.0 OMNI-ARCHITECT`)**
 - **المحرك البرمجي التنفيذي للنطق الصوتي والـ DSP (`scripts/hussaini_dsp_montage.py`) ومجموعة اختبارات الوحدات الآلية (`tests/test_hussaini_modules.py` + `requirements.txt` + `.github/workflows/ci.yml`)**
 - **بروتوكول التهيئة المسبقة للجلسة بصيغة `JSON` على خطوتين في `Producer Chat` (`Module 39 / Section 17 — JSON Session Pre-Conditioning Protocol`)**
 - **هندسة النطق الدقيق والتنوين العروضي واللّهجي (`Module 40`)، وقانون فصل الكلمات وفكّ الالتصاق الصوتي لمنع التشبيك في `Flow Music` (`Module 41 / Section 18`)**
@@ -45,7 +45,7 @@ npx skills add husainalmualif/hussaini-production-studio
 عندما تكون لديك قصيدة مكتوبة وتريد تحويلها إلى لطمية أو نعي أو مناجاة متقنة اللهجة والنطق واللحن والمقام والإيقاع:
 
 **مثال للأمر (Prompt) الذي تكتبه للوكيل:**
-> «إليك هذه القصيدة الحسينية، طبّق قواعد `hussaini-production-studio` (`V45.0 OMNI-ARCHITECT`) للتعرف على لهجتها (بحرانية أو عراقية)، وفصل الكلمات المتصلة لمنع التشبيك (`Module 41`)، وضبط التنوين اللهجي/العروضي والوقف بالسكون (`Module 40 & 43`)، وتوحيد تفعيلات المرحلة الأولى (`Iso-Syllabic Stage-1 Lock`)، ثم أنتجها في `New session` على `https://www.flowmusic.app/` عبر بروتوكول التهيئة المسبقة بصيغة `JSON` على خطوتين (`Module 39`) عبر `/browser`»
+> «إليك هذه القصيدة الحسينية، طبّق قواعد `hussaini-production-studio` (`V48.0 OMNI-ARCHITECT`) للتعرف على لهجتها (بحرانية أو عراقية)، وفصل الكلمات المتصلة لمنع التشبيك (`Module 41`)، وضبط التنوين اللهجي/العروضي والوقف بالسكون (`Module 40 & 43`)، وتوحيد تفعيلات المرحلة الأولى (`Iso-Syllabic Stage-1 Lock`)، ثم أنتجها في `New session` على `https://www.flowmusic.app/` عبر بروتوكول التهيئة المسبقة بصيغة `JSON` على خطوتين (`Module 39`) عبر `/browser`»
 
 **ما الذي ستقوم به المهارة تلقائياً؟**
 1. **التعرّف التلقائي على اللهجة البحرانية مقابل العراقية وتشكيلها لحنياً (`Automatic Bahrani vs. Iraqi Dialect Engine — Module 43`):**
@@ -122,12 +122,12 @@ Traditional Iraqi and Bahrani Hussaini Latmiya, Thaqeel Faizi and Nazla style, M
 لقفل ذاكرة وكيل `Producer Chat` في `https://www.flowmusic.app/` بنسبة 100% ومنع أي أخطاء لحنية أو لغوية أو مقامية أو موسيقية، نطبّق بروتوكول الخطوتين في بداية كل `New session`:
 
 1. **الخطوة الأولى (رسالة التهيئة الشاملة بصيغة `JSON` قبل إدخال أي قصيدة):**
-   انسخ هذا الأمر مع كائن الـ `JSON` الشامل (`V45.0 OMNI-ARCHITECT`) وأرسله في **`Producer Chat`**، وانتظر تأكيد الـ `Producer` بحفظ القواعد دون توليد:
+   انسخ هذا الأمر مع كائن الـ `JSON` الشامل (`V48.0 OMNI-ARCHITECT`) وأرسله في **`Producer Chat`**، وانتظر تأكيد الـ `Producer` بحفظ القواعد دون توليد:
 ```text
-System Context Injection (Hussaini Production Studio OS V45.0): Read and lock the following JSON production constitution in your active session memory as our strict operating protocol for all upcoming tracks in this session. DO NOT call lyrics__register or audio__create_song yet—simply acknowledge that you have locked these rules and are ready to receive the Arabic poem in Step 2:
+System Context Injection (Hussaini Production Studio OS V48.0): Read and lock the following JSON production constitution in your active session memory as our strict operating protocol for all upcoming tracks in this session. DO NOT call lyrics__register or audio__create_song yet—simply acknowledge that you have locked these rules and are ready to receive the Arabic poem in Step 2:
 
 {
-  "protocol_name": "Hussaini_Production_Studio_OS_V45_OMNI_ARCHITECT",
+  "protocol_name": "Hussaini_Production_Studio_OS_V48_OMNI_ARCHITECT",
   "session_mode": "Pre_Conditioning_Lock_Only_Wait_For_Step_2_Lyrics",
   "1_cultural_and_acoustic_firewall": {
     "permitted_sound_sources": [
@@ -204,7 +204,7 @@ System Context Injection (Hussaini Production Studio OS V45.0): Read and lock th
 
 2. **الخطوة الثانية (إرسال القصيدة وأمر التوليد بعد تأكيد الـ `Producer` — مع ملاحظة أن تمرير `<OPTIONAL_USER_CLIP_UUID>` اختياري ويخص المقاطع الموجودة داخل حسابك الشخصي فقط):**
 ```text
-Now execute Step 2 following the locked V45.0 JSON constitution:
+Now execute Step 2 following the locked V48.0 JSON constitution:
 Register the lyrics using lyrics__register and create the track using audio__create_song at 58 BPM (optionally referencing your own workspace clip ID "<OPTIONAL_USER_CLIP_UUID>" if desired) with this sound prompt:
 "Traditional Iraqi and Bahrani Hussaini Latmiya, Thaqeel Faizi and Nazla style, Maqam Saba, 58 BPM, authentic Iraqi and Bahrani colloquial dialect, commanding deep resonant Baritone lead vocal, powerful high chest-voice climbs, natural vocal rasp, emotional weep cracks, heavy 55Hz bare-palm chest thud, 285ms analog tape echo, 3.2s Husseiniya hall reverb, wide unison male Raddada choir response, Pure Acapella No Instruments"
 ```
@@ -271,7 +271,7 @@ python3 scripts/hussaini_dsp_montage.py \
 ---
 
 ### السيناريو 6: استخدام المُترجم الصوتي البرمجي، والمدقق الآلي للقصيدة (`Poem Linter`)، وتشغيل اختبارات الوحدات (`V45.0 API & Unit Tests`)
-يوفر الإصدار **`V45.0 OMNI-ARCHITECT`** دوال برمجية تنفيذية داخل `scripts/hussaini_dsp_montage.py` لمعالجة القصائد صوتياً بحدود الكلمة الصرفية الكاملة، وفحص توازن الشطرين، وتوليد كائنات التهيئة والجسور اللحنية، وفحص جودة الكود آلياً:
+يوفر الإصدار **`V48.0 OMNI-ARCHITECT`** دوال برمجية تنفيذية داخل `scripts/hussaini_dsp_montage.py` لمعالجة القصائد صوتياً بحدود الكلمة الصرفية الكاملة، وفحص توازن الشطرين، وتوليد كائنات التهيئة والجسور اللحنية، وفحص جودة الكود آلياً:
 
 #### 1. استدعاء مُترجم اللهجات وفصل الكلمات والتنوين والمدقق العروضي برمجياً (Python API):
 ```python
@@ -373,7 +373,7 @@ pylint scripts/hussaini_dsp_montage.py tests/test_hussaini_modules.py
 
 ```text
 hussaini-production-studio/
-├── VERSION                                          # مصدر الحقيقة الموحد لرقم الإصدار (V45.0 OMNI-ARCHITECT)
+├── VERSION                                          # مصدر الحقيقة الموحد لرقم الإصدار (V48.0 OMNI-ARCHITECT)
 ├── SKILL.md                                         # الموجّه المهيكل الرشيق (~9KB Router: متى تُستدعى المهارة، القواعد الصلبة، وروابط الوحدات)
 ├── README.md                                        # دليل وتعليمات الاستخدام الشاملة (هذا الملف)
 ├── requirements.txt                                 # متطلبات مكتبات المعالجة الرقمية والفحص (numpy, scipy, pylint, pytest, pytest-cov)
