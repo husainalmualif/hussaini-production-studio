@@ -1,6 +1,6 @@
-# الموسوعة الشاملة للأطوار والمقامات والعروض ودستور الهندسة الصوتية الحسينية (V26.0 – V45.0 OMNI-ARCHITECT & Constitution V5.5)
+# الموسوعة الشاملة للأطوار والمقامات والعروض ودستور الهندسة الصوتية الحسينية (V26.0 – V48.0 OMNI-ARCHITECT & Constitution V5.5)
 
-تجمع هذه الوثيقة المرجعية خلاصة **جامعة الصوتيات الحسينية الرقمية (الإصدارات V26.0 حتى V45.0 OMNI-ARCHITECT)** مع **دستور البرومبت الحسيني (Hussaini Prompt Constitution V5.5)**، شاملةً الفيزياء الفسيولوجية للصوت الجوهري والحنجرة الذهبية، هندسة المسارات الخمسة لطور الزنجيل والبندرية (`5-Track DAW Routing Matrix`)، الأطروحة الكاملة للهندسة الصوتية والفونيتك لنعي المنبر الحسيني، فلسفة ومعايير مزج الأطوار والفرق بين المقام («القماشة») والطور («الثوب المُفصّل»)، دستور الأركان الثلاثة لنجاح اللطمية الحسينية، بروتوكول التهيئة المسبقة للجلسة بصيغة `JSON` (`Module 39`)، هندسة التنوين اللهجي والفصيح وفصل الكلمات لمنع التشبيك (`Modules 40–41`)، موسوعة الليالي العشر وفن الگريز والهوسة (`Module 42`)، وخوارزمية التمييز الصوتي واللحني والمقامي الدقيق بين اللهجتين البحرانية والعراقية (`Module 43`).
+تجمع هذه الوثيقة المرجعية خلاصة **جامعة الصوتيات الحسينية الرقمية (الإصدارات V26.0 حتى V48.0 OMNI-ARCHITECT)** مع **دستور البرومبت الحسيني (Hussaini Prompt Constitution V5.5)**، شاملةً الفيزياء الفسيولوجية للصوت الجوهري والحنجرة الذهبية، هندسة المسارات الخمسة لطور الزنجيل والبندرية (`5-Track DAW Routing Matrix`)، الأطروحة الكاملة للهندسة الصوتية والفونيتك لنعي المنبر الحسيني، فلسفة ومعايير مزج الأطوار والفرق بين المقام («القماشة») والطور («الثوب المُفصّل»)، دستور الأركان الثلاثة لنجاح اللطمية الحسينية، بروتوكول التهيئة المسبقة للجلسة بصيغة `JSON` (`Module 39`)، هندسة التنوين اللهجي والفصيح وفصل الكلمات لمنع التشبيك (`Modules 40–41`)، موسوعة الليالي العشر وفن الگريز والهوسة (`Module 42`)، وخوارزمية التمييز الصوتي واللحني والمقامي الدقيق بين اللهجتين البحرانية والعراقية (`Module 43`).
 
 ---
 
@@ -456,7 +456,7 @@ Register the lyrics using lyrics__register and create the track using audio__cre
 
 ---
 
-## 13. الفيزياء الفسيولوجية للصوت الجوهري والحنجرة الذهبية، قواعد القصيدة الشجية، وهندسة المسارات الخمسة لطور «الزنجيل» و«البندرية» (`V45.0 OMNI-ARCHITECT`)
+## 13. الفيزياء الفسيولوجية للصوت الجوهري والحنجرة الذهبية، قواعد القصيدة الشجية، وهندسة المسارات الخمسة لطور «الزنجيل» و«البندرية» (`V48.0 OMNI-ARCHITECT`)
 
 ### أولاً: قواعد كتابة القصيدة الحسينية الشجية وصياغة الأطوار اللحنية
 1. **اختيار البحر والوزن الشعري الشجي:**
@@ -532,7 +532,7 @@ Register the lyrics using lyrics__register and create the track using audio__cre
 
 ---
 
-## 14. الأطروحة الشاملة للهندسة الصوتية والأدائية والفونيتك لنعي المنبر الحسيني ومقارنة المدرستين العراقية والبحرانية (`V45.0 OMNI-ARCHITECT`)
+## 14. الأطروحة الشاملة للهندسة الصوتية والأدائية والفونيتك لنعي المنبر الحسيني ومقارنة المدرستين العراقية والبحرانية (`V48.0 OMNI-ARCHITECT`)
 
 ### أولاً: الجذور التاريخية وأطوار النعي الستة الكبرى
 يمتد النعي الحسيني بجذوره إلى الرثاء العربي القديم متبلوراً عقائدياً من دعوة أهل البيت (ع) لإحياء أمرهم بالإنشاد الحزين («رحم الله من أحيا أمرنا» وتوجيه الإمام الصادق ع لأبي هارون المكفوف: «أنشدني كما تنشدون عندكم» أي بالرقة والشجن). وتنقسم أطوار النعي المنبري إلى ستة أطوار رئيسية:
@@ -585,7 +585,7 @@ Register the lyrics using lyrics__register and create the track using audio__cre
 
 ---
 
-## 15. فلسفة ومعايير مزج الأطوار والألحان (`Atwar & Melodic Blending Architecture`)، الفرق الجوهري بين «المقام» و«الطور»، والتقسيم الوظيفي للأطوار مع الأمثلة التطبيقية (`V45.0 OMNI-ARCHITECT`)
+## 15. فلسفة ومعايير مزج الأطوار والألحان (`Atwar & Melodic Blending Architecture`)، الفرق الجوهري بين «المقام» و«الطور»، والتقسيم الوظيفي للأطوار مع الأمثلة التطبيقية (`V48.0 OMNI-ARCHITECT`)
 
 ### أولاً: الفرق الجوهري بين «المقام الموسيقي» («القماشة») و«الطور الحسيني» («الثوب المُفصّل»)
 العلاقة بين المقام والطور تشبه العلاقة بين **«القماشة الخام»** و**«الثوب المُفصّل»**:
@@ -655,7 +655,7 @@ Register the lyrics using lyrics__register and create the track using audio__cre
 
 ---
 
-## 16. دستور الأركان الثلاثة لنجاح اللطمية الحسينية: اللحن والأطوار، البناء المقامي، والهندسة الصوتية في الاستوديو والمأتم المباشر (`V45.0 OMNI-ARCHITECT`)
+## 16. دستور الأركان الثلاثة لنجاح اللطمية الحسينية: اللحن والأطوار، البناء المقامي، والهندسة الصوتية في الاستوديو والمأتم المباشر (`V48.0 OMNI-ARCHITECT`)
 
 تعتمد اللطمية الحسينية الناجحة والخالدة على تكامل ثلاثة أركان أساسية (**اللحن والأطوار، توظيف المقامات، والهندسة الصوتية بشقيها الاستوديوي والمباشر**) لتقديم عمل فني وعزائي يلامس وجدان المستمع ويحفظ قدسية وهوية المنبر الحسيني:
 
@@ -693,7 +693,7 @@ Register the lyrics using lyrics__register and create the track using audio__cre
 
 ---
 
-## 17. بروتوكول التهيئة المسبقة للجلسة بصيغة `JSON` على خطوتين في `Producer Chat` (`Module 39: Two-Step JSON Session Pre-Conditioning Protocol — V45.0 OMNI-ARCHITECT`)
+## 17. بروتوكول التهيئة المسبقة للجلسة بصيغة `JSON` على خطوتين في `Producer Chat` (`Module 39: Two-Step JSON Session Pre-Conditioning Protocol — V48.0 OMNI-ARCHITECT`)
 
 ### الفلسفة الهندسية (`JSON Session Pre-Conditioning / System Context Injection`)
 وكيل **`Producer Chat`** في `https://www.flowmusic.app/` هو نموذج لغوي ذكي يتحكم في أدوات التوليد الصوتي (`lyrics__register`، `audio__create_song`، `audio__render_edit`، `audio__apply_effect`). عندما نعطيه **دستور الإنتاج الحسيني الشامل بصيغة `JSON`** في الرسالة الأولى داخل `New session` قبل إدخال أي قصيدة، ونطلب منه حفظه كمرجع تشغيلي للجلسة دون استدعاء أداة التوليد بعد، فإنه يقفل ذاكرته السياقية بالكامل على قوانين المأتم الحسيني (منع الغناء والآلات، قفل اللهجة العراقية والبحرانية والوقف بالسكون، الالتزام بالـ 40 كلمة في `Sound` بمقام واحد، وتثبيت المعرفات الصوتية المرجعية والفلاتر).
@@ -704,10 +704,10 @@ Register the lyrics using lyrics__register and create the track using audio__cre
 انسخ هذا الأمر مع كائن الـ `JSON` الشامل وأرسله في **`Producer Chat`**، وانتظر رد الـ `Producer` بتأكيد استلام القواعد (`Acknowledge & Lock`):
 
 ```text
-System Context Injection (Hussaini Production Studio OS V45.0): Read and lock the following JSON production constitution in your active session memory as our strict operating protocol for all upcoming tracks in this session. DO NOT call lyrics__register or audio__create_song yet—simply acknowledge that you have locked these rules and are ready to receive the Arabic poem in Step 2:
+System Context Injection (Hussaini Production Studio OS V48.0): Read and lock the following JSON production constitution in your active session memory as our strict operating protocol for all upcoming tracks in this session. DO NOT call lyrics__register or audio__create_song yet—simply acknowledge that you have locked these rules and are ready to receive the Arabic poem in Step 2:
 
 {
-  "protocol_name": "Hussaini_Production_Studio_OS_V45_OMNI_ARCHITECT",
+  "protocol_name": "Hussaini_Production_Studio_OS_V48_OMNI_ARCHITECT",
   "session_mode": "Pre_Conditioning_Lock_Only_Wait_For_Step_2_Lyrics",
   "1_cultural_and_acoustic_firewall": {
     "permitted_sound_sources": [
@@ -802,7 +802,7 @@ System Context Injection (Hussaini Production Studio OS V45.0): Read and lock th
 بعد أن يردّ عليك `Producer Chat` بأنه حفظ دستور الـ `JSON` وأنه جاهز، أرسل له الرسالة الثانية التالية مع أبيات قصيدتك (12 سطراً موزونة ومشكولة بالوقف بالسكون):
 
 ```text
-Now execute Step 2 following the locked V45.0 JSON constitution:
+Now execute Step 2 following the locked V48.0 JSON constitution:
 1. Call `lyrics__register` with the exact pure-Arabic lyrics below.
 2. Call `audio__create_song` at 58 BPM (optionally referencing your own workspace clip ID "<OPTIONAL_USER_CLIP_UUID>" if desired) using the `iraqi_bahrani_58bpm_saba` 40-word sound prompt:
 "Traditional Iraqi and Bahrani Hussaini Latmiya, Thaqeel Faizi and Nazla style, Maqam Saba, 58 BPM, authentic Iraqi and Bahrani colloquial dialect, commanding deep resonant Baritone lead vocal, powerful high chest-voice climbs, natural vocal rasp, emotional weep cracks, heavy 55Hz bare-palm chest thud, 285ms analog tape echo, 3.2s Husseiniya hall reverb, wide unison male Raddada choir response, Pure Acapella No Instruments"
@@ -833,7 +833,7 @@ Lyrics to register:
 
 ---
 
-## 18. هندسة النطق الدقيق والتنوين العروضي واللّهجي (`Module 40`)، قانون فصل الكلمات لمنع التشبيك في `Flow Music` (`Module 41`)، وموسوعة الليالي العشر وفن «الگريز» والهوسة والأطوار التراثية النادرة (`Module 42 — V45.0 OMNI-ARCHITECT`)
+## 18. هندسة النطق الدقيق والتنوين العروضي واللّهجي (`Module 40`)، قانون فصل الكلمات لمنع التشبيك في `Flow Music` (`Module 41`)، وموسوعة الليالي العشر وفن «الگريز» والهوسة والأطوار التراثية النادرة (`Module 42 — V48.0 OMNI-ARCHITECT`)
 
 ### أولاً: هندسة النطق الدقيق والتنوين المتناسب مع اللهجات والفصحى في `www.flowmusic.app` (`Module 40: Dialect-Accurate & Prosodic Tanween Resolution`)
 يعاني محرك التحويل الصوتي (`Arabic G2P Tokenizer`) في نماذج الذكاء الاصطناعي من خلل شائع عند قراءة رموز التنوين القياسية (`ً ، ٌ ، ٍ`)؛ فإما أن يبتلعها فيكسر الوزن العروضي، أو يقرأها بلهجة فصحى مدرسية جافة داخل القصيدة الشعبية. ولضبط التنوين بنسبة 100% بما يناسب كل لهجة ومقام، تُطبّق القواعد الثلاث التالية:
@@ -924,7 +924,7 @@ Lyrics to register:
 
 ---
 
-## 19. خوارزمية التعرف التلقائي والتمييز الصوتي واللحني والمقامي الدقيق بين «اللهجة البحرانية» و«اللهجة العراقية» (`Module 43: Automatic Bahrani vs. Iraqi Dialect Identification, Phonological Diacritics & Maqam Articulation Engine — V45.0 OMNI-ARCHITECT`)
+## 19. خوارزمية التعرف التلقائي والتمييز الصوتي واللحني والمقامي الدقيق بين «اللهجة البحرانية» و«اللهجة العراقية» (`Module 43: Automatic Bahrani vs. Iraqi Dialect Identification, Phonological Diacritics & Maqam Articulation Engine — V48.0 OMNI-ARCHITECT`)
 
 لا يقتصر الفرق بين المدرسة البحرانية والمدرسة العراقية على المفردات فحسب، بل يمتد إلى **فيزياء نطق الحروف والحركات (الفونولوجيا) وكيفية تفاعل الكلمة مع اللحن والمقام الموسيقي**. هذا القسم يزود الوكيل الذكي ومحرك `Flow Music` (`Lyria 3.5`) بخوارزمية التعرف التلقائي على اللهجة وضبط تشكيلها الصوتي ومسارها النغمي بدقة 100%:
 
