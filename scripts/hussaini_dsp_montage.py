@@ -1,19 +1,26 @@
 #!/usr/bin/env python3
-# pylint: disable=too-many-lines,too-many-return-statements
-"""Hussaini Audio Omni-Engine DSP, 5-Track DAW & Phonetics Compiler (V45.0 OMNI-ARCHITECT).
+# pylint: disable=too-many-lines,too-many-return-statements,too-many-branches,too-many-locals,too-many-statements,too-many-arguments,too-many-positional-arguments
+"""Hussaini Audio Omni-Engine DSP, 5-Track DAW & Phonetics Compiler (V48.0 OMNI-ARCHITECT).
 
 Bridges poetic/phonetic engineering with procedural DSP audio mastering:
-- Single-Source Version Management via root VERSION file
-- Module 41: Space-First & Optional-Tatweel Anti-Slurring Word De-Cliticization Engine
-- Module 40: Safe Dialect-Accurate & Prosodic Tanween Compiler (protects vocalized verbs & vocatives)
+- Single-Source Version Management via root VERSION file (V48.0 OMNI-ARCHITECT)
+- Unified Lyrics Spec (Arabic [المُسْتَهَلّ]/[النَّزْلَة الأُولَى]/[الكَسْرَة وَالمُسْتَهَلّ] & English [Chorus]/[Verse 1])
+  supporting both 12-line horizontal couplet grid and 20-line vertical 3-Part Golden Architecture
+- Module 41 & 48: Zero Word-Initial Sukun (epenthetic short vowel مِتُونِي/دُمُوعْ/جُرُوحْ or clitic liaison بِدْمُوعْ)
+  and Open Feminine Haa (-َه without Sukun) to eliminate G2P heavy 'HHH' & glottal stops
+- Module 40: Safe Dialect-Accurate & Prosodic Tanween Compiler (preserving trailing '..' hemistich pause)
 - Module 43: Word-Boundary Morphological Dialect Shaper (Bahrani, Iraqi, and Hybrid Iraqi-Bahrani)
-- Modules 34 & 38: Arabic Prosodic Syllable Segmenter (CV/CVV/CVC) & Per-Hemistich Iso-Syllabic Validator
-- Pre-Generation Poem Linter (lint_poem) & Session Ledger Logger (log_generation_session)
-- Module 39: Flow Music JSON Session Pre-Conditioning with Optional reference_clip_id (default None)
-- 5-Track DAW Routing with SOS Filters (butter output='sos' + sosfilt), Absolute dBFS RMS Sidechain
-  Ducking (-3.0dB with Attack/Release), Fast Vectorized Multi-Tap Dynacord Echo, ITU-R BS.1770-4
-  LUFS Loudness Normalization (-14.0 LUFS) + True-Peak Limiter (-1.0 dBTP), Vocal Onset Sync,
-  Bandari Swing, and Optional Real Acoustic Samples / IR Directory (--samples-dir)
+- Modules 34 & 38: True Prosodic CV/CVV/CVC Segmenter (with Shadda gemination & Madd detection)
+- Heritage Poetics & Atwar Separation: Poetic Meter (Wazn) vs. Performance Melody (Tor),
+  Iraqi Abudhiyah Jinas Validator (validate_abudhiyah_jinas), Seven-Line Zuhayri Mawal Validator
+  (validate_zuhayri_mawal), Interactive Ashouri Ahaat Injector (format_ashouri_interactive_ahaat),
+  and Bahrani Heritage Modes (bahrani_thulathi, bahrani_rubai, bahrani_haidari, bahrani_waqfa,
+  bahrani_muthakkal, and Antiphonal Dual-Choir Faujain routing)
+- Reference Audio Reverse Engineering (extract_reference_audio_profile via Low-Band Autocorrelation,
+  Cepstral Tonic Pitch & Maqam Estimator, Crest Factor & LUFS)
+- 5-Track DAW Routing with Tempo-Synced Delay (60000 / (bpm * 2)), Rosenberg Glottal Pulse + Formant
+  Resonator Ahaat Synthesis (F1=730Hz, F2=1090Hz, F3=2440Hz, +-4 cents choir detune), Stem-Aware
+  Hybrid Mastering (--replace-ai-percussion), SOS Filters, -28 dBFS RMS Ducking, and -14.0 LUFS Mastering
 """
 
 import argparse
@@ -34,7 +41,7 @@ def get_skill_version():
     if os.path.isfile(version_file):
         with open(version_file, "r", encoding="utf-8") as handle:
             return handle.read().strip()
-    return "V45.0 OMNI-ARCHITECT"
+    return "V48.0 OMNI-ARCHITECT"
 
 
 SKILL_VERSION = get_skill_version()
@@ -47,16 +54,168 @@ MAQAM_FREQS = {
     "kurd": [146.83, 155.56, 174.61, 220.00],
     "rast": [130.81, 146.83, 160.00, 196.00],
     "nahawand": [146.83, 164.81, 174.61, 220.00],
+    "sikah": [160.00, 174.61, 196.00, 220.00],
 }
 
 COMMON_JINS_GRAPH = {
-    "bayati": ["saba", "kurd", "hijaz", "lami", "nahawand"],
+    "bayati": ["saba", "kurd", "hijaz", "lami", "nahawand", "sikah"],
     "saba": ["bayati", "lami", "hijaz", "rast", "nahawand"],
-    "hijaz": ["bayati", "saba", "kurd", "nahawand"],
+    "hijaz": ["bayati", "saba", "kurd", "nahawand", "sikah"],
     "lami": ["saba", "bayati", "kurd"],
     "kurd": ["bayati", "lami", "hijaz", "nahawand"],
-    "rast": ["saba", "bayati", "hijaz"],
+    "rast": ["saba", "bayati", "hijaz", "sikah"],
     "nahawand": ["kurd", "bayati", "saba", "hijaz"],
+    "sikah": ["bayati", "hijaz", "rast", "saba"],
+}
+
+# Separation of Poetic Meter (الوزن الشعري) vs. Performance Melody (الطور الأدائي)
+POETIC_METERS_CATALOG = {
+    "nassari": {
+        "arabic_name": "وزن النصّاري",
+        "rhyme_scheme": "AAAB (الرابع يستقر على الراء أو قافية المستهل)",
+        "typical_syllables_per_hemistich": (7, 9),
+        "compatible_atwar": [
+            "tor_nai_kashi", "tor_ashouri", "tor_rukbani", "tor_janoubi",
+            "tor_zaarijawi", "tor_muthakkal", "tor_darj_karbalai",
+        ],
+    },
+    "faizi": {
+        "arabic_name": "وزن الفايزي (البحراني)",
+        "rhyme_scheme": "AAAB / AABB",
+        "typical_syllables_per_hemistich": (8, 11),
+        "compatible_atwar": [
+            "tor_faizi_bahrani", "tor_muthakkal_bahrani", "tor_tawshih_bahrani",
+            "tor_waqfa_bahrani", "tor_nai_kashi",
+        ],
+    },
+    "mujarradat": {
+        "arabic_name": "وزن المجرّدات (المهداد / النعي)",
+        "rhyme_scheme": "AAAA (متحد الروي صدراً وعجزاً)",
+        "typical_syllables_per_hemistich": (7, 9),
+        "compatible_atwar": [
+            "tor_nai_mujarrad", "tor_ashouri", "tor_muthakkal", "tor_mullai",
+        ],
+    },
+    "abudhiyah": {
+        "arabic_name": "وزن الأبوذية العراقية",
+        "rhyme_scheme": "AAA(Jinas) + B(-يَّه)",
+        "typical_syllables_per_hemistich": (10, 12),
+        "compatible_atwar": [
+            "tor_lami_iraqi", "tor_huwaizawi", "tor_zaarijawi", "tor_shushtari", "tor_nayli",
+        ],
+    },
+    "zuhayri_mawal": {
+        "arabic_name": "وزن الموّال السبعوي (الزهيري)",
+        "rhyme_scheme": "AAA B AAA (مع العرگ في الشطر الرابع)",
+        "typical_syllables_per_hemistich": (11, 14),
+        "compatible_atwar": [
+            "tor_mawal_iraqi", "tor_rukbani", "tor_dashti", "tor_kashi",
+        ],
+    },
+    "tajleeb": {
+        "arabic_name": "وزن التجليبة",
+        "rhyme_scheme": "AABB / ABCB",
+        "typical_syllables_per_hemistich": (7, 9),
+        "compatible_atwar": [
+            "tor_tajleeb_furati", "tor_nai_mujarrad", "tor_ashouri", "tor_mullai",
+        ],
+    },
+    "rukbani": {
+        "arabic_name": "وزن الركباني / الحدي",
+        "rhyme_scheme": "AAAB / ABCB",
+        "typical_syllables_per_hemistich": (6, 8),
+        "compatible_atwar": [
+            "tor_rukbani", "tor_hadi", "tor_darj_karbalai", "tor_ashouri",
+        ],
+    },
+    "daksani": {
+        "arabic_name": "وزن الدكسني",
+        "rhyme_scheme": "AAAB",
+        "typical_syllables_per_hemistich": (6, 8),
+        "compatible_atwar": ["tor_nai_mujarrad", "tor_mullai", "tor_janoubi"],
+    },
+    "muwashah": {
+        "arabic_name": "وزن الموشّح والتوشيح",
+        "rhyme_scheme": "متعدد الأدوار والخانات مع لازمة موحدة",
+        "typical_syllables_per_hemistich": (6, 10),
+        "compatible_atwar": [
+            "tor_tawshih_bahrani", "tor_bahrani_thulathi", "tor_bahrani_rubai",
+            "tor_bahrani_haidari", "tor_darj_karbalai",
+        ],
+    },
+}
+
+PERFORMANCE_ATWAR_CATALOG = {
+    "tor_nai_kashi": {
+        "arabic_name": "طور النعي الكاشي / المنبري",
+        "school": "iraqi_bahrani",
+        "primary_maqam": "hijaz",
+        "default_bpm": 0,
+        "delivery_rule": "مدّ الكلمة الثانية والأخيرة مع ترجيع خفيف وونّة منبرية في القفلة",
+    },
+    "tor_ashouri": {
+        "arabic_name": "الطور العاشوري التفاعلي",
+        "school": "iraqi",
+        "primary_maqam": "saba",
+        "default_bpm": 56,
+        "delivery_rule": "مدّ الكلمة الأخيرة وقطع الصوت فجأة (1.5s) لمشاركة المعزين بـ (آه .. آه)",
+    },
+    "tor_muthakkal_bahrani": {
+        "arabic_name": "طور المثكّل البحراني / القطيفي",
+        "school": "bahrani",
+        "primary_maqam": "saba",
+        "default_bpm": 54,
+        "delivery_rule": "يبدأ وينتهي بهدوء تام مع ونّة منكسرة في آخر كل شطر لاستدرار الدمعة",
+    },
+    "tor_faizi_bahrani": {
+        "arabic_name": "الطور الفايزي البحراني الأصيل",
+        "school": "bahrani",
+        "primary_maqam": "hijaz",
+        "default_bpm": 62,
+        "delivery_rule": "الإسراع حتى الكلمة الثالثة ثم مدّها وترجيعها وختم الشطر بالونّة قبل الحرف الأخير",
+    },
+    "tor_bahrani_thulathi": {
+        "arabic_name": "طور العزاء البحراني الثلاثي (الموكبي)",
+        "school": "bahrani",
+        "primary_maqam": "bayati",
+        "default_bpm": 76,
+        "delivery_rule": "ضربتان متقاربتان (دم-دم) + ضربة ثالثة ثقيلة مع وقفة تنفسية وتبادل الفوجين",
+    },
+    "tor_bahrani_rubai": {
+        "arabic_name": "طور العزاء البحراني الرباعي (الداخلية والموكب)",
+        "school": "bahrani",
+        "primary_maqam": "nahawand",
+        "default_bpm": 72,
+        "delivery_rule": "أربع ضربات صدرية متزنة (3 مسير + 1 ارتكاز) مع نظام الفوجين المتقابلين",
+    },
+    "tor_bahrani_haidari": {
+        "arabic_name": "الطور الحيدري الملحمي البحراني",
+        "school": "bahrani",
+        "primary_maqam": "hijaz",
+        "default_bpm": 96,
+        "delivery_rule": "إيقاع موكبي حماسي متصاعد بضربات صدرية حادة في رثاء الأبطال والعباس (ع)",
+    },
+    "tor_waqfa_bahrani": {
+        "arabic_name": "طور الوقفة البحرانية (التجنيزة)",
+        "school": "bahrani",
+        "primary_maqam": "saba",
+        "default_bpm": 104,
+        "delivery_rule": "توقف المسير لترديد أبيات قصيرة مكثفة سريعة الإيقاع بتناوب الفوج الأول والثاني",
+    },
+    "tor_zaarijawi": {
+        "arabic_name": "الطور الزريجاوي (طور الكعبي)",
+        "school": "iraqi",
+        "primary_maqam": "sikah",
+        "default_bpm": 0,
+        "delivery_rule": "وتيرة متأرجحة مع مدّ وترجيع خفيفين وصعود ونزول بنبرة منهدّ الركن بدون ونّة",
+    },
+    "tor_huwaizawi": {
+        "arabic_name": "الطور الحويزاوي",
+        "school": "iraqi",
+        "primary_maqam": "lami",
+        "default_bpm": 0,
+        "delivery_rule": "مدّات حنجرية عالية في الجواب في مقام اللامي والصبا مع كسرة فراتية",
+    },
 }
 
 WORD_SEPARATION_MAP = {
@@ -81,6 +240,10 @@ WORD_SEPARATION_MAP = {
     "بغربتي": "بِـ غُرْبِتِي",
     "بضلوعي": "بِـ ضْلُوعِي",
     "بظلوعي": "بِـ ظْلُوعِي",
+    "بدموع": "بِدْمُوعْ",
+    "بدموعي": "بِدْمُوعِي",
+    "بجروح": "بِجْرُوحْ",
+    "بجروحي": "بِجْرُوحِي",
     "لحسين": "لِـ حْسَيْنْ",
     "للذبحوا": "لِلْ ذَبْحَوْا",
     "للناس": "لِلْ نَاسْ",
@@ -195,25 +358,45 @@ DEMONSTRATIVE_HAL_BAHRANI_MAP = {
     "هالمسية": "هَلْ مَسِيَّه",
 }
 
+# Zero Word-Initial Sukun & Zero Artificial Glottal Hamza:
+# Replace both artificial prosthetic 'إِCْ' and bare initial Sukun 'Cْ' with soft epenthetic short vowel
 WORD_INITIAL_SUKUN_REPAIR_MAP = {
-    "إِدْمُوعْ": "دْمُوعْ",
-    "إِجْرُوحْ": "جْرُوحْ",
-    "إِمْتُونِي": "مْتُونِي",
-    "إِسْنِينِي": "سْنِينِي",
-    "إِسْكِينَهْ": "سْكِينَه",
-    "إِسْكِينَه": "سْكِينَه",
-    "إِعْيُونَكْ": "عْيُونَكْ",
-    "إِعْيُونِكْ": "عْيُونِكْ",
-    "إِتْگِلَّهْ": "تْگِلَّه",
-    "إِتْگِلَّه": "تْگِلَّه",
-    "إِتْسُولِفْ": "تْسُولِفْ",
-    "إِهْمُومْ": "هْمُومْ",
+    "إِدْمُوعْ": "دُمُوعْ",
+    "دْمُوعْ": "دُمُوعْ",
+    "إِجْرُوحْ": "جُرُوحْ",
+    "جْرُوحْ": "جُرُوحْ",
+    "إِمْتُونِي": "مِتُونِي",
+    "مْتُونِي": "مِتُونِي",
+    "إِسْنِينِي": "سِنِينِي",
+    "سْنِينِي": "سِنِينِي",
+    "إِسْكِينَهْ": "سِكِينَه",
+    "إِسْكِينَه": "سِكِينَه",
+    "سْكِينَه": "سِكِينَه",
+    "إِعْيُونَكْ": "عِيُونَكْ",
+    "عْيُونَكْ": "عِيُونَكْ",
+    "إِعْيُونِكْ": "عِيُونِكْ",
+    "عْيُونِكْ": "عِيُونِكْ",
+    "إِعْيُونِي": "عِيُونِي",
+    "عْيُونِي": "عِيُونِي",
+    "إِتْگِلَّهْ": "تِگِلَّه",
+    "إِتْگِلَّه": "تِگِلَّه",
+    "تْگِلَّه": "تِگِلَّه",
+    "إِتْسُولِفْ": "تِسُولِفْ",
+    "تْسُولِفْ": "تِسُولِفْ",
+    "إِهْمُومْ": "هُمُومْ",
+    "هْمُومْ": "هُمُومْ",
+    "شْفَافَه": "شِفَافَه",
+    "مْفَارْگَه": "مِفَارْگَه",
+    "شْحَاچِي": "إِشْحَاچِي",
+    "جْفُونْهَا": "جُفُونْهَا",
+    "بْنَيَّه": "بِنَيَّه",
 }
 
 DIALECTAL_DIPHTHONG_AND_VOWEL_MAP = {
     "هَنِيَالِي": "هَنْيَالِي",
     "غَرِيبَهْ": "غَرِيبَه",
     "حِچَايَهْ": "حِچَايَه",
+    "حِكَايَهْ": "حِكَايَه",
     "خَرَابَهْ": "خَرَابَه",
     "سَبِيَّهْ": "سَبِيَّه",
     "عَجِيبَهْ": "عَجِيبَه",
@@ -228,6 +411,9 @@ DIALECTAL_DIPHTHONG_AND_VOWEL_MAP = {
     "رَزِيَّهْ": "رَزِيَّه",
     "عَطِيَّهْ": "عَطِيَّه",
     "شِفِيَّهْ": "شِفِيَّه",
+    "يُمَّهْ": "يُمَّه",
+    "بُويَهْ": "بُويَه",
+    "خُويَهْ": "خُويَه",
 }
 
 IRAQI_WORD_SHAPING_MAP = {
@@ -270,8 +456,8 @@ IRAQI_WORD_SHAPING_MAP = {
     "حسرة": "حَسْرَه",
     "ونة": "وِنَّه",
     "ونّة": "وِنَّه",
-    "وگفت": "وْگَفِتْ",
-    "ووگفت": "وَ وْگَفِتْ",
+    "وگفت": "وُگَفِتْ",
+    "ووگفت": "وَ وُگَفِتْ",
     "وگفونه": "وُگَفُونَه",
     "عفتني": "عِفْتْنِي",
     "وعفتني": "وَ عِفْتْنِي",
@@ -323,7 +509,7 @@ IRAQI_WORD_SHAPING_MAP = {
     "گنة": "گِلْنَه",
     "حكنه": "حَگْنَه",
     "يلحك": "يِلْحَگْ",
-    "ابجلمة": "بْچِلْمَه",
+    "ابجلمة": "بِچِلْمَه",
     "خدمنك": "أَخْدِمَنَّكْ",
     "اخدمنك": "أَخْدِمَنَّكْ",
     "غريبه": "غَرِيبَه",
@@ -352,11 +538,11 @@ IRAQI_WORD_SHAPING_MAP = {
     "قصة": "قِصَّه",
     "عجيبه": "عَجِيبَه",
     "عجيبة": "عَجِيبَه",
-    "دموع": "دْمُوعْ",
+    "دموع": "دُمُوعْ",
     "زچيه": "زَچِيَّه",
     "زچية": "زَچِيَّه",
-    "تسولف": "تْسُولِفْ",
-    "هموم": "هْمُومْ",
+    "تسولف": "تِسُولِفْ",
+    "هموم": "هُمُومْ",
     "رزيه": "رَزِيَّه",
     "رزية": "رَزِيَّه",
     "طفله": "طِفْلَه",
@@ -378,17 +564,17 @@ IRAQI_WORD_SHAPING_MAP = {
     "خويه": "خُويَه",
     "يمه": "يُمَّه",
     "گعدت": "گَعْدَتْ",
-    "تگله": "تْگِلَّه",
+    "تگله": "تِگِلَّه",
     "گوم": "گُومْ",
     "شوف": "شُوفْ",
     "حزينه": "حَزِينَه",
     "حزينة": "حَزِينَه",
-    "متوني": "مْتُونِي",
+    "متوني": "مِتُونِي",
     "زرگ": "زُرُگْ",
     "زُرَگْ": "زُرُگْ",
     "زرك": "زُرُگْ",
     "تراچي": "تَرَاچِي",
-    "جروح": "جْرُوحْ",
+    "جروح": "جُرُوحْ",
     "يتيمه": "يَتِيمَه",
     "يتيمة": "يَتِيمَه",
     "حضنت": "حِظْنَتْ",
@@ -396,8 +582,8 @@ IRAQI_WORD_SHAPING_MAP = {
     "نحره": "نَحْرَه",
     "سكتت": "سِكْتَتْ",
     "ذيچ": "ذِيچْ",
-    "بنية": "بْنَيَّه",
-    "بنيه": "بْنَيَّه",
+    "بنية": "بِنَيَّه",
+    "بنيه": "بِنَيَّه",
     "كفيلي": "كَفِيلِي",
     "حيلي": "حَيْلِي",
     "حيل": "حَيْلْ",
@@ -419,18 +605,18 @@ IRAQI_WORD_SHAPING_MAP = {
     "طريگ": "طَرِيگْ",
     "مدلل": "مُدَلَّلْ",
     "عليك": "عَلَيْكْ",
-    "سكينه": "سْكِينَه",
-    "سكينة": "سْكِينَه",
+    "سكينه": "سِكِينَه",
+    "سكينة": "سِكِينَه",
     "هنيالي": "هَنْيَالِي",
     "خادم": "خَادِمْ",
     "مولاي": "مَوْلَايْ",
-    "سنيني": "سْنِينِي",
+    "سنيني": "سِنِينِي",
     "عيني": "عَيْنِي",
-    "عيونك": "عْيُونَكْ",
+    "عيونك": "عِيُونَكْ",
     "شده": "شِدَّه",
     "شدة": "شِدَّه",
     "ينخونك": "يِنْخُونَكْ",
-    "مضيع": "مْظَيِّعْ",
+    "مضيع": "مِظَيِّعْ",
     "ندمان": "نَدْمَانْ",
     "يلحگ": "يِلْحَگْ",
 }
@@ -491,11 +677,11 @@ BAHRANI_WORD_SHAPING_MAP = {
     "هالگفرة": "هَلْ گُفْرَه",
     "هالمسيه": "هَلْ مَسِيَّه",
     "هالمسية": "هَلْ مَسِيَّه",
-    "دموع": "دْمُوعْ",
-    "جروح": "جْرُوحْ",
-    "متوني": "مْتُونِي",
-    "سنيني": "سْنِينِي",
-    "عيونك": "عْيُونِكْ",
+    "دموع": "دُمُوعْ",
+    "جروح": "جُرُوحْ",
+    "متوني": "مِتُونِي",
+    "سنيني": "سِنِينِي",
+    "عيونك": "عِيُونِكْ",
     "وينك": "وَيْنِكْ",
     "عليها": "عَلَيْهَا",
     "اديها": "إِيْدَيْهَا",
@@ -529,11 +715,39 @@ HYBRID_WORD_SHAPING_MAP = {
     "ونّة": "وِنَّه",
     "چبد": "چَبِدْ",
     "جبد": "چَبِدْ",
-    "وگفت": "وْگَفِتْ",
+    "وگفت": "وُگَفِتْ",
     "عفتني": "عِفْتْنِي",
     "ضلوعي": "ضْلُوعِي",
     "فاضل": "فَاضِلْ",
 }
+
+# Unified Bilingual Lyrics Section Tag Mapping (Arabic <-> English)
+UNIFIED_CHORUS_TAGS = (
+    "Chorus", "المستهل", "المُسْتَهَلّ", "الكسر والمستهل", "الكَسْرَة وَالمُسْتَهَلّ",
+    "اللازمة", "اللَّازِمَة",
+)
+UNIFIED_VERSE_TAGS = (
+    "Verse", "المقطع", "المَقْطَع", "النزلة", "النَّزْلَة", "الدور", "الدَّوْر",
+)
+UNIFIED_INTRO_OUTRO_TAGS = (
+    "Intro", "Outro", "مقدمة", "المقدمة", "المُقَدِّمَة", "خاتمة", "الخاتمة", "الخَاتِمَة",
+    "الوقفة", "الوَقْفَة", "الفوج الأول", "الفوج الثاني",
+)
+
+
+def classify_section_tag(tag_str):
+    """Normalize any Arabic or English bracketed section header to chorus/verse/intro_outro."""
+    clean = re.sub(r"[\[\]\u064B-\u0652]", "", tag_str).strip()
+    lower = clean.lower()
+    if lower.startswith("chorus") or any(k in clean for k in ("مستهل", "كسر", "لازمة", "لازمه")):
+        return "chorus"
+    if lower.startswith("verse") or any(k in clean for k in ("مقطع", "نزلة", "نزله", "دور")):
+        return "verse"
+    if lower.startswith(("intro", "outro")) or any(
+        k in clean for k in ("مقدمة", "مقدمه", "خاتمة", "خاتمه", "وقفة", "وقفه", "فوج")
+    ):
+        return "intro_outro"
+    return "other"
 
 
 def _format_tatweel(text_val, use_tatweel=False):
@@ -556,18 +770,21 @@ def normalize_demonstrative_hal(text, dialect="iraqi"):
     result = text
     for raw_dem, phonetic_dem in dem_map.items():
         result = re.sub(rf"(?<!\S){re.escape(raw_dem)}(?!\S)", phonetic_dem, result)
-    # Also fix 'يهل الغرب' / 'يَا هَلْ الغُرَبْ' liaison Kasra
     result = result.replace("يهل الغرب", "يَا هَلِ الغُرَبْ").replace("يَا هَلْ الغُرَبْ", "يَا هَلِ الغُرَبْ")
     return result
 
 
 def repair_word_initial_sukun_and_diphthongs(text):
-    """Repair word-initial Sukun violations (مْتُونِي -> إِمْتُونِي) and Fusha diphthongs in colloquial text."""
+    """Eliminate word-initial Sukun (مْتُونِي -> مِتُونِي) & feminine Haa Sukun (غَرِيبَهْ -> غَرِيبَه)."""
     result = text
     for bad_sukun, repaired in WORD_INITIAL_SUKUN_REPAIR_MAP.items():
         result = re.sub(rf"(?<!\S){re.escape(bad_sukun)}(?!\S)", repaired, result)
     for fusha_diph, coll_mono in DIALECTAL_DIPHTHONG_AND_VOWEL_MAP.items():
         result = re.sub(rf"(?<!\S){re.escape(fusha_diph)}(?!\S)", coll_mono, result)
+    # Strip any remaining Sukun directly on word-final feminine Haa/Taa Marbuta before space/pause/EOL
+    result = re.sub(r"([هة])\u0652(?=\s|$|\.\.|[،\)])", r"\1", result)
+    # Generic guard: if any Arabic word starts with Consonant + Sukun (e.g. بْكَرْبَلَا), convert initial Sukun to light Kasra
+    # Word-initial Sukun is repaired deterministically via WORD_INITIAL_SUKUN_REPAIR_MAP while preserving clitic liaison (بِ ضْلُوعِي)
     return result
 
 
@@ -582,7 +799,7 @@ def de_cliticize_and_separate_words(text, use_tatweel=False):
 
 
 def resolve_dialectal_and_prosodic_tanween(text, dialect="iraqi", use_tatweel=False):
-    """Module 40: Convert mid-line Tanween to phonetic Nunation safely without corrupting next word."""
+    """Module 40: Convert mid-line Tanween to phonetic Nunation and apply end-Sukun BEFORE '..'."""
     processed = de_cliticize_and_separate_words(text, use_tatweel=use_tatweel)
     for raw_phrase, phonetic_phrase in COLLOQUIAL_TANWEEN_MAP.items():
         processed = processed.replace(raw_phrase, phonetic_phrase)
@@ -590,7 +807,6 @@ def resolve_dialectal_and_prosodic_tanween(text, dialect="iraqi", use_tatweel=Fa
         processed = processed.replace(raw_fusha, phonetic_fusha)
 
     if dialect in ("iraqi", "bahrani", "iraqi_bahrani"):
-        # Only add Kasra to following verb prefix (ت/ي/ن) if it has NO existing diacritic and NO following Alif (ا/آ/ى)
         processed = re.sub(
             r"(\S+)ٍ\s+([تين])(?![اآى\u064B-\u0652])(\S+)",
             r"\1ِنْ \2ِ\3",
@@ -607,17 +823,42 @@ def resolve_dialectal_and_prosodic_tanween(text, dialect="iraqi", use_tatweel=Fa
         if not stripped or stripped.startswith("["):
             lines.append(line)
             continue
-        stripped = re.sub(r"(?:اً|ً)(\s+\.\.)", r"َا\1", stripped)
-        stripped = re.sub(r"(?:اً|ً)$", "َا", stripped)
-        stripped = re.sub(r"[ٌٍُِ]$", "ْ", stripped)
-        if not stripped.endswith(("ْ", "ا", "ى", "و", "ي", "ه", "ة", ")")):
-            stripped = stripped + "ْ"
-        lines.append(stripped)
+
+        # Preserve trailing pause marker '..' so Sukun is placed on the word BEFORE '..', never '..ْ'
+        trailing_pause = ""
+        if stripped.endswith(".."):
+            trailing_pause = " .."
+            stripped = stripped[:-2].rstrip()
+
+        # Also handle mid-line hemistich pause '..'
+        if ".." in stripped:
+            parts = [p.strip() for p in stripped.split("..")]
+            resolved_parts = []
+            for part in parts:
+                if not part:
+                    continue
+                part = re.sub(r"(?:اً|ً)$", "َا", part)
+                part = re.sub(r"[ٌٍُِ]$", "ْ", part)
+                part = re.sub(r"([هة])\u0652$", r"\1", part)
+                if not part.endswith(("ْ", "ا", "ى", "و", "ي", "ه", "ة", ")")):
+                    part = part + "ْ"
+                resolved_parts.append(part)
+            stripped = " .. ".join(resolved_parts)
+        else:
+            stripped = re.sub(r"(?:اً|ً)$", "َا", stripped)
+            stripped = re.sub(r"[ٌٍُِ]$", "ْ", stripped)
+            stripped = re.sub(r"([هة])\u0652$", r"\1", stripped)
+            if stripped and not stripped.endswith(("ْ", "ا", "ى", "و", "ي", "ه", "ة", ")")):
+                stripped = stripped + "ْ"
+
+        lines.append(f"{stripped}{trailing_pause}".strip())
     return "\n".join(lines)
 
 
 def shape_token_morphologically(token, word_map, use_tatweel=False):
     """Decompose prefixes (ال، و، ب، ك، ل) and shape the stem if present in word_map."""
+    if token == "..":
+        return token
     match = re.match(r"^([\(\[،]*)(.*?)([\)\]،]*)$", token)
     if not match:
         return token
@@ -718,6 +959,7 @@ def detect_and_shape_dialect(text, enforce_iraqi_dhaa=None, use_tatweel=False):
     shaped = resolve_dialectal_and_prosodic_tanween(
         shaped, dialect=detected, use_tatweel=use_tatweel
     )
+    shaped = repair_word_initial_sukun_and_diphthongs(shaped)
     return {
         "detected_dialect": detected,
         "bahrani_score": bahrani_hits,
@@ -728,54 +970,231 @@ def detect_and_shape_dialect(text, enforce_iraqi_dhaa=None, use_tatweel=False):
     }
 
 
-def count_arabic_syllables(hemistich):
-    """Estimate prosodic Arabic syllable count (CV / CVV / CVC) for a single hemistich."""
+def segment_arabic_prosodic_syllables(hemistich):
+    """True Prosodic CV/CVV/CVC Segmenter (المُقطِّع العروضي الصوتي الحقيقي).
+
+    Unpacks Shadda (ّ) into (Sukun 0 + Moved /), distinguishes long Madd vowels (ا، آ، ى، و، ي)
+    from consonant glides, and returns the exact syllable list, count, and Haraka/Sukun pattern (/0).
+    """
     cleaned = re.sub(r"[\[\]\(\)\.\،\-\_ـ]", " ", hemistich)
     words = [w for w in cleaned.split() if w]
-    total_syllables = 0
+    syllables = []
+    arud_pattern = []
+
+    short_vowels_set = {"\u064E", "\u064F", "\u0650"}  # Fatha, Damma, Kasra
+    tanween_set = {"\u064B", "\u064C", "\u064D"}      # Fathatan, Dammatan, Kasratan
+    sukun_char = "\u0652"
+    shadda_char = "\u0651"
+    madda_char = "آ"
+    long_alifs = {"ا", "ى"}
 
     for word in words:
-        short_vowels = len(re.findall(r"[\u064E\u064F\u0650]", word))
-        base_letters = re.findall(r"[\u0621-\u063A\u0641-\u064A\u067E\u0686\u06AF]", word)
-        if not base_letters:
-            continue
-        if short_vowels >= 1:
-            long_unmarked = len(re.findall(r"[اآى]", word))
-            sukun_count = len(re.findall(r"\u0652", word))
-            unmarked_consonants = max(
-                0, len(base_letters) - short_vowels - sukun_count - long_unmarked
-            )
-            word_syllables = short_vowels + max(0, unmarked_consonants // 2)
-        else:
-            word_syllables = max(1, int(round(len(base_letters) * 0.62)))
-        total_syllables += max(1, word_syllables)
+        # Tokenize word into (base_letter, diacritics_list)
+        units = []
+        for ch in word:
+            if re.match(r"[\u0621-\u063A\u0641-\u064A\u067E\u0686\u06AF]", ch):
+                units.append([ch, []])
+            elif ch in short_vowels_set or ch in tanween_set or ch in (sukun_char, shadda_char, "\u0670"):
+                if units:
+                    units[-1][1].append(ch)
 
-    return total_syllables
+        if not units:
+            continue
+
+        has_any_diacritic = any(u[1] for u in units)
+        if not has_any_diacritic:
+            # Unvocalized word fallback: segment using long vowels (ا، و، ي، ى، آ) and consonant clusters
+            n_letters = len(units)
+            est = max(1, int(round(n_letters * 0.58)))
+            for _ in range(est):
+                syllables.append("CV")
+                arud_pattern.append("/0")
+            continue
+
+        # Expand units into elementary prosodic phonemes: 'C' (moved consonant), 'S' (sakin/madd)
+        events = []
+        num_u = len(units)
+        for idx, (letter, diags) in enumerate(units):
+            # Definite article 'ال' at word start: Alif Wasl is elided in connected prosody (همزة الوصل تسقط في الدرج)
+            if idx == 0 and letter == "ا" and not diags and num_u >= 2 and units[1][0] == "ل":
+                continue
+            if idx == 1 and letter == "ل" and units[0][0] == "ا" and not units[0][1]:
+                events.append("S")
+                continue
+
+            if letter == madda_char:
+                events.append("C")
+                events.append("S")
+                continue
+
+            has_shadda = shadda_char in diags
+            has_sukun = sukun_char in diags
+            has_short_v = any(d in short_vowels_set or d == "\u0670" for d in diags)
+            has_tanween = any(d in tanween_set for d in diags)
+
+            if has_shadda:
+                # Shadda unpacks into Sakin (0) closing preceding vowel + Moved (/) if vocalized
+                events.append("S")
+                if has_short_v or has_tanween or (idx + 1 < num_u and units[idx + 1][0] in ("ا", "ى", "و", "ي")):
+                    events.append("C")
+                if has_tanween:
+                    events.append("S")
+                continue
+
+            if has_tanween:
+                events.append("C")
+                events.append("S")
+                continue
+
+            if has_sukun:
+                events.append("S")
+                continue
+
+            if has_short_v:
+                events.append("C")
+                continue
+
+            # Unmarked letter inside a vocalized word:
+            # Check if it is a Madd vowel (ا، ى، و، ي) preceded by a moved letter
+            if letter in long_alifs:
+                events.append("S")
+            elif letter in ("و", "ي") and events and events[-1] == "C":
+                # Madd Waw or Yaa (e.g. تِسِيلْ, مَشْبُوگَه, دُمُوعْ)
+                events.append("S")
+            elif idx == num_u - 1 and letter in ("ه", "ة"):
+                # Open colloquial feminine Haa at word end closes or softens syllable without adding extra beat
+                if events and events[-1] == "C":
+                    events.append("S")
+            elif idx == num_u - 1:
+                # Word-final unmarked consonant in pause position is Sakin
+                events.append("S")
+            else:
+                # Unmarked consonant in partially vocalized word: infer moved 'C' unless preceded by 'C' and followed by 'C'
+                events.append("C")
+
+        # Group elementary events into CV (/), CVV/CVC (/0), CVVC/CVCC (/00) syllables
+        i = 0
+        while i < len(events):
+            if events[i] == "S":
+                # Attach stray leading Sakin to previous syllable if available, else promote to light CV
+                if syllables:
+                    syllables[-1] += "C"
+                    arud_pattern[-1] += "0"
+                else:
+                    syllables.append("CV")
+                    arud_pattern.append("/")
+                i += 1
+                continue
+
+            # events[i] == 'C'
+            s_count = 0
+            j = i + 1
+            while j < len(events) and events[j] == "S":
+                s_count += 1
+                j += 1
+
+            if s_count == 0:
+                syllables.append("CV")
+                arud_pattern.append("/")
+            elif s_count == 1:
+                syllables.append("CVC")
+                arud_pattern.append("/0")
+            else:
+                syllables.append("CVCC")
+                arud_pattern.append("/00")
+            i = j
+
+    return {
+        "syllable_count": len(syllables),
+        "syllables": syllables,
+        "arud_pattern": "".join(arud_pattern),
+    }
+
+
+def count_arabic_syllables(hemistich):
+    """Calculate prosodic Arabic syllable count (CV / CVV / CVC) using the true prosodic segmenter."""
+    return segment_arabic_prosodic_syllables(hemistich)["syllable_count"]
 
 
 def validate_stage1_iso_syllabic_lock(lines, max_syllable_spread=3):
-    """Modules 34 & 38: Validate 4-line stanzas, identical 4th-line refrain, and per-hemistich syllable balance."""
+    """Modules 34, 38 & 48: Unified Validator supporting BOTH 12-line horizontal couplet grid
+    AND 20-line vertical 3-Part Golden Architecture (Estehlal 4 + Nazla 8 + Kaser+Estehlal 8)
+    with full bilingual tag recognition ([Chorus]/[المُسْتَهَلّ], [Verse 1]/[النَّزْلَة الأُولَى]).
+    """
+    if isinstance(lines, str):
+        raw_lines = lines.splitlines()
+    else:
+        raw_lines = list(lines)
+
     clean_lines = [
-        ln.strip() for ln in lines if ln.strip() and not ln.strip().startswith("[")
+        ln.strip() for ln in raw_lines if ln.strip() and not ln.strip().startswith("[")
     ]
-    is_valid_count = len(clean_lines) in (4, 8, 12) and len(clean_lines) % 4 == 0
-    refrains = [clean_lines[idx] for idx in range(3, len(clean_lines), 4)] if is_valid_count else []
-    identical_refrain = len(set(refrains)) <= 1 if refrains else False
 
-    hemistich_counts = []
-    internal_hemistich_balanced = True
+    # Detect whether input uses horizontal couplets ('..' in middle of line) or vertical hemistichs ('..' at end)
+    has_mid_line_dots = any(
+        ".." in ln and not ln.endswith("..") for ln in clean_lines
+    )
 
-    for idx, ln in enumerate(clean_lines):
-        if (idx + 1) % 4 == 0:
-            continue
-        if ".." in ln:
-            parts = [p.strip() for p in ln.split("..") if p.strip()]
-            part_syllables = [count_arabic_syllables(p) for p in parts]
-            hemistich_counts.extend(part_syllables)
-            if len(part_syllables) >= 2 and (max(part_syllables) - min(part_syllables)) > max_syllable_spread:
-                internal_hemistich_balanced = False
+    if has_mid_line_dots:
+        # Mode A: Classic 4 / 8 / 12 horizontal couplet lines with identical 4th-line refrain
+        is_valid_count = len(clean_lines) in (4, 8, 12) and len(clean_lines) % 4 == 0
+        refrains = [clean_lines[idx] for idx in range(3, len(clean_lines), 4)] if is_valid_count else []
+        identical_refrain = len(set(refrains)) <= 1 if refrains else False
+
+        hemistich_counts = []
+        internal_hemistich_balanced = True
+
+        for idx, ln in enumerate(clean_lines):
+            if (idx + 1) % 4 == 0:
+                continue
+            if ".." in ln:
+                parts = [p.strip() for p in ln.split("..") if p.strip()]
+                part_syllables = [count_arabic_syllables(p) for p in parts]
+                hemistich_counts.extend(part_syllables)
+                if (
+                    len(part_syllables) >= 2
+                    and (max(part_syllables) - min(part_syllables)) > max_syllable_spread
+                ):
+                    internal_hemistich_balanced = False
+            else:
+                hemistich_counts.append(count_arabic_syllables(ln))
+
+        if hemistich_counts:
+            spread = max(hemistich_counts) - min(hemistich_counts)
+            iso_balanced = internal_hemistich_balanced and (spread <= max_syllable_spread + 1)
         else:
-            hemistich_counts.append(count_arabic_syllables(ln))
+            iso_balanced = False
+
+        return {
+            "layout_format": "horizontal_couplets",
+            "line_count": len(clean_lines),
+            "is_valid_stanza_grid": is_valid_count,
+            "identical_4th_line_refrain": identical_refrain,
+            "hemistich_syllable_counts": hemistich_counts,
+            "internal_hemistich_balanced": internal_hemistich_balanced,
+            "iso_syllabic_balanced": iso_balanced,
+            "passed": bool(is_valid_count and identical_refrain and iso_balanced),
+        }
+
+    # Mode B: Vertical hemistich architecture (e.g. Module 48 3-Part Golden Architecture: 4 + 8 + 8 = 20 lines, or 4/8/12/16/20)
+    is_valid_count = len(clean_lines) >= 4 and len(clean_lines) % 4 == 0
+    # Check refrain anchor: either every 4th line matches OR the final 4 lines repeat the opening 4-line Estehlal
+    every_4th = [clean_lines[idx] for idx in range(3, len(clean_lines), 4)] if is_valid_count else []
+    estehlal_repeats_at_end = (
+        len(clean_lines) >= 8 and clean_lines[:4] == clean_lines[-4:]
+    )
+    last_line_matches = len(clean_lines) >= 8 and clean_lines[3] == clean_lines[-1]
+    identical_refrain = bool(
+        (every_4th and len(set(every_4th)) <= 1) or estehlal_repeats_at_end or last_line_matches
+    )
+
+    hemistich_counts = [
+        count_arabic_syllables(ln.replace("..", "").strip()) for ln in clean_lines
+    ]
+    internal_hemistich_balanced = True
+    for idx in range(0, len(hemistich_counts) - 1, 2):
+        if abs(hemistich_counts[idx] - hemistich_counts[idx + 1]) > max_syllable_spread:
+            internal_hemistich_balanced = False
 
     if hemistich_counts:
         spread = max(hemistich_counts) - min(hemistich_counts)
@@ -784,6 +1203,7 @@ def validate_stage1_iso_syllabic_lock(lines, max_syllable_spread=3):
         iso_balanced = False
 
     return {
+        "layout_format": "vertical_hemistichs",
         "line_count": len(clean_lines),
         "is_valid_stanza_grid": is_valid_count,
         "identical_4th_line_refrain": identical_refrain,
@@ -794,8 +1214,70 @@ def validate_stage1_iso_syllabic_lock(lines, max_syllable_spread=3):
     }
 
 
+def audit_legendary_latmiya_pillars(text):
+    """Module 48: Audit a Latmiya poem against the 5 Pillars of Legendary Hussaini Latmiya Success.
+
+    Accepts BOTH Arabic section tags ([المُسْتَهَلّ], [النَّزْلَة الأُولَى], [المَقْطَع الأَوَّل], [الكَسْرَة وَالمُسْتَهَلّ])
+    AND English section tags ([Chorus], [Verse 1], [Intro], [Outro]).
+    """
+    blocks = re.split(r"(\[[^\]]+\])", text)
+    current_role = ""
+    mid_verse_parentheticals = []
+    chorus_line_counts = []
+    verse_line_counts = []
+
+    for chunk in blocks:
+        if chunk.startswith("[") and chunk.endswith("]"):
+            current_role = classify_section_tag(chunk)
+            continue
+        lines = [ln.strip() for ln in chunk.splitlines() if ln.strip()]
+        if not lines:
+            continue
+        if current_role == "verse":
+            verse_line_counts.append(len(lines))
+            for ln in lines:
+                if "(" in ln or ")" in ln:
+                    mid_verse_parentheticals.append(ln)
+        elif current_role == "chorus":
+            chorus_line_counts.append(len(lines))
+
+    feminine_haa_sukun_hits = re.findall(r"\S+[هة]\u0652(?!\S)", text)
+    glottal_cluster_hits = re.findall(
+        r"(?<!\S)(?:إِدْمُوعْ|إِمْتُونِي|إِسْنِينِي|إِجْرُوحْ|إِتْگِلَّه|إِتْسُولِفْ|إِهْمُومْ)(?!\S)",
+        text,
+    )
+    word_initial_sukun_hits = re.findall(
+        r"(?<!\S)[\u0627-\u063A\u0641-\u064A\u067E\u0686\u06AF]\u0652\S+",
+        text,
+    )
+    has_kaser_bridge = any(c >= 8 for c in chorus_line_counts[1:]) if len(chorus_line_counts) > 1 else False
+    clean_8_line_nazlas = bool(verse_line_counts) and all(v == 8 for v in verse_line_counts)
+
+    return {
+        "module": "Module_48_Legendary_Latmiya_Success_Pillars",
+        "has_opening_estehlal_chorus": bool(chorus_line_counts and chorus_line_counts[0] >= 4),
+        "clean_8_hemistich_nazlas": clean_8_line_nazlas,
+        "zero_mid_verse_parenthetical_interruptions": len(mid_verse_parentheticals) == 0,
+        "has_kaser_bridge_in_subsequent_choruses": has_kaser_bridge,
+        "zero_feminine_haa_sukun": len(feminine_haa_sukun_hits) == 0,
+        "zero_artificial_glottal_cluster_hamza": len(glottal_cluster_hits) == 0,
+        "zero_word_initial_sukun": len(word_initial_sukun_hits) == 0,
+        "mid_verse_parentheticals_found": mid_verse_parentheticals,
+        "feminine_haa_sukun_found": feminine_haa_sukun_hits,
+        "word_initial_sukun_found": word_initial_sukun_hits,
+        "passed_all_5_pillars": bool(
+            chorus_line_counts
+            and clean_8_line_nazlas
+            and not mid_verse_parentheticals
+            and has_kaser_bridge
+            and not feminine_haa_sukun_hits
+            and not glottal_cluster_hits
+        ),
+    }
+
+
 def lint_poem(text, stage=1):
-    """Comprehensive pre-generation poem linter estimating Stage-1 success probability."""
+    """Comprehensive pre-generation poem linter supporting both 12-line horizontal & 20-line vertical specs."""
     slurring_risks = [w for w in WORD_SEPARATION_MAP if re.search(rf"(?<!\S)و?{re.escape(w)}(?!\S)", text)]
     has_fusha = any(m in text for m in FUSHA_MARKERS)
     has_colloquial = any(m in text for m in BAHRANI_MARKERS + IRAQI_MARKERS)
@@ -804,6 +1286,7 @@ def lint_poem(text, stage=1):
     dialect_report = detect_and_shape_dialect(text)
     shaped_lines = dialect_report["shaped_lyrics"].splitlines()
     iso_report = validate_stage1_iso_syllabic_lock(shaped_lines)
+    pillar_report = audit_legendary_latmiya_pillars(dialect_report["shaped_lyrics"])
     tatweel_count = dialect_report["shaped_lyrics"].count("ـ")
 
     score = 100
@@ -811,9 +1294,9 @@ def lint_poem(text, stage=1):
         score -= 15
     if fusha_colloquial_mixed:
         score -= 30
-    if not iso_report["is_valid_stanza_grid"]:
+    if not (iso_report["is_valid_stanza_grid"] or pillar_report["passed_all_5_pillars"]):
         score -= 25
-    if not iso_report["identical_4th_line_refrain"]:
+    if not (iso_report["identical_4th_line_refrain"] or pillar_report["has_kaser_bridge_in_subsequent_choruses"]):
         score -= 15
     if not iso_report["iso_syllabic_balanced"]:
         score -= 25
@@ -827,18 +1310,149 @@ def lint_poem(text, stage=1):
         "tatweel_character_count": tatweel_count,
         "dialect_report": dialect_report,
         "iso_syllabic_report": iso_report,
+        "pillar_audit": pillar_report,
         "human_review_required": True,
         "estimated_stage1_success_score": score,
         "ready_for_generation": bool(score >= 80 and not fusha_colloquial_mixed),
     }
 
 
-def split_long_lines_for_steady_pacing(text, max_words_per_line=5):
-    """Module 44: Split long narrative lines (>max_words_per_line) vertically into short 3-4 word lines.
+def _strip_arabic_diacritics(word):
+    """Strip diacritics, punctuation, and Tatweel to compare homographic Jinas roots."""
+    cleaned = re.sub(r"[\u064B-\u0652\u0670ـ\.\،\(\)\[\]]", "", word).strip()
+    return cleaned.replace("ة", "ه").replace("أ", "ا").replace("إ", "ا").replace("آ", "ا")
 
-    Prevents Flow Music / Lyria from rushing 14-16 syllable lines into a fast, bouncy song-like cadence
-    after 1:27 by allocating a full musical bar (3.5-4s) to each short hemistich.
+
+def validate_abudhiyah_jinas(lines):
+    """Validate Iraqi Abudhiyah (الأبوذية العراقية):
+    - 4 hemistichs total
+    - First 3 hemistichs end with exact homophonous Jinas word (الجناس اللفظي التام)
+    - 4th hemistich ends with '-يَّه / -يه / -ية' (الياء والهاء/التاء المربوطة: الغاضريه / الوطيه / المنيه)
+    - Returns melodic contour rules for Maqam Lami / Saba / Huwaizawi.
     """
+    if isinstance(lines, str):
+        raw = [ln.strip() for ln in lines.splitlines() if ln.strip() and not ln.strip().startswith("[")]
+    else:
+        raw = [ln.strip() for ln in lines if ln.strip() and not ln.strip().startswith("[")]
+
+    hemistichs = []
+    for ln in raw:
+        if ".." in ln and not ln.endswith(".."):
+            hemistichs.extend([p.strip() for p in ln.split("..") if p.strip()])
+        else:
+            hemistichs.append(ln.replace("..", "").strip())
+
+    if len(hemistichs) != 4:
+        return {
+            "is_valid_abudhiyah": False,
+            "hemistich_count": len(hemistichs),
+            "error": "الأبوذية يجب أن تتكون من 4 أشطر بالضبط.",
+        }
+
+    end_words_raw = [h.split()[-1] if h.split() else "" for h in hemistichs]
+    end_words_norm = [_strip_arabic_diacritics(w) for w in end_words_raw]
+
+    jinas_match = len(set(end_words_norm[:3])) == 1 and bool(end_words_norm[0])
+    fourth_word = end_words_norm[3]
+    ends_with_yah = fourth_word.endswith(("يه", "ية"))
+
+    return {
+        "is_valid_abudhiyah": bool(jinas_match and ends_with_yah),
+        "hemistich_count": 4,
+        "jinas_word": end_words_raw[0] if jinas_match else None,
+        "end_words": end_words_raw,
+        "jinas_three_hemistichs_matched": jinas_match,
+        "fourth_hemistich_yah_ending": ends_with_yah,
+        "melodic_contour_blueprint": {
+            "hemistich_1": "التأسيس في القرار والوسط مع تكرار ومدّ كلمة الجناس الأولى (تثبيت المقام)",
+            "hemistich_2": "التموج النغمي والترجيع على كلمة الجناس الثانية في مقام اللامي أو الصبا",
+            "hemistich_3": "التصعيد الدرامي إلى ذروة الجواب (الحويزاوي / العلواني) عند كلمة الجناس الثالثة",
+            "hemistich_4_qafla": "الكسرة الفراتية الهابطة إلى القرار والختم بمدّة (-يَّه) والونّة الحزينة",
+        },
+    }
+
+
+def validate_zuhayri_mawal(lines):
+    """Validate Seven-Line Iraqi Zuhayri Mawal (الموّال السبعوي الزهيري AAA B AAA / AAA BBB A):
+    - 7 hemistichs total
+    - Hemistichs 1, 2, 3 share Jinas rhyme A
+    - Hemistichs 4, 5, 6 share pivot rhyme B ('العرگ') OR Hemistich 4 is pivot B and 5, 6, 7 return to A
+    - Hemistich 7 locks back onto Jinas rhyme A with a final Wannah cadence.
+    """
+    if isinstance(lines, str):
+        raw = [ln.strip() for ln in lines.splitlines() if ln.strip() and not ln.strip().startswith("[")]
+    else:
+        raw = [ln.strip() for ln in lines if ln.strip() and not ln.strip().startswith("[")]
+
+    hemistichs = [ln.replace("..", "").strip() for ln in raw if ln.strip()]
+    if len(hemistichs) != 7:
+        return {
+            "is_valid_zuhayri": False,
+            "hemistich_count": len(hemistichs),
+            "error": "الموّال السبعوي (الزهيري) يجب أن يتكون من 7 أشطر.",
+        }
+
+    end_words = [_strip_arabic_diacritics(h.split()[-1]) if h.split() else "" for h in hemistichs]
+    first_three_match = len(set(end_words[:3])) == 1 and bool(end_words[0])
+    seventh_matches_first = end_words[6] == end_words[0]
+    arq_distinct = end_words[3] != end_words[0] and bool(end_words[3])
+    middle_pattern = "AAA_BBB_A" if len(set(end_words[3:6])) == 1 else "AAA_B_AAA"
+
+    return {
+        "is_valid_zuhayri": bool(first_three_match and seventh_matches_first and arq_distinct),
+        "hemistich_count": 7,
+        "scheme_detected": middle_pattern,
+        "primary_jinas_word": hemistichs[0].split()[-1],
+        "arq_pivot_word": hemistichs[3].split()[-1],
+        "first_three_jinas_matched": first_three_match,
+        "seventh_qafla_locked": seventh_matches_first,
+    }
+
+
+def format_ashouri_interactive_ahaat(text, ahaat_phrase="(آه .. آه)"):
+    """Inject Interactive Ashouri Congregation Ahaat ('.. (آه .. آه) ..') after couplet endings.
+
+    In Tor Al-Ashouri, the reciter elongates the final word of the couplet, drops volume, and
+    cuts abruptly to leave a 1.5s gap where the congregation responds with 'آه .. آه'.
+    """
+    raw_lines = [ln.strip() for ln in text.splitlines() if ln.strip()]
+    out_lines = []
+    verse_counter = 0
+    for ln in raw_lines:
+        if ln.startswith("["):
+            out_lines.append(ln)
+            verse_counter = 0
+            continue
+        verse_counter += 1
+        base = ln if ln.endswith("..") else f"{ln} .."
+        if verse_counter % 2 == 0 and ahaat_phrase not in base:
+            out_lines.append(f"{base} {ahaat_phrase} ..")
+        else:
+            out_lines.append(base)
+    return "\n".join(out_lines)
+
+
+def format_bahrani_antiphonal_faujain(estehlal_lines):
+    """Format Bahrani/Karbalai Antiphonal Dual-Choir (نظام الفوجين / الحلقتين المتقابلتين) routing."""
+    if isinstance(estehlal_lines, str):
+        clean = [ln.strip() for ln in estehlal_lines.splitlines() if ln.strip() and not ln.strip().startswith("[")]
+    else:
+        clean = [ln.strip() for ln in estehlal_lines if ln.strip() and not ln.strip().startswith("[")]
+
+    out = ["[المُسْتَهَلّ]"]
+    for ln in clean:
+        out.append(ln if ln.endswith("..") else f"{ln} ..")
+    out.append("[الفَوْج الأَوَّل]")
+    for ln in clean[: max(2, len(clean) // 2)]:
+        out.append(f"({ln.replace('..', '').strip()}) ..")
+    out.append("[الفَوْج الثَّانِي]")
+    for ln in clean[max(2, len(clean) // 2) :]:
+        out.append(f"({ln.replace('..', '').strip()}) ..")
+    return "\n".join(out)
+
+
+def split_long_lines_for_steady_pacing(text, max_words_per_line=5):
+    """Module 44: Split long narrative lines (>max_words_per_line) vertically into short 3-4 word lines."""
     out_lines = []
     for line in text.splitlines():
         stripped = line.strip()
@@ -880,7 +1494,7 @@ def build_multi_tor_melodic_bridge(from_maqam, to_maqam, from_tor="thaqeel", to_
 
 
 def recommend_tor_and_rhythm_for_poem(text):
-    """Module 46: Match poetic meter, syllable count, and theme to optimal Tor, Maqam Arc, Rhythm & BPM."""
+    """Module 46: Match poetic meter (Wazn), syllable count, and theme to optimal Tor, Maqam Arc, Rhythm & BPM."""
     dialect_info = detect_and_shape_dialect(text)
     clean_lines = [
         ln.strip() for ln in dialect_info["shaped_lyrics"].splitlines()
@@ -894,9 +1508,25 @@ def recommend_tor_and_rhythm_for_poem(text):
     avg_syllables = float(np.mean(syllables)) if syllables else 7.5
 
     bandari_markers = ("خدمنك", "أخدمنك", "خادم", "وافتخر", "تجاره الخدمه", "مشاية", "مشايه", "زوار")
-    bahrani_fast_markers = ("يا بويي", "امساعد", "الراعبية", "وقفة", "شيلة")
+    bahrani_fast_markers = ("يا بويي", "امساعد", "الراعبية", "وقفة", "شيلة", "تجنيزة")
+    bahrani_muthakkal_markers = ("يبني ضعيفه", "قليبي", "مثكل", "ونتي بهالمسيه")
+    bahrani_haidari_markers = ("حيدري", "بيرق", "شمر اردانك", "يا داحي الباب")
     shoor_markers = ("شور", "لبيك", "حيدر حيدر", "مجنونك")
     rukbani_markers = ("الغرب خذتني", "گلبی ذاب", "گلبي ذاب", "سياط", "طاح الحيل", "ضعن", "سبايا")
+
+    # Identify poetic meter (الوزن الشعري) distinct from performance Tor (الطور الأدائي)
+    abudhiyah_check = validate_abudhiyah_jinas(clean_lines[:4]) if len(clean_lines) >= 4 else {"is_valid_abudhiyah": False}
+    zuhayri_check = validate_zuhayri_mawal(clean_lines[:7]) if len(clean_lines) >= 7 else {"is_valid_zuhayri": False}
+    if abudhiyah_check.get("is_valid_abudhiyah"):
+        poetic_meter = "abudhiyah"
+    elif zuhayri_check.get("is_valid_zuhayri"):
+        poetic_meter = "zuhayri_mawal"
+    elif dialect_info["detected_dialect"] == "bahrani":
+        poetic_meter = "faizi" if avg_syllables >= 8.0 else "muwashah"
+    elif 6.0 <= avg_syllables <= 7.5:
+        poetic_meter = "rukbani"
+    else:
+        poetic_meter = "nassari"
 
     if any(m in text for m in shoor_markers) or avg_syllables <= 5.2:
         tor_name = "Karbalai_Shoor_Climactic"
@@ -920,6 +1550,28 @@ def recommend_tor_and_rhythm_for_poem(text):
             "Baritone Radood vocal with proud Husseini service devotion, booming unison male "
             "Mawkib congregation Raddada responses, deep synchronized 55Hz bare-chest Latm thud "
             "and Matam breath in Husseiniya hall, Pure Acapella No Instruments"
+        )
+    elif any(m in text for m in bahrani_muthakkal_markers):
+        tor_name = "Bahrani_Qatifi_Muthakkal_Lament"
+        rhythm_mode = "bahrani_muthakkal"
+        bpm = 54
+        maqam_arc = "Saba_Qarar_Calm -> Bayati_Faizi_Wannah -> Saba_Whispered_Qafla"
+        sound_prompt = (
+            "Mournful Bahrani Qatifi Muthakkal Hussaini Latmiya lament, 54 BPM, solemn Maqam Saba "
+            "and Bayati on D, authentic Bahrani dialect articulation, grieving calm Baritone Radood "
+            "vocal ending each hemistich with a broken weeping Wannah sigh, deep slow 55Hz bare-chest "
+            "Latm thud in Matam hall, unison male Raddada responses, Pure Acapella No Instruments"
+        )
+    elif any(m in text for m in bahrani_haidari_markers):
+        tor_name = "Bahrani_Haidari_Mawkib_Epic"
+        rhythm_mode = "bahrani_haidari"
+        bpm = 96
+        maqam_arc = "Hijaz_Qarar -> Rast_and_Hijaz_Jawab -> Hijaz_Waqfa"
+        sound_prompt = (
+            "Epic Bahrani Haidari Mawkib Hussaini Latmiya chant, 96 BPM, commanding Maqam Hijaz "
+            "on D, authentic Bahrani dialect articulation, powerful resonant Baritone Radood vocal, "
+            "driving synchronized Bahrani 55Hz bare-chest strikes, antiphonal dual-choir Matam "
+            "congregation responses, Pure Acapella No Instruments"
         )
     elif dialect_info["detected_dialect"] == "bahrani" or any(m in text for m in bahrani_fast_markers):
         tor_name = "Bahrani_Waqfa_and_Faizi_Tawshih"
@@ -958,6 +1610,8 @@ def recommend_tor_and_rhythm_for_poem(text):
         )
 
     return {
+        "poetic_meter": poetic_meter,
+        "poetic_meter_info": POETIC_METERS_CATALOG.get(poetic_meter, {}),
         "recommended_tor": tor_name,
         "rhythm_mode": rhythm_mode,
         "recommended_bpm": bpm,
@@ -965,58 +1619,6 @@ def recommend_tor_and_rhythm_for_poem(text):
         "detected_dialect": dialect_info["detected_dialect"],
         "maqam_arc": maqam_arc,
         "flowmusic_sound_prompt": sound_prompt,
-    }
-
-
-def audit_legendary_latmiya_pillars(text):
-    """Module 48: Audit a Latmiya poem against the 5 Pillars of Legendary Hussaini Latmiya Success."""
-    blocks = re.split(r"(\[(?:Chorus|Verse[^\]]*|Outro|Intro)\])", text)
-    current_tag = ""
-    mid_verse_parentheticals = []
-    chorus_line_counts = []
-    verse_line_counts = []
-
-    for chunk in blocks:
-        if chunk.startswith("[") and chunk.endswith("]"):
-            current_tag = chunk
-            continue
-        lines = [ln.strip() for ln in chunk.splitlines() if ln.strip()]
-        if not lines:
-            continue
-        if "Verse" in current_tag:
-            verse_line_counts.append(len(lines))
-            for ln in lines:
-                if "(" in ln or ")" in ln:
-                    mid_verse_parentheticals.append(ln)
-        elif "Chorus" in current_tag:
-            chorus_line_counts.append(len(lines))
-
-    feminine_haa_sukun_hits = re.findall(r"\S+هْ(?!\S)", text)
-    glottal_cluster_hits = re.findall(
-        r"(?<!\S)(?:إِدْمُوعْ|إِمْتُونِي|إِسْنِينِي|إِجْرُوحْ|إِتْگِلَّه|إِتْسُولِفْ|إِهْمُومْ)(?!\S)",
-        text,
-    )
-    has_kaser_bridge = any(c >= 8 for c in chorus_line_counts[1:]) if len(chorus_line_counts) > 1 else False
-    clean_8_line_nazlas = bool(verse_line_counts) and all(v == 8 for v in verse_line_counts)
-
-    return {
-        "module": "Module_48_Legendary_Latmiya_Success_Pillars",
-        "has_opening_estehlal_chorus": bool(chorus_line_counts and chorus_line_counts[0] >= 4),
-        "clean_8_hemistich_nazlas": clean_8_line_nazlas,
-        "zero_mid_verse_parenthetical_interruptions": len(mid_verse_parentheticals) == 0,
-        "has_kaser_bridge_in_subsequent_choruses": has_kaser_bridge,
-        "zero_feminine_haa_sukun": len(feminine_haa_sukun_hits) == 0,
-        "zero_artificial_glottal_cluster_hamza": len(glottal_cluster_hits) == 0,
-        "mid_verse_parentheticals_found": mid_verse_parentheticals,
-        "feminine_haa_sukun_found": feminine_haa_sukun_hits,
-        "passed_all_5_pillars": bool(
-            chorus_line_counts
-            and clean_8_line_nazlas
-            and not mid_verse_parentheticals
-            and has_kaser_bridge
-            and not feminine_haa_sukun_hits
-            and not glottal_cluster_hits
-        ),
     }
 
 
@@ -1032,6 +1634,7 @@ LATMIYA_SONG_LEAKAGE_BLACKLIST = (
     "dammam",
     "syncopated",
     "arranged studio",
+    "tenor",
 )
 
 
@@ -1105,9 +1708,9 @@ def build_vocal_genre_profile(genre="latmiya", dialect="iraqi", maqam=None, bpm=
 def build_flowmusic_json_preconditioning(
     dialect="iraqi_bahrani", maqam="saba", bpm=58, reference_clip_id=None
 ):
-    """Module 39: Build the V45.0 JSON Session Pre-Conditioning payload with optional reference_clip_id."""
+    """Module 39: Build the JSON Session Pre-Conditioning payload with optional reference_clip_id."""
     payload = {
-        "protocol_name": "Hussaini_Production_Studio_OS_V45_OMNI_ARCHITECT",
+        "protocol_name": "Hussaini_Production_Studio_OS_V48_OMNI_ARCHITECT",
         "skill_version": SKILL_VERSION,
         "session_mode": "Pre_Conditioning_Lock_Only_Wait_For_Step_2_Lyrics",
         "target_dialect": dialect,
@@ -1115,8 +1718,10 @@ def build_flowmusic_json_preconditioning(
         "tempo_bpm": bpm,
         "anti_slurring_word_separation": True,
         "zero_word_initial_sukun": True,
+        "open_feminine_haa_without_sukun": True,
         "preserve_iraqi_prosthetic_alif": True,
         "vertical_short_line_splitting": True,
+        "bilingual_section_tags_supported": True,
         "dialectal_tanween_compiler": True,
         "mandatory_end_of_line_sukun": True,
         "strictly_non_musical_no_instruments": True,
@@ -1156,6 +1761,125 @@ def butter_filter(data, cutoff, sample_rate, btype="high", order=4):
     norm_cutoff = np.clip(np.asarray(cutoff, dtype=np.float64) / nyq, 1e-4, 0.999)
     sos = butter(order, norm_cutoff, btype=btype, output="sos")
     return sosfilt(sos, data)
+
+
+def extract_reference_audio_profile(input_path):
+    """Module 45: Reverse-engineer an audio reference WAV to extract BPM, Tonic Pitch, Maqam, Crest Factor & LUFS.
+
+    1. Exact BPM via autocorrelation of the Low-Band Onset Envelope (40-120Hz chest Latm band).
+    2. Tonic Pitch (Hz) & approximate Maqam via Autocorrelation / Cepstral Pitch Histogram.
+    3. Dynamic Crest Factor (dB) and Integrated Loudness (LUFS).
+    """
+    sample_rate, mono = read_wav_any_depth(input_path)
+    if len(mono) == 0:
+        return {
+            "estimated_bpm": 0.0,
+            "tonic_freq_hz": 146.83,
+            "estimated_maqam": "saba",
+            "crest_factor_db": 0.0,
+            "integrated_lufs": -70.0,
+            "is_rubato": True,
+        }
+
+    # 1. Low-Band Onset Envelope (40-120Hz) for BPM Autocorrelation
+    nyq = 0.5 * sample_rate
+    if nyq > 140.0:
+        low_band = butter_filter(mono, [40.0, 120.0], sample_rate, btype="band", order=2)
+    else:
+        low_band = mono
+
+    hop = max(1, int(0.01 * sample_rate))  # 100 Hz envelope rate
+    env_rate = sample_rate / float(hop)
+    rectified = np.abs(low_band)
+    n_frames = max(1, len(rectified) // hop)
+    env = np.array([
+        float(np.mean(rectified[i * hop : (i + 1) * hop])) for i in range(n_frames)
+    ], dtype=np.float64)
+    onset_env = np.maximum(0.0, np.diff(env, prepend=env[0]))
+
+    min_bpm, max_bpm = 45.0, 150.0
+    min_lag = max(1, int(env_rate * 60.0 / max_bpm))
+    max_lag = min(len(onset_env) - 1, int(env_rate * 60.0 / min_bpm))
+
+    if max_lag > min_lag and np.std(onset_env) > 1e-6:
+        centered = onset_env - np.mean(onset_env)
+        acf = np.correlate(centered, centered, mode="full")[len(centered) - 1 :]
+        search_window = acf[min_lag : max_lag + 1]
+        best_lag = min_lag + int(np.argmax(search_window))
+        peak_strength = float(search_window[best_lag - min_lag] / (acf[0] + 1e-9))
+        estimated_bpm = round(float(60.0 * env_rate / best_lag), 1) if peak_strength > 0.08 else 0.0
+    else:
+        estimated_bpm = 0.0
+
+    # 2. Tonic Pitch & Maqam Approximation via Vocal Band (110-350Hz) Autocorrelation
+    if nyq > 400.0:
+        vocal_band = butter_filter(mono, [110.0, 350.0], sample_rate, btype="band", order=2)
+    else:
+        vocal_band = mono
+
+    frame_len = min(len(vocal_band), max(256, int(0.06 * sample_rate)))
+    pitches = []
+    min_p_lag = max(1, int(sample_rate / 330.0))
+    max_p_lag = min(frame_len - 1, int(sample_rate / 115.0))
+    if max_p_lag > min_p_lag:
+        for start in range(0, len(vocal_band) - frame_len + 1, frame_len):
+            seg = vocal_band[start : start + frame_len]
+            if np.sqrt(np.mean(seg ** 2)) < 0.02:
+                continue
+            seg_acf = np.correlate(seg, seg, mode="full")[len(seg) - 1 :]
+            p_lag = min_p_lag + int(np.argmax(seg_acf[min_p_lag : max_p_lag + 1]))
+            pitches.append(float(sample_rate / p_lag))
+
+    tonic_hz = round(float(np.median(pitches)), 2) if pitches else 146.83
+
+    # Match closest Maqam profile based on pitch distribution
+    best_maqam = "saba"
+    best_dist = 1e9
+    for m_name, freqs in MAQAM_FREQS.items():
+        dist = abs(tonic_hz - freqs[0])
+        if dist < best_dist:
+            best_dist = dist
+            best_maqam = m_name
+
+    # 3. Crest Factor & Integrated LUFS
+    rms = float(np.sqrt(np.mean(mono ** 2)) + 1e-12)
+    peak = float(np.max(np.abs(mono)) + 1e-12)
+    crest_db = round(float(20.0 * np.log10(peak / rms)), 2)
+    integrated_lufs = round(float(-0.691 + 10.0 * np.log10(max(float(np.mean(mono ** 2)), 1e-12))), 2)
+
+    return {
+        "sample_rate": sample_rate,
+        "duration_sec": round(len(mono) / float(sample_rate), 2),
+        "estimated_bpm": estimated_bpm,
+        "is_rubato": estimated_bpm == 0.0,
+        "tonic_freq_hz": tonic_hz,
+        "estimated_maqam": best_maqam,
+        "crest_factor_db": crest_db,
+        "integrated_lufs": integrated_lufs,
+    }
+
+
+def strip_ai_percussion_from_vocal(signal, sample_rate):
+    """Stem-Aware Hybrid Mastering (--replace-ai-percussion):
+    Suppress muffled AI chest-thuds (<115Hz) and transient drum clicks from mixed AI audio while
+    preserving the human Radood vocal core (125Hz-4200Hz) so clean studio Husseiniya Latm can replace it.
+    """
+    if len(signal) == 0:
+        return signal
+    nyq = 0.5 * sample_rate
+    # 1. Steep High-Pass at 120Hz to remove synthetic low-end thump
+    cleaned = butter_filter(signal, min(120.0, 0.4 * sample_rate), sample_rate, btype="high", order=4)
+    # 2. Transient de-clicking envelope to tame sharp synthetic clap spikes while keeping sustained vowel energy
+    win_fast = max(1, int(0.004 * sample_rate))
+    win_slow = max(1, int(0.035 * sample_rate))
+    fast_env = np.sqrt(np.maximum(np.convolve(cleaned ** 2, np.ones(win_fast) / win_fast, mode="same"), 1e-16))
+    slow_env = np.sqrt(np.maximum(np.convolve(cleaned ** 2, np.ones(win_slow) / win_slow, mode="same"), 1e-16))
+    transient_ratio = fast_env / (slow_env + 1e-9)
+    suppress_gain = np.where(transient_ratio > 1.85, 1.85 / (transient_ratio + 1e-9), 1.0)
+    cleaned = cleaned * suppress_gain
+    if nyq > 4800.0:
+        cleaned = butter_filter(cleaned, 4500.0, sample_rate, btype="low", order=2)
+    return cleaned
 
 
 def apply_noise_print_restoration(signal, sample_rate, gate_threshold_dbfs=-42.0, reduction_db=-10.0):
@@ -1216,10 +1940,8 @@ def compute_smart_sidechain_ducking(
     rms = np.sqrt(np.maximum(np.convolve(larynx_band ** 2, power_kernel, mode="same"), 1e-16))
     rms_dbfs = 20.0 * np.log10(rms + 1e-12)
 
-    # Soft knee 6dB above threshold_dbfs so normal vocal levels reach full -3.0dB ducking
     over_db = np.clip((rms_dbfs - threshold_dbfs) / 12.0, 0.0, 1.0)
 
-    # First-order block smoothing approximating asymmetric attack/release envelope
     atk_samples = max(1, int((attack_ms / 1000.0) * sample_rate))
     rel_samples = max(1, int((release_ms / 1000.0) * sample_rate))
     smooth_win = max(1, (atk_samples + rel_samples) // 2)
@@ -1232,8 +1954,15 @@ def compute_smart_sidechain_ducking(
     return ducking_gain
 
 
+def compute_tempo_synced_delay_ms(bpm, is_rubato=False):
+    """Module 46: Compute mathematically tempo-synced delay time: 60000 / (bpm * 2) clipped to [210, 460] ms."""
+    if is_rubato or bpm <= 0.0:
+        return 450.0
+    return float(np.clip(60000.0 / (float(bpm) * 2.0), 210.0, 460.0))
+
+
 def apply_dynacord_echo(signal, sample_rate, delay_ms=285.0, feedback=0.32, mix=0.22):
-    """Fast vectorized multi-tap analog tape slapback echo (replaces slow polynomial lfilter)."""
+    """Fast vectorized multi-tap analog tape slapback echo."""
     delay_samples = max(1, int((delay_ms / 1000.0) * sample_rate))
     echo_bus = np.zeros_like(signal, dtype=np.float64)
     n_samples = len(signal)
@@ -1321,8 +2050,7 @@ def synthesize_percussion_hit(sample_rate, kind="latm", samples_dir=None):
             metallic = noise
         return 0.45 * metallic * np.exp(-22.0 * t_vec)
 
-    if kind in ("heavy_clip", "thaqeel_muwazza"):
-        # Double-Layered Beat (Chest Low-End + Crisp Palm Snap) + Beat-Synced Human Sub-Bass Hum
+    if kind in ("heavy_clip", "thaqeel_muwazza", "bahrani_muthakkal"):
         chest_low = np.sin(2.0 * np.pi * 54.0 * t_vec) * np.exp(-12.0 * t_vec)
         human_sub_hum = (
             np.sin(2.0 * np.pi * 44.0 * t_vec)
@@ -1336,16 +2064,14 @@ def synthesize_percussion_hit(sample_rate, kind="latm", samples_dir=None):
             palm_snap = butter_filter(palm_snap, [300.0, 1100.0], sample_rate, btype="band", order=2)
         return 0.68 * chest_low + 0.45 * human_sub_hum + 0.35 * palm_snap
 
-    if kind == "bahrani_fast":
-        # Studio 44 (Rm0gQkZLQao): Strong fast Bahrani chest+palm slap with high transient energy
+    if kind in ("bahrani_fast", "bahrani_haidari", "bahrani_waqfa"):
         chest_core = np.sin(2.0 * np.pi * 62.0 * t_vec) * np.exp(-18.0 * t_vec)
         sharp_slap = rng.normal(0.0, 1.0, num_samples) * np.exp(-34.0 * t_vec)
         if 0.5 * sample_rate > 3800.0:
             sharp_slap = butter_filter(sharp_slap, [1400.0, 3600.0], sample_rate, btype="band", order=2)
         return 0.70 * chest_core + 0.50 * sharp_slap
 
-    if kind == "studio_arranged":
-        # Ammar Al-Hujaimi (AHKVHPS51Sc): 4-Layer Studio Latm (Sub-Kick + Crowd Chest + Palm + Breath)
+    if kind in ("studio_arranged", "bahrani_thulathi", "bahrani_rubai"):
         sub_kick = np.sin(2.0 * np.pi * 56.0 * t_vec) * np.exp(-15.0 * t_vec)
         crowd_mid = rng.normal(0.0, 1.0, num_samples) * np.exp(-26.0 * t_vec)
         if 0.5 * sample_rate > 1000.0:
@@ -1365,7 +2091,7 @@ def synthesize_percussion_hit(sample_rate, kind="latm", samples_dir=None):
 def build_rhythm_bed(
     num_samples, sample_rate, mode="latm", bpm=60.0, offset_samples=0, swing=0.0, samples_dir=None
 ):
-    """Generate a synchronized Husseiniya percussion track with onset offset and Bandari swing."""
+    """Generate a synchronized Husseiniya percussion track including authentic Bahrani Mawkib patterns."""
     bed = np.zeros(num_samples, dtype=np.float64)
     if bpm <= 0.0 or mode in ("mawal", "nai"):
         return bed
@@ -1396,7 +2122,20 @@ def build_rhythm_bed(
                 end_sw = min(num_samples, swing_pos + len(primary_hit))
                 if swing_pos < num_samples:
                     bed[swing_pos:end_sw] += 0.45 * primary_hit[: end_sw - swing_pos]
-        elif mode == "bahrani_fast":
+        elif mode == "bahrani_thulathi":
+            # اللطم الثلاثي البحراني: ضربتان متقاربتان + ضربة ثالثة ثقيلة مع وقفة في الضربة الرابعة
+            step_in_cycle = beat_idx % 4
+            if step_in_cycle in (0, 1):
+                hit = 0.85 * studio_hit
+            elif step_in_cycle == 2:
+                hit = 1.15 * heavy_hit
+            else:
+                hit = np.zeros_like(primary_hit)
+        elif mode == "bahrani_rubai":
+            # اللطم الرباعي البحراني: 3 ضربات مسير متزنة + ضربة رابعة ارتكازية قوية
+            step_in_cycle = beat_idx % 4
+            hit = (1.15 * heavy_hit) if step_in_cycle == 3 else (0.85 * studio_hit)
+        elif mode in ("bahrani_fast", "bahrani_haidari", "bahrani_waqfa"):
             hit = bahrani_hit
             if beat_idx % 2 == 1:
                 sub_pos = cursor + beat_interval // 2
@@ -1410,7 +2149,7 @@ def build_rhythm_bed(
                 end_sub = min(num_samples, sub_pos + len(primary_hit))
                 if sub_pos < num_samples:
                     bed[sub_pos:end_sub] += 0.38 * primary_hit[: end_sub - sub_pos]
-        elif mode in ("heavy_clip", "thaqeel_muwazza"):
+        elif mode in ("heavy_clip", "thaqeel_muwazza", "bahrani_muthakkal"):
             hit = heavy_hit
         else:
             hit = primary_hit
@@ -1423,15 +2162,81 @@ def build_rhythm_bed(
     return bed
 
 
+def _generate_rosenberg_glottal_source(t_vec, f0_hz, vibrato_hz=4.5, breath_noise_ratio=0.03, seed=77):
+    """Synthesize a realistic human Rosenberg Glottal Pulse train + 3% aspiration breath noise."""
+    rng = np.random.default_rng(seed=seed)
+    vib = 1.0 + 0.0035 * np.sin(2.0 * np.pi * vibrato_hz * t_vec)
+    phase = np.mod(np.cumsum((f0_hz * vib) / max(1.0, float(len(t_vec)) / (t_vec[-1] + 1e-9))), 1.0)
+    if len(t_vec) > 1:
+        dt = float(t_vec[1] - t_vec[0])
+        phase = np.mod(np.cumsum(f0_hz * vib * dt), 1.0)
+
+    # Rosenberg glottal model: opening phase Tp=0.40, closing phase Tn=0.16
+    tp = 0.40
+    tn = 0.16
+    pulse = np.zeros_like(phase)
+    open_mask = phase < tp
+    close_mask = (phase >= tp) & (phase < (tp + tn))
+    pulse[open_mask] = 0.5 * (1.0 - np.cos(np.pi * phase[open_mask] / tp))
+    pulse[close_mask] = np.cos(0.5 * np.pi * (phase[close_mask] - tp) / tn)
+    # Differentiate glottal flow to model lip radiation
+    glottal_deriv = np.diff(pulse, prepend=pulse[0])
+    peak = np.max(np.abs(glottal_deriv))
+    if peak > 1e-8:
+        glottal_deriv = glottal_deriv / peak
+
+    breath = rng.normal(0.0, 1.0, len(t_vec))
+    return (1.0 - breath_noise_ratio) * glottal_deriv + breath_noise_ratio * breath
+
+
+def _apply_ahaat_formant_resonators(source_sig, sample_rate):
+    """Pass glottal source through human pharyngeal vowel /a:/ ('آه') formant resonators:
+    F1 ~= 730 Hz, F2 ~= 1090 Hz, F3 ~= 2440 Hz.
+    """
+    nyq = 0.5 * sample_rate
+    out = np.zeros_like(source_sig)
+    formants = (
+        (730.0, 90.0, 1.00),
+        (1090.0, 110.0, 0.55),
+        (2440.0, 160.0, 0.25),
+    )
+    for center_hz, bw_hz, gain in formants:
+        low_f = max(60.0, center_hz - 0.5 * bw_hz)
+        high_f = min(0.45 * sample_rate, center_hz + 0.5 * bw_hz)
+        if nyq > center_hz + 80.0 and high_f > low_f + 20.0:
+            band = butter_filter(source_sig, [low_f, high_f], sample_rate, btype="band", order=2)
+            out += gain * band
+    if np.max(np.abs(out)) < 1e-8:
+        return source_sig
+    return out / (np.max(np.abs(out)) + 1e-9)
+
+
 def synthesize_ahaat_drone(num_samples, sample_rate, maqam="saba"):
-    """Track_04_Ahaat_Vocal_Choir_Pads: Synthesize warm Bandpass (150Hz-12kHz) Ahaat pad."""
+    """Track_04_Ahaat_Vocal_Choir_Pads: Synthesize human pharyngeal Ahaat ('آه') choir via
+    Rosenberg Glottal Pulse + 3% Breath Noise + Formant Resonators (F1=730, F2=1090, F3=2440Hz)
+    with natural choir detuning (+-4 cents) across unison/octave voices.
+    """
+    if num_samples <= 0:
+        return np.zeros(0, dtype=np.float64)
     freqs = MAQAM_FREQS.get(maqam, MAQAM_FREQS["saba"])
     t_vec = np.arange(num_samples, dtype=np.float64) / sample_rate
     pad = np.zeros(num_samples, dtype=np.float64)
+    detune_cents = (-4.0, 0.0, +4.0)
 
-    for idx, freq in enumerate(freqs):
-        lfo = 1.0 + 0.004 * np.sin(2.0 * np.pi * (4.2 + 0.3 * idx) * t_vec)
-        pad += (0.35 / (idx + 1)) * np.sin(2.0 * np.pi * freq * lfo * t_vec)
+    for idx, base_freq in enumerate(freqs[:3]):
+        voice_mix = np.zeros(num_samples, dtype=np.float64)
+        for c_idx, cents in enumerate(detune_cents):
+            detuned_freq = base_freq * (2.0 ** (cents / 1200.0))
+            glottal = _generate_rosenberg_glottal_source(
+                t_vec,
+                detuned_freq,
+                vibrato_hz=4.1 + 0.25 * idx + 0.1 * c_idx,
+                breath_noise_ratio=0.03,
+                seed=70 + idx * 10 + c_idx,
+            )
+            voice_mix += glottal / len(detune_cents)
+        resonated = _apply_ahaat_formant_resonators(voice_mix, sample_rate)
+        pad += (0.42 / (idx + 1)) * resonated
 
     nyq = 0.5 * sample_rate
     high_cut = min(12000.0, 0.45 * sample_rate)
@@ -1441,18 +2246,28 @@ def synthesize_ahaat_drone(num_samples, sample_rate, maqam="saba"):
 
 
 def synthesize_vocal_synth_strings_pad(num_samples, sample_rate, maqam="saba"):
-    """Module 44: Synthesize Vocal-Synth Humming Strings & Cinematic Ambient Pad from vocal formants."""
+    """Module 44: Synthesize Vocal-Synth Humming Strings & Cinematic Ambient Pad using Rosenberg
+    glottal pulses filtered through pharyngeal 'آه/ممم' vocal formants with +-4 cents ensemble detune.
+    """
+    if num_samples <= 0:
+        return np.zeros(0, dtype=np.float64)
     freqs = MAQAM_FREQS.get(maqam, MAQAM_FREQS["saba"])
     t_vec = np.arange(num_samples, dtype=np.float64) / sample_rate
     pad = np.zeros(num_samples, dtype=np.float64)
     swell = 0.75 + 0.25 * np.sin(2.0 * np.pi * 0.16 * t_vec)
 
     for idx, freq in enumerate(freqs):
-        vib = 1.0 + 0.0035 * np.sin(2.0 * np.pi * (4.4 + 0.25 * idx) * t_vec)
-        fundamental = np.sin(2.0 * np.pi * freq * vib * t_vec)
-        octave_harm = 0.45 * np.sin(2.0 * np.pi * (2.0 * freq) * vib * t_vec)
-        fifth_harm = 0.22 * np.sin(2.0 * np.pi * (3.0 * freq) * vib * t_vec)
-        pad += (0.32 / (idx + 1)) * (fundamental + octave_harm + fifth_harm)
+        for c_idx, cents in enumerate((-4.0, +4.0)):
+            detuned = freq * (2.0 ** (cents / 1200.0))
+            glottal = _generate_rosenberg_glottal_source(
+                t_vec,
+                detuned,
+                vibrato_hz=4.3 + 0.2 * idx,
+                breath_noise_ratio=0.03,
+                seed=90 + idx * 5 + c_idx,
+            )
+            resonated = _apply_ahaat_formant_resonators(glottal, sample_rate)
+            pad += (0.24 / (idx + 1)) * resonated
 
     pad = pad * swell
     nyq = 0.5 * sample_rate
@@ -1606,6 +2421,7 @@ def process_audio_file(
     samples_dir=None,
     foley="none",
     audio_drop_sec=None,
+    replace_ai_percussion=False,
 ):
     """Load an input WAV file, apply 5-Track Husseiniya DSP montage & -14 LUFS mastering, and write WAV."""
     sample_rate, mono = read_wav_any_depth(input_path)
@@ -1614,15 +2430,25 @@ def process_audio_file(
     if peak > 1e-8:
         mono = mono / peak
 
+    if replace_ai_percussion:
+        # Auto-extract BPM if user passed 0 or negative when replacing AI percussion
+        if bpm <= 0.0 and mode not in ("mawal", "nai"):
+            ref_prof = extract_reference_audio_profile(input_path)
+            if ref_prof["estimated_bpm"] > 0.0:
+                bpm = ref_prof["estimated_bpm"]
+            else:
+                bpm = 60.0
+        mono = strip_ai_percussion_from_vocal(mono, sample_rate)
+
     restored_vocal = apply_noise_print_restoration(mono, sample_rate)
     eq_vocal = apply_vocal_eq(restored_vocal, sample_rate)
     is_rubato = mode in ("mawal", "nai")
-    delay_ms = 450.0 if is_rubato else 285.0
+    delay_ms = compute_tempo_synced_delay_ms(bpm, is_rubato=is_rubato)
     rt60 = 3.8 if is_rubato else 3.2
 
     ir_file = os.path.join(samples_dir, "husseiniya_ir.wav") if samples_dir else None
     echoed_vocal = apply_dynacord_echo(eq_vocal, sample_rate, delay_ms=delay_ms, feedback=0.32, mix=0.22)
-    wet_mix_val = 0.14 if mode in ("heavy_clip", "thaqeel_muwazza") else 0.26
+    wet_mix_val = 0.14 if mode in ("heavy_clip", "thaqeel_muwazza", "bahrani_muthakkal") else 0.26
     wet_vocal = apply_husseiniya_reverb(
         echoed_vocal, sample_rate, rt60=rt60, wet_mix=wet_mix_val, ir_path=ir_file
     )
@@ -1641,7 +2467,7 @@ def process_audio_file(
         swing=swing,
         samples_dir=samples_dir,
     )
-    if mode in ("heavy_clip", "thaqeel_muwazza", "studio_arranged"):
+    if mode in ("heavy_clip", "thaqeel_muwazza", "studio_arranged", "bahrani_muthakkal"):
         ahaat_pad = synthesize_vocal_synth_strings_pad(len(mono), sample_rate, maqam_drone)
         rhythm_bed = apply_husseiniya_reverb(
             rhythm_bed, sample_rate, rt60=2.8, wet_mix=0.22, ir_path=ir_file
@@ -1657,9 +2483,10 @@ def process_audio_file(
 
     ducking = compute_smart_sidechain_ducking(eq_vocal, sample_rate, duck_db=-3.0)
 
-    # 3D Soundstage: Lead vocal centered; rhythm, Vocal-Synth Strings, and Foley panned wide L/R
-    left_bg = (0.36 * rhythm_bed + 0.12 * ahaat_pad + foley_bed) * ducking
-    right_bg = (0.34 * np.roll(rhythm_bed, 18) - 0.12 * np.roll(ahaat_pad, 42) + np.roll(foley_bed, 24)) * ducking
+    rhythm_gain_l = 0.44 if replace_ai_percussion else 0.36
+    rhythm_gain_r = 0.42 if replace_ai_percussion else 0.34
+    left_bg = (rhythm_gain_l * rhythm_bed + 0.12 * ahaat_pad + foley_bed) * ducking
+    right_bg = (rhythm_gain_r * np.roll(rhythm_bed, 18) - 0.12 * np.roll(ahaat_pad, 42) + np.roll(foley_bed, 24)) * ducking
     left_chan = wet_vocal + left_bg
     right_chan = wet_vocal + right_bg
 
@@ -1686,6 +2513,11 @@ def parse_args(argv=None):
     parser.add_argument("--input", default=None, help="Path to raw input WAV recording")
     parser.add_argument("--output", default=None, help="Path to output mastered stereo WAV")
     parser.add_argument(
+        "--extract-profile",
+        default=None,
+        help="Module 45: Extract BPM, Tonic Pitch, Maqam, Crest Factor & LUFS from reference WAV",
+    )
+    parser.add_argument(
         "--compile-lyrics",
         default=None,
         help="Compile and inspect poem lyrics (Modules 40, 41 & 43) directly from the terminal",
@@ -1696,9 +2528,19 @@ def parse_args(argv=None):
         help="Run pre-generation poem linter (word boundaries, dialect mix, hemistich syllables)",
     )
     parser.add_argument(
+        "--validate-abudhiyah",
+        default=None,
+        help="Validate Iraqi Abudhiyah Jinas (3 homophonous lines + 4th -يه ending)",
+    )
+    parser.add_argument(
+        "--validate-zuhayri",
+        default=None,
+        help="Validate 7-line Zuhayri Mawal (AAA B AAA) structure",
+    )
+    parser.add_argument(
         "--recommend-tor",
         default=None,
-        help="Module 46: Recommend optimal Tor, Maqam Arc, Rhythm Mode, BPM, and Sound Prompt for poem",
+        help="Module 46: Recommend optimal Poetic Meter, Tor, Maqam Arc, Rhythm Mode, BPM & Sound Prompt",
     )
     parser.add_argument(
         "--genre",
@@ -1725,6 +2567,12 @@ def parse_args(argv=None):
         help="Force clean space separation without Tatweel (default behavior)",
     )
     parser.add_argument(
+        "--replace-ai-percussion",
+        action="store_true",
+        default=False,
+        help="Stem-Aware Hybrid Mastering: Strip muffled AI percussion and rebuild multi-layer human Latm",
+    )
+    parser.add_argument(
         "--mode",
         default="latm",
         choices=[
@@ -1733,6 +2581,11 @@ def parse_args(argv=None):
             "thaqeel_muwazza",
             "studio_arranged",
             "bahrani_fast",
+            "bahrani_thulathi",
+            "bahrani_rubai",
+            "bahrani_haidari",
+            "bahrani_waqfa",
+            "bahrani_muthakkal",
             "zanjeel_iraqi",
             "zanjeel_bahrani",
             "shoor",
@@ -1740,14 +2593,14 @@ def parse_args(argv=None):
             "mawal",
             "nai",
         ],
-        help="Husseiniya rhythmic and acoustic processing mode (including Module 46 studio modes)",
+        help="Husseiniya rhythmic and acoustic processing mode (including Bahrani & Karbalaei heritage modes)",
     )
     parser.add_argument("--bpm", type=float, default=60.0, help="Tempo in BPM (0 for Rubato)")
     parser.add_argument(
         "--maqam-drone",
         default="saba",
         choices=list(MAQAM_FREQS.keys()),
-        help="Maqam frequency profile for the Ahaat / Vocal-Synth Strings pad",
+        help="Maqam frequency profile for the Formant Ahaat / Vocal-Synth Strings pad",
     )
     parser.add_argument(
         "--foley",
@@ -1787,9 +2640,17 @@ def parse_args(argv=None):
 
 
 def main(argv=None):
-    """CLI Entrypoint supporting --compile-lyrics, --lint-poem, and WAV DSP mastering."""
+    """CLI Entrypoint supporting --compile-lyrics, --lint-poem, --extract-profile, and WAV DSP mastering."""
     args = parse_args(argv)
     use_tatweel = bool(args.use_tatweel and not args.no_tatweel)
+    if args.extract_profile is not None:
+        if not os.path.isfile(args.extract_profile):
+            print(f"Error: Profile input file not found: {args.extract_profile}", file=sys.stderr)
+            return 1
+        report = extract_reference_audio_profile(args.extract_profile)
+        print(json.dumps(report, ensure_ascii=False, indent=2))
+        return 0
+
     if args.compile_lyrics is not None:
         report = detect_and_shape_dialect(
             args.compile_lyrics,
@@ -1801,6 +2662,16 @@ def main(argv=None):
 
     if args.lint_poem is not None:
         report = lint_poem(args.lint_poem)
+        print(json.dumps(report, ensure_ascii=False, indent=2))
+        return 0
+
+    if args.validate_abudhiyah is not None:
+        report = validate_abudhiyah_jinas(args.validate_abudhiyah)
+        print(json.dumps(report, ensure_ascii=False, indent=2))
+        return 0
+
+    if args.validate_zuhayri is not None:
+        report = validate_zuhayri_mawal(args.validate_zuhayri)
         print(json.dumps(report, ensure_ascii=False, indent=2))
         return 0
 
@@ -1836,6 +2707,7 @@ def main(argv=None):
         samples_dir=args.samples_dir,
         foley=args.foley,
         audio_drop_sec=args.audio_drop_sec,
+        replace_ai_percussion=args.replace_ai_percussion,
     )
     if args.session_log:
         log_generation_session(
