@@ -1,4 +1,4 @@
-# بروتوكول التهيئة المسبقة بصيغة `JSON` والاحتراف الكامل لواجهة `Flow Music Studio` (`Module 39`) — V45.0 OMNI-ARCHITECT
+# بروتوكول التهيئة المسبقة بصيغة `JSON` والاحتراف الكامل لواجهة `Flow Music Studio` (`Module 39`) — V48.0 OMNI-ARCHITECT
 
 يوثق هذا الملف بروتوكول التهيئة المسبقة للجلسة (`JSON Session Pre-Conditioning`) والقواعد الهندسية الصارمة للتعامل الاحترافي مع واجهة وأدوات `https://www.flowmusic.app/` (`New session`، لوحة `Compose` المباشرة، وقائمة `Remix > Extend / Trim / Replace / Cover / Variation / Use prompt / Split stems`).
 
@@ -46,7 +46,7 @@ payload_with_ref = build_flowmusic_json_preconditioning(
 ### ب) القاعدة الذهبية الثانية: استخدام لوحة `Compose` المباشرة (`Direct Compose Studio Panel`)
 بدلاً من حشو التعليمات الإنجليزية مع الكلمات العربية في صندوق المحادثة (`textarea[aria-label="Chat message"]`)، استخدم حقول لوحة **`Compose`** المخصصة مباشرةً:
 1. **قسم الكلمات (`Lyrics` — `textarea[aria-label="Lyrics"]`):**
-   - ضع فيه **النص الشعري العربي المُشكّل فقط** (مع الفواصل `..` وعناوين المقاطع `[Intro]`، `[Chorus]`، `[Verse 1]`) دون أي كلمة إنجليزية أو شرح تقني.
+   - ضع فيه **النص الشعري العربي المُشكّل فقط** (مع الفواصل `..` وعناوين المقاطع بالعربية الصرفة `[المُسْتَهَلّ]`، `[النَّزْلَة الأُولَى]`، `[الكَسْرَة وَالمُسْتَهَلّ]` (مع دعم المحلل البرمجي للوسوم الإنجليزية `[Intro]`، `[Chorus]`، `[Verse 1]` أيضاً)) دون أي كلمة إنجليزية أو شرح تقني.
    - تأكد من بقاء مفتاح `button[role="switch"][aria-label="Toggle instrumental mode"]` مغلقاً (`OFF`).
 2. **قسم الوصف الصوتي (`Sound` — `textarea[aria-label="Sound description"]`):**
    - ضع فيه وصف الهوية الصوتية والطور والمقام والنبض (`BPM`) فقط.
