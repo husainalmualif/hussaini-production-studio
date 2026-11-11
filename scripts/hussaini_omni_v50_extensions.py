@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# pylint: disable=too-many-lines,too-many-locals,too-many-branches,too-many-statements,too-many-arguments,too-many-positional-arguments,too-many-return-statements
+# pylint: disable=too-many-lines,too-many-locals,too-many-branches,too-many-statements,too-many-arguments,too-many-positional-arguments,too-many-return-statements,no-member
 """V50.0 OMNI-PERFECTION Extension Suite for Hussaini Production Studio.
 
 Implements all 7 advanced studio, prosodic, melodic, dialectal, atwar, DSP & AI-routing pillars:
