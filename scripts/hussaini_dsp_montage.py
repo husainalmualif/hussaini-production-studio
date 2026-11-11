@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 # pylint: disable=too-many-lines,too-many-return-statements,too-many-branches,too-many-locals,too-many-statements,too-many-arguments,too-many-positional-arguments
-"""Hussaini Audio Omni-Engine DSP, 5-Track DAW & Phonetics Compiler (V48.0 OMNI-ARCHITECT).
+"""Hussaini Audio Omni-Engine DSP, 5-Track DAW & Phonetics Compiler (V50.0 OMNI-PERFECTION).
 
 Bridges poetic/phonetic engineering with procedural DSP audio mastering:
-- Single-Source Version Management via root VERSION file (V48.0 OMNI-ARCHITECT)
+- Single-Source Version Management via root VERSION file (V50.0 OMNI-PERFECTION)
 - Unified Lyrics Spec (Arabic [المُسْتَهَلّ]/[النَّزْلَة الأُولَى]/[الكَسْرَة وَالمُسْتَهَلّ] & English [Chorus]/[Verse 1])
   supporting both 12-line horizontal couplet grid and 20-line vertical 3-Part Golden Architecture
 - Module 41 & 48: Zero Word-Initial Sukun (epenthetic short vowel مِتُونِي/دُمُوعْ/جُرُوحْ or clitic liaison بِدْمُوعْ)
@@ -34,6 +34,36 @@ import numpy as np
 from scipy.io import wavfile
 from scipy.signal import butter, fftconvolve, iirnotch, lfilter, sosfilt
 
+from hussaini_omni_v50_extensions import (  # pylint: disable=unused-import
+    MAQAM_INTERVALS_CENTS,
+    POETIC_METERS_V50,
+    PERFORMANCE_ATWAR_V50,
+    apply_generative_morphological_rules,
+    apply_microtonal_maqam_tuning,
+    apply_minbar_tor_delivery_rules,
+    apply_mono_safe_stereo_stage,
+    apply_parallel_vocal_compression,
+    apply_vocal_deesser,
+    build_multi_engine_ai_prompt,
+    classify_maqam_by_cents_histogram,
+    compile_generative_g2p_and_ipa,
+    compose_microtonal_melody_for_poem as _compose_melody_ext,
+    export_guide_melody_wav,
+    export_microtonal_midi,
+    export_scala_microtonal_scale,
+    generate_multi_maqam_readings as _multi_maqam_ext,
+    infer_unvocalized_arud_pattern,
+    match_poetic_meter_bitmask as _match_meter_ext,
+    prosody_safe_caesura_split,
+    strip_ai_percussion_stft_hpss,
+    synthesize_dynamic_pitch_tracked_ahaat,
+    synthesize_semantic_lyric_foley,
+    synthesize_tasa_and_matam_breath,
+    transcribe_vocalized_arabic_to_ipa,
+    transpose_maqam_frequencies,
+    write_wav_bit_depth,
+)
+
 
 def get_skill_version():
     """Read the canonical skill version from the root VERSION file."""
@@ -41,31 +71,32 @@ def get_skill_version():
     if os.path.isfile(version_file):
         with open(version_file, "r", encoding="utf-8") as handle:
             return handle.read().strip()
-    return "V48.0 OMNI-ARCHITECT"
+    return "V50.0 OMNI-PERFECTION"
 
 
 SKILL_VERSION = get_skill_version()
 
 MAQAM_FREQS = {
-    "bayati": [146.83, 160.00, 174.61, 220.00],
-    "saba": [146.83, 160.00, 174.61, 207.65],
-    "hijaz": [146.83, 155.56, 185.00, 220.00],
-    "lami": [146.83, 155.56, 174.61, 207.65],
-    "kurd": [146.83, 155.56, 174.61, 220.00],
-    "rast": [130.81, 146.83, 160.00, 196.00],
-    "nahawand": [146.83, 164.81, 174.61, 220.00],
-    "sikah": [160.00, 174.61, 196.00, 220.00],
+    m_key: transpose_maqam_frequencies(m_key)[:6]
+    for m_key in MAQAM_INTERVALS_CENTS
 }
 
 COMMON_JINS_GRAPH = {
-    "bayati": ["saba", "kurd", "hijaz", "lami", "nahawand", "sikah"],
-    "saba": ["bayati", "lami", "hijaz", "rast", "nahawand"],
-    "hijaz": ["bayati", "saba", "kurd", "nahawand", "sikah"],
-    "lami": ["saba", "bayati", "kurd"],
-    "kurd": ["bayati", "lami", "hijaz", "nahawand"],
-    "rast": ["saba", "bayati", "hijaz", "sikah"],
-    "nahawand": ["kurd", "bayati", "saba", "hijaz"],
-    "sikah": ["bayati", "hijaz", "rast", "saba"],
+    "bayati": ["saba", "bayati_shuri", "kurd", "hijaz", "lami", "nahawand", "sikah", "rast"],
+    "bayati_shuri": ["bayati", "hijaz", "saba", "kurd"],
+    "saba": ["saba_zamzam", "bayati", "lami", "hijaz", "rast", "nahawand", "bastanikar"],
+    "saba_zamzam": ["saba", "kurd", "lami", "hijaz", "bayati"],
+    "hijaz": ["hijaz_kar", "bayati", "bayati_shuri", "saba", "kurd", "nahawand", "sikah", "suznak"],
+    "hijaz_kar": ["hijaz", "nahawand", "suznak", "rast"],
+    "lami": ["saba", "saba_zamzam", "bayati", "kurd"],
+    "kurd": ["bayati", "lami", "saba_zamzam", "hijaz", "nahawand"],
+    "rast": ["suznak", "saba", "bayati", "hijaz", "sikah", "ajam"],
+    "suznak": ["rast", "hijaz", "nahawand", "bayati"],
+    "nahawand": ["hijaz_kar", "kurd", "bayati", "saba", "hijaz", "suznak", "ajam"],
+    "sikah": ["huzam", "bastanikar", "bayati", "hijaz", "rast", "saba"],
+    "huzam": ["sikah", "bastanikar", "hijaz", "bayati"],
+    "bastanikar": ["sikah", "huzam", "saba", "bayati"],
+    "ajam": ["rast", "nahawand", "kurd"],
 }
 
 # Separation of Poetic Meter (الوزن الشعري) vs. Performance Melody (الطور الأدائي)
@@ -217,6 +248,9 @@ PERFORMANCE_ATWAR_CATALOG = {
         "delivery_rule": "مدّات حنجرية عالية في الجواب في مقام اللامي والصبا مع كسرة فراتية",
     },
 }
+POETIC_METERS_CATALOG.update(POETIC_METERS_V50)
+PERFORMANCE_ATWAR_CATALOG.update(PERFORMANCE_ATWAR_V50)
+
 
 WORD_SEPARATION_MAP = {
     "ياحسين": "يَا حْسَيْنْ",
@@ -626,8 +660,8 @@ BAHRANI_WORD_SHAPING_MAP = {
     "بقلب": "بِـ گَلِبْ",
     "وقلب": "وَ گَلِبْ",
     "قلبي": "گَلْبِي",
-    "بقلبي": "بِـ گَلْبِي",
-    "وقلبي": "وَ گَلْبِي",
+    "بقلبي": "بِـ گَلِبْ",
+    "وقلبي": "وَ گَلِبْ",
     "قلبك": "گَلْبِكْ",
     "قلبچ": "گَلْبِچْ",
     "گلبش": "گَلْبِشْ",
@@ -1003,12 +1037,9 @@ def segment_arabic_prosodic_syllables(hemistich):
 
         has_any_diacritic = any(u[1] for u in units)
         if not has_any_diacritic:
-            # Unvocalized word fallback: segment using long vowels (ا، و، ي، ى، آ) and consonant clusters
-            n_letters = len(units)
-            est = max(1, int(round(n_letters * 0.58)))
-            for _ in range(est):
-                syllables.append("CV")
-                arud_pattern.append("/0")
+            inferred_syls, inferred_pat = infer_unvocalized_arud_pattern(word)
+            syllables.extend(inferred_syls)
+            arud_pattern.extend(inferred_pat)
             continue
 
         # Expand units into elementary prosodic phonemes: 'C' (moved consonant), 'S' (sakin/madd)
@@ -1452,28 +1483,43 @@ def format_bahrani_antiphonal_faujain(estehlal_lines):
 
 
 def split_long_lines_for_steady_pacing(text, max_words_per_line=5):
-    """Module 44: Split long narrative lines (>max_words_per_line) vertically into short 3-4 word lines."""
+    """Modules 44 & 49: Prosody- & syntax-safe vertical short-line caesura splitter."""
     out_lines = []
     for line in text.splitlines():
-        stripped = line.strip()
-        if not stripped or stripped.startswith("["):
-            out_lines.append(line)
-            continue
-        words_only = [w for w in stripped.split() if w != ".." and not w.startswith("(")]
-        if len(words_only) > max_words_per_line:
-            if ".." in stripped:
-                parts = [p.strip() for p in stripped.split("..") if p.strip()]
-                for idx, part in enumerate(parts):
-                    suffix = " .." if idx < len(parts) - 1 else ""
-                    out_lines.append(f"{part}{suffix}")
-                continue
-            tokens = stripped.split()
-            mid = len(tokens) // 2
-            out_lines.append(" ".join(tokens[:mid]) + " ..")
-            out_lines.append(" ".join(tokens[mid:]))
-        else:
-            out_lines.append(stripped)
+        out_lines.extend(
+            prosody_safe_caesura_split(
+                line, segment_arabic_prosodic_syllables, max_words_per_line=max_words_per_line
+            )
+        )
     return "\n".join(out_lines)
+
+
+def match_poetic_meter_bitmask(text):
+    """Module 49: Match poem lines against all 25 Hussaini poetic meters via binary Arud bitmasks."""
+    shaped = detect_and_shape_dialect(text)["shaped_lyrics"]
+    return _match_meter_ext(shaped, segment_arabic_prosodic_syllables)
+
+def compose_microtonal_melody_for_poem(poem_text, maqam="saba", bpm=60.0, tonic_hz=None):
+    """Module 50: Compose a 24-EDO microtonal melody locking prosodic Watad onto chest downbeats."""
+    shaped = detect_and_shape_dialect(poem_text)["shaped_lyrics"]
+    return _compose_melody_ext(
+        shaped, segment_arabic_prosodic_syllables, maqam=maqam, bpm=bpm, tonic_hz=tonic_hz
+    )
+
+
+def generate_multi_maqam_readings(
+    poem_text, maqamat=("bayati", "saba", "hijaz", "nahawand", "lami"), bpm=60.0
+):
+    """Module 50: Generate comparative Maqam key readings for the exact same poem."""
+    shaped = detect_and_shape_dialect(poem_text)["shaped_lyrics"]
+    return _multi_maqam_ext(shaped, segment_arabic_prosodic_syllables, maqamat=maqamat, bpm=bpm)
+
+
+def compile_dialect_g2p_and_ipa(text, dialect=None, use_tatweel=False):
+    """Module 51: Compile lyrics across 6 Hussaini dialect ecosystems with generative G2P & IPA."""
+    return compile_generative_g2p_and_ipa(
+        text, detect_and_shape_dialect, dialect=dialect, use_tatweel=use_tatweel
+    )
 
 
 def build_multi_tor_melodic_bridge(from_maqam, to_maqam, from_tor="thaqeel", to_tor="shoor"):
@@ -1710,7 +1756,7 @@ def build_flowmusic_json_preconditioning(
 ):
     """Module 39: Build the JSON Session Pre-Conditioning payload with optional reference_clip_id."""
     payload = {
-        "protocol_name": "Hussaini_Production_Studio_OS_V48_OMNI_ARCHITECT",
+        "protocol_name": "Hussaini_Production_Studio_OS_V50_OMNI_PERFECTION",
         "skill_version": SKILL_VERSION,
         "session_mode": "Pre_Conditioning_Lock_Only_Wait_For_Step_2_Lyrics",
         "target_dialect": dialect,
@@ -1830,16 +1876,9 @@ def extract_reference_audio_profile(input_path):
             p_lag = min_p_lag + int(np.argmax(seg_acf[min_p_lag : max_p_lag + 1]))
             pitches.append(float(sample_rate / p_lag))
 
-    tonic_hz = round(float(np.median(pitches)), 2) if pitches else 146.83
-
-    # Match closest Maqam profile based on pitch distribution
-    best_maqam = "saba"
-    best_dist = 1e9
-    for m_name, freqs in MAQAM_FREQS.items():
-        dist = abs(tonic_hz - freqs[0])
-        if dist < best_dist:
-            best_dist = dist
-            best_maqam = m_name
+    tonic_hz, best_maqam, maqam_scores = classify_maqam_by_cents_histogram(
+        pitches, fallback_maqam="saba"
+    )
 
     # 3. Crest Factor & Integrated LUFS
     rms = float(np.sqrt(np.mean(mono ** 2)) + 1e-12)
@@ -1854,32 +1893,17 @@ def extract_reference_audio_profile(input_path):
         "is_rubato": estimated_bpm == 0.0,
         "tonic_freq_hz": tonic_hz,
         "estimated_maqam": best_maqam,
+        "maqam_histogram_scores": maqam_scores,
         "crest_factor_db": crest_db,
         "integrated_lufs": integrated_lufs,
     }
 
 
 def strip_ai_percussion_from_vocal(signal, sample_rate):
-    """Stem-Aware Hybrid Mastering (--replace-ai-percussion):
-    Suppress muffled AI chest-thuds (<115Hz) and transient drum clicks from mixed AI audio while
-    preserving the human Radood vocal core (125Hz-4200Hz) so clean studio Husseiniya Latm can replace it.
-    """
+    """Module 52 Stem-Aware Hybrid Mastering: STFT Median HPSS preserving 4.5-12kHz vocal air."""
     if len(signal) == 0:
         return signal
-    nyq = 0.5 * sample_rate
-    # 1. Steep High-Pass at 120Hz to remove synthetic low-end thump
-    cleaned = butter_filter(signal, min(120.0, 0.4 * sample_rate), sample_rate, btype="high", order=4)
-    # 2. Transient de-clicking envelope to tame sharp synthetic clap spikes while keeping sustained vowel energy
-    win_fast = max(1, int(0.004 * sample_rate))
-    win_slow = max(1, int(0.035 * sample_rate))
-    fast_env = np.sqrt(np.maximum(np.convolve(cleaned ** 2, np.ones(win_fast) / win_fast, mode="same"), 1e-16))
-    slow_env = np.sqrt(np.maximum(np.convolve(cleaned ** 2, np.ones(win_slow) / win_slow, mode="same"), 1e-16))
-    transient_ratio = fast_env / (slow_env + 1e-9)
-    suppress_gain = np.where(transient_ratio > 1.85, 1.85 / (transient_ratio + 1e-9), 1.0)
-    cleaned = cleaned * suppress_gain
-    if nyq > 4800.0:
-        cleaned = butter_filter(cleaned, 4500.0, sample_rate, btype="low", order=2)
-    return cleaned
+    return strip_ai_percussion_stft_hpss(signal, sample_rate)
 
 
 def apply_noise_print_restoration(signal, sample_rate, gate_threshold_dbfs=-42.0, reduction_db=-10.0):
@@ -2019,22 +2043,28 @@ def detect_vocal_onset_offset_samples(vocal_signal, sample_rate, threshold_dbfs=
     return 0
 
 
-def synthesize_percussion_hit(sample_rate, kind="latm", samples_dir=None):
-    """Load real acoustic percussion sample from samples_dir if present, else synthesize procedurally."""
+def synthesize_percussion_hit(sample_rate, kind="latm", samples_dir=None, variant_idx=0):
+    """Load real acoustic percussion sample or synthesize round-robin humanized Husseiniya percussion."""
     if samples_dir and os.path.isdir(samples_dir):
-        candidate = os.path.join(samples_dir, f"{kind}.wav")
-        if os.path.isfile(candidate):
-            _, hit_data = wavfile.read(candidate)
-            hit_float = hit_data.astype(np.float64)
-            if hit_float.ndim > 1:
-                hit_float = np.mean(hit_float, axis=1)
-            peak = np.max(np.abs(hit_float))
-            return hit_float / peak if peak > 1e-8 else hit_float
+        for cand_name in (f"{kind}_{variant_idx + 1}.wav", f"{kind}.wav"):
+            candidate = os.path.join(samples_dir, cand_name)
+            if os.path.isfile(candidate):
+                _, hit_data = wavfile.read(candidate)
+                hit_float = hit_data.astype(np.float64)
+                if hit_float.ndim > 1:
+                    hit_float = np.mean(hit_float, axis=1)
+                peak = np.max(np.abs(hit_float))
+                return hit_float / peak if peak > 1e-8 else hit_float
 
-    rng = np.random.default_rng(seed=101)
+    if kind in ("tasa", "matam_breath"):
+        return synthesize_tasa_and_matam_breath(sample_rate, kind=kind, seed=300 + variant_idx)
+
+    rng = np.random.default_rng(seed=101 + int(variant_idx) * 17)
+    pitch_jit = 1.0 + 0.018 * np.sin(float(variant_idx) * 1.7)
+    vel_jit = 0.94 + 0.06 * np.cos(float(variant_idx) * 1.3)
     dur = 0.24
     num_samples = max(1, int(dur * sample_rate))
-    t_vec = np.linspace(0.0, dur, num_samples, endpoint=False)
+    t_vec = np.linspace(0.0, dur, num_samples, endpoint=False) * pitch_jit
 
     if kind == "dammam":
         freq_env = 90.0 * np.exp(-14.0 * t_vec) + 48.0
@@ -2085,13 +2115,13 @@ def synthesize_percussion_hit(sample_rate, kind="latm", samples_dir=None):
     skin_slap = rng.normal(0.0, 1.0, num_samples) * np.exp(-42.0 * t_vec)
     if 0.5 * sample_rate > 1200.0:
         skin_slap = butter_filter(skin_slap, [200.0, 1100.0], sample_rate, btype="band", order=2)
-    return 0.80 * sub_thud + 0.25 * skin_slap
+    return vel_jit * (0.80 * sub_thud + 0.25 * skin_slap)
 
 
 def build_rhythm_bed(
     num_samples, sample_rate, mode="latm", bpm=60.0, offset_samples=0, swing=0.0, samples_dir=None
 ):
-    """Generate a synchronized Husseiniya percussion track including authentic Bahrani Mawkib patterns."""
+    """Module 52: Round-Robin Humanized Husseiniya Percussion (Latm, Dammam, Brass Tasa, Zanjeel, Hosa & Breath)."""
     bed = np.zeros(num_samples, dtype=np.float64)
     if bpm <= 0.0 or mode in ("mawal", "nai"):
         return bed
@@ -2100,30 +2130,60 @@ def build_rhythm_bed(
     if beat_interval <= 0:
         return bed
 
-    primary_hit = synthesize_percussion_hit(sample_rate, "latm", samples_dir=samples_dir)
-    heavy_hit = synthesize_percussion_hit(sample_rate, "heavy_clip", samples_dir=samples_dir)
-    dammam_hit = synthesize_percussion_hit(sample_rate, "dammam", samples_dir=samples_dir)
-    zanjeel_hit = synthesize_percussion_hit(sample_rate, "zanjeel", samples_dir=samples_dir)
-    bahrani_hit = synthesize_percussion_hit(sample_rate, "bahrani_fast", samples_dir=samples_dir)
-    studio_hit = synthesize_percussion_hit(sample_rate, "studio_arranged", samples_dir=samples_dir)
+    rr_count = 6
+    banks = {
+        k: [synthesize_percussion_hit(sample_rate, k, samples_dir=samples_dir, variant_idx=v) for v in range(rr_count)]
+        for k in ("latm", "heavy_clip", "dammam", "zanjeel", "bahrani_fast", "studio_arranged", "tasa", "matam_breath")
+    }
+    rng = np.random.default_rng(seed=505)
+    max_jitter = min(beat_interval // 10, max(1, int(0.008 * sample_rate)))
 
     cursor = max(0, int(offset_samples))
     beat_idx = 0
     while cursor < num_samples:
-        if mode in ("zanjeel_iraqi", "zanjeel_bahrani", "bandari"):
-            hit = dammam_hit if (beat_idx % 2 == 0) else (0.65 * dammam_hit + 0.55 * zanjeel_hit)
-            if mode == "zanjeel_bahrani" and (beat_idx % 4 == 2):
+        rr = beat_idx % rr_count
+        primary_hit = banks["latm"][rr]
+        heavy_hit = banks["heavy_clip"][rr]
+        dammam_hit = banks["dammam"][rr]
+        zanjeel_hit = banks["zanjeel"][rr]
+        bahrani_hit = banks["bahrani_fast"][rr]
+        studio_hit = banks["studio_arranged"][rr]
+        tasa_hit = banks["tasa"][rr]
+        breath_hit = banks["matam_breath"][rr]
+
+        if mode in ("zanjeel_iraqi", "zanjeel_bahrani", "bandari", "dammam_tasa"):
+            if beat_idx % 2 == 0:
+                hit = dammam_hit
+            else:
+                max_h = max(len(dammam_hit), len(zanjeel_hit), len(tasa_hit))
+                hit = np.zeros(max_h, dtype=np.float64)
+                hit[: len(dammam_hit)] += 0.65 * dammam_hit
+                hit[: len(zanjeel_hit)] += 0.50 * zanjeel_hit
+                hit[: len(tasa_hit)] += 0.28 * tasa_hit
+            if mode in ("zanjeel_bahrani", "dammam_tasa") and (beat_idx % 4 == 2):
                 sub_pos = cursor + beat_interval // 2
-                end_sub = min(num_samples, sub_pos + len(zanjeel_hit))
+                end_sub = min(num_samples, sub_pos + len(tasa_hit))
                 if sub_pos < num_samples:
-                    bed[sub_pos:end_sub] += 0.6 * zanjeel_hit[: end_sub - sub_pos]
+                    bed[sub_pos:end_sub] += 0.52 * tasa_hit[: end_sub - sub_pos]
             if mode == "bandari" and swing > 0.0:
                 swing_pos = cursor + int(beat_interval * (0.5 + 0.16 * min(swing, 0.35)))
                 end_sw = min(num_samples, swing_pos + len(primary_hit))
                 if swing_pos < num_samples:
                     bed[swing_pos:end_sw] += 0.45 * primary_hit[: end_sw - swing_pos]
+        elif mode in ("iraqi_hosa", "bahrani_hosa"):
+            # Hosa 3+1 celebratory-epic tribal/mawkib stomp & double chest clap
+            if beat_idx % 4 == 3:
+                max_h = max(len(bahrani_hit), len(dammam_hit))
+                hit = np.zeros(max_h, dtype=np.float64)
+                hit[: len(bahrani_hit)] += 1.15 * bahrani_hit
+                hit[: len(dammam_hit)] += 0.35 * dammam_hit
+            else:
+                hit = bahrani_hit
+            sub_pos = cursor + (beat_interval * 2) // 3
+            end_sub = min(num_samples, sub_pos + len(bahrani_hit))
+            if sub_pos < num_samples:
+                bed[sub_pos:end_sub] += 0.58 * bahrani_hit[: end_sub - sub_pos]
         elif mode == "bahrani_thulathi":
-            # اللطم الثلاثي البحراني: ضربتان متقاربتان + ضربة ثالثة ثقيلة مع وقفة في الضربة الرابعة
             step_in_cycle = beat_idx % 4
             if step_in_cycle in (0, 1):
                 hit = 0.85 * studio_hit
@@ -2132,7 +2192,6 @@ def build_rhythm_bed(
             else:
                 hit = np.zeros_like(primary_hit)
         elif mode == "bahrani_rubai":
-            # اللطم الرباعي البحراني: 3 ضربات مسير متزنة + ضربة رابعة ارتكازية قوية
             step_in_cycle = beat_idx % 4
             hit = (1.15 * heavy_hit) if step_in_cycle == 3 else (0.85 * studio_hit)
         elif mode in ("bahrani_fast", "bahrani_haidari", "bahrani_waqfa"):
@@ -2154,8 +2213,19 @@ def build_rhythm_bed(
         else:
             hit = primary_hit
 
-        end_idx = min(num_samples, cursor + len(hit))
-        bed[cursor:end_idx] += hit[: end_idx - cursor]
+        # Add congregation Matam exhale breath on off-beats in Shoor, Latm, and Heavy Clips
+        if mode in ("shoor", "latm", "heavy_clip") and beat_interval > len(breath_hit):
+            br_pos = cursor + beat_interval // 2
+            end_br = min(num_samples, br_pos + len(breath_hit))
+            if br_pos < num_samples:
+                bed[br_pos:end_br] += (0.55 if mode == "shoor" else 0.26) * breath_hit[: end_br - br_pos]
+
+        # Subtle crowd micro-timing humanization (except beat 0 anchor)
+        jitter = 0 if beat_idx == 0 else int(rng.integers(-max_jitter, max_jitter + 1))
+        hit_pos = max(0, cursor + jitter)
+        end_idx = min(num_samples, hit_pos + len(hit))
+        if hit_pos < num_samples:
+            bed[hit_pos:end_idx] += hit[: end_idx - hit_pos]
         cursor += beat_interval
         beat_idx += 1
 
@@ -2277,39 +2347,11 @@ def synthesize_vocal_synth_strings_pad(num_samples, sample_rate, maqam="saba"):
     return pad * 0.18
 
 
-def synthesize_contextual_foley(num_samples, sample_rate, foley_type="none"):
-    """Module 44: Synthesize subtle dramatic Foley (desert wind, Euphrates water, echoed horses)."""
-    if not foley_type or foley_type == "none" or num_samples <= 0:
-        return np.zeros(num_samples, dtype=np.float64)
-
-    rng = np.random.default_rng(seed=202)
-    t_vec = np.arange(num_samples, dtype=np.float64) / sample_rate
-    noise = rng.normal(0.0, 1.0, num_samples)
-    nyq = 0.5 * sample_rate
-
-    if foley_type == "wind":
-        gust = 0.55 + 0.45 * np.sin(2.0 * np.pi * 0.22 * t_vec)
-        high_cut = min(1200.0, 0.42 * sample_rate)
-        if nyq > 350.0 and high_cut > 220.0:
-            wind = butter_filter(noise, [180.0, high_cut], sample_rate, btype="band", order=2)
-        else:
-            wind = noise
-        return 0.045 * wind * gust
-
-    if foley_type == "water":
-        stream = butter_filter(noise, min(900.0, 0.4 * sample_rate), sample_rate, btype="low", order=2)
-        droplet_env = np.exp(-35.0 * np.mod(t_vec, 0.45))
-        droplet = np.sin(2.0 * np.pi * 1150.0 * t_vec) * droplet_env
-        return 0.035 * (0.6 * stream + 0.4 * droplet)
-
-    if foley_type == "horses":
-        cadence = np.exp(-28.0 * np.mod(t_vec, 0.38)) + 0.7 * np.exp(-28.0 * np.mod(t_vec + 0.14, 0.38))
-        hoof = noise * cadence
-        if nyq > 600.0:
-            hoof = butter_filter(hoof, [120.0, min(850.0, 0.4 * sample_rate)], sample_rate, btype="band", order=2)
-        return 0.04 * hoof
-
-    return np.zeros(num_samples, dtype=np.float64)
+def synthesize_contextual_foley(num_samples, sample_rate, foley_type="none", lyrics_text=None):
+    """Modules 44 & 52: Synthesize static or semantic lyric-timed ritual Foley cues."""
+    return synthesize_semantic_lyric_foley(
+        num_samples, sample_rate, foley_type=foley_type, lyrics_text=lyrics_text
+    )
 
 
 def apply_dramatic_audio_drop(signal, sample_rate, drop_start_sec=None, drop_duration_sec=3.0):
@@ -2422,8 +2464,12 @@ def process_audio_file(
     foley="none",
     audio_drop_sec=None,
     replace_ai_percussion=False,
+    microtonal_tune=0.0,
+    bit_depth=16,
+    lyrics_text=None,
+    export_stems_dir=None,
 ):
-    """Load an input WAV file, apply 5-Track Husseiniya DSP montage & -14 LUFS mastering, and write WAV."""
+    """Load WAV, apply V50.0 Pitch-Tracked 5-Track Husseiniya DSP & Mono-Safe -14 LUFS Master."""
     sample_rate, mono = read_wav_any_depth(input_path)
 
     peak = np.max(np.abs(mono))
@@ -2431,23 +2477,25 @@ def process_audio_file(
         mono = mono / peak
 
     if replace_ai_percussion:
-        # Auto-extract BPM if user passed 0 or negative when replacing AI percussion
         if bpm <= 0.0 and mode not in ("mawal", "nai"):
             ref_prof = extract_reference_audio_profile(input_path)
-            if ref_prof["estimated_bpm"] > 0.0:
-                bpm = ref_prof["estimated_bpm"]
-            else:
-                bpm = 60.0
+            bpm = ref_prof["estimated_bpm"] if ref_prof["estimated_bpm"] > 0.0 else 60.0
         mono = strip_ai_percussion_from_vocal(mono, sample_rate)
 
     restored_vocal = apply_noise_print_restoration(mono, sample_rate)
-    eq_vocal = apply_vocal_eq(restored_vocal, sample_rate)
+    tuned_vocal = apply_microtonal_maqam_tuning(
+        restored_vocal, sample_rate, maqam=maqam_drone, strength=microtonal_tune
+    )
+    eq_vocal = apply_vocal_eq(tuned_vocal, sample_rate)
+    deessed_vocal = apply_vocal_deesser(eq_vocal, sample_rate)
+    steady_vocal = apply_parallel_vocal_compression(deessed_vocal, blend=0.24)
+
     is_rubato = mode in ("mawal", "nai")
     delay_ms = compute_tempo_synced_delay_ms(bpm, is_rubato=is_rubato)
     rt60 = 3.8 if is_rubato else 3.2
 
     ir_file = os.path.join(samples_dir, "husseiniya_ir.wav") if samples_dir else None
-    echoed_vocal = apply_dynacord_echo(eq_vocal, sample_rate, delay_ms=delay_ms, feedback=0.32, mix=0.22)
+    echoed_vocal = apply_dynacord_echo(steady_vocal, sample_rate, delay_ms=delay_ms, feedback=0.32, mix=0.22)
     wet_mix_val = 0.14 if mode in ("heavy_clip", "thaqeel_muwazza", "bahrani_muthakkal") else 0.26
     wet_vocal = apply_husseiniya_reverb(
         echoed_vocal, sample_rate, rt60=rt60, wet_mix=wet_mix_val, ir_path=ir_file
@@ -2456,7 +2504,7 @@ def process_audio_file(
     if offset_ms is not None:
         offset_samples = max(0, int((offset_ms / 1000.0) * sample_rate))
     else:
-        offset_samples = detect_vocal_onset_offset_samples(eq_vocal, sample_rate)
+        offset_samples = detect_vocal_onset_offset_samples(steady_vocal, sample_rate)
 
     rhythm_bed = build_rhythm_bed(
         len(mono),
@@ -2467,188 +2515,165 @@ def process_audio_file(
         swing=swing,
         samples_dir=samples_dir,
     )
-    if mode in ("heavy_clip", "thaqeel_muwazza", "studio_arranged", "bahrani_muthakkal"):
-        ahaat_pad = synthesize_vocal_synth_strings_pad(len(mono), sample_rate, maqam_drone)
+    use_strings_pad = mode in ("heavy_clip", "thaqeel_muwazza", "studio_arranged", "bahrani_muthakkal")
+    ahaat_pad = synthesize_dynamic_pitch_tracked_ahaat(
+        steady_vocal, sample_rate, maqam=maqam_drone, is_strings_pad=use_strings_pad
+    )
+    if use_strings_pad:
         rhythm_bed = apply_husseiniya_reverb(
             rhythm_bed, sample_rate, rt60=2.8, wet_mix=0.22, ir_path=ir_file
         )
-    else:
-        ahaat_pad = synthesize_ahaat_drone(len(mono), sample_rate, maqam_drone)
 
-    foley_bed = synthesize_contextual_foley(len(mono), sample_rate, foley_type=foley)
+    foley_bed = synthesize_contextual_foley(
+        len(mono), sample_rate, foley_type=foley, lyrics_text=lyrics_text
+    )
 
     if audio_drop_sec is not None:
         rhythm_bed = apply_dramatic_audio_drop(rhythm_bed, sample_rate, drop_start_sec=audio_drop_sec)
         ahaat_pad = apply_dramatic_audio_drop(ahaat_pad, sample_rate, drop_start_sec=audio_drop_sec)
 
-    ducking = compute_smart_sidechain_ducking(eq_vocal, sample_rate, duck_db=-3.0)
-
-    rhythm_gain_l = 0.44 if replace_ai_percussion else 0.36
-    rhythm_gain_r = 0.42 if replace_ai_percussion else 0.34
-    left_bg = (rhythm_gain_l * rhythm_bed + 0.12 * ahaat_pad + foley_bed) * ducking
-    right_bg = (rhythm_gain_r * np.roll(rhythm_bed, 18) - 0.12 * np.roll(ahaat_pad, 42) + np.roll(foley_bed, 24)) * ducking
-    left_chan = wet_vocal + left_bg
-    right_chan = wet_vocal + right_bg
+    ducking = compute_smart_sidechain_ducking(steady_vocal, sample_rate, duck_db=-3.0)
+    left_chan, right_chan = apply_mono_safe_stereo_stage(
+        wet_vocal, rhythm_bed, ahaat_pad, foley_bed, ducking, sample_rate, replace_ai=replace_ai_percussion
+    )
 
     stereo_raw = np.column_stack(
-        (tape_saturate(left_chan, drive=1.4), tape_saturate(right_chan, drive=1.4))
+        (tape_saturate(left_chan, drive=1.35), tape_saturate(right_chan, drive=1.35))
     )
     stereo_glued = apply_master_glue_compressor(stereo_raw, ratio=1.5, threshold=0.65)
     stereo = normalize_lufs_and_true_peak(
         stereo_glued, sample_rate, target_lufs=-14.0, ceiling_dbtp=-1.0
     )
 
-    out_int16 = np.clip(stereo * 32767.0, -32768, 32767).astype(np.int16)
-    out_dir = os.path.dirname(os.path.abspath(output_path))
-    if out_dir and not os.path.exists(out_dir):
-        os.makedirs(out_dir, exist_ok=True)
-    wavfile.write(output_path, sample_rate, out_int16)
+    write_wav_bit_depth(output_path, sample_rate, stereo, bit_depth=bit_depth)
+
+    if export_stems_dir:
+        os.makedirs(export_stems_dir, exist_ok=True)
+        write_wav_bit_depth(os.path.join(export_stems_dir, "01_Lead_Radood.wav"), sample_rate, wet_vocal, bit_depth=bit_depth)
+        write_wav_bit_depth(os.path.join(export_stems_dir, "02_Percussion_Latm.wav"), sample_rate, rhythm_bed * ducking, bit_depth=bit_depth)
+        write_wav_bit_depth(os.path.join(export_stems_dir, "03_Dynamic_Ahaat_Pad.wav"), sample_rate, ahaat_pad * ducking, bit_depth=bit_depth)
+        write_wav_bit_depth(os.path.join(export_stems_dir, "04_Semantic_Foley.wav"), sample_rate, foley_bed * ducking, bit_depth=bit_depth)
+        write_wav_bit_depth(os.path.join(export_stems_dir, "05_Master_Mix.wav"), sample_rate, stereo, bit_depth=bit_depth)
 
 
 def parse_args(argv=None):
-    """Parse CLI arguments for the Hussaini DSP Montage Engine & Lyrics Compiler/Linter."""
+    """Parse CLI arguments for the V50.0 Hussaini DSP Montage, Melody & Prosody Compiler."""
     parser = argparse.ArgumentParser(
-        description=f"Hussaini Audio Omni-Engine DSP & Phonetics Compiler Script ({SKILL_VERSION})"
+        description=f"Hussaini Audio Omni-Engine DSP, Melody & Prosody Compiler ({SKILL_VERSION})"
     )
     parser.add_argument("--input", default=None, help="Path to raw input WAV recording")
     parser.add_argument("--output", default=None, help="Path to output mastered stereo WAV")
-    parser.add_argument(
-        "--extract-profile",
-        default=None,
-        help="Module 45: Extract BPM, Tonic Pitch, Maqam, Crest Factor & LUFS from reference WAV",
-    )
-    parser.add_argument(
-        "--compile-lyrics",
-        default=None,
-        help="Compile and inspect poem lyrics (Modules 40, 41 & 43) directly from the terminal",
-    )
-    parser.add_argument(
-        "--lint-poem",
-        default=None,
-        help="Run pre-generation poem linter (word boundaries, dialect mix, hemistich syllables)",
-    )
-    parser.add_argument(
-        "--validate-abudhiyah",
-        default=None,
-        help="Validate Iraqi Abudhiyah Jinas (3 homophonous lines + 4th -يه ending)",
-    )
-    parser.add_argument(
-        "--validate-zuhayri",
-        default=None,
-        help="Validate 7-line Zuhayri Mawal (AAA B AAA) structure",
-    )
-    parser.add_argument(
-        "--recommend-tor",
-        default=None,
-        help="Module 46: Recommend optimal Poetic Meter, Tor, Maqam Arc, Rhythm Mode, BPM & Sound Prompt",
-    )
-    parser.add_argument(
-        "--genre",
-        default=None,
-        choices=["latmiya", "nasheed", "ibtihalat", "tawashih"],
-        help="Module 47: Build strict vocal genre profile (latmiya, nasheed, ibtihalat, tawashih)",
-    )
-    parser.add_argument(
-        "--enforce-iraqi-dhaa",
-        action="store_true",
-        default=None,
-        help="Explicitly enforce Iraqi emphatic Dhaa (ظ) conversion",
-    )
-    parser.add_argument(
-        "--use-tatweel",
-        action="store_true",
-        default=False,
-        help="Use Arabic Tatweel (ـ) after single-letter prepositions instead of clean space",
-    )
-    parser.add_argument(
-        "--no-tatweel",
-        action="store_true",
-        default=False,
-        help="Force clean space separation without Tatweel (default behavior)",
-    )
-    parser.add_argument(
-        "--replace-ai-percussion",
-        action="store_true",
-        default=False,
-        help="Stem-Aware Hybrid Mastering: Strip muffled AI percussion and rebuild multi-layer human Latm",
-    )
+    parser.add_argument("--extract-profile", default=None, help="Reverse-engineer BPM, Tonic, 15-Maqam Cents Histogram & LUFS")
+    parser.add_argument("--compile-lyrics", default=None, help="Compile poem lyrics (Modules 40, 41 & 43)")
+    parser.add_argument("--compile-g2p", default=None, help="Module 51: 6-Dialect Generative G2P + IPA transcription")
+    parser.add_argument("--dialect", default=None, help="Optional explicit dialect (iraqi, iraqi_janoubi, bahrani, qatifi, hasawi, ahwazi, amili, fusha)")
+    parser.add_argument("--match-meter", default=None, help="Module 49: Binary Arud bitmask match across 25 poetic meters")
+    parser.add_argument("--compose-melody", default=None, help="Module 50: Compose 24-EDO syllable-locked microtonal melody")
+    parser.add_argument("--melody-wav", default=None, help="Optional output path for 24-EDO Guide Vocal WAV")
+    parser.add_argument("--melody-midi", default=None, help="Optional output path for 14-bit Pitch-Bend Microtonal MIDI")
+    parser.add_argument("--multi-maqam", action="store_true", default=False, help="Include comparative multi-Maqam key readings")
+    parser.add_argument("--export-scala", default=None, help="Export Huygens-Fokker Scala (.scl) microtonal tuning file")
+    parser.add_argument("--tor-rules", default=None, choices=list(PERFORMANCE_ATWAR_CATALOG.keys()), help="Module 51: Apply specific Tor delivery & council placement rules")
+    parser.add_argument("--council-pos", default="middle", choices=["opening", "middle", "closing"], help="Position in Husseini council (opening, middle, closing)")
+    parser.add_argument("--ai-router", default=None, choices=["flow_music", "suno_v4_5", "suno_v5_5", "udio", "rvc_svc"], help="Module 52: Multi-engine AI prompt & voice router")
+    parser.add_argument("--verified-voice-id", default=None, help="Optional verified custom voice ID for ethical SVC/Voice Cloning")
+    parser.add_argument("--lint-poem", default=None, help="Run pre-generation poem linter")
+    parser.add_argument("--validate-abudhiyah", default=None, help="Validate Iraqi Abudhiyah Jinas")
+    parser.add_argument("--validate-zuhayri", default=None, help="Validate 7-line Zuhayri Mawal")
+    parser.add_argument("--recommend-tor", default=None, help="Recommend Poetic Meter, Tor, Maqam Arc, Rhythm & BPM")
+    parser.add_argument("--genre", default=None, choices=["latmiya", "nasheed", "ibtihalat", "tawashih"], help="Build strict vocal genre profile")
+    parser.add_argument("--enforce-iraqi-dhaa", action="store_true", default=None, help="Explicitly enforce Iraqi emphatic Dhaa (ظ)")
+    parser.add_argument("--use-tatweel", action="store_true", default=False, help="Use Tatweel after single-letter prepositions")
+    parser.add_argument("--no-tatweel", action="store_true", default=False, help="Force clean space separation (default)")
+    parser.add_argument("--replace-ai-percussion", action="store_true", default=False, help="STFT HPSS AI percussion removal + human Latm rebuild")
     parser.add_argument(
         "--mode",
         default="latm",
         choices=[
-            "latm",
-            "heavy_clip",
-            "thaqeel_muwazza",
-            "studio_arranged",
-            "bahrani_fast",
-            "bahrani_thulathi",
-            "bahrani_rubai",
-            "bahrani_haidari",
-            "bahrani_waqfa",
-            "bahrani_muthakkal",
-            "zanjeel_iraqi",
-            "zanjeel_bahrani",
-            "shoor",
-            "bandari",
-            "mawal",
-            "nai",
+            "latm", "heavy_clip", "thaqeel_muwazza", "studio_arranged",
+            "bahrani_fast", "bahrani_thulathi", "bahrani_rubai", "bahrani_haidari",
+            "bahrani_waqfa", "bahrani_muthakkal", "zanjeel_iraqi", "zanjeel_bahrani",
+            "dammam_tasa", "iraqi_hosa", "bahrani_hosa", "shoor", "bandari", "mawal", "nai",
         ],
-        help="Husseiniya rhythmic and acoustic processing mode (including Bahrani & Karbalaei heritage modes)",
+        help="Husseiniya rhythmic and acoustic processing mode (19 heritage & studio modes)",
     )
     parser.add_argument("--bpm", type=float, default=60.0, help="Tempo in BPM (0 for Rubato)")
-    parser.add_argument(
-        "--maqam-drone",
-        default="saba",
-        choices=list(MAQAM_FREQS.keys()),
-        help="Maqam frequency profile for the Formant Ahaat / Vocal-Synth Strings pad",
-    )
+    parser.add_argument("--maqam-drone", default="saba", choices=list(MAQAM_FREQS.keys()), help="15-Maqam 24-EDO profile")
     parser.add_argument(
         "--foley",
         default="none",
-        choices=["none", "wind", "water", "horses"],
-        help="Contextual dramatic Foley bed (wind, water, horses)",
+        choices=["none", "wind", "water", "horses", "chains", "swords", "majlis_weeping", "auto"],
+        help="Static or semantic lyric-driven ('auto') ritual Foley sound design",
     )
-    parser.add_argument(
-        "--audio-drop-sec",
-        type=float,
-        default=None,
-        help="Optional timestamp in seconds to trigger a dramatic Audio Drop (solo broken vocal)",
-    )
-    parser.add_argument(
-        "--offset-ms",
-        type=float,
-        default=None,
-        help="Manual rhythm grid offset in ms (defaults to automatic vocal onset detection)",
-    )
-    parser.add_argument(
-        "--swing",
-        type=float,
-        default=0.0,
-        help="Swing factor (0.0 to 0.35) for Bandari 6/8 groove",
-    )
-    parser.add_argument(
-        "--samples-dir",
-        default=None,
-        help="Optional directory containing real WAV samples (latm.wav, dammam.wav, zanjeel.wav, husseiniya_ir.wav)",
-    )
-    parser.add_argument(
-        "--session-log",
-        default=None,
-        help="Optional JSON ledger file path to log the session",
-    )
+    parser.add_argument("--lyrics-text", default=None, help="Poem text used for semantic Foley timing or Tor rules")
+    parser.add_argument("--microtonal-tune", type=float, default=0.0, help="24-EDO Maqam vocal pitch-correction strength (0.0 to 1.0)")
+    parser.add_argument("--bit-depth", type=int, default=16, choices=[16, 24], help="Output PCM WAV bit depth (16 or studio 24-bit)")
+    parser.add_argument("--export-stems", default=None, help="Optional directory to export 5 separated mixing stems")
+    parser.add_argument("--audio-drop-sec", type=float, default=None, help="Timestamp (sec) for dramatic Audio Drop")
+    parser.add_argument("--offset-ms", type=float, default=None, help="Manual rhythm grid offset in ms")
+    parser.add_argument("--swing", type=float, default=0.0, help="Swing factor (0.0 to 0.35)")
+    parser.add_argument("--samples-dir", default=None, help="Optional directory containing real WAV percussion/IR samples")
+    parser.add_argument("--session-log", default=None, help="Optional JSON ledger file path")
     return parser.parse_args(argv)
 
 
 def main(argv=None):
-    """CLI Entrypoint supporting --compile-lyrics, --lint-poem, --extract-profile, and WAV DSP mastering."""
+    """CLI Entrypoint supporting V50.0 Prosody, Melody, 6-Dialect G2P, Multi-AI Router & 24-Bit DSP."""
     args = parse_args(argv)
     use_tatweel = bool(args.use_tatweel and not args.no_tatweel)
+
+    if args.export_scala is not None:
+        rep = export_scala_microtonal_scale(maqam=args.maqam_drone, output_scl_path=args.export_scala)
+        if args.compose_melody is None and args.input is None:
+            print(json.dumps(rep, ensure_ascii=False, indent=2))
+            return 0
+
     if args.extract_profile is not None:
         if not os.path.isfile(args.extract_profile):
             print(f"Error: Profile input file not found: {args.extract_profile}", file=sys.stderr)
             return 1
-        report = extract_reference_audio_profile(args.extract_profile)
-        print(json.dumps(report, ensure_ascii=False, indent=2))
+        print(json.dumps(extract_reference_audio_profile(args.extract_profile), ensure_ascii=False, indent=2))
+        return 0
+
+    if args.match_meter is not None:
+        print(json.dumps(match_poetic_meter_bitmask(args.match_meter), ensure_ascii=False, indent=2))
+        return 0
+
+    if args.compile_g2p is not None:
+        rep = compile_dialect_g2p_and_ipa(args.compile_g2p, dialect=args.dialect, use_tatweel=use_tatweel)
+        print(json.dumps(rep, ensure_ascii=False, indent=2))
+        return 0
+
+    if args.tor_rules is not None:
+        sample_txt = args.lyrics_text or "يَا حْسَيْنْ يَا مَظْلُومْ .."
+        rep = apply_minbar_tor_delivery_rules(sample_txt, tor_id=args.tor_rules, position=args.council_pos)
+        print(json.dumps(rep, ensure_ascii=False, indent=2))
+        return 0
+
+    if args.compose_melody is not None:
+        plan = compose_microtonal_melody_for_poem(
+            args.compose_melody, maqam=args.maqam_drone, bpm=args.bpm
+        )
+        if args.melody_wav:
+            export_guide_melody_wav(plan, args.melody_wav, bit_depth=args.bit_depth)
+            plan["exported_guide_wav"] = args.melody_wav
+        if args.melody_midi:
+            export_microtonal_midi(plan, args.melody_midi)
+            plan["exported_microtonal_midi"] = args.melody_midi
+        if args.multi_maqam:
+            plan["multi_maqam_readings"] = generate_multi_maqam_readings(args.compose_melody, bpm=args.bpm)
+        print(json.dumps(plan, ensure_ascii=False, indent=2))
+        return 0
+
+    if args.ai_router is not None:
+        rep = build_multi_engine_ai_prompt(
+            engine_name=args.ai_router,
+            dialect=args.dialect or "iraqi",
+            maqam=args.maqam_drone,
+            bpm=int(args.bpm),
+            verified_voice_id=args.verified_voice_id,
+        )
+        print(json.dumps(rep, ensure_ascii=False, indent=2))
         return 0
 
     if args.compile_lyrics is not None:
@@ -2661,28 +2686,25 @@ def main(argv=None):
         return 0
 
     if args.lint_poem is not None:
-        report = lint_poem(args.lint_poem)
-        print(json.dumps(report, ensure_ascii=False, indent=2))
+        print(json.dumps(lint_poem(args.lint_poem), ensure_ascii=False, indent=2))
         return 0
 
     if args.validate_abudhiyah is not None:
-        report = validate_abudhiyah_jinas(args.validate_abudhiyah)
-        print(json.dumps(report, ensure_ascii=False, indent=2))
+        print(json.dumps(validate_abudhiyah_jinas(args.validate_abudhiyah), ensure_ascii=False, indent=2))
         return 0
 
     if args.validate_zuhayri is not None:
-        report = validate_zuhayri_mawal(args.validate_zuhayri)
-        print(json.dumps(report, ensure_ascii=False, indent=2))
+        print(json.dumps(validate_zuhayri_mawal(args.validate_zuhayri), ensure_ascii=False, indent=2))
         return 0
 
     if args.recommend_tor is not None:
-        report = recommend_tor_and_rhythm_for_poem(args.recommend_tor)
-        print(json.dumps(report, ensure_ascii=False, indent=2))
+        print(json.dumps(recommend_tor_and_rhythm_for_poem(args.recommend_tor), ensure_ascii=False, indent=2))
         return 0
 
     if args.genre is not None:
         report = build_vocal_genre_profile(
             genre=args.genre,
+            dialect=args.dialect or "iraqi",
             maqam=args.maqam_drone,
             bpm=args.bpm if args.bpm else None,
         )
@@ -2696,6 +2718,7 @@ def main(argv=None):
     if not os.path.isfile(args.input):
         print(f"Error: Input file not found: {args.input}", file=sys.stderr)
         return 1
+
     process_audio_file(
         input_path=args.input,
         output_path=args.output,
@@ -2708,17 +2731,21 @@ def main(argv=None):
         foley=args.foley,
         audio_drop_sec=args.audio_drop_sec,
         replace_ai_percussion=args.replace_ai_percussion,
+        microtonal_tune=args.microtonal_tune,
+        bit_depth=args.bit_depth,
+        lyrics_text=args.lyrics_text,
+        export_stems_dir=args.export_stems,
     )
     if args.session_log:
         log_generation_session(
             args.session_log,
-            prompt=f"DSP Montage mode={args.mode} bpm={args.bpm} maqam={args.maqam_drone}",
-            lyrics=args.input,
+            prompt=f"DSP Montage V50 mode={args.mode} bpm={args.bpm} maqam={args.maqam_drone} {args.bit_depth}bit",
+            lyrics=args.lyrics_text or args.input,
             result_url=args.output,
         )
     print(
         f"Successfully mastered Husseiniya audio ({args.mode}, {args.bpm} BPM, "
-        f"Maqam {args.maqam_drone}) -> {args.output}"
+        f"Maqam {args.maqam_drone}, {args.bit_depth}-bit Mono-Safe) -> {args.output}"
     )
     return 0
 
