@@ -1,9 +1,9 @@
-# استوديو الإنتاج الحسيني الشامل — Hussaini Production Studio (V48.0 OMNI-ARCHITECT)
+# استوديو الإنتاج الحسيني الشامل — Hussaini Production Studio (V50.0 OMNI-PERFECTION)
 
 مهارة متكاملة للتأليف الشعري الحسيني، وهندسة الألحان والمقامات والأطوار المنبرية ومزجها (`Multi-Tor & Melodic Blending`)، وتوليد القصائد واللطميات بالذكاء الاصطناعي (**Google Flow Music / Lyria 3.5, Suno, Udio**) عبر **بروتوكول التهيئة المسبقة للجلسة بصيغة `JSON` (`Module 39`)** و**مُترجم النطق الصوتي الآلي وفصل الكلمات وضبط التنوين اللهجي/العروضي والتمييز الصوتي واللحني بين اللهجتين البحرانية والعراقية (`Modules 40, 41 & 43`)**، والمونتاج الصوتي الاحترافي (**5-Track DAW Routing, Smart `-3.0 dB` Dynamic Sidechain Ducking & Automated CI/Unit Testing**) للتسجيلات الصوتية والمجالس.
 
 تدمج هذه المهارة:
-- **الموسوعة الصوتية الحسينية الموحدة (`V26.0 – V48.0 OMNI-ARCHITECT`)**
+- **الموسوعة الصوتية الحسينية الموحدة (`V26.0 – V50.0 OMNI-PERFECTION`)**
 - **المحرك البرمجي التنفيذي للنطق الصوتي والـ DSP (`scripts/hussaini_dsp_montage.py`) ومجموعة اختبارات الوحدات الآلية (`tests/test_hussaini_modules.py` + `requirements.txt` + `.github/workflows/ci.yml`)**
 - **بروتوكول التهيئة المسبقة للجلسة بصيغة `JSON` على خطوتين في `Producer Chat` (`Module 39 / Section 17 — JSON Session Pre-Conditioning Protocol`)**
 - **هندسة النطق الدقيق والتنوين العروضي واللّهجي (`Module 40`)، وقانون فصل الكلمات وفكّ الالتصاق الصوتي لمنع التشبيك في `Flow Music` (`Module 41 / Section 18`)**
@@ -45,7 +45,7 @@ npx skills add husainalmualif/hussaini-production-studio
 عندما تكون لديك قصيدة مكتوبة وتريد تحويلها إلى لطمية أو نعي أو مناجاة متقنة اللهجة والنطق واللحن والمقام والإيقاع:
 
 **مثال للأمر (Prompt) الذي تكتبه للوكيل:**
-> «إليك هذه القصيدة الحسينية، طبّق قواعد `hussaini-production-studio` (`V48.0 OMNI-ARCHITECT`) للتعرف على لهجتها (بحرانية أو عراقية)، وفصل الكلمات المتصلة لمنع التشبيك (`Module 41`)، وضبط التنوين اللهجي/العروضي والوقف بالسكون (`Module 40 & 43`)، وتوحيد تفعيلات المرحلة الأولى (`Iso-Syllabic Stage-1 Lock`)، ثم أنتجها في `New session` على `https://www.flowmusic.app/` عبر بروتوكول التهيئة المسبقة بصيغة `JSON` على خطوتين (`Module 39`) عبر `/browser`»
+> «إليك هذه القصيدة الحسينية، طبّق قواعد `hussaini-production-studio` (`V50.0 OMNI-PERFECTION`) للتعرف على لهجتها (بحرانية أو عراقية)، وفصل الكلمات المتصلة لمنع التشبيك (`Module 41`)، وضبط التنوين اللهجي/العروضي والوقف بالسكون (`Module 40 & 43`)، وتوحيد تفعيلات المرحلة الأولى (`Iso-Syllabic Stage-1 Lock`)، ثم أنتجها في `New session` على `https://www.flowmusic.app/` عبر بروتوكول التهيئة المسبقة بصيغة `JSON` على خطوتين (`Module 39`) عبر `/browser`»
 
 **ما الذي ستقوم به المهارة تلقائياً؟**
 1. **التعرّف التلقائي على اللهجة البحرانية مقابل العراقية وتشكيلها لحنياً (`Automatic Bahrani vs. Iraqi Dialect Engine — Module 43`):**
@@ -122,12 +122,12 @@ Traditional Iraqi and Bahrani Hussaini Latmiya, Thaqeel Faizi and Nazla style, M
 لقفل ذاكرة وكيل `Producer Chat` في `https://www.flowmusic.app/` بنسبة 100% ومنع أي أخطاء لحنية أو لغوية أو مقامية أو موسيقية، نطبّق بروتوكول الخطوتين في بداية كل `New session`:
 
 1. **الخطوة الأولى (رسالة التهيئة الشاملة بصيغة `JSON` قبل إدخال أي قصيدة):**
-   انسخ هذا الأمر مع كائن الـ `JSON` الشامل (`V48.0 OMNI-ARCHITECT`) وأرسله في **`Producer Chat`**، وانتظر تأكيد الـ `Producer` بحفظ القواعد دون توليد:
+   انسخ هذا الأمر مع كائن الـ `JSON` الشامل (`V50.0 OMNI-PERFECTION`) وأرسله في **`Producer Chat`**، وانتظر تأكيد الـ `Producer` بحفظ القواعد دون توليد:
 ```text
 System Context Injection (Hussaini Production Studio OS V48.0): Read and lock the following JSON production constitution in your active session memory as our strict operating protocol for all upcoming tracks in this session. DO NOT call lyrics__register or audio__create_song yet—simply acknowledge that you have locked these rules and are ready to receive the Arabic poem in Step 2:
 
 {
-  "protocol_name": "Hussaini_Production_Studio_OS_V48_OMNI_ARCHITECT",
+  "protocol_name": "Hussaini_Production_Studio_OS_V50_OMNI_PERFECTION",
   "session_mode": "Pre_Conditioning_Lock_Only_Wait_For_Step_2_Lyrics",
   "1_cultural_and_acoustic_firewall": {
     "permitted_sound_sources": [
@@ -217,184 +217,4 @@ Apply audio__apply_effect on the generated clip: HighPass filter at 85Hz, Advanc
 
 ### السيناريو 4: المونتاج والهندسة الصوتية لتسجيل صوتي خام بصوتك (`Audio DSP Montage — SOS Filters, -28 dBFS RMS Ducking & -14.0 LUFS Mastering`) ومصفوفة المسارات الخمسة (`5-Track DAW Matrix`)
 إذا كان لديك تسجيل صوتي خام بصوتك (أو بصوت رادود/خطيب) بصيغة `.wav` (سواء كان `Mono` أو `Stereo` وبأي تردد اعتيان مثل `8kHz, 16kHz, 44.1kHz, 48kHz`) وتريد إضافة لطم صدر بشري، أو دمام، أو زنجيل، أو آهات، أو صدى دايناكورد متجهي (`Vectorized Multi-Tap Echo`) وريفيرب حسينية مع موازنة الجهارة العالمية (`-14.0 LUFS` و`-1.0 dBTP`):
-
 ```bash
-# 1) مونتاج أساسي مع مزامنة تلقائية لبداية صوت الرادود (Auto Vocal Onset Sync) وماسترنغ -14.0 LUFS:
-python3 scripts/hussaini_dsp_montage.py \
-  --input "raw_voice.wav" \
-  --output "mastered_latmiya.wav" \
-  --mode "latm" \
-  --bpm 60 \
-  --maqam-drone "saba"
-
-# 2) مونتاج متقدم مع تمرير مجلد عينات صوتية حقيقية (latm.wav, dammam.wav, zanjeel.wav, husseiniya_ir.wav)، وإزاحة يدوية، وتأرجح بندري (Swing)، وتسجيل الجلسة:
-python3 scripts/hussaini_dsp_montage.py \
-  --input "raw_voice.wav" \
-  --output "mastered_bandari.wav" \
-  --mode "bandari" \
-  --bpm 105 \
-  --maqam-drone "hijaz" \
-  --samples-dir "./custom_samples" \
-  --offset-ms 50 \
-  --swing 0.18 \
-  --session-log "logs/session_ledger.jsonl"
-```
-- **الأطوار المدعومة في `--mode`:** `latm`, `zanjeel_iraqi`, `zanjeel_bahrani`, `shoor`, `bandari`, `mawal`, `nai`.
-- **المقامات المدعومة في `--maqam-drone`:** `saba`, `bayati`, `hijaz`, `lami`, `kurd`, `rast`.
-- **الخيارات الهندسية المتقدمة:**
-  - `--samples-dir`: مسار اختياري لمجلد يحتوي على عينات صوتية مسجلة حقيقية (`latm.wav`, `dammam.wav`, `zanjeel.wav`, `husseiniya_ir.wav`)؛ وفي حال عدم توفره يستخدم المحرك التوليد الإجرائي الفيزيائي كبديل تلقائي (`Fallback`).
-  - `--offset-ms`: إزاحة بداية الإيقاع بالملي ثانية (وعند عدم تحديده يقوم المحرك بكشف بداية نبرة الرادود تلقائياً `detect_vocal_onset_offset_samples`).
-  - `--swing`: نسبة التأرجح الإيقاعي (`0.0` إلى `0.35`) لنبضات طور البندرية (`6/8`).
-  - `--session-log`: حفظ سجل الجلسة التجريبي بصيغة `JSONL` لتتبع التعديلات ومقارنات `A/B`.
-
-#### مصفوفة المسارات الخمسة لمكساج طور «الزنجيل» و«البندرية» (`5-Track DAW Routing & EQ Matrix — 100–110 BPM / 80 BPM`):
-| رقم واسم المسار (`Track ID`) | التوزيع الفضائي (`Panning / Stereo`) | المعالجة الترددية (`EQ Curve`) | المعالجة الديناميكية والزمنية (`Dynamics & Spatial FX`) |
-| :--- | :--- | :--- | :--- |
-| **`Track_01_Dammam_Sub_Bass`** (الطبل الكبير / الدمام) | `Mono` \| في المنتصف تماماً (`Center - C`) | `HPF < 35Hz` + `Boost +2dB @ 90Hz` لإبراز الثقل الصدري | `Compressor (Fast Attack, Medium Release)` على النبضة `1` و `3` |
-| **`Track_02_Kasat_Brass_Cymbals`** (الكاسات / الطاس النحاسي) | `Light Stereo` \| إزاحة خفيفة (`15% L/R`) | `HPF < 1000Hz` + `De-esser / Cut @ 5kHz–8kHz` | `Short Room Reverb (10% Wet)` |
-| **`Track_03_Zanjeel_Chain_FX`** (مؤثرات السلاسل / الزنجيل) | `Ultra-Wide Stereo` (`120% Stereo Imager`) | `HPF < 200Hz` + `Boost @ 3kHz` لإبراز خشخشة الحديد | `Medium Room Reverb (Open Street Ambience)` مع `Micro-silences` |
-| **`Track_04_Ahaat_Vocal_Choir_Pads`** (الآهات البشرية والهمهمات) | `Wide Deep Stereo` (`100% Hard Left & Hard Right`) | `Bandpass (HPF < 150Hz, LPF > 12kHz)` | `3.2s Large Hall/Plate Reverb (40ms Pre-delay)` + `Ping-Pong Delay` |
-| **`Track_05_Master_Mix_Bus`** (المسار الرئيسي الشامل) | `Full 3D Stereo Stage` | موازنة طيفية شاملة مع `Sidechain Ducking` تحت صوت الرادود | `Glue Compressor (1.5:1 Ratio)` لدمج العناصر ككيان عضوي واحد |
-
----
-
-### السيناريو 5: محاكاة مدارس الرواديد والخطباء أخلاقياً (`20+ Radoods & 8 Khutaba`) ومزج الأطوار وهندسة النعي المنبري
-يمكنك طلب صياغة اللحن والمقام ومزج الأطوار على مدرسة أيٍّ من الرواديد أو الخطباء الموثقين في `references/radoods_and_khutaba_encyclopedia.md` و`Sections 14 & 15` من `references/atwar_maqamat_and_poetry_guide.md`:
-- **الرواديد ورواد مزج الأطوار (`14 مدرسة تفصيلية`):** الحاج باسم الكربلائي (4 أوكتافات، التنقل بين الصبا/اللامي/العشاق والركبان/الموشح الحماسي مثل `أنا زينب البطلة` و`يا ليل طول ساعتك` و`صليت لو بعدك`)، الملا مرتضى حرب (مزج الأطوار الفراتية التراثية كالركبان والموشح والحياوي وطور الثقيل/الدرج مع الشور مثل `يا يمة شلون` و`يا عباس جيب الماي`)، محمد جرتاني/الحجيرات (الألحان المركبة وتطوير الأطوار التقليدية)، أحمد الباوي (الانتقالات النغمية المفاجئة والمدروسة)، الشيخ حسين الأكرف (مزج التوشيح البحراني التراثي بالجواب الملحمي العالي مثل `يا بوفاضل` و`صلاة الليل`)، الملا جليل الكربلائي (مزج طور الدرج والشور القديم بالمقامات العربية)، الحاج محمود كريمي والحاج مهدي رسولي (مزج الشور بالمراثي والألحان الملحمية)، السيد سلام الحسيني (طور الملاية التراثي وصوت الذاكر)، الملا محمد بوجبارة، الحاج عمار الكناني، الملا محمد باقر الخاقاني، السيد عصام الهاشمي، السيد هاني الوداعي، الرادود صالح الدرازي، الرادود مدين العياشي، أمير المحياوي، نوح المحمداوي، أمجد الشغانبي، عباس عجيد العامري، حسين خير الدين.
-- **خطباء المنبر الحسيني في النعي وأطواره الستة الكبرى (`المجرّد/المهداد، العاشوري، البحراني/الفايزي، المثكّل، الزريجاوي، الحدي/الركباني`):** الشيخ عبد الوهاب الكاشي، الدكتور أحمد الوائلي، السيد جاسم الطويرجاوي، الشيخ عبد الحي قمبر، الشيخ زمان الحسناوي، السيد نصرات قشاقش، الشيخ حيدر المولى، الشيخ زمان العقابي — مع تطبيق **قاعدة الكسر (`Sudden Drop Rule`)** في الكلمة الأخيرة من البيت والتمييز الدقيق بين **المدرسة العراقية (الشجن الانفجاري الفراتي في الصبا واللامي)** و**المدرسة البحرانية (الشجن التأملي التراكمي والمدّ في الكلمة الثالثة في الحجاز والبيات)**.
-
-#### الفرق الجوهري بين «المقام» و«الطور» ومعايير مزج الأطوار الخمسة (`Section 15`):
-- **المقام الموسيقي («القماشة»):** هو السلم النغمي العام ذو الدرجات السبع (`بيات، صبا، رست، حجاز، لامي، كرد`).
-- **الطور الحسيني («الثوب المُفصّل»):** هو القالب الأدائي والبيئي الشعبي الذي يحدد أين يمدّ الرادود صوته وأين يقف وكيف يتنقل مع حركة اللطم (فمقام `الصبا` الواحد يصبح **طور حياوي** في الأنين الريفي العراقي، أو **طور محمراوي** في النصاري الجنوبي، أو **طور فايزي** في الترجيع البحراني).
-- **المعايير الخمسة لمزج الأطوار (`Multi-Tor Blending`):** (1) **التوافق المقامي (القرابة النغمية والجنس المشترك)** مثل البيات ⟷ الشور، أو الرست ⟷ الصبا، (2) **سلاسة الانتقال عبر «الجسر اللحني» (`Melodic Bridge`)** من الطور الهادئ إلى الحماسي، (3) **المساحة الصوتية الواسعة (`Qarar` إلى `Jawab`)**، (4) **تطابق اللحن مع النص (`تجسيد المعنى`)** (أطوار اللامي/الصبا/الحياوي للمصيبة والوداع ⟵ أطوار الركبان/الهوسة/الموشح للشجاعة والميدان)، (5) **مراعاة البحر الشعري**، مع تثبيت الطور الأول في `Stage 1` وتنفيذ الانتقال في `Stage 2 Extend`.
-
----
-
-### السيناريو 6: استخدام المُترجم الصوتي البرمجي، والمدقق الآلي للقصيدة (`Poem Linter`)، وتشغيل اختبارات الوحدات (`V45.0 API & Unit Tests`)
-يوفر الإصدار **`V48.0 OMNI-ARCHITECT`** دوال برمجية تنفيذية داخل `scripts/hussaini_dsp_montage.py` لمعالجة القصائد صوتياً بحدود الكلمة الصرفية الكاملة، وفحص توازن الشطرين، وتوليد كائنات التهيئة والجسور اللحنية، وفحص جودة الكود آلياً:
-
-#### 1. استدعاء مُترجم اللهجات وفصل الكلمات والتنوين والمدقق العروضي برمجياً (Python API):
-```python
-from scripts.hussaini_dsp_montage import (
-    de_cliticize_and_separate_words,
-    resolve_dialectal_and_prosodic_tanween,
-    detect_and_shape_dialect,
-    count_arabic_syllables,
-    validate_stage1_iso_syllabic_lock,
-    lint_poem,
-    build_flowmusic_json_preconditioning,
-    build_multi_tor_melodic_bridge,
-    log_generation_session,
-)
-
-# 1) فكّ الالتصاق الصوتي ومنع التشبيك (Module 41 — مع خيار use_tatweel=False للفصل بمسافة صافية):
-clean_text = de_cliticize_and_separate_words("ياحسين ويبوفاضل عالباب شصار بغربتي", use_tatweel=False)
-# النتيجة: "يَا حْسَيْنْ وَ يَا بُو فَاضِلْ عَلَى البَابْ إِشْ صَارْ بِ غُرْبِتِي"
-
-# 2) التعرف التلقائي على اللهجة (البحرانية / العراقية / التعادل الحيادي) وتفكيك البادئات (ال، و، ب، ك، ل) (Modules 40 & 43):
-bahrani_res = detect_and_shape_dialect("يا بويي ونتي بقلبي وقلب والصبر والجمرة ويبوفاضل")
-# bahrani_res["detected_dialect"] -> "bahrani" (تشكيل گَلْبِي / گَلِبْ / وَ الصَبِرْ / وَ الجَمْرَه + بقاء الضاد فَاضِلْ)
-
-iraqi_res = detect_and_shape_dialect(
-    "يا بويه شلون دلالي بقلب وقلبي وقلبك والصبر وكالجمر والجمرة والمقلوب ويبوفاضل بضلوعي"
-)
-# iraqi_res["detected_dialect"] -> "iraqi" (تشكيل گَلُبْ / گَلْبِي / وَ گَلْبَكْ / وَ الصَبُرْ / كَ الجَمُرْ / وَ الجَمْرَه + حماية "المقلوب" + ظاء عراقية تلقائية فَاظِلْ / ظْلُوعِي)
-
-neutral_res = detect_and_shape_dialect("ياحسين قلب وقلبي والصبر والجمرة ويبوفاضل بضلوعي")
-# neutral_res["detected_dialect"] -> "iraqi_bahrani" (تشكيل حيادي 100%: قَلْبْ / قَلْبِي / وَ الصَبْرْ / وَ الجَمْرَه / فَاضِلْ)
-
-# 3) عدّ المقاطع الصوتية العروضية (CV/CVV/CVC) وفحص توازن الشطرين (Module 34 & 38):
-syllables = count_arabic_syllables("يَا حْسَيْنْ بْضَمِيرِي")
-iso_report = validate_stage1_iso_syllabic_lock([
-    [
-        "يَا حْسَيْنْ بْضَمِيرِي .. صَوْتَكْ يِسْرِي بْوَرِيدِي",
-        "يَا حْسَيْنْ بْضَمِيرِي .. صَوْتَكْ يِسْرِي بْوَرِيدِي",
-        "يَا حْسَيْنْ بْضَمِيرِي .. صَوْتَكْ يِسْرِي بْوَرِيدِي",
-        "يَا حْسَيْنْ بْضَمِيرِي .. صَوْتَكْ يِسْرِي بْوَرِيدِي",
-    ]
-])
-# iso_report["iso_syllabic_locked"] -> True, iso_report["internal_hemistich_balanced"] -> True
-
-# 4) الفحص الشامل للقصيدة قبل التوليد (Pre-Generation Poem Linter):
-lint_report = lint_poem("ياحسين يا خويه شلون قلب وقلبي .. عينٍ تسيل بدمعي", stage=1)
-
-# 5) توليد دستور التهيئة المسبقة بصيغة JSON لـ Producer Chat (Module 39 — reference_clip_id اختياري):
-json_payload = build_flowmusic_json_preconditioning(
-    dialect="iraqi_bahrani", maqam="Maqam Saba", bpm=58, reference_clip_id=None
-)
-
-# 6) بناء الجسر اللحني للانتقال بين الأطوار والمقامات في Stage 2 Extend (Module 38 & Section 15):
-bridge = build_multi_tor_melodic_bridge("saba", "hijaz", "Tor Faizi / Nazla", "Tor Rukban / Hosa")
-```
-
-#### 2. ترجمة وفحص كلمات القصيدة مباشرة من الطرفية (`CLI Lyrics Compiler & Linter`) وتشغيل الاختبارات (`Pytest & Pylint`):
-```bash
-# تثبيت المتطلبات
-pip install -r requirements.txt
-
-# 1) ترجمة وفحص كلمات القصيدة مباشرة من الطرفية (فصل الكلمات + التنوين + كشف اللهجة وتشكيلها)
-python3 scripts/hussaini_dsp_montage.py --compile-lyrics "ياحسين يا خويه شلون قلب وقلبي وقلبك وچبد ودمع وعينٍ تسيل"
-
-# 2) تفعيل الظاء العراقية المفخمة (--enforce-iraqi-dhaa) والفصل بمسافة صافية بدون تطويل (--no-tatweel)
-python3 scripts/hussaini_dsp_montage.py --compile-lyrics "يبوفاضل يا بويه بضلوعي بغربتي" --enforce-iraqi-dhaa --no-tatweel
-
-# 3) فحص القصيدة الشامل قبل التوليد (Pre-Generation Poem Linter: يرصد الكلمات المتصلة، التنوين، وتوازن مقاطع كل شطر)
-python3 scripts/hussaini_dsp_montage.py --lint-poem "ياحسين يا خويه شلون قلب وقلبي .. عينٍ تسيل بدمعي"
-
-# 4) تشغيل اختبارات الوحدات الشاملة (الحالات السلبية، 24-bit WAV، الأوضاع السبعة، واختبار الثبات Idempotency) مع فرض تغطية >= 70%
-pytest -v --cov=scripts --cov-fail-under=70 tests/test_hussaini_modules.py
-
-# 5) فحص جودة الكود بمعايير Pylint الصارمة (10.00/10)
-pylint scripts/hussaini_dsp_montage.py tests/test_hussaini_modules.py
-```
-
----
-
-## ثالثاً: القواعد الذهبية الاثنتا عشرة لضمان أعلى جودة إنتاج (`12 Golden Rules`)
-
-1. **برومبت `Sound` مركّز (40–50 كلمة) ومقفل اللهجة والمقام الواحد:** اذكر `authentic Iraqi and Bahrani colloquial dialect` في أول سطر، وثبّت مقاماً واحداً فقط (`Maqam Saba` أو `Maqam Bayati`)، وامنع الكلمات المعرّبة (`bahha`, `tarjee'`, `maddat`) وأرقام الـ `EQ` وكلمة `tenor`.
-2. **قفل اللهجة، هندسة التنوين اللهجي والفصيح، وفصل الكلمات لمنع التشبيك الصوتي (`Modules 34, 35, 40 & 41`):**
-   - **قانون فصل الكلمات لمنع التشبيك في النطق (`Anti-Slurring Word Separation`):** افصل دائماً أدوات النداء (`يَا حْسَيْنْ`، `يَا بُو فَاضِلْ` بدل `ياحسين، يبوفاضل`)، وحروف الجر المندمجة (`عَلَى البَابْ / عَ البَابْ`، `بِـ غُرْبِتِي`، `لِلْ ذَبْحَوْا` بدل `عالباب، بغربتي، للذبحوا`)، وأدوات الاستفهام العراقية (`إِشْ صَارْ`، `إِشْ نْگُولْ` بدل `شصار، شنگول`)، وواو العطف (`وَ الشَّمْسُ`، `وَ الخَيْلْ` بدل `والشمس، والخيل`)، وضع فاصلة خفيفة (`،`) بين الكلمات المتتالية التي يدمجها المحرك.
-   - **هندسة التنوين الصحيح حسب اللهجة والوزن (`Dialectal & Prosodic Tanween`):** في الشعر الشعبي (العراقي، البحراني الفايزي، والخليجي) عندما يقتضي الوزن تنوين كسر في وسط الشطر، اكتبه صوتياً بنون ساكنة مكسورة مع كسر حرف المضارعة في الفعل التالي (`عَيْنِنْ تِسِيلْ`، `كِلِّنْ يِنَادِي`، `جَرْحِنْ چِبِيرْ`)، وفي الفصحى عند خوف ابتلاع التنوين في وسط الشطر اكتبه عروضياً (`دَامِنْ بِلَا قُبُورْ`، `جِسْمَنْ عَلَى الثَّرَى`)، بينما في آخر الشطر (موضع الوقف) اسقط التنوين دائماً وقِف بالسكون الصارم (`ْ`) أو مدّ الألف (`ظَامِئاً ⟵ ظَامِئَا`).
-3. **الوقف بالسكون الصارم (`Mandatory End-of-Phrase Sukun`):** ضع دائماً سكوناً (`ْ`) أو حرف مدّ مفتوح (`ا، و، ي، ه`) في أواخر الأشطر والكلمات الدارجة.
-4. **قفل تساوي التفعيلات في المرحلة الأولى (`Strict Iso-Syllabic Stage-1 Lock`):** جميع أسطر المرحلة الأولى الـ 12 (المستهل + المقطعين + شطر القفلة الرابط) يجب أن تكون على **نفس البحر العروضي ونفس عدد المقاطع الصوتية تماماً**؛ ولا تُدخل تغييرات الوزن أو الگريز أو مزج الأطوار إلا في المرحلة الثانية (`Extend`).
-5. **منع الكليشيهات الجاهزة في المستهل (`Dynamic Poem-Specific Opening`):** لا تكرر عبارات جاهزة مثل `آآآه يَا حُسَيْنَا .. آآآه يَا مَظْلُومْ` في مطلع كل قصيدة؛ بل ادخل مباشرة في الشطر الأول للقصيدة بحروف مدّ نابعة من موضوعها ولهجتها.
-6. **لا للاستنساخ الحرفي (`Zero Blind Cloning`):** لا تنسخ برومبت أو بذرة (`Seed`) قصيدة سابقة على قصيدة جديدة مختلفة الوزن والموضوع.
-7. **اللطمة البشرية الخالصة والابتعاد عن الموسيقى (`100% Non-Musical Pure Chest-Slap`):** اعتمد حصرياً على الصوت البشري ولطمة الكف على الصدر (`55Hz bare-palm chest thud`)، ولا تكتب أسماء آلات موسيقية (`piano, guitar, synth`) حتى في صيغة النفي داخل مربع `Sound`.
-8. **صفر حروف إنجليزية في مربع الكلمات (`Zero English in Lyrics Box`):** اكتب الكلمات والوسوم بالعربية الصرفة فقط، ولا تضع تسميات هيكلية مثل `(الرابط والقفلة)` بين قوسين دائريين `(...)` حتى لا ينطقها الكورال.
-9. **حذف النقاط الثلاث المتتالية (`...`) واستخدام النقطتين (` .. `) للوقفة الوسطية:** لفصل الشطر الأول عن الشطر الثاني بوقفة تنفس طبيعية.
-10. **تثبيت الشطر الرابع أو اللازمة الختامية (`Identical Anchor Refrain`):** اجعل نهاية كل دور تعود إلى نفس الشطر الرابط أو اللازمة الموحدة ليحفظ المحرك والمستمع قرار اللحن.
-11. **نقل أرقام الفلاتر والمعادل الصوتي إلى `audio__apply_effect` بعد التوليد:** طبّق فلاتر `HighPass 85Hz` و`+4.5dB @ 2500Hz` عبر محادثة الـ `Producer` بعد التوليد وليس داخل نص `Sound`.
-12. **استخدام `New session` لتوليد المقاطع الصوتية، و`Spaces` لبناء الأدوات التفاعلية فقط:** لتوليد قصيدة أو لطمية مباشرة مع التحكم في `Lyrics` و`Sound` والتمديد (`Remix/Extend`)، افتح دائماً **`New session` (جلسة جديدة)**.
-
----
-
-## رابعاً: هيكل ملفات المهارة وبيئة الفحص الآلي (Repository Structure & CI/CD)
-
-```text
-hussaini-production-studio/
-├── VERSION                                          # مصدر الحقيقة الموحد لرقم الإصدار (V48.0 OMNI-ARCHITECT)
-├── SKILL.md                                         # الموجّه المهيكل الرشيق (~9KB Router: متى تُستدعى المهارة، القواعد الصلبة، وروابط الوحدات)
-├── README.md                                        # دليل وتعليمات الاستخدام الشاملة (هذا الملف)
-├── requirements.txt                                 # متطلبات مكتبات المعالجة الرقمية والفحص (numpy, scipy, pylint, pytest, pytest-cov)
-├── references/
-│   ├── atwar_maqamat_and_poetry_guide.md            # الموسوعة المرجعية الشاملة (الأقسام 1–19 + Modules 34–43 + جدول الأعطال QC1–QC12)
-│   ├── radoods_and_khutaba_encyclopedia.md          # موسوعة الخصائص الفنية والهندسية لـ 20+ رادوداً (14 مدرسة) و8 من كبار خطباء المنبر
-│   └── modules/                                     # الوحدات المرجعية المقسّمة للتحميل الانتقائي السريع والحوكمة التجريبية:
-│       ├── experimental_ab_evaluation_and_human_review.md # مصفوفة التقييم التجريبي (A/B) وبوابة المراجعة البشرية والشرعية وحفظ حقوق الشاعر
-│       ├── module_39_json_preconditioning.md        # بروتوكول التهيئة المسبقة بصيغة JSON لـ Producer Chat (مع reference_clip_id اختياري)
-│       ├── module_40_41_43_phonetics_and_dialects.md # هندسة النطق بتفكيك البادئات (ال، و، ب، ك، ل)، التنوين المحمي، والتمييز بين البحرانية والعراقية والتعادل
-│       ├── module_42_gireez_hosa_and_muharram_calendar.md # فن الگريز، الهوسة العراقية (3+1)، وتقويم الليالي العشر لمحرم وصفر
-│       ├── module_44_studio_production_and_heavy_clips.md # الإنتاج الاستوديوي الحديث، دمج الأوركسترا الصوتية البشرية، واللطميات الثقيلة (60–75 BPM)
-│       ├── module_45_dialect_orthoepy_and_tashkeel_mastery.md # الإتقان الصوتي والفونيمي للهجتين العراقية والبحرانية وفصل اسم الإشارة (غَرِيبَه هَلْ حِچَايَه)
-│       ├── module_46_rhythm_choir_and_tor_diversity.md # هندسة تنوع الأطوار والإيقاعات الحسينية والآهات (تحليل 20 مرجعاً صوتياً وإيقاعياً)
-│       ├── module_47_genre_taxonomy_latmiya_nasheed_ibtihalat_tawashih.md # التفريق الصارم بين اللطمية الحسينية والنشيد الإسلامي والابتهالات والتواشيح والأغنية
-│       └── module_48_secrets_of_legendary_latmiyat.md # دراسة مقومات نجاح اللطمية الحسينية الخالدة (المستهل الخاطف، صدق المشهد، النزلة والكسر، ومطابقة الطور للموضوع)
-├── scripts/
-│   └── hussaini_dsp_montage.py                      # محرك الـ DSP (8/16/24/32-bit WAV, SOS Filters, -28dBFS RMS Ducking, -14 LUFS) ومُترجم اللهجات (Pylint 10/10)
-├── tests/
-│   └── test_hussaini_modules.py                     # اختبارات الوحدات الآلية (تغطية >85% مع شرط --cov-fail-under=70)
-└── .github/
-    └── workflows/
-        └── ci.yml                                   # الفحص الآلي (GitHub Actions CI عبر مصفوفة Python 3.10, 3.11, 3.12): Pylint + Pytest + 7-Mode DSP
-```
