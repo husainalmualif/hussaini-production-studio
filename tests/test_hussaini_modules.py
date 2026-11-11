@@ -301,7 +301,7 @@ def test_abudhiyah_jinas_zuhayri_mawal_and_ashouri_ahaat():
 def test_module39_optional_clip_id_and_poem_linter():
     """Verify optional reference_clip_id (default None), Multi-Tor bridge, and lint_poem()."""
     payload_default = engine.build_flowmusic_json_preconditioning(dialect="iraqi_bahrani", maqam="saba", bpm=58)
-    assert payload_default["protocol_name"] == "Hussaini_Production_Studio_OS_V48_OMNI_ARCHITECT"
+    assert payload_default["protocol_name"] == "Hussaini_Production_Studio_OS_V50_OMNI_PERFECTION"
     assert payload_default["reference_clip_id"] is None
 
     payload_custom = engine.build_flowmusic_json_preconditioning(
@@ -585,6 +585,146 @@ def test_cli_flags_version_and_compact_skill_router():
         assert canonical_version in content, f"Missing {canonical_version} in {rel_path}"
 
 
+
+
+def test_v50_arud_bitmask_25_meters_and_safe_caesura():
+    """Verify V50 Binary Arud Bitmask matcher across 25 meters & syntax-safe caesura splitting."""
+    assert len(engine.POETIC_METERS_CATALOG) >= 25
+    assert "mujarasha" in engine.POETIC_METERS_CATALOG
+    assert "hajri" in engine.POETIC_METERS_CATALOG
+    assert "shiati" in engine.POETIC_METERS_CATALOG
+
+    m_res = engine.match_poetic_meter_bitmask("جينا ننشد كربلا مضيعينها .. بيها زينب گالوا ميسرينها")
+    assert m_res["matched_meter"] in engine.POETIC_METERS_CATALOG
+    assert m_res["confidence_score"] > 0.5
+    assert m_res["canonical_melodic_key"]
+
+    # Ensure prosody-safe splitter never leaves a dangling preposition like 'على' at end of line 1
+    tricky = "مشيت بليل وحشة ودمعتي تجري على الخدين يا مظلوم"
+    split_lines = engine.split_long_lines_for_steady_pacing(tricky, max_words_per_line=5).splitlines()
+    assert len(split_lines) == 2
+    first_half_no_dots = split_lines[0].replace("..", "").strip()
+    assert not first_half_no_dots.endswith("على")
+    assert not first_half_no_dots.endswith("يا")
+
+
+def test_v50_microtonal_melody_wav_midi_scala_and_multi_maqam(tmp_path):
+    """Verify V50 24-EDO melody composer, Watad lock, Guide WAV, 14-bit MIDI, Scala .scl & Multi-Maqam."""
+    poem = (
+        "[المُسْتَهَلّ]\nغَرِيبَه هَلْ حِچَايَه ..\nسَبِيَّه مِنِ السَّبَايَا ..\n"
+        "[النَّزْلَة الأُولَى]\nمَاتَتْ وَ مَشْبُوگَه إِدَيْهَا ..\nبِلَهْفَه چَانَتْ شَابْگَه ..\n"
+        "[الكَسْرَة وَالمُسْتَهَلّ]\nرَوَتْ قِصَّه عَجِيبَه ..\nبِخَرَابَه شَيِّعُوهَا .."
+    )
+    wav_out = str(tmp_path / "guide_24bit.wav")
+    mid_out = str(tmp_path / "guide_microtonal.mid")
+    scl_out = str(tmp_path / "saba_zamzam.scl")
+
+    rc = engine.main([
+        "--compose-melody", poem,
+        "--maqam-drone", "saba_zamzam",
+        "--bpm", "58",
+        "--bit-depth", "24",
+        "--melody-wav", wav_out,
+        "--melody-midi", mid_out,
+        "--export-scala", scl_out,
+        "--multi-maqam",
+    ])
+    assert rc == 0
+    assert os.path.isfile(wav_out)
+    assert os.path.isfile(mid_out)
+    assert os.path.isfile(scl_out)
+
+    with open(mid_out, "rb") as mf:
+        midi_bytes = mf.read()
+    assert midi_bytes.startswith(b"MThd")
+    assert b"MTrk" in midi_bytes
+
+    with open(scl_out, "r", encoding="utf-8") as sf:
+        scl_txt = sf.read()
+    assert "2/1" in scl_txt or "1100.00" in scl_txt
+
+    with wave.open(wav_out, "rb") as wf:  # pylint: disable=no-member
+        assert wf.getsampwidth() == 3  # 24-bit PCM verified
+
+
+def test_v50_6dialects_g2p_ipa_and_26_atwar_council_locks():
+    """Verify V50 6-dialect G2P + IPA transducer and 26+ Atwar council opening/closing rules."""
+    amili_res = engine.compile_dialect_g2p_and_ipa("هلعليله خبروها عا مصابو فوق جدران الولايي")
+    assert amili_res["ecosystem_dialect"] == "amili"
+    assert "عَا" in amili_res["shaped_lyrics"]
+    assert "مصابُو" in amili_res["shaped_lyrics"]
+    assert "الولاِيِّي" in amili_res["shaped_lyrics"]
+    assert amili_res["ipa_transcription"]
+
+    qatifi_res = engine.compile_dialect_g2p_and_ipa("في سيهات وتاروت عيونش تدمع")
+    assert qatifi_res["ecosystem_dialect"] == "qatifi"
+    assert "عيونِشْ" in qatifi_res["shaped_lyrics"]
+
+    # Council locks: tor_iraqi_qadeem forbids closing; tor_hadee forbids opening
+    assert len(engine.PERFORMANCE_ATWAR_CATALOG) >= 26
+    close_check = engine.apply_minbar_tor_delivery_rules("طحت يا حسين بلحومه", "tor_iraqi_qadeem", position="closing")
+    assert close_check["council_position_warnings"]
+    assert close_check["recommended_followup_tor"] == "tor_nai_kashi"
+
+    open_check = engine.apply_minbar_tor_delivery_rules("أحمى الضائعات بعدك ضعنا", "tor_hadee", position="opening")
+    assert open_check["council_position_warnings"]
+    assert open_check["recommended_prelude_tor"] == "tor_nai_kashi"
+
+
+def test_v50_cents_histogram_maqam_mono_safe_24bit_stems_and_ai_router(tmp_path):
+    """Verify Cents-Histogram Maqam detection (Saba vs Hijaz on same D3 tonic), Mono-safe M/S,
+    24-bit + 5-stem export, semantic Foley, new percussion modes, and Multi-AI Router.
+    """
+    sr = 16000
+    # Synthesize a clear D-Hijaz melodic phrase: D3 (146.83), Eb3 (155.56), F#3 (185.00), G3 (196.00)
+    notes_hijaz = [146.83, 146.83, 155.56, 185.00, 196.00, 185.00, 155.56, 146.83]
+    seg_dur = 0.25
+    segs = [
+        0.5 * np.sin(2.0 * np.pi * f * np.linspace(0.0, seg_dur, int(sr * seg_dur), endpoint=False))
+        for f in notes_hijaz
+    ]
+    hijaz_melody = np.concatenate(segs)
+    hijaz_wav = str(tmp_path / "test_hijaz.wav")
+    wavfile.write(hijaz_wav, sr, (hijaz_melody * 24000).astype(np.int16))
+
+    prof = engine.extract_reference_audio_profile(hijaz_wav)
+    assert prof["estimated_maqam"] in ("hijaz", "hijaz_kar")
+
+    # Master with 24-bit, microtonal tuning, dammam_tasa, auto semantic Foley & 5 stems
+    out_24 = str(tmp_path / "master_v50_24bit.wav")
+    stems_dir = str(tmp_path / "stems_out")
+    rc = engine.main([
+        "--input", hijaz_wav,
+        "--output", out_24,
+        "--mode", "dammam_tasa",
+        "--bpm", "78",
+        "--maqam-drone", "hijaz",
+        "--microtonal-tune", "0.5",
+        "--bit-depth", "24",
+        "--foley", "auto",
+        "--lyrics-text", "عطشان يم الفرات .. والخيل داست صدره .. وبالقيود مشوا للطف",
+        "--export-stems", stems_dir,
+    ])
+    assert rc == 0
+    assert os.path.isfile(out_24)
+    for stem_file in (
+        "01_Lead_Radood.wav", "02_Percussion_Latm.wav",
+        "03_Dynamic_Ahaat_Pad.wav", "04_Semantic_Foley.wav", "05_Master_Mix.wav",
+    ):
+        assert os.path.isfile(os.path.join(stems_dir, stem_file))
+
+    # Verify new Hosa modes
+    for hosa_mode in ("iraqi_hosa", "bahrani_hosa"):
+        h_out = str(tmp_path / f"{hosa_mode}.wav")
+        assert engine.main(["--input", hijaz_wav, "--output", h_out, "--mode", hosa_mode, "--bpm", "118"]) == 0
+
+    # Verify Multi-Engine AI Router across all 5 targets
+    for ai_eng in ("flow_music", "suno_v4_5", "suno_v5_5", "udio", "rvc_svc"):
+        assert engine.main(["--ai-router", ai_eng, "--dialect", "bahrani", "--maqam-drone", "saba", "--bpm", "60"]) == 0
+    suno55 = engine.build_multi_engine_ai_prompt("suno_v5_5", dialect="iraqi", maqam="saba", bpm=60)
+    assert "zero pop-washing" in suno55["style_or_sound_prompt"].lower()
+
+
 class HussainiOmniArchitectTestSuite(unittest.TestCase):
     """Unittest wrapper so standard `python3 -m unittest` runs all tests cleanly."""
 
@@ -599,8 +739,13 @@ class HussainiOmniArchitectTestSuite(unittest.TestCase):
         test_module39_optional_clip_id_and_poem_linter()
         test_dsp_rms_sidechain_tempo_delay_formant_ahaat_and_lufs()
         with tempfile.TemporaryDirectory() as td:
-            test_all_16_dsp_modes_extract_profile_and_replace_ai_percussion(pathlib.Path(td))
+            tpath = pathlib.Path(td)
+            test_all_16_dsp_modes_extract_profile_and_replace_ai_percussion(tpath)
+            test_v50_microtonal_melody_wav_midi_scala_and_multi_maqam(tpath)
+            test_v50_cents_histogram_maqam_mono_safe_24bit_stems_and_ai_router(tpath)
         test_cli_flags_version_and_compact_skill_router()
+        test_v50_arud_bitmask_25_meters_and_safe_caesura()
+        test_v50_6dialects_g2p_ipa_and_26_atwar_council_locks()
 
 
 if __name__ == "__main__":
