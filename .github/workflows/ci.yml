@@ -86,15 +86,7 @@ jobs:
           test -s /tmp/saba_zamzam.scl
           python scripts/hussaini_dsp_montage.py --recommend-tor "يَا بُويِي إِشْحَالِكْ وَنِّتِي"
           python scripts/hussaini_dsp_montage.py --genre latmiya --maqam-drone saba --bpm 60
-          python -c "import numpy as np; from scipy.io import wavfile
-for sr in (8000, 16000, 44100, 48000):
-    t = np.linspace(0, 1.2, int(1.2*sr), endpoint=False)
-    mono = (0.4*np.sin(2*np.pi*180.0*t)*32767).astype(np.int16)
-    wavfile.write(f'/tmp/in_{sr}.wav', sr, mono)
-t44 = np.linspace(0, 1.2, int(1.2*44100), endpoint=False)
-sig = (0.4*np.sin(2*np.pi*180.0*t44)*32767).astype(np.int16)
-stereo = np.column_stack((sig, sig))
-wavfile.write('/tmp/in_stereo.wav', 44100, stereo)"
+          python -c "import numpy as np; from scipy.io import wavfile; [wavfile.write(f'/tmp/in_{sr}.wav', sr, (0.4*np.sin(2*np.pi*180.0*np.linspace(0, 1.2, int(1.2*sr), endpoint=False))*32767).astype(np.int16)) for sr in (8000, 16000, 44100, 48000)]; t44 = np.linspace(0, 1.2, int(1.2*44100), endpoint=False); sig = (0.4*np.sin(2*np.pi*180.0*t44)*32767).astype(np.int16); wavfile.write('/tmp/in_stereo.wav', 44100, np.column_stack((sig, sig)))"
           python scripts/hussaini_dsp_montage.py --extract-profile /tmp/in_16000.wav
           for sr in 8000 16000 44100 48000; do
             python scripts/hussaini_dsp_montage.py --input "/tmp/in_${sr}.wav" --output "/tmp/out_${sr}.wav" --mode latm --bpm 60 --maqam-drone saba
