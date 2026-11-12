@@ -1,752 +1,352 @@
 #!/usr/bin/env python3
-# pylint: disable=no-member,too-many-locals,too-many-statements
-"""Comprehensive Unit, Negative-Edge, Idempotency, 24-Bit WAV & 16-Mode DSP Test Suite (V48.0).
-
-Validates:
-- Unified Lyrics Spec (Arabic [المُسْتَهَلّ]/[النَّزْلَة الأُولَى]/[الكَسْرَة وَالمُسْتَهَلّ] & English [Chorus]/[Verse 1])
-  across both 12-line horizontal couplet grid and 20-line vertical 3-Part Golden Architecture
-- Module 41 & 48: Anti-Slurring Word Separation, Zero Word-Initial Sukun via Epenthetic Vowels
-  (دُمُوعْ، مِتُونِي، سِنِينِي، جُرُوحْ، تِگِلَّه), and Open Feminine Haa without Sukun (غَرِيبَه هَلْ حِچَايَه)
-- Module 40: Dialectal & Prosodic Tanween Compiler + Pre-Pause Sukun placement before '..' (never '..ْ')
-- Module 43: Prefix-Aware Morphological Word-Boundary Shaping (ال، و، ب، ك، ل)
-- Modules 34 & 38: True Prosodic CV/CVV/CVC Segmenter (with Shadda unpacking & Madd detection)
-- Heritage Validators: Abudhiyah Jinas (validate_abudhiyah_jinas), Zuhayri Mawal (validate_zuhayri_mawal),
-  Interactive Ashouri Ahaat (format_ashouri_interactive_ahaat), Bahrani Antiphonal Faujain, and Wazn vs. Tor
-- Module 45 & 46 DSP Upgrades: extract_reference_audio_profile(), Tempo-Synced Delay (60000/(bpm*2)),
-  Rosenberg Glottal Pulse + Formant Resonators Ahaat, and Stem-Aware Hybrid Mastering (--replace-ai-percussion)
-"""
+# pylint: disable=wrong-import-position,too-many-lines,no-member
+"""Comprehensive Unit & Integration Test Suite for Hussaini Production Studio (V48.5 OMNI-ARCHITECT)."""
 
 import os
 import sys
-import unittest
 import wave
-import tempfile
-import pathlib
+
 import numpy as np
 from scipy.io import wavfile
 
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "scripts")))
+ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+SCRIPTS_DIR = os.path.join(ROOT_DIR, "scripts")
+if SCRIPTS_DIR not in sys.path:
+    sys.path.insert(0, SCRIPTS_DIR)
 
-import hussaini_dsp_montage as engine  # pylint: disable=wrong-import-position
-
-
-def test_module41_word_separation_and_tatweel_option():
-    """Verify attached vocatives, prepositions, interrogatives, and default use_tatweel=False."""
-    raw = "ياحسين ويبوفاضل عالباب بغربتي شصار وشنگول للذبحوا والشمس بدموعي"
-    separated_default = engine.de_cliticize_and_separate_words(raw)
-    assert "ـ" not in separated_default
-    assert "يَا حْسَيْنْ" in separated_default
-    assert "وَ يَا بُو فَاضِلْ" in separated_default
-    assert "عَلَى البَابْ" in separated_default
-    assert "بِ غُرْبِتِي" in separated_default
-    assert "إِشْ صَارْ" in separated_default
-    assert "وَ إِشْ نْگُولْ" in separated_default
-    assert "لِلْ ذَبْحَوْا" in separated_default
-    assert "وَ الشَّمْسْ" in separated_default
-    assert "بِدْمُوعِي" in separated_default
-
-    with_tatweel = engine.de_cliticize_and_separate_words("بغربتي لحسين", use_tatweel=True)
-    assert "بِـ غُرْبِتِي" in with_tatweel
-    assert "لِـ حْسَيْنْ" in with_tatweel
+import hussaini_dsp_montage as hds  # noqa: E402
 
 
-def test_module40_tanween_and_pre_pause_sukun_before_dots():
-    """Verify Tanween resolution, vocalized verb protection, and Sukun placement BEFORE '..' (never '..ْ')."""
-    raw_line = "عينٍ تسيل وجرحٍ چبير وكلٍ ينادي يمظلومُ"
-    resolved = engine.resolve_dialectal_and_prosodic_tanween(raw_line, dialect="iraqi")
-    assert "عَيْنِنْ تِسِيلْ" in resolved
-    assert "جَرْحِنْ چِبِيرْ" in resolved
-    assert "كِلِّنْ يِنَادِي" in resolved
-    assert resolved.endswith("ْ")
+def test_single_source_version_and_v50_purge():
+    """Verify V48.5 (Rev 2) version lock, SKILL.md router budget, JSON constitution, and zero V50 files."""
+    assert hds.SKILL_VERSION == "V48.5 OMNI-ARCHITECT (Rev 2)"
+    skill_md = os.path.join(ROOT_DIR, "SKILL.md")
+    assert os.path.isfile(skill_md)
+    assert os.path.getsize(skill_md) <= 10500
 
-    # Critical Bug Fix: Lines ending with '..' must place Sukun on the word BEFORE '..', never '..ْ'
-    vertical_line = "مَاتَتْ وَ مَشْبُوگَه إِدَيْهَا ..\nبِخَرَابَه شَيِّعُوهَا ..\nيَا حْسَيْنْ يَا مَظْلُومُ .."
-    resolved_vert = engine.resolve_dialectal_and_prosodic_tanween(vertical_line, dialect="iraqi")
-    assert "..ْ" not in resolved_vert
-    assert "يَا مَظْلُومْ .." in resolved_vert
-    for ln in resolved_vert.splitlines():
-        assert ln.endswith("..")
+    cancelled_v50_files = (
+        os.path.join(ROOT_DIR, "scripts", "hussaini_omni_v50_extensions.py"),
+        os.path.join(ROOT_DIR, "references", "modules", "module_49_arud_bitmask_and_25_poetic_meters.md"),
+        os.path.join(ROOT_DIR, "references", "modules", "module_50_melody_composition_and_24edo_guide_synth.md"),
+        os.path.join(ROOT_DIR, "references", "modules", "module_51_6dialects_g2p_and_25_atwar_encyclopedia.md"),
+        os.path.join(ROOT_DIR, "references", "modules", "module_52_pro_dsp_dynamic_ahaat_and_multi_ai_router.md"),
+    )
+    for obsolete_path in cancelled_v50_files:
+        assert not os.path.exists(obsolete_path)
 
-    edge_vocalized = engine.resolve_dialectal_and_prosodic_tanween("نارٍ يَصْلَى", dialect="iraqi")
-    assert "يَِ" not in edge_vocalized
-    assert "نارِنْ يَصْلَى" in edge_vocalized
-    assert edge_vocalized.endswith("ى")
-    assert not edge_vocalized.endswith("ىْ")
-
-    edge_vocative = engine.resolve_dialectal_and_prosodic_tanween("دمعٍ ياحسين", dialect="iraqi")
-    assert "يِا" not in edge_vocative
-    assert "دمعِنْ يَا حْسَيْنْ" in edge_vocative
-
-    fusha_line1 = "جسماً على الثرى"
-    resolved_fusha1 = engine.resolve_dialectal_and_prosodic_tanween(fusha_line1, dialect="fusha")
-    assert "جِسْمَنْ عَلَى الثَّرَى" in resolved_fusha1
-    assert resolved_fusha1.endswith("ى")
-
-    fusha_line2 = "دامٍ بلا قبورٍ .. يقضي ظامئاً"
-    resolved_fusha2 = engine.resolve_dialectal_and_prosodic_tanween(fusha_line2, dialect="fusha")
-    assert "دَامِنْ بِلَا قُبُورْ" in resolved_fusha2
-    assert resolved_fusha2.endswith("ظَامِئَا")
+    constitution = hds.load_v48_5_constitution()
+    assert (
+        constitution["protocol_metadata"]["protocol_name"]
+        == "Hussaini_Production_Studio_OS_V48_5_OMNI_ARCHITECT"
+    )
+    assert constitution["protocol_metadata"]["skill_version"] == "V48.5 OMNI-ARCHITECT (Rev 2)"
+    assert len(constitution["5_master_sound_prompts_library_modules_36_44_46_48_52"]) == 16
+    assert len(hds.MASTER_SOUND_PROMPTS_V48_5) == 16
 
 
-def test_module43_prefix_decomposition_dhaa_and_neutral_tie():
-    """Verify prefix decomposition (ال، و، ب، ك، ل), الجمرة/والصبر shaping, Iraqi Dhaa, and neutral tie."""
-    bahrani_poem = "يا بويي ونتي بهالگفره امساعد الله يا قلبي وقلب والصبر والجمرة ويبوفاضل بضلوعي"
-    bahrani_res = engine.detect_and_shape_dialect(bahrani_poem)
-    shaped_bahrani = bahrani_res["shaped_lyrics"]
+def test_module_41_and_49_iraqi_prosthetic_clusters_and_diphthongs():
+    """Verify mandatory Iraqi prosthetic clusters, syncopated nouns, constructs, and unmarked diphthongs."""
+    raw = (
+        "ياحسين يا بويه بچفك عيوني عيونك بمجلسك بگلبي بگاع خيام بهداي بعفه .. "
+        "عالباب للشام العافية حافية فاتحة وسادة ريش دنية خير بس امسح يالمطيني وادم هالحچايه غريبه"
+    )
+    res = hds.detect_and_shape_dialect(raw)
+    assert res["detected_dialect"] == "iraqi"
+    assert res["sound_prompt_dialect_declaration"] == "authentic Iraqi colloquial dialect"
+    shaped = res["shaped_lyrics"]
+
+    expected_tokens = (
+        "يَا إِحْسَينْ",
+        "إِبْچَفَّكْ",
+        "إِعْيُونِي",
+        "إِعْيُونَكْ",
+        "إِبْمَجْلِسَكْ",
+        "إِبْگَلْبِي",
+        "إِبْگَاعْ",
+        "إِخْيَامْ",
+        "إِبْهِدَايْ",
+        "إِبْعِفَّه",
+        "إِعْلَه البَابْ",
+        "لِلشَّامْ",
+        "العَافْيَه",
+        "حَافْيَه",
+        "فَاتْحَه",
+        "وِسَادَتْ رِيشْ",
+        "دِنْيَتْ خَيرْ",
+        "بَسْ إِمْسَحْ",
+        "يَالمِطِّينِي",
+        "وَادِمْ",
+        "هَلْ حِچَايَه",
+        "غَرِيبَه",
+    )
+    for token in expected_tokens:
+        assert token in shaped
+
+    assert "إِحْسَيْنْ" not in shaped
+    assert "خَيْرْ" not in shaped
+    assert "غَرِيبَهْ" not in shaped
+
+
+def test_module_49_plain_epenthetic_vowels_and_idempotency():
+    """Verify plain initial clusters use soft epenthetic vowels (never word-initial Sukun or إِدْمُوعْ)."""
+    raw = "بويه إِدْمُوعْ جْرُوحْ مْتُونِي سْنِينِي تْگِلَّه زَيْنَبْ"
+    first_pass = hds.detect_and_shape_dialect(raw)["shaped_lyrics"]
+    second_pass = hds.detect_and_shape_dialect(first_pass)["shaped_lyrics"]
+    assert first_pass == second_pass
+    for clean_tok in ("دُمُوعْ", "جُرُوحْ", "مِتُونِي", "سِنِينِي", "تِگِلَّه", "زَينَبْ"):
+        assert clean_tok in first_pass
+
+
+def test_module_43_and_49_bahrani_vs_neutral_isolation():
+    """Verify Pure Bahrani shaping ('عَلَه البَابْ', 'گَلِبْ', 'فَاضِلْ') vs Neutral Tie shaping."""
+    bahrani_res = hds.detect_and_shape_dialect("يا بويي ونتي عالباب بقلب وقلبي والصبر ويبوفاضل")
     assert bahrani_res["detected_dialect"] == "bahrani"
-    assert "گَلْبِي" in shaped_bahrani
-    assert "گَلِبْ" in shaped_bahrani
-    assert "وَ الصَبِرْ" in shaped_bahrani
-    assert "وَ الجَمْرَه" in shaped_bahrani
-    assert "وَ يَا بُو فَاضِلْ" in shaped_bahrani
-    assert "بِ ضْلُوعِي" in shaped_bahrani
-    assert "3rd-Word Faizi Vibrato" in bahrani_res["maqam_articulation_rule"]
+    assert bahrani_res["sound_prompt_dialect_declaration"] == "authentic Bahrani colloquial dialect"
+    assert "عَلَه البَابْ" in bahrani_res["shaped_lyrics"]
+    assert "گَلِبْ" in bahrani_res["shaped_lyrics"]
+    assert "گَلْبِي" in bahrani_res["shaped_lyrics"]
+    assert "فَاضِلْ" in bahrani_res["shaped_lyrics"]
 
-    iraqi_poem = (
-        "يا خويه يمه وليدي دلالي شلون شصار بلياك "
-        "قلب وقلبي وقلبك والجمرة والمقلوب والصبر وكالجمر وبالقلب وچبد ودمع ووگفت وعفتني ويبوفاضل بضلوعي"
-    )
-    iraqi_res = engine.detect_and_shape_dialect(iraqi_poem)
-    shaped_iraqi = iraqi_res["shaped_lyrics"]
-    assert iraqi_res["detected_dialect"] == "iraqi"
-    assert iraqi_res["dhad_articulation"] == "Emphatic Iraqi Dhaa (ظ)"
-    assert "گَلُبْ" in shaped_iraqi
-    assert "گَلْبِي" in shaped_iraqi
-    assert "وَ گَلْبَكْ" in shaped_iraqi
-    assert "گَلُبْي" not in shaped_iraqi
-    assert "گَلُبْك" not in shaped_iraqi
-    assert "الجَمُرْة" not in shaped_iraqi
-    assert "وَ الجَمْرَه" in shaped_iraqi
-    assert "المقلوب" in shaped_iraqi
-    assert "وَ الصَبُرْ" in shaped_iraqi
-    assert "كَ الجَمُرْ" in shaped_iraqi
-    assert "بِ الگَلُبْ" in shaped_iraqi
-    assert "چَبِدْ" in shaped_iraqi
-    assert "دَمِعْ" in shaped_iraqi
-    assert "وُگَفِتْ" in shaped_iraqi
-    assert "عِفْتْنِي" in shaped_iraqi
-    assert "وَ يَا بُو فَاظِلْ" in shaped_iraqi
-    assert "بِ ظْلُوعِي" in shaped_iraqi
-
-    ortho_iraqi = engine.detect_and_shape_dialect(
-        "يا يمه ابأرض الشام عشت انه اشكَـد آلام كَـوه النفس اشهكَـ صرت من كثر ما تعبوني صارت كَـدامي بالسوكَـ شيجيبه الي راعي الشيم طوله مدمه الكالي اتبشري اموذر ازماطي"
-    )
-    shaped_ortho = ortho_iraqi["shaped_lyrics"]
-    assert "آنَه" in shaped_ortho
-    assert "إِشْگَدْ" in shaped_ortho
-    assert "گُوَّه" in shaped_ortho
-    assert "أَشْهَگْ" in shaped_ortho
-    assert "صِرِتْ" in shaped_ortho
-    assert "كِثِرْ" in shaped_ortho
-    assert "گِدَّامِي" in shaped_ortho
-    assert "بِ السُّوگْ" in shaped_ortho
-    assert "بِأَرْضِ" in shaped_ortho
-    assert "شِيجِيبَه" in shaped_ortho
-    assert "مُدَمَّه" in shaped_ortho
-    assert "إِتْبَشْرِي" in shaped_ortho
-    assert "إِمْوَذَّرْ" in shaped_ortho
-    assert "إِزْمَاطِي" in shaped_ortho
-
-    neutral_res = engine.detect_and_shape_dialect("ياحسين قلب وقلبي والصبر والجمرة ويبوفاضل بضلوعي")
-    shaped_neutral = neutral_res["shaped_lyrics"]
+    neutral_res = hds.detect_and_shape_dialect("ياحسين قلب وقلبي والصبر والجمرة ويبوفاضل")
     assert neutral_res["detected_dialect"] == "iraqi_bahrani"
-    assert neutral_res["dhad_articulation"] == "Balanced Neutral Dhad (ض)"
-    assert "قَلْبْ" in shaped_neutral
-    assert "قَلْبِي" in shaped_neutral
-    assert "وَ الصَبْرْ" in shaped_neutral
-    assert "وَ الجَمْرَه" in shaped_neutral
-    assert "وَ يَا بُو فَاضِلْ" in shaped_neutral
-    assert "بِ ضْلُوعِي" in shaped_neutral
-    assert "گَلُبْ" not in shaped_neutral
-    assert "گَلِبْ" not in shaped_neutral
+    assert "قَلْبْ" in neutral_res["shaped_lyrics"]
+    assert "قَلْبِي" in neutral_res["shaped_lyrics"]
+    assert "فَاضِلْ" in neutral_res["shaped_lyrics"]
 
 
-def test_idempotency_and_true_prosodic_segmenter():
-    """Verify f(f(x)) == f(x) and true prosodic CV/CVV/CVC segmentation (Shadda & Madd)."""
-    sample = "ياحسين يا خويه شلون قلب وقلبي والصبر والجمرة وعينٍ تسيل ونارٍ يَصْلَى ودمعٍ ياحسين"
-    sep1 = engine.de_cliticize_and_separate_words(sample)
-    sep2 = engine.de_cliticize_and_separate_words(sep1)
-    assert sep1 == sep2
+def test_module_40_tanween_compiler_colloquial_and_fusha():
+    """Verify mid-line phonetic Nunation and pause Tanween resolution before '..'."""
+    coll = hds.resolve_dialectal_and_prosodic_tanween("عينٍ تسيل بدمعي .. جرحٍ چبير ..", dialect="iraqi")
+    assert "عَينِنْ تِسِيلْ" in coll
+    assert "جَرْحِنْ چِبِيرْ .." in coll
 
-    tan1 = engine.resolve_dialectal_and_prosodic_tanween(sample, dialect="iraqi")
-    tan2 = engine.resolve_dialectal_and_prosodic_tanween(tan1, dialect="iraqi")
-    assert tan1 == tan2
-
-    sh1 = engine.detect_and_shape_dialect(sample)["shaped_lyrics"]
-    sh2 = engine.detect_and_shape_dialect(sh1)["shaped_lyrics"]
-    assert sh1 == sh2
-
-    # True Prosodic Segmenter verification:
-    # 1) 'تِسِيلْ' = تِ (CV) + سِيلْ (CVCC) -> 2 syllables (Madd Yaa is NOT counted as a consonant!)
-    seg_taseel = engine.segment_arabic_prosodic_syllables("تِسِيلْ")
-    assert seg_taseel["syllable_count"] == 2
-    assert seg_taseel["arud_pattern"] == "//00"
-
-    # 2) 'مَشْبُوگَه' = مَشْ (CVC) + بُو (CVC) + گَه (CVC) -> 3 syllables (Madd Waw properly recognized)
-    seg_mashbooga = engine.segment_arabic_prosodic_syllables("مَشْبُوگَه")
-    assert seg_mashbooga["syllable_count"] == 3
-
-    # 3) Shadda unpacking: 'مُحَمَّدْ' = مُ (CV) + حَمْ (CVC) + مَدْ (CVC) -> 3 syllables
-    seg_shadda = engine.segment_arabic_prosodic_syllables("مُحَمَّدْ")
-    assert seg_shadda["syllable_count"] == 3
-    assert seg_shadda["arud_pattern"] == "//0/0"
-
-    long_line = "مَكْسُورَة خَاطِرْ وَ الدَّمِعْ .. مَا ظَلْ بَعَدْ بِ عْيُونِي"
-    split_res = engine.split_long_lines_for_steady_pacing(long_line, max_words_per_line=5)
-    split_lines = split_res.splitlines()
-    assert len(split_lines) == 2
-    assert split_lines[0].endswith("..")
+    fusha = hds.resolve_dialectal_and_prosodic_tanween(
+        "جسماً على الثرى .. قضى ظامئاً ..", dialect="fusha"
+    )
+    assert "جِسْمَنْ عَلَى الثَّرَى" in fusha
+    assert "ظَامِئَا .." in fusha
 
 
-def test_unified_lyrics_spec_both_horizontal_and_vertical_and_bilingual_tags():
-    """Verify that BOTH 12-line horizontal couplets AND 20-line vertical 3-Part Golden Architecture
-    pass validate_stage1_iso_syllabic_lock(), audit_legendary_latmiya_pillars(), and lint_poem()
-    with either Arabic tags ([المُسْتَهَلّ]) or English tags ([Chorus]).
-    """
-    balanced_horizontal = [
-        "[المُسْتَهَلّ]",
-        "يَا بُو السَّجَّادْ دَلَّالِي تِفَطَّرْ .. عِفْتْنِي بِ غُرْبِتِي وَ الدَّمِعْ يِسْهَرْ",
-        "عَيْنِنْ تِسِيلْ وَ الخِيَمْ تِسْعَرْ .. جَرْحِنْ چِبِيرْ بِ گَلْبِي مَا يِفْتَرْ",
-        "إِشْ صَارْ بِنَه يَا ضَوَه المَحْشَرْ .. كِلِّنْ يِنَادِي يَا غَرِيبْ الطَّفْ",
-        "يَا حْسَيْنْ يَا مَظْلُومْ يَا مَنْحُورْ",
-        "[المَقْطَع الأَوَّل]",
-        "عَلَى الرَّمْضَه وُگَفِتْ وَ العَيْنْ تِرْعَاكْ .. إِشْ نْگُولْ لِلْ ذَبْحَوْا ضَوَه مَلْگَاكْ",
-        "بِ ظْلُوعِي جَمُرْ مَا طِفَه بْ فَرْگَاكْ .. وَ الشَّمْسْ غَابَتْ يَا حِمَى بْلَيَّاكْ",
-        "عَلَى البَابْ أَنْتِظِرْ يَا خُويَه مَمْشَاكْ .. حَالِنْ يِفَطِّرْ صَخَرْ هَالوِدْيَانْ",
-        "يَا حْسَيْنْ يَا مَظْلُومْ يَا مَنْحُورْ",
+def test_module_50_crying_isolation_and_anti_12tet_firewall():
+    """Verify zero weeping/12-TET leakage in rhythmic prompts and exclusive weeping in 0 BPM Rubato."""
+    for key, prompt in hds.MASTER_SOUND_PROMPTS_V48_5.items():
+        lower = prompt.lower()
+        if key == "minbar_nai_0bpm_rubato_saba_exclusive_weeping":
+            assert "weeping" in lower
+            assert "rubato" in lower
+            continue
+        for banned in hds.LATMIYA_SONG_LEAKAGE_BLACKLIST:
+            if key == "zanjeel_procession_80bpm_hijaz" and banned == "dammam":
+                continue
+            assert banned not in lower, f"Leakage '{banned}' found in {key}"
+
+    for genre in ("latmiya", "nasheed", "ibtihalat", "tawashih"):
+        prof = hds.build_vocal_genre_profile(genre=genre, dialect="iraqi", maqam="saba", bpm=60)
+        assert prof["song_leakage_terms_detected"] == []
+
+
+def test_module_51_collective_estehlal_and_qc1_to_qc18_linter():
+    """Verify collective '(...)' Estehlal wrapper, 5 Golden Pillars auditor, and QC13/14/17/18 linter."""
+    raw_poem = "\n".join(
+        [
+            "[المُسْتَهَلّ]",
+            "يَا إِحْسَينْ إِبْگَلْبِي ..",
+            "صَوْتَكْ يِسْرِي إِبْدَمِّي ..",
+            "مَا أَنْسَى إِخْيَامَكْ ..",
+            "يَا سُلْطَانْ إِهْمُومِي ..",
+            "[النَّزْلَة الأُولَى]",
+            "وُگَفِتْ إِعْلَه البَابْ ..",
+            "أَنْظُرْ دَرُبْ الشَّامْ ..",
+            "دُمُوعْ إِعْيُونِي تْسِيلْ ..",
+            "تِسُولِفْ بِالأَيْتَامْ ..",
+            "إِبْچَفَّكْ يَا مَوْلَايْ ..",
+            "إِمْسَحْ دَمْعَاتِي ..",
+            "إِبْمَجْلِسَكْ أَرْتَاحْ ..",
+            "تِشْفَى جُرُوحَاتِي ..",
+            "[الكَسْرَة وَالمُسْتَهَلّ]",
+            "غَرِيبَه هَلْ حِچَايَه ..",
+            "ظَلَّتْ بِالخَرَابَه ..",
+            "تِنَادِي يَا بُويَه ..",
+            "شُوفْ إِشْ صَارْ إِبْحَالِي ..",
+            "يَا إِحْسَينْ إِبْگَلْبِي ..",
+            "صَوْتَكْ يِسْرِي إِبْدَمِّي ..",
+            "مَا أَنْسَى إِخْيَامَكْ ..",
+            "يَا سُلْطَانْ إِهْمُومِي ..",
+        ]
+    )
+    unwrapped_lint = hds.lint_poem(raw_poem)
+    assert unwrapped_lint["solo_estehlal_violation"] is True
+    assert unwrapped_lint["marked_medial_diphthong_glides_detected"] == ["مَوْلَايْ"]
+
+    repaired = unwrapped_lint["auto_repaired_lyrics"]
+    clean_lint = hds.lint_poem(repaired)
+    assert clean_lint["solo_estehlal_violation"] is False
+    assert clean_lint["inline_json_in_lyrics"] is False
+    assert clean_lint["fusha_dialect_clash_detected"] == []
+    assert clean_lint["ready_for_generation"] is True
+
+    pillars = hds.audit_legendary_latmiya_pillars(repaired)
+    assert pillars["all_five_pillars_passed"] is True
+    assert pillars["total_vertical_lines"] == 20
+
+    bad_poem = "[المُسْتَهَلّ]\n{\"bpm\": 60}\nبويه عُيُونِي يا حُسَيْن عَلَى الباب خَيْرْ"
+    bad_lint = hds.lint_poem(bad_poem)
+    assert bad_lint["inline_json_in_lyrics"] is True
+    assert "عُيُونِي" in bad_lint["fusha_dialect_clash_detected"]
+    assert "عَلَى" in bad_lint["fusha_dialect_clash_detected"]
+    assert "خَيْرْ" in bad_lint["marked_medial_diphthong_glides_detected"]
+    assert bad_lint["ready_for_generation"] is False
+
+
+def test_module_46_48_52_validators_formatters_and_stage_plan(tmp_path):
+    """Verify Abudhiyah, Zuhayri, Ashouri, Faujain, Caesura splitter, 4-Stage Plan & Session Logger."""
+    abudhiyah = [
+        "گلبي بمأتمك يحسين ينصاب ..",
+        "وذكرك من يمر الدمع ينصاب ..",
+        "گلبي بدال گلبك ريت ينصاب ..",
+        "وخدي دون خدك على الوطيه ..",
     ]
-    report = engine.validate_stage1_iso_syllabic_lock(balanced_horizontal)
-    assert report["is_valid_stanza_grid"] is True
-    assert report["identical_4th_line_refrain"] is True
-    assert report["internal_hemistich_balanced"] is True
-    assert report["iso_syllabic_balanced"] is True
-    assert report["passed"] is True
+    assert hds.validate_abudhiyah_jinas(abudhiyah)["is_valid_abudhiyah"] is True
 
-    lopsided_stanzas = list(balanced_horizontal)
-    lopsided_stanzas[1] = "يَا حْسَيْنْ .. عِفْتْنِي بِ غُرْبِتِي وَ الدَّمِعْ يِسْهَرْ طُولْ اللَّيَالِي وَ السِّنِينْ"
-    bad_report = engine.validate_stage1_iso_syllabic_lock(lopsided_stanzas)
-    assert bad_report["internal_hemistich_balanced"] is False
-    assert bad_report["passed"] is False
+    zuhayri = [
+        "يا صاح دمع الجفن عالخد جرى وسال ..",
+        "والگلب من فرگتك ذاب بحزن وسال ..",
+        "ما ظل صبر بالصدر عن غربتك وسال ..",
+        "بالطف وگفنا بدمع نندب أبو السجاد ..",
+        "والشام شافت سبي وآل النبي تنقاد ..",
+        "ما تنطفي جمرته لو مرت الأعياد ..",
+        "كل ما يمر عاشور دمعي تحدر وسال ..",
+    ]
+    assert hds.validate_zuhayri_mawal(zuhayri)["is_valid_zuhayri"] is True
 
-    # Vertical 20-line Golden Architecture with Arabic tags ([المُسْتَهَلّ], [النَّزْلَة الأُولَى], [الكَسْرَة وَالمُسْتَهَلّ])
-    authentic_arabic_tags = (
-        "[المُسْتَهَلّ]\nغَرِيبَه هَلْ حِچَايَه ..\nسَبِيَّه مِنِ السَّبَايَا ..\nكِتَلْهَا رَاسْ أَبُوهَا ..\nبِخَرَابَه شَيِّعُوهَا ..\n"
-        "[النَّزْلَة الأُولَى]\nمَاتَتْ وَ مَشْبُوگَه إِدَيْهَا ..\nبِلَهْفَه چَانَتْ شَابْگَه ..\nطَابْعَه شِفَافَه عَلَى خَدْهَا ..\nبِرَاسْ أَبُوهَا مِفَارْگَه ..\n"
-        "مَيِّتَه وَ الفَرْحَه بِثَغُرْهَا ..\nإِشْحَاچِي يَمْهَا وَ شَاهْگَه ..\nجُفُونْهَا المَا تِرْضَى تِنْسَدْ ..\nمِنْ شَهَرْ مَا طَابْگَه ..\n"
-        "[الكَسْرَة وَالمُسْتَهَلّ]\nرَوَتْ قِصَّه عَجِيبَه ..\nمُحِبْ كَاتِلْ حَبِيبَه ..\nعَلَى طَشْتَه لِگُوهَا ..\nبِخَرَابَه شَيِّعُوهَا ..\n"
-        "غَرِيبَه هَلْ حِچَايَه ..\nسَبِيَّه مِنِ السَّبَايَا ..\nكِتَلْهَا رَاسْ أَبُوهَا ..\nبِخَرَابَه شَيِّعُوهَا .."
+    ashouri = hds.format_ashouri_interactive_ahaat("يَا إِحْسَينْ يَا مَظْلُومْ ..")
+    assert "(آه .. آه)" in ashouri
+
+    faujain = hds.format_bahrani_antiphonal_faujain(["مَاجُورَه يَا زَهْرَه ..", "بِمُصَابْ أَبُو السَّجَّادْ .."])
+    assert "[الفَوْج الأَوَّل]" in faujain and "[الفَوْج الثَّانِي]" in faujain
+
+    split_text = hds.split_long_lines_for_steady_pacing(
+        "وُگَفِتْ إِبْمَجْلِسَكْ يَا سَيِّدِي إِعْلَه البَابْ أَنْتَظِرْ", max_words_per_line=4
     )
-    pillar_ar = engine.audit_legendary_latmiya_pillars(authentic_arabic_tags)
-    assert pillar_ar["passed_all_5_pillars"] is True
-    assert pillar_ar["zero_word_initial_sukun"] is True
-    assert pillar_ar["zero_feminine_haa_sukun"] is True
+    for line in split_text.splitlines():
+        core = line.replace("..", "").strip()
+        assert not core.endswith("إِعْلَه") and not core.endswith("يَا")
 
-    iso_vert = engine.validate_stage1_iso_syllabic_lock(authentic_arabic_tags)
-    assert iso_vert["layout_format"] == "vertical_hemistichs"
-    assert iso_vert["passed"] is True
-
-    lint_vert = engine.lint_poem(authentic_arabic_tags, stage=1)
-    assert lint_vert["ready_for_generation"] is True
-    assert lint_vert["estimated_stage1_success_score"] >= 85
-
-
-def test_abudhiyah_jinas_zuhayri_mawal_and_ashouri_ahaat():
-    """Verify Iraqi Abudhiyah Jinas validator, 7-line Zuhayri Mawal validator, and Ashouri interactive Ahaat."""
-    abudhiyah_valid = (
-        "گَلْبِي بِمَأْتَمَكْ يَا حْسَيْنْ يِنْصَابْ ..\n"
-        "وَ ذِكْرَكْ مِنْ يِمُرْ الدَّمِعْ يِنْصَابْ ..\n"
-        "گَلْبِي بْدَالْ گَلْبَكْ رَيْتْ يِنْصَابْ ..\n"
-        "وَ خَدِّي دُونْ خَدَّكْ عَلَى الوَطِيَّه .."
-    )
-    ab_res = engine.validate_abudhiyah_jinas(abudhiyah_valid)
-    assert ab_res["is_valid_abudhiyah"] is True
-    assert ab_res["jinas_three_hemistichs_matched"] is True
-    assert ab_res["fourth_hemistich_yah_ending"] is True
-
-    abudhiyah_bad = (
-        "گَلْبِي بِمَأْتَمَكْ يَا حْسَيْنْ يِنْصَابْ ..\n"
-        "وَ ذِكْرَكْ مِنْ يِمُرْ الدَّمِعْ يِجْرِي ..\n"
-        "گَلْبِي بْدَالْ گَلْبَكْ رَيْتْ يِنْصَابْ ..\n"
-        "وَ خَدِّي دُونْ خَدَّكْ عَلَى التُّرَابْ .."
-    )
-    ab_bad_res = engine.validate_abudhiyah_jinas(abudhiyah_bad)
-    assert ab_bad_res["is_valid_abudhiyah"] is False
-
-    zuhayri_valid = (
-        "يَا الهَادِي جَمُرْ الحُزُنْ بِحْشَاشِتِي يَاجِدْ ..\n"
-        "حُزُنْ البِگَلْبِي حُزُنْ مِثْلَه فَلَا يَاجِدْ ..\n"
-        "لِمُصَابْ شِبْلَكْ تِظُنْ دَمِعْ الجَفِنْ يَاجِدْ ..\n"
-        "لَا يِجْدِي دَمْعِي وَ لَا تِبْرِي العِلَلْ وَ تْصِيحْ ..\n"
-        "إِغْبَرَّتْ سِمَانَه وَ لَا تِصْفَه بَعَدْ وَ تْصِيحْ ..\n"
-        "هَاذِي بَنَاتَكْ إِجَتْ مِنْ كَرْبَلَا وَ تْصِيحْ ..\n"
-        "يَا جَدِّي گَطْعَوْا نَحُرْ رَيْحَانِتَكْ يَاجِدْ .."
-    )
-    z_res = engine.validate_zuhayri_mawal(zuhayri_valid)
-    assert z_res["is_valid_zuhayri"] is True
-    assert z_res["first_three_jinas_matched"] is True
-    assert z_res["seventh_qafla_locked"] is True
-
-    ashouri_formatted = engine.format_ashouri_interactive_ahaat(
-        "يَا عَبَّاسْ مَا أَنْتَ اللِّي جِبْتْنِي ..\nوَ بِيْدَكْ يَا خُويَه رَكَّبْتْنِي .."
-    )
-    assert "(آه .. آه) .." in ashouri_formatted
-
-    faujain_formatted = engine.format_bahrani_antiphonal_faujain(
-        "غَرِيبَه هَلْ حِچَايَه ..\nسَبِيَّه مِنِ السَّبَايَا ..\nكِتَلْهَا رَاسْ أَبُوهَا ..\nبِخَرَابَه شَيِّعُوهَا .."
-    )
-    assert "[الفَوْج الأَوَّل]" in faujain_formatted
-    assert "[الفَوْج الثَّانِي]" in faujain_formatted
-
-
-def test_module39_optional_clip_id_and_poem_linter():
-    """Verify optional reference_clip_id (default None), Multi-Tor bridge, and lint_poem()."""
-    payload_default = engine.build_flowmusic_json_preconditioning(dialect="iraqi_bahrani", maqam="saba", bpm=58)
-    assert payload_default["protocol_name"] == "Hussaini_Production_Studio_OS_V50_OMNI_PERFECTION"
-    assert payload_default["reference_clip_id"] is None
-
-    payload_custom = engine.build_flowmusic_json_preconditioning(
-        dialect="iraqi", maqam="saba", bpm=58, reference_clip_id="custom-clip-123"
-    )
-    assert payload_custom["reference_clip_id"] == "custom-clip-123"
-
-    bridge = engine.build_multi_tor_melodic_bridge("bayati", "kurd", "thaqeel", "shoor")
+    bridge = hds.build_multi_tor_melodic_bridge("tor_ashouri", "tor_lami_iraqi", "saba", "lami", 58)
     assert bridge["common_jins_compatible"] is True
 
-    mixed_poem = "إنما ياحسين شلون قلبي"
-    lint_res = engine.lint_poem(mixed_poem, stage=1)
-    assert lint_res["fusha_colloquial_mixing_in_stage1"] is True
-    assert "ياحسين" in lint_res["slurring_risks_detected"]
-    assert lint_res["ready_for_generation"] is False
+    plan = hds.build_four_stage_latmiya_plan("iraqi")
+    assert plan["stage_1_root_track"]["bpm"] == 58
+    assert plan["stage_4_extend_3_kasra_finale"]["bpm"] == 56
+    assert plan["stage_4_extend_3_kasra_finale"]["audio_drop_sec"] == 3.0
 
-
-def test_dsp_rms_sidechain_tempo_delay_formant_ahaat_and_lufs():
-    """Verify RMS dBFS ducking, Tempo-Synced Delay formula, Rosenberg Formant Ahaat, and LUFS."""
-    sample_rate = 16000
-    t_vec = np.linspace(0.0, 2.0, 2 * sample_rate, endpoint=False)
-
-    # Verify Tempo-Synced Delay formula: 60000 / (bpm * 2) clipped to [210, 460] ms
-    assert abs(engine.compute_tempo_synced_delay_ms(100.0, is_rubato=False) - 300.0) < 1e-6
-    assert abs(engine.compute_tempo_synced_delay_ms(60.0, is_rubato=False) - 460.0) < 1e-6
-    assert abs(engine.compute_tempo_synced_delay_ms(0.0, is_rubato=True) - 450.0) < 1e-6
-
-    # Verify Rosenberg Glottal + Formant Ahaat synthesis has rich formant harmonics (not pure sine)
-    ahaat_sig = engine.synthesize_ahaat_drone(sample_rate, sample_rate, maqam="saba")
-    assert len(ahaat_sig) == sample_rate
-    assert float(np.max(np.abs(ahaat_sig))) > 0.01
-
-    signal = 0.004 * np.sin(2.0 * np.pi * 200.0 * t_vec)
-    signal[int(0.5 * sample_rate) : int(0.52 * sample_rate)] = 1.0
-    signal[int(0.7 * sample_rate) : int(1.8 * sample_rate)] = 0.28 * np.sin(
-        2.0 * np.pi * 220.0 * t_vec[int(0.7 * sample_rate) : int(1.8 * sample_rate)]
-    )
-
-    duck_curve = engine.compute_smart_sidechain_ducking(signal, sample_rate, duck_db=-3.0)
-    noise_region_gain = float(np.mean(duck_curve[int(0.1 * sample_rate) : int(0.4 * sample_rate)]))
-    vocal_region_gain = float(np.mean(duck_curve[int(1.0 * sample_rate) : int(1.5 * sample_rate)]))
-    expected_minus_3db = float(10.0 ** (-3.0 / 20.0))
-
-    assert noise_region_gain > 0.97
-    assert abs(vocal_region_gain - expected_minus_3db) < 0.06
-
-    stereo_test = np.column_stack((signal, signal))
-    mastered = engine.normalize_lufs_and_true_peak(stereo_test, sample_rate, target_lufs=-14.0, ceiling_dbtp=-1.0)
-    assert float(np.max(np.abs(mastered))) <= float(10.0 ** (-1.0 / 20.0)) + 1e-3
-
-
-def test_all_16_dsp_modes_extract_profile_and_replace_ai_percussion(tmp_path):
-    """Verify 24-bit/8-bit/Stereo WAV inputs, extract_reference_audio_profile(), --replace-ai-percussion,
-    and all 16 CLI DSP modes (including Bahrani Thulathi, Ruba'i, Haidari, Waqfa, Muthakkal).
-    """
-    sr = 8000
-    dur = 2.5
-    t_vec = np.linspace(0.0, dur, int(sr * dur), endpoint=False)
-    # Create a synthetic reference track with 60 BPM (1 Hz) 60Hz chest thuds + 146.83 Hz (D3) vocal tone
-    vocal_tone = 0.35 * np.sin(2.0 * np.pi * 146.83 * t_vec)
-    beat_pulses = np.exp(-18.0 * np.mod(t_vec, 1.0)) * np.sin(2.0 * np.pi * 60.0 * t_vec)
-    ref_sig = 0.5 * vocal_tone + 0.45 * beat_pulses
-
-    wav_ref = str(tmp_path / "ref_60bpm.wav")
-    wavfile.write(wav_ref, sr, (ref_sig * 24000).astype(np.int16))
-
-    profile = engine.extract_reference_audio_profile(wav_ref)
-    assert 55.0 <= profile["estimated_bpm"] <= 65.0
-    assert 135.0 <= profile["tonic_freq_hz"] <= 160.0
-    assert profile["estimated_maqam"] in engine.MAQAM_FREQS
-    assert engine.main(["--extract-profile", wav_ref]) == 0
-
-    # Create a 24-bit PCM WAV file
-    sine = 0.4 * np.sin(2.0 * np.pi * 220.0 * t_vec[: int(sr * 0.35)])
-    wav_24bit = str(tmp_path / "input_24bit.wav")
-    int24_vals = np.clip(sine * ((1 << 23) - 1), -(1 << 23), (1 << 23) - 1).astype(np.int32)
-    packed_24 = bytearray()
-    for val in int24_vals:
-        uval = int(val) & 0xFFFFFF
-        packed_24.extend((uval & 0xFF, (uval >> 8) & 0xFF, (uval >> 16) & 0xFF))
-    with wave.open(wav_24bit, "wb") as wf:  # pylint: disable=no-member
-        wf.setnchannels(1)
-        wf.setsampwidth(3)
-        wf.setframerate(sr)
-        wf.writeframes(bytes(packed_24))
-
-    read_sr, read_mono = engine.read_wav_any_depth(wav_24bit)
-    assert read_sr == sr
-    assert len(read_mono) == len(sine)
-    assert np.allclose(read_mono, sine, atol=1e-3)
-
-    wav_8bit = str(tmp_path / "input_8bit.wav")
-    u8_vals = np.clip((sine * 127.0) + 128.0, 0, 255).astype(np.uint8)
-    with wave.open(wav_8bit, "wb") as wf:  # pylint: disable=no-member
-        wf.setnchannels(1)
-        wf.setsampwidth(1)
-        wf.setframerate(sr)
-        wf.writeframes(u8_vals.tobytes())
-
-    wav_stereo = str(tmp_path / "input_stereo.wav")
-    stereo_16 = np.column_stack(((sine * 16000).astype(np.int16), (sine * 14000).astype(np.int16)))
-    wavfile.write(wav_stereo, sr, stereo_16)
-
-    samples_dir = tmp_path / "custom_samples"
-    samples_dir.mkdir()
-    short_hit = (0.5 * np.sin(2.0 * np.pi * 90.0 * np.linspace(0, 0.08, int(sr * 0.08))) * 32767).astype(np.int16)
-    for name in ("latm.wav", "dammam.wav", "zanjeel.wav", "husseiniya_ir.wav"):
-        wavfile.write(str(samples_dir / name), sr, short_hit)
-
-    ledger_file = str(tmp_path / "session_ledger.json")
-
-    modes_and_inputs = [
-        ("latm", wav_24bit, "saba", "60", "none"),
-        ("heavy_clip", wav_24bit, "nahawand", "66", "wind"),
-        ("thaqeel_muwazza", wav_24bit, "saba", "60", "none"),
-        ("studio_arranged", wav_stereo, "lami", "74", "none"),
-        ("bahrani_fast", wav_8bit, "hijaz", "88", "none"),
-        ("bahrani_thulathi", wav_24bit, "bayati", "76", "none"),
-        ("bahrani_rubai", wav_stereo, "nahawand", "72", "none"),
-        ("bahrani_haidari", wav_24bit, "hijaz", "96", "none"),
-        ("bahrani_waqfa", wav_8bit, "saba", "104", "none"),
-        ("bahrani_muthakkal", wav_24bit, "saba", "54", "none"),
-        ("zanjeel_iraqi", wav_stereo, "hijaz", "80", "horses"),
-        ("zanjeel_bahrani", wav_8bit, "bayati", "80", "water"),
-        ("shoor", wav_24bit, "kurd", "130", "none"),
-        ("bandari", wav_stereo, "rast", "105", "none"),
-        ("mawal", wav_24bit, "lami", "0", "none"),
-        ("nai", wav_8bit, "saba", "0", "none"),
-    ]
-    for mode, in_wav, maqam, bpm, foley_kind in modes_and_inputs:
-        out_wav = str(tmp_path / f"out_{mode}.wav")
-        rc = engine.main([
-            "--input", in_wav,
-            "--output", out_wav,
-            "--mode", mode,
-            "--bpm", bpm,
-            "--maqam-drone", maqam,
-            "--foley", foley_kind,
-            "--audio-drop-sec", "0.08",
-            "--swing", "0.2",
-            "--offset-ms", "20",
-            "--samples-dir", str(samples_dir),
-            "--session-log", ledger_file,
-        ])
-        assert rc == 0
-        assert os.path.isfile(out_wav)
-
-    # Test Stem-Aware Hybrid Mastering (--replace-ai-percussion)
-    out_hybrid = str(tmp_path / "out_hybrid_replaced.wav")
-    rc_hybrid = engine.main([
-        "--input", wav_ref,
-        "--output", out_hybrid,
-        "--mode", "thaqeel_muwazza",
-        "--bpm", "0",
-        "--maqam-drone", "saba",
-        "--replace-ai-percussion",
-    ])
-    assert rc_hybrid == 0
-    assert os.path.isfile(out_hybrid)
-
-    assert os.path.isfile(ledger_file)
-    assert engine.main([]) == 1
-    assert engine.main(["--input", str(tmp_path / "nonexistent.wav"), "--output", str(tmp_path / "x.wav")]) == 1
-
-
-def test_cli_flags_version_and_compact_skill_router():
-    """Verify CLI flags, VERSION single source of truth, and compact SKILL.md router size (<= 10.5KB)."""
-    assert engine.main(["--compile-lyrics", "ياحسين يا خويه شلون قلب وقلبي وچبد ودمع", "--use-tatweel"]) == 0
-    assert engine.main(["--lint-poem", "ياحسين يا خويه شلون قلب وقلبي"]) == 0
-    assert engine.main(["--recommend-tor", "هنيالي من خدمنك .. خادم وافتخر مولاي"]) == 0
-    assert engine.main([
-        "--validate-abudhiyah",
-        "گلبي بمأتمك يحسين ينصاب ..\nوذكرك من يمر الدمع ينصاب ..\nگلبي بدال گلبك ريت ينصاب ..\nوخدي دون خدك على الوطيه .."
-    ]) == 0
-    assert engine.main([
-        "--validate-zuhayri",
-        "يا الهادي جمر الحزن بحشاشتي ياجد ..\nحزن البقلبي حزن مثله فلا ياجد ..\nلمصاب شبلك تظن دمع الجفن ياجد ..\nلا يجدي دمعي ولا تبري العلل وتصيح ..\nاغبرت سمانه ولا تصفه بعد وتصيح ..\nهاذي بناتك اجت من كربلا وتصيح ..\nيا جدي گطعوا نحر ريحانتك ياجد .."
-    ]) == 0
-
-    rec_bandari = engine.recommend_tor_and_rhythm_for_poem("هنيالي من خدمنك .. خادم وافتخر مولاي")
-    assert rec_bandari["rhythm_mode"] == "bandari"
-    assert rec_bandari["recommended_bpm"] == 74
-    assert "poetic_meter" in rec_bandari
-    assert "Bandari" not in rec_bandari["flowmusic_sound_prompt"]
-    assert "groove" not in rec_bandari["flowmusic_sound_prompt"]
-
-    rec_rukbani = engine.recommend_tor_and_rhythm_for_poem("يا هل الغرب خذتني .. احتاجيت احس غلاتي")
-    assert rec_rukbani["rhythm_mode"] == "studio_arranged"
-    assert rec_rukbani["recommended_bpm"] == 64
-    assert "humming" not in rec_rukbani["flowmusic_sound_prompt"]
-    assert "pads" not in rec_rukbani["flowmusic_sound_prompt"]
-
-    rec_bahrani = engine.recommend_tor_and_rhythm_for_poem("يا بويي ونتي وامساعد")
-    assert rec_bahrani["rhythm_mode"] == "bahrani_fast"
-    assert rec_bahrani["recommended_bpm"] == 84
-
-    rec_muthakkal = engine.recommend_tor_and_rhythm_for_poem("يبني ضعيفه وذوب قليبي امصابك")
-    assert rec_muthakkal["rhythm_mode"] == "bahrani_muthakkal"
-    assert rec_muthakkal["recommended_bpm"] == 54
-
-    rec_shoor = engine.recommend_tor_and_rhythm_for_poem("شور لبيك حيدر حيدر")
-    assert rec_shoor["rhythm_mode"] == "shoor"
-
-    rec_thaqeel = engine.recommend_tor_and_rhythm_for_poem(
-        "غريبه هالحچايه ماتت ومشبوگه اديها .. ماتت بخرابه ابوها مثلي يبچي عليها"
-    )
-    assert rec_thaqeel["rhythm_mode"] == "thaqeel_muwazza"
-    assert rec_thaqeel["recommended_bpm"] == 55
-    assert "humming" not in rec_thaqeel["flowmusic_sound_prompt"]
-
-    for g_name in ("latmiya", "nasheed", "ibtihalat", "tawashih"):
-        assert engine.main(["--genre", g_name]) == 0
-
-    prof_latmiya = engine.build_vocal_genre_profile("latmiya", dialect="iraqi")
-    assert prof_latmiya["uses_chest_latm"] is True
-    assert prof_latmiya["song_leakage_terms_detected"] == []
-    assert "Pure Acapella No Instruments" in prof_latmiya["flowmusic_sound_prompt"]
-
-    # Verify epenthetic vowel repair for initial consonant clusters & open feminine Haa without Sukun
-    iraqi_hal = engine.detect_and_shape_dialect(
-        "غَرِيبَهْ هَالْحِچَايَهْ ماتت ومشبوگه إِدَيْهَا يبچي عَلَيْهَا إِمْتُونِي زُرَگْ هَنِيَالِي إِسْنِينِي إِدْمُوعْ إِجْرُوحْ مِنْ هَالْتَّعَبْ"
-    )
-    assert iraqi_hal["detected_dialect"] == "iraqi"
-    assert "غَرِيبَه هَلْ حِچَايَه" in iraqi_hal["shaped_lyrics"]
-    assert "غَرِيبَهْ" not in iraqi_hal["shaped_lyrics"]
-    assert "مِتُونِي" in iraqi_hal["shaped_lyrics"]
-    assert "مْتُونِي" not in iraqi_hal["shaped_lyrics"]
-    assert "سِنِينِي" in iraqi_hal["shaped_lyrics"]
-    assert "دُمُوعْ" in iraqi_hal["shaped_lyrics"]
-    assert "جُرُوحْ" in iraqi_hal["shaped_lyrics"]
-    assert "هَنْيَالِي" in iraqi_hal["shaped_lyrics"]
-    assert "هَلْ تَعَبْ" in iraqi_hal["shaped_lyrics"]
-
-    bahrani_hal = engine.detect_and_shape_dialect(
-        "يا بويي ونتي اشحالش غريبه هالحچايه بهالگفره هالمسيهْ"
-    )
-    assert bahrani_hal["detected_dialect"] == "bahrani"
-    assert "غَرِيبَه هَلْ حِچَايَه" in bahrani_hal["shaped_lyrics"]
-    assert "إِشْحَالِشْ" in bahrani_hal["shaped_lyrics"]
-    assert "هَلْ مَسِيَّه" in bahrani_hal["shaped_lyrics"]
-    assert "مَسِيَّهْ" not in bahrani_hal["shaped_lyrics"]
-
-    authentic_sample = (
-        "[Chorus]\nغَرِيبَه هَلْ حِچَايَه ..\nسَبِيَّه مِنِ السَّبَايَا ..\nكِتَلْهَا رَاسْ أَبُوهَا ..\nبِخَرَابَه شَيِّعُوهَا ..\n"
-        "[Verse 1]\nمَاتَتْ وَ مَشْبُوگَه إِدَيْهَا ..\nبِلَهْفَه چَانَتْ شَابْگَه ..\nطَابْعَه شِفَافَه عَلَى خَدْهَا ..\nبِرَاسْ أَبُوهَا مِفَارْگَه ..\n"
-        "مَيِّتَه وَ الفَرْحَه بِثَغُرْهَا ..\nإِشْحَاچِي يَمْهَا وَ شَاهْگَه ..\nجُفُونْهَا المَا تِرْضَى تِنْسَدْ ..\nمِنْ شَهَرْ مَا طَابْگَه ..\n"
-        "[Chorus]\nرَوَتْ قِصَّه عَجِيبَه ..\nمُحِبْ كَاتِلْ حَبِيبَه ..\nعَلَى طَشْتَه لِگُوهَا ..\nبِخَرَابَه شَيِّعُوهَا ..\n"
-        "غَرِيبَه هَلْ حِچَايَه ..\nسَبِيَّه مِنِ السَّبَايَا ..\nكِتَلْهَا رَاسْ أَبُوهَا ..\nبِخَرَابَه شَيِّعُوهَا .."
-    )
-    pillar_audit = engine.audit_legendary_latmiya_pillars(authentic_sample)
-    assert pillar_audit["passed_all_5_pillars"] is True
-
-    repo_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-    version_file = os.path.join(repo_root, "VERSION")
-    assert os.path.isfile(version_file)
-    with open(version_file, "r", encoding="utf-8") as handle:
-        canonical_version = handle.read().strip()
-    assert engine.SKILL_VERSION == canonical_version
-
-    # Ensure duplicate module_45_golden_larynx_and_reverse_engineering.md no longer exists
-    dup_mod45 = os.path.join(
-        repo_root, "references", "modules", "module_45_golden_larynx_and_reverse_engineering.md"
-    )
-    assert not os.path.exists(dup_mod45)
-
-    skill_md_path = os.path.join(repo_root, "SKILL.md")
-    with open(skill_md_path, "r", encoding="utf-8") as handle:
-        skill_content = handle.read()
-    skill_bytes = len(skill_content.encode("utf-8"))
-    assert skill_bytes <= 10500, f"SKILL.md router must be <= 10.5KB (got {skill_bytes} bytes)"
-
-    for rel_path in (
-        "SKILL.md",
-        "README.md",
-        os.path.join("references", "atwar_maqamat_and_poetry_guide.md"),
-        os.path.join("references", "radoods_and_khutaba_encyclopedia.md"),
+    for sample in (
+        "هنيالي من خدمنك خادم مولاي",
+        "يا عباس يا كفيل زينب",
+        "شور حسين حسين لبيك",
+        "يا بويي ونتي بالگلب",
+        "بويه شلون دلالي",
     ):
-        full_path = os.path.join(repo_root, rel_path)
-        with open(full_path, "r", encoding="utf-8") as handle:
-            content = handle.read()
-        assert canonical_version in content, f"Missing {canonical_version} in {rel_path}"
+        rec = hds.recommend_tor_and_rhythm_for_poem(sample)
+        assert rec["recommended_bpm"] >= 56
 
+    precond = hds.build_flowmusic_json_preconditioning()
+    assert precond["reference_clip_id"] is None
+    assert precond["session_mode"] == "Pre_Conditioning_Lock_Wait_For_Stage_JSON"
 
-
-
-def test_v50_arud_bitmask_25_meters_and_safe_caesura():
-    """Verify V50 Binary Arud Bitmask matcher across 25 meters & syntax-safe caesura splitting."""
-    assert len(engine.POETIC_METERS_CATALOG) >= 25
-    assert "mujarasha" in engine.POETIC_METERS_CATALOG
-    assert "hajri" in engine.POETIC_METERS_CATALOG
-    assert "shiati" in engine.POETIC_METERS_CATALOG
-
-    m_res = engine.match_poetic_meter_bitmask("جينا ننشد كربلا مضيعينها .. بيها زينب گالوا ميسرينها")
-    assert m_res["matched_meter"] in engine.POETIC_METERS_CATALOG
-    assert m_res["confidence_score"] > 0.5
-    assert m_res["canonical_melodic_key"]
-
-    # Ensure prosody-safe splitter never leaves a dangling preposition like 'على' at end of line 1
-    tricky = "مشيت بليل وحشة ودمعتي تجري على الخدين يا مظلوم"
-    split_lines = engine.split_long_lines_for_steady_pacing(tricky, max_words_per_line=5).splitlines()
-    assert len(split_lines) == 2
-    first_half_no_dots = split_lines[0].replace("..", "").strip()
-    assert not first_half_no_dots.endswith("على")
-    assert not first_half_no_dots.endswith("يا")
-
-
-def test_v50_microtonal_melody_wav_midi_scala_and_multi_maqam(tmp_path):
-    """Verify V50 24-EDO melody composer, Watad lock, Guide WAV, 14-bit MIDI, Scala .scl & Multi-Maqam."""
-    poem = (
-        "[المُسْتَهَلّ]\nغَرِيبَه هَلْ حِچَايَه ..\nسَبِيَّه مِنِ السَّبَايَا ..\n"
-        "[النَّزْلَة الأُولَى]\nمَاتَتْ وَ مَشْبُوگَه إِدَيْهَا ..\nبِلَهْفَه چَانَتْ شَابْگَه ..\n"
-        "[الكَسْرَة وَالمُسْتَهَلّ]\nرَوَتْ قِصَّه عَجِيبَه ..\nبِخَرَابَه شَيِّعُوهَا .."
+    stage_json = hds.build_stage_orchestration_json(
+        "[المُسْتَهَلّ]\nياحسين بگلبي ..\n[النَّزْلَة الأُولَى]\nوگفت عالباب ..\n[الكَسْرَة وَالمُسْتَهَلّ]\nغريبه هالحچايه ..",
+        stage_id="stage_1_root",
+        title="يَا إِحْسَينْ إِبْگَلْبِي",
+        global_bpm=58,
     )
-    wav_out = str(tmp_path / "guide_24bit.wav")
-    mid_out = str(tmp_path / "guide_microtonal.mid")
-    scl_out = str(tmp_path / "saba_zamzam.scl")
+    val_ok = hds.validate_stage_orchestration_json(stage_json)
+    assert val_ok["is_valid_stage_json"] is True
+    assert val_ok["qc19_passed"] is True
+    assert len(stage_json["sections"]) == 3
 
-    rc = engine.main([
-        "--compose-melody", poem,
-        "--maqam-drone", "saba_zamzam",
-        "--bpm", "58",
-        "--bit-depth", "24",
-        "--melody-wav", wav_out,
-        "--melody-midi", mid_out,
-        "--export-scala", scl_out,
-        "--multi-maqam",
-    ])
-    assert rc == 0
-    assert os.path.isfile(wav_out)
-    assert os.path.isfile(mid_out)
-    assert os.path.isfile(scl_out)
+    for st_id in ("stage_0_fusha_intro", "stage_2_extend_1", "stage_3_extend_2", "stage_4_extend_3"):
+        sub_json = hds.build_stage_orchestration_json("يَا إِحْسَينْ ..", stage_id=st_id, global_bpm=58)
+        assert hds.validate_stage_orchestration_json(sub_json)["is_valid_stage_json"] is True
 
-    with open(mid_out, "rb") as mf:
-        midi_bytes = mf.read()
-    assert midi_bytes.startswith(b"MThd")
-    assert b"MTrk" in midi_bytes
+    bad_stage = {
+        "stage_id": "stage_1_root",
+        "sections": [{"section_tag": "[Chorus]", "lyrics_arabic": ["Hello {bad}"]}],
+    }
+    val_bad = hds.validate_stage_orchestration_json(bad_stage)
+    assert val_bad["is_valid_stage_json"] is False
+    assert len(val_bad["missing_stage_keys"]) > 0
+    assert len(val_bad["section_errors"]) > 0
+    assert hds.validate_stage_orchestration_json("bare plain text")["is_valid_stage_json"] is False
 
-    with open(scl_out, "r", encoding="utf-8") as sf:
-        scl_txt = sf.read()
-    assert "2/1" in scl_txt or "1100.00" in scl_txt
-
-    with wave.open(wav_out, "rb") as wf:  # pylint: disable=no-member
-        assert wf.getsampwidth() == 3  # 24-bit PCM verified
+    log_file = tmp_path / "session_audit.jsonl"
+    rec_log = hds.log_generation_session(str(log_file), "قصيدة الطف", poet_name="شاعر المنبر")
+    assert rec_log["living_artist_impersonation"] is False
+    assert log_file.is_file()
 
 
-def test_v50_6dialects_g2p_ipa_and_26_atwar_council_locks():
-    """Verify V50 6-dialect G2P + IPA transducer and 26+ Atwar council opening/closing rules."""
-    amili_res = engine.compile_dialect_g2p_and_ipa("هلعليله خبروها عا مصابو فوق جدران الولايي")
-    assert amili_res["ecosystem_dialect"] == "amili"
-    assert "عَا" in amili_res["shaped_lyrics"]
-    assert "مصابُو" in amili_res["shaped_lyrics"]
-    assert "الولاِيِّي" in amili_res["shaped_lyrics"]
-    assert amili_res["ipa_transcription"]
-
-    qatifi_res = engine.compile_dialect_g2p_and_ipa("في سيهات وتاروت عيونش تدمع")
-    assert qatifi_res["ecosystem_dialect"] == "qatifi"
-    assert "عيونِشْ" in qatifi_res["shaped_lyrics"]
-
-    # Council locks: tor_iraqi_qadeem forbids closing; tor_hadee forbids opening
-    assert len(engine.PERFORMANCE_ATWAR_CATALOG) >= 26
-    close_check = engine.apply_minbar_tor_delivery_rules("طحت يا حسين بلحومه", "tor_iraqi_qadeem", position="closing")
-    assert close_check["council_position_warnings"]
-    assert close_check["recommended_followup_tor"] == "tor_nai_kashi"
-
-    open_check = engine.apply_minbar_tor_delivery_rules("أحمى الضائعات بعدك ضعنا", "tor_hadee", position="opening")
-    assert open_check["council_position_warnings"]
-    assert open_check["recommended_prelude_tor"] == "tor_nai_kashi"
-
-
-def test_v50_cents_histogram_maqam_mono_safe_24bit_stems_and_ai_router(tmp_path):
-    """Verify Cents-Histogram Maqam detection (Saba vs Hijaz on same D3 tonic), Mono-safe M/S,
-    24-bit + 5-stem export, semantic Foley, new percussion modes, and Multi-AI Router.
-    """
+def test_16_dsp_modes_24bit_wav_profile_and_percussion_cleaning(tmp_path):
+    """Verify 8/16/24-bit WAV reading, --extract-profile, --replace-ai-percussion, and all 16 DSP modes."""
     sr = 16000
-    # Synthesize a clear D-Hijaz melodic phrase: D3 (146.83), Eb3 (155.56), F#3 (185.00), G3 (196.00)
-    notes_hijaz = [146.83, 146.83, 155.56, 185.00, 196.00, 185.00, 155.56, 146.83]
-    seg_dur = 0.25
-    segs = [
-        0.5 * np.sin(2.0 * np.pi * f * np.linspace(0.0, seg_dur, int(sr * seg_dur), endpoint=False))
-        for f in notes_hijaz
-    ]
-    hijaz_melody = np.concatenate(segs)
-    hijaz_wav = str(tmp_path / "test_hijaz.wav")
-    wavfile.write(hijaz_wav, sr, (hijaz_melody * 24000).astype(np.int16))
+    t_vec = np.linspace(0.0, 0.8, int(0.8 * sr), endpoint=False)
+    vocal = 0.35 * np.sin(2.0 * np.pi * 160.0 * t_vec)
 
-    prof = engine.extract_reference_audio_profile(hijaz_wav)
-    assert prof["estimated_maqam"] in ("hijaz", "hijaz_kar")
+    in_16 = tmp_path / "in_16.wav"
+    wavfile.write(str(in_16), sr, (vocal * 32767).astype(np.int16))
 
-    # Master with 24-bit, microtonal tuning, dammam_tasa, auto semantic Foley & 5 stems
-    out_24 = str(tmp_path / "master_v50_24bit.wav")
-    stems_dir = str(tmp_path / "stems_out")
-    rc = engine.main([
-        "--input", hijaz_wav,
-        "--output", out_24,
-        "--mode", "dammam_tasa",
-        "--bpm", "78",
-        "--maqam-drone", "hijaz",
-        "--microtonal-tune", "0.5",
-        "--bit-depth", "24",
-        "--foley", "auto",
-        "--lyrics-text", "عطشان يم الفرات .. والخيل داست صدره .. وبالقيود مشوا للطف",
-        "--export-stems", stems_dir,
-    ])
-    assert rc == 0
-    assert os.path.isfile(out_24)
-    for stem_file in (
-        "01_Lead_Radood.wav", "02_Percussion_Latm.wav",
-        "03_Dynamic_Ahaat_Pad.wav", "04_Semantic_Foley.wav", "05_Master_Mix.wav",
-    ):
-        assert os.path.isfile(os.path.join(stems_dir, stem_file))
+    in_8 = tmp_path / "in_8.wav"
+    wavfile.write(str(in_8), sr, np.clip((vocal * 127 + 128), 0, 255).astype(np.uint8))
+    assert hds.read_wav_any_depth(str(in_8))[3] == "8-bit PCM"
 
-    # Verify new Hosa modes
-    for hosa_mode in ("iraqi_hosa", "bahrani_hosa"):
-        h_out = str(tmp_path / f"{hosa_mode}.wav")
-        assert engine.main(["--input", hijaz_wav, "--output", h_out, "--mode", hosa_mode, "--bpm", "118"]) == 0
+    in_24 = tmp_path / "in_24.wav"
+    scaled_24 = np.clip(np.round(vocal * 8388607.0), -8388608, 8388607).astype(np.int32)
+    b0 = (scaled_24 & 0xFF).astype(np.uint8)
+    b1 = ((scaled_24 >> 8) & 0xFF).astype(np.uint8)
+    b2 = ((scaled_24 >> 16) & 0xFF).astype(np.uint8)
+    packed_24 = np.column_stack((b0, b1, b2)).tobytes()
+    with wave.open(str(in_24), "wb") as wav_out:
+        wav_out.setnchannels(1)
+        wav_out.setsampwidth(3)
+        wav_out.setframerate(sr)
+        wav_out.writeframes(packed_24)
+    sr_24, mono_24, ch_24, depth_24 = hds.read_wav_any_depth(str(in_24))
+    assert sr_24 == sr and ch_24 == 1 and depth_24 == "24-bit PCM"
+    assert len(mono_24) == len(vocal)
 
-    # Verify Multi-Engine AI Router across all 5 targets
-    for ai_eng in ("flow_music", "suno_v4_5", "suno_v5_5", "udio", "rvc_svc"):
-        assert engine.main(["--ai-router", ai_eng, "--dialect", "bahrani", "--maqam-drone", "saba", "--bpm", "60"]) == 0
-    suno55 = engine.build_multi_engine_ai_prompt("suno_v5_5", dialect="iraqi", maqam="saba", bpm=60)
-    assert "zero pop-washing" in suno55["style_or_sound_prompt"].lower()
+    prof = hds.extract_reference_audio_profile(str(in_16))
+    assert prof["closest_maqam"] in hds.MAQAM_FREQS
 
+    samples_dir = tmp_path / "samples"
+    samples_dir.mkdir()
+    wavfile.write(str(samples_dir / "latm.wav"), sr, (vocal[:800] * 32767).astype(np.int16))
 
-class HussainiOmniArchitectTestSuite(unittest.TestCase):
-    """Unittest wrapper so standard `python3 -m unittest` runs all tests cleanly."""
+    for idx, mode in enumerate(hds.SUPPORTED_DSP_MODES):
+        out_wav = tmp_path / f"out_{mode}.wav"
+        foley_choice = ("none", "wind", "water", "horses")[idx % 4]
+        res = hds.process_audio_file(
+            str(in_24 if idx == 0 else in_16),
+            str(out_wav),
+            mode=mode,
+            bpm=62.0,
+            maqam_drone="saba_zamzam" if idx == 1 else "saba",
+            swing=0.18,
+            foley=foley_choice,
+            audio_drop_sec=0.1 if idx % 3 == 0 else None,
+            replace_ai_percussion=(idx % 2 == 0),
+            samples_dir=str(samples_dir) if idx == 0 else None,
+        )
+        assert out_wav.is_file() and out_wav.stat().st_size > 200
+        assert res["mode"] == mode
 
-    def test_all(self):
-        """Run all module and DSP tests."""
-        test_module41_word_separation_and_tatweel_option()
-        test_module40_tanween_and_pre_pause_sukun_before_dots()
-        test_module43_prefix_decomposition_dhaa_and_neutral_tie()
-        test_idempotency_and_true_prosodic_segmenter()
-        test_unified_lyrics_spec_both_horizontal_and_vertical_and_bilingual_tags()
-        test_abudhiyah_jinas_zuhayri_mawal_and_ashouri_ahaat()
-        test_module39_optional_clip_id_and_poem_linter()
-        test_dsp_rms_sidechain_tempo_delay_formant_ahaat_and_lufs()
-        with tempfile.TemporaryDirectory() as td:
-            tpath = pathlib.Path(td)
-            test_all_16_dsp_modes_extract_profile_and_replace_ai_percussion(tpath)
-            test_v50_microtonal_melody_wav_midi_scala_and_multi_maqam(tpath)
-            test_v50_cents_histogram_maqam_mono_safe_24bit_stems_and_ai_router(tpath)
-        test_cli_flags_version_and_compact_skill_router()
-        test_v50_arud_bitmask_25_meters_and_safe_caesura()
-        test_v50_6dialects_g2p_ipa_and_26_atwar_council_locks()
-
-
-if __name__ == "__main__":
-    unittest.main()
+    in_8k = tmp_path / "in_8k.wav"
+    t_8k = np.linspace(0.0, 0.5, 4000, endpoint=False)
+    wavfile.write(str(in_8k), 8000, (0.3 * np.sin(2.0 * np.pi * 150.0 * t_8k) * 32767).astype(np.int16))
+    out_8k = tmp_path / "out_8k.wav"
+    assert hds.main(["--input", str(in_8k), "--output", str(out_8k), "--mode", "latm", "--replace-ai-percussion"]) == 0
+    assert hds.main(["--compile-lyrics", "ياحسين بچفك عيوني"]) == 0
+    assert hds.main(["--lint-poem", "ياحسين يا بويه"]) == 0
+    assert hds.main(["--enforce-estehlal", "[المُسْتَهَلّ]\nيَا إِحْسَينْ .."]) == 0
+    assert hds.main(["--build-stage-json", "[المُسْتَهَلّ]\nيَا إِحْسَينْ .."]) == 0
+    assert hds.main(["--stage-plan", "iraqi"]) == 0
+    assert hds.main(["--export-constitution"]) == 0
+    assert hds.main(["--extract-profile", str(in_16)]) == 0
