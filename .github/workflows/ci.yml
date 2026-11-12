@@ -30,7 +30,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Validate V48.5 23-File Canonical Tree, Router Budget (<=10.5KB) & Zero V50 Files
+      - name: Validate V48.5 (Rev 2) 24-File Canonical Tree, Router Budget (<=10.5KB) & Zero V50 Files
         run: |
           test -f VERSION
           test -f SKILL.md
@@ -52,6 +52,7 @@ jobs:
           test -f references/modules/module_50_crying_isolation_and_anti_12tet_firewall.md
           test -f references/modules/module_51_two_channel_routing_and_collective_estehlal.md
           test -f references/modules/module_52_dynamic_4stage_maqam_progression_and_master_prompts.md
+          test -f references/modules/module_53_per_stage_and_section_json_orchestration.md
           test -f scripts/hussaini_dsp_montage.py
           test -f tests/test_hussaini_modules.py
           ! test -f scripts/hussaini_omni_v50_extensions.py
@@ -59,7 +60,7 @@ jobs:
           ! test -f references/modules/module_50_melody_composition_and_24edo_guide_synth.md
           ! test -f references/modules/module_51_6dialects_g2p_and_25_atwar_encyclopedia.md
           ! test -f references/modules/module_52_pro_dsp_dynamic_ahaat_and_multi_ai_router.md
-          python -c "import json, pathlib; assert pathlib.Path('VERSION').read_text(encoding='utf-8').strip() == 'V48.5 OMNI-ARCHITECT'; assert pathlib.Path('SKILL.md').stat().st_size <= 10500; data = json.loads(pathlib.Path('references/hussaini_os_v48_5_constitution.json').read_text(encoding='utf-8')); assert data['protocol_metadata']['protocol_name'] == 'Hussaini_Production_Studio_OS_V48_5_OMNI_ARCHITECT'"
+          python -c "import json, pathlib; assert pathlib.Path('VERSION').read_text(encoding='utf-8').strip() == 'V48.5 OMNI-ARCHITECT (Rev 2)'; assert pathlib.Path('SKILL.md').stat().st_size <= 10500; data = json.loads(pathlib.Path('references/hussaini_os_v48_5_constitution.json').read_text(encoding='utf-8')); assert data['protocol_metadata']['protocol_name'] == 'Hussaini_Production_Studio_OS_V48_5_OMNI_ARCHITECT'; assert data['protocol_metadata']['skill_version'] == 'V48.5 OMNI-ARCHITECT (Rev 2)'"
 
       - name: Run Pylint Static Analysis
         run: |
@@ -75,6 +76,7 @@ jobs:
           python scripts/hussaini_dsp_montage.py --compile-lyrics "ياحسين يا بويه بچفك عيوني بمجلسك بگلبي عالباب العافية وسادة ريش"
           python scripts/hussaini_dsp_montage.py --lint-poem "ياحسين يا خويه شلون قلب وقلبي"
           python scripts/hussaini_dsp_montage.py --enforce-estehlal "[المُسْتَهَلّ]\nيَا إِحْسَينْ إِبْگَلْبِي .."
+          python scripts/hussaini_dsp_montage.py --build-stage-json "[المُسْتَهَلّ]\nيَا إِحْسَينْ إِبْگَلْبِي ..\n[النَّزْلَة الأُولَى]\nوُگَفِتْ إِعْلَه البَابْ .."
           python scripts/hussaini_dsp_montage.py --stage-plan iraqi
           python scripts/hussaini_dsp_montage.py --recommend-tor "يَا بُويِي إِشْحَالِكْ وَنِّتِي"
           python scripts/hussaini_dsp_montage.py --genre latmiya --maqam-drone saba --bpm 60
