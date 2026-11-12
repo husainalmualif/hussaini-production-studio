@@ -1,15 +1,15 @@
-name: Hussaini Production Studio CI (Skill & DSP Engine Validation)
+name: Hussaini Production Studio CI (V48.5 OMNI-ARCHITECT Validation)
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "v48-original" ]
   pull_request:
     branches: [ "main" ]
   workflow_dispatch:
 
 jobs:
   validate-skill-and-dsp:
-    name: Validate Skill Docs, Pylint, Unit Tests & V50.0 DSP Engine (Py ${{ matrix.python-version }})
+    name: Validate V48.5 Docs, Pylint, Unit Tests & 16-Mode DSP (Py ${{ matrix.python-version }})
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -30,12 +30,13 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Validate V50.0 Skill Structure, Router Size (<=10.5KB) & Single-Source VERSION
+      - name: Validate V48.5 23-File Canonical Tree, Router Budget (<=10.5KB) & Zero V50 Files
         run: |
           test -f VERSION
           test -f SKILL.md
           test -f README.md
           test -f requirements.txt
+          test -f references/hussaini_os_v48_5_constitution.json
           test -f references/atwar_maqamat_and_poetry_guide.md
           test -f references/radoods_and_khutaba_encyclopedia.md
           test -f references/modules/experimental_ab_evaluation_and_human_review.md
@@ -44,58 +45,48 @@ jobs:
           test -f references/modules/module_42_gireez_hosa_and_muharram_calendar.md
           test -f references/modules/module_44_studio_production_and_heavy_clips.md
           test -f references/modules/module_45_dialect_orthoepy_and_tashkeel_mastery.md
-          ! test -f references/modules/module_45_golden_larynx_and_reverse_engineering.md
           test -f references/modules/module_46_rhythm_choir_and_tor_diversity.md
           test -f references/modules/module_47_genre_taxonomy_latmiya_nasheed_ibtihalat_tawashih.md
           test -f references/modules/module_48_secrets_of_legendary_latmiyat.md
-          test -f references/modules/module_49_arud_bitmask_and_25_poetic_meters.md
-          test -f references/modules/module_50_melody_composition_and_24edo_guide_synth.md
-          test -f references/modules/module_51_6dialects_g2p_and_25_atwar_encyclopedia.md
-          test -f references/modules/module_52_pro_dsp_dynamic_ahaat_and_multi_ai_router.md
+          test -f references/modules/module_49_pure_dialect_isolation_and_iraqi_prosthetic_clusters.md
+          test -f references/modules/module_50_crying_isolation_and_anti_12tet_firewall.md
+          test -f references/modules/module_51_two_channel_routing_and_collective_estehlal.md
+          test -f references/modules/module_52_dynamic_4stage_maqam_progression_and_master_prompts.md
           test -f scripts/hussaini_dsp_montage.py
-          test -f scripts/hussaini_omni_v50_extensions.py
           test -f tests/test_hussaini_modules.py
-          SKILL_BYTES="$(wc -c < SKILL.md)"
-          echo "SKILL.md size: ${SKILL_BYTES} bytes"
-          test "$SKILL_BYTES" -le 10500
-          VER="$(tr -d '\r\n' < VERSION)"
-          grep -q "^name: hussaini-production-studio" SKILL.md
-          grep -q "$VER" SKILL.md
-          grep -q "$VER" README.md
-          grep -q "$VER" references/atwar_maqamat_and_poetry_guide.md
-          grep -q "$VER" references/radoods_and_khutaba_encyclopedia.md
+          ! test -f scripts/hussaini_omni_v50_extensions.py
+          ! test -f references/modules/module_49_arud_bitmask_and_25_poetic_meters.md
+          ! test -f references/modules/module_50_melody_composition_and_24edo_guide_synth.md
+          ! test -f references/modules/module_51_6dialects_g2p_and_25_atwar_encyclopedia.md
+          ! test -f references/modules/module_52_pro_dsp_dynamic_ahaat_and_multi_ai_router.md
+          python -c "import json, pathlib; assert pathlib.Path('VERSION').read_text(encoding='utf-8').strip() == 'V48.5 OMNI-ARCHITECT'; assert pathlib.Path('SKILL.md').stat().st_size <= 10500; data = json.loads(pathlib.Path('references/hussaini_os_v48_5_constitution.json').read_text(encoding='utf-8')); assert data['protocol_metadata']['protocol_name'] == 'Hussaini_Production_Studio_OS_V48_5_OMNI_ARCHITECT'"
 
-      - name: Lint DSP Montage, V50 Extensions & Unit Tests with Pylint
+      - name: Run Pylint Static Analysis
         run: |
-          PYTHONPATH=scripts pylint --disable=C0301,R0801,R0912,R0913,R0914,R0915,R0917 scripts/hussaini_dsp_montage.py scripts/hussaini_omni_v50_extensions.py tests/test_hussaini_modules.py
+          pylint --disable=C0301,R0912,R0913,R0914,R0915,R0917 scripts/hussaini_dsp_montage.py tests/test_hussaini_modules.py
 
-      - name: Run Unit, V50 Prosody/Melody/G2P, 24-Bit WAV & Idempotency Tests (Enforce >=70% Coverage)
+      - name: Run Pytest Unit Tests & Coverage Gate (>=75%)
         run: |
-          pytest -v --cov=scripts --cov-fail-under=70 tests/test_hussaini_modules.py
+          pytest -v --cov=scripts --cov-fail-under=75 tests/test_hussaini_modules.py
 
-      - name: Test V50.0 CLI Prosody, 6-Dialect G2P, 24-EDO Melody, Multi-AI Router & 19-Mode 24-Bit DSP Engine
+      - name: Run CLI Phonetics, Linter, Stage Plan & 16-Mode DSP Smoke Tests
         run: |
-          python scripts/hussaini_dsp_montage.py --compile-lyrics "ياحسين يا خويه شلون قلب وقلبي والصبر والجمرة ويبوفاضل بضلوعي"
+          python scripts/hussaini_dsp_montage.py --version
+          python scripts/hussaini_dsp_montage.py --compile-lyrics "ياحسين يا بويه بچفك عيوني بمجلسك بگلبي عالباب العافية وسادة ريش"
           python scripts/hussaini_dsp_montage.py --lint-poem "ياحسين يا خويه شلون قلب وقلبي"
-          python scripts/hussaini_dsp_montage.py --match-meter "جينا ننشد كربلا مضيعينها .. بيها زينب گالوا ميسرينها"
-          python scripts/hussaini_dsp_montage.py --compile-g2p "هلعليله خبروها عا مصابو من دمى نحرو شرابو" --dialect amili
-          python scripts/hussaini_dsp_montage.py --ai-router suno_v5_5 --dialect iraqi --maqam-drone saba --bpm 60
-          python scripts/hussaini_dsp_montage.py --compose-melody "غريبه هالحچايه .. سبيه من السبايا" --maqam-drone saba_zamzam --bpm 58 --bit-depth 24 --melody-wav /tmp/guide.wav --melody-midi /tmp/guide.mid --export-scala /tmp/saba_zamzam.scl --multi-maqam
-          test -s /tmp/guide.wav
-          test -s /tmp/guide.mid
-          test -s /tmp/saba_zamzam.scl
+          python scripts/hussaini_dsp_montage.py --enforce-estehlal "[المُسْتَهَلّ]\nيَا إِحْسَينْ إِبْگَلْبِي .."
+          python scripts/hussaini_dsp_montage.py --stage-plan iraqi
           python scripts/hussaini_dsp_montage.py --recommend-tor "يَا بُويِي إِشْحَالِكْ وَنِّتِي"
           python scripts/hussaini_dsp_montage.py --genre latmiya --maqam-drone saba --bpm 60
-          python -c "import numpy as np; from scipy.io import wavfile; [wavfile.write(f'/tmp/in_{sr}.wav', sr, (0.4*np.sin(2*np.pi*180.0*np.linspace(0, 1.2, int(1.2*sr), endpoint=False))*32767).astype(np.int16)) for sr in (8000, 16000, 44100, 48000)]; t44 = np.linspace(0, 1.2, int(1.2*44100), endpoint=False); sig = (0.4*np.sin(2*np.pi*180.0*t44)*32767).astype(np.int16); wavfile.write('/tmp/in_stereo.wav', 44100, np.column_stack((sig, sig)))"
+          python -c "import numpy as np; from scipy.io import wavfile; [wavfile.write(f'/tmp/in_{sr}.wav', sr, (0.4*np.sin(2*np.pi*180.0*np.linspace(0, 1.0, sr, endpoint=False))*32767).astype(np.int16)) for sr in (8000, 16000, 44100, 48000)]; sig = (0.4*np.sin(2*np.pi*180.0*np.linspace(0, 1.0, 44100, endpoint=False))*32767).astype(np.int16); wavfile.write('/tmp/in_stereo.wav', 44100, np.column_stack((sig, sig)))"
           python scripts/hussaini_dsp_montage.py --extract-profile /tmp/in_16000.wav
           for sr in 8000 16000 44100 48000; do
             python scripts/hussaini_dsp_montage.py --input "/tmp/in_${sr}.wav" --output "/tmp/out_${sr}.wav" --mode latm --bpm 60 --maqam-drone saba
             test -s "/tmp/out_${sr}.wav"
           done
-          python scripts/hussaini_dsp_montage.py --input /tmp/in_stereo.wav --output /tmp/out_stereo.wav --mode dammam_tasa --bpm 80 --bit-depth 24 --microtonal-tune 0.45 --foley auto --lyrics-text "عطشان يم الفرات والخيل داست صدره" --export-stems /tmp/stems_out
+          python scripts/hussaini_dsp_montage.py --input /tmp/in_stereo.wav --output /tmp/out_stereo.wav --mode bandari --bpm 88 --swing 0.22 --maqam-drone kurd
           test -s /tmp/out_stereo.wav
-          test -s /tmp/stems_out/05_Master_Mix.wav
-          for mode in latm heavy_clip thaqeel_muwazza studio_arranged bahrani_fast bahrani_thulathi bahrani_rubai bahrani_haidari bahrani_waqfa bahrani_muthakkal zanjeel_iraqi zanjeel_bahrani dammam_tasa iraqi_hosa bahrani_hosa shoor bandari mawal nai; do
-            python scripts/hussaini_dsp_montage.py --input /tmp/in_16000.wav --output "/tmp/test_out_${mode}.wav" --mode "$mode" --bpm 66 --maqam-drone nahawand --foley wind --audio-drop-sec 0.2 --replace-ai-percussion
+          for mode in latm heavy_clip thaqeel_muwazza studio_arranged bahrani_fast bahrani_thulathi bahrani_rubai bahrani_haidari bahrani_waqfa bahrani_muthakkal zanjeel_iraqi zanjeel_bahrani shoor bandari mawal nai; do
+            python scripts/hussaini_dsp_montage.py --input /tmp/in_16000.wav --output "/tmp/test_out_${mode}.wav" --mode "$mode" --bpm 60 --maqam-drone saba_zamzam --foley wind --audio-drop-sec 0.2 --replace-ai-percussion
             test -s "/tmp/test_out_${mode}.wav"
           done
