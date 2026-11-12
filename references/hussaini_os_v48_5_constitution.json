@@ -1,0 +1,751 @@
+{
+  "protocol_metadata": {
+    "protocol_name": "Hussaini_Production_Studio_OS_V48_5_OMNI_ARCHITECT",
+    "skill_version": "V48.5 OMNI-ARCHITECT",
+    "previous_baseline_version": "V48.0 OMNI-ARCHITECT",
+    "previous_baseline_commit_sha": "9e7ec61081e7ae0af96858ccd761f74165f4a3ad",
+    "canonical_repository": "https://github.com/husainalmualif/hussaini-production-studio",
+    "primary_studio_url": "https://www.flowmusic.app/",
+    "target_engines": [
+      "Google Flow Music (Lyria 3.5)",
+      "Local 5-Track SOS/RMS/LUFS DSP Montage Engine (scripts/hussaini_dsp_montage.py)",
+      "Suno / Udio (with acoustic firewall adaptation)"
+    ],
+    "session_mode": "Pre_Conditioning_Lock_Only_Wait_For_Step_2_Lyrics",
+    "system_context_directive": "Read and lock this V48.5 OMNI-ARCHITECT JSON constitution in active session memory as the strict operating protocol for all tracks in this session. Enforce 24-EDO Eastern Maqam microtonality, 100% pure single-dialect vocal tract isolation, collective unison Raddada choir on all (...) Estehlal lines, and zero background crying clutter in rhythmic Latmiyas. Parse all JSON keys silently in Producer Chat and pass ONLY pure vocalized Arabic lines and Arabic section headers to lyrics__register. Acknowledge rule lock first and wait for Step 2."
+  },
+  "1_flowmusic_studio_session_and_ui_protocol_modules_39_51": {
+    "project_isolation_rule": "One New Poem = One New Session (https://www.flowmusic.app/session | a[href='/session']). Never generate a new poem inside a previous poem's session, and isolate 0 BPM Fusha Minbar Na'i intros in their own separate session.",
+    "two_channel_json_vs_ui_routing_module_51": {
+      "channel_1_producer_chat": "Send session pre-conditioning JSON and per-stage orchestration JSON strictly inside Producer Chat (textarea[aria-label='Chat message']).",
+      "channel_2_compose_panel": "Paste exact English 'sound_description' into Sound and pure vocalized Arabic lines into Lyrics. NEVER paste inline JSON braces ('{...}') inside the Compose Panel Lyrics box to prevent RTL bracket corruption and English vocal readout."
+    },
+    "mandatory_collective_estehlal_rule_module_51": {
+      "rule": "Every [المُسْتَهَلّ] section—at opening, between stanzas, and in the final 4 lines of [الكَسْرَة وَالمُسْتَهَلّ]—must be sung 100% EXCLUSIVELY by the wide unison male Raddada congregation choir (zero solo Radood lead).",
+      "orthographic_lock": "Wrap every single hemistich of [المُسْتَهَلّ] in parentheses '(...)' before '..', while keeping all [النَّزْلَة ...] and solo Kasra lines unwrapped."
+    },
+    "four_step_execution_sequence": {
+      "step_1_producer_preconditioning": "Send this JSON constitution in Producer Chat (textarea[aria-label='Chat message']) at the start of a New session and wait for Producer acknowledgment.",
+      "step_2_direct_compose_panel": {
+        "sidebar_viewport_rule": "Close left sidebar (button[aria-label='Close sidebar']) and open Compose panel (button[aria-label='Toggle compose panel']).",
+        "instrumental_switch": "Strictly OFF (button[role='switch'][aria-label='Toggle instrumental mode']).",
+        "lyrics_field": "Pure vocalized Arabic text only in textarea[aria-label='Lyrics'] with Arabic section headers ([المُسْتَهَلّ], [النَّزْلَة الأُولَى], [الكَسْرَة وَالمُسْتَهَلّ]), '(...)' around all Estehlal choir lines, and '..' hemistich pauses. Zero Latin characters and zero JSON syntax.",
+        "sound_field": "Pure concise English acoustic prompt (45-56 words) in textarea[aria-label='Sound description'].",
+        "details_title_field": "Clean Arabic poem title in Details (textarea[maxlength='100']).",
+        "candidate_selection": "Click Generate -> evaluate A/B candidates -> CHOOSE / Keep Both."
+      },
+      "step_3_remix_suite": {
+        "extend": "Use Remix > Extend exclusively to add subsequent stanzas while preserving exact Radood voice and BPM, updating the Sound prompt per stage along the Common Jins Maqam arc (Module 52).",
+        "trim": "Use Remix > Trim to cut before any late-track drift (e.g., 1:27), then Remix > Extend from that clean timestamp.",
+        "replace": "Use Remix > Replace (inpainting) to repair single-word pronunciation by adjusting Tashkeel in Edit Lyrics without regenerating the full track.",
+        "split_stems": "Use Split stems (Vocals, Drums, Bass, Other) to feed pure vocals into scripts/hussaini_dsp_montage.py."
+      },
+      "step_4_post_generation_dsp": "Apply EQ, compression, hall reverb, and -1.0dB limiter via Producer Chat (audio__apply_effect) AFTER generation, never as raw numbers inside the Sound prompt."
+    },
+    "optional_reference_clip_id": null,
+    "reference_clip_policy": "Keep null by default to prevent cross-poem melody cloning and cross-account UUID errors; set to an account-owned <OPTIONAL_USER_CLIP_UUID> only when explicitly anchoring to a personal library clip."
+  },
+  "2_cultural_firewall_crying_isolation_and_genre_taxonomy_modules_44_47_50": {
+    "permitted_latmiya_sound_sources": [
+      "Commanding deep resonant Jawhari Baritone lead vocal (cello-like chest warmth, natural laryngeal rasp, passionate 24-EDO microtonal melisma, powerful high chest-voice climbs)",
+      "Wide unison male Raddada congregation choir response (80% stereo width, Jawab & Qarar octave unison)",
+      "Organic 55Hz bare-palm human chest thud + crisp 2.4kHz palm slap (Latm) with Matam congregation breath",
+      "Wordless pharyngeal human Ahaat vocal drone synthesized/mixed locally in post-production DSP (Rosenberg glottal pulse + F1=730Hz, F2=1090Hz, F3=2440Hz formants, ducked -3.0dB)",
+      "Acoustic Dammam drum, brass Tasa cymbals, and metallic shoulder Zanjeel chains ONLY when Zanjeel/Bandari Mawkib mode is explicitly requested"
+    ],
+    "strictly_forbidden_song_and_12tet_leakage_blacklist_in_latmiya_sound_prompt": [
+      "piano",
+      "guitar",
+      "strings",
+      "oud",
+      "violin",
+      "synth",
+      "808",
+      "trap",
+      "studio-arranged",
+      "studio-mixed",
+      "arranged studio",
+      "humming",
+      "pads",
+      "sub-bass",
+      "groove",
+      "bandari",
+      "harmonic",
+      "dammam",
+      "syncopated",
+      "tenor",
+      "reciter",
+      "spoken",
+      "wailing",
+      "screaming",
+      "tear-choked",
+      "emotional weep cracks",
+      "weeping",
+      "sobbing",
+      "majlis cries",
+      "legato phrasing",
+      "wordless pharyngeal Ahaat vocal drone",
+      "calm",
+      "serene",
+      "bahha",
+      "tarjee'",
+      "maddat sawtiya",
+      "taqatee'",
+      "--no piano"
+    ],
+    "crying_and_weeping_isolation_protocol_module_50": {
+      "rhythmic_latmiya_54_to_132_bpm": "Strictly zero crying, sobbing, or crowd weeping descriptors in Sound prompts so background clutter never overlaps active Radood articulation; generate deep grief exclusively through 24-EDO Maqam intervals, 'natural vocal rasp', 'passionate microtonal melisma', and 'prolonged microtonal vowel elongations'.",
+      "minbar_nai_0_bpm_rubato_only": "Place controlled, dignified Husseini weeping cracks EXCLUSIVELY in isolated 0 BPM Rubato Minbar Na'i tracks, strictly on phrase-ending vowel tails before '..' after consonants are 100% articulated."
+    },
+    "mandatory_latmiya_closing_lock": "Pure Acapella No Instruments",
+    "three_studio_production_tiers_module_44": {
+      "tier_1_pure_heritage_acapella": "Center dry-forward Jawhari Baritone Radood + stereo layered human chest Latm (55Hz) + wide unison male Raddada congregation choir in Husseiniya dome reverb.",
+      "tier_2_conservative_vocal_synth": "Human vocal-synth Ahaat pad generated locally via scripts/hussaini_dsp_montage.py using Rosenberg glottal pulses & formant resonators (never writing 'strings', 'synth', or 'Ahaat vocal drone' in Flow Music Sound prompt).",
+      "tier_3_heavy_studio_clips_60_75_bpm": "Local 5-track DAW montage: double-layered 54Hz chest thud + 1.8-3.2kHz palm snap + beat-synced 44Hz human sub-bass hum + 3D soundstage (100% center dry vocal, +-85% L/R choir with Husseiniya IR, -3.0dB sidechain ducking) + dramatic 3.0s Audio Drop."
+    },
+    "four_religious_vocal_genres_module_47": {
+      "latmiya": {
+        "bpm_range": "54-132 BPM (58-60 BPM optimal Thaqeel sweet spot; 0 BPM for Minbar Na'i)",
+        "uses_chest_latm": true,
+        "primary_maqamat": [
+          "saba",
+          "saba_zamzam",
+          "lami",
+          "bayati",
+          "hijaz",
+          "kurd"
+        ],
+        "choir_style": "Unison male congregation Raddada (zero Western harmonic pads)"
+      },
+      "nasheed": {
+        "bpm_range": "78-110 BPM",
+        "uses_chest_latm": false,
+        "primary_maqamat": [
+          "bayati",
+          "rast",
+          "nahawand",
+          "ajam",
+          "kurd"
+        ],
+        "choir_style": "Harmonic multi-layered male Nasheed choir with frame drum (Daf)"
+      },
+      "ibtihalat": {
+        "bpm_range": "0 BPM Free-Tempo Rubato",
+        "uses_chest_latm": false,
+        "primary_maqamat": [
+          "saba",
+          "rast",
+          "sikah",
+          "bayati",
+          "hijaz"
+        ],
+        "choir_style": "Pure solo Mubtahil vocal with spacious Mosque reverb"
+      },
+      "tawashih": {
+        "bpm_range": "68-84 BPM Measured Classical Muwashah",
+        "uses_chest_latm": false,
+        "primary_maqamat": [
+          "hijaz",
+          "bayati",
+          "rast",
+          "nahawand",
+          "saba"
+        ],
+        "choir_style": "Antiphonal call-and-response between solo Munshid and unison Bitanah ensemble"
+      }
+    }
+  },
+  "3_arabic_phonetics_and_pure_dialect_isolation_compiler_modules_40_41_43_45_49": {
+    "pure_dialect_vocal_tract_isolation_module_49": {
+      "core_law": "Never mix Classical Arabic (Fusha) vowels, case endings, or prepositions with colloquial dialect, and never mix Iraqi and Bahrani dialect markers inside a single-dialect poem.",
+      "sound_prompt_dialect_declaration": {
+        "pure_iraqi_poem": "authentic Iraqi colloquial dialect",
+        "pure_bahrani_poem": "authentic Bahrani colloquial dialect",
+        "explicit_dual_fusion_poem": "authentic Iraqi and Bahrani colloquial dialect",
+        "fusha_minbar_intro": "authentic Arabic recitation (isolated in separate 0 BPM session)"
+      }
+    },
+    "zero_word_initial_sukun_and_prosthetic_cluster_rules": {
+      "general_epenthetic_vowel_rule": "Never place Sukun (ْ) on the first letter of any word. Repair plain initial consonant clusters with soft colloquial vowels.",
+      "plain_epenthetic_examples": {
+        "دموع": "دُمُوعْ",
+        "جروح": "جُرُوحْ",
+        "متوني": "مِتُونِي",
+        "سنيني": "سِنِينِي",
+        "سكينه": "سِكِينَه",
+        "تگله": "تِگِلَّه",
+        "تسولف": "تِسُولِفْ",
+        "هموم": "هُمُومْ"
+      },
+      "mandatory_iraqi_prosthetic_clusters_module_49": {
+        "rule": "Use prosthetic Kasra Alif ('إِ') + closed consonant Sukun on Iraqi labial/pharyngeal/velar clusters to block Fusha damma/kasra injection ('ḥu-', 'bi-', ''u-') and enforce crisp palatal '/j/' constriction.",
+        "mappings": {
+          "بچفك": "إِبْچَفَّكْ (/ɪb.tʃaf.fak/)",
+          "عيوني": "إِعْيُونِي (/ɪʕ.juː.niː/ - prevents slurred 'ūnī)",
+          "عيونك": "إِعْيُونَكْ (/ɪʕ.juː.nak/)",
+          "حسين": "إِحْسَينْ (/ɪħ.seːn/ - prevents Fusha ḥusayn)",
+          "بمجلسك": "إِبْمَجْلِسَكْ (/ɪb.madʒ.lɪ.sak/)",
+          "بگلبي": "إِبْگَلْبِي (/ɪb.gal.biː/)",
+          "بگاع": "إِبْگَاعْ (/ɪb.gaːʕ/)",
+          "خيام": "إِخْيَامْ (/ɪx.jaːm/)",
+          "بهداي": "إِبْهِدَايْ (/ɪb.hɪ.daːj/)",
+          "بعفه": "إِبْعِفَّه"
+        },
+        "heritage_iraqi_prosthetic_alif": [
+          "إِتْبَشْرِي",
+          "إِمْوَذَّرْ",
+          "إِزْمَاطِي",
+          "إِچْفُوفْ",
+          "إِيْرَامُونْ",
+          "إِحْجَارْ",
+          "إِحْلُوگْ",
+          "إِنْيَاگْ"
+        ]
+      }
+    },
+    "syncopated_nouns_constructs_and_diphthong_madd_locks_module_49": {
+      "syncopated_iraqi_feminine_nouns": {
+        "rule": "Silence medial consonant before '-ya / -ḥa' to prevent Fusha 4-syllable expansion.",
+        "examples": {
+          "العافية": "العَافْيَه",
+          "حافية": "حَافْيَه",
+          "فاتحة": "فَاتْحَه"
+        }
+      },
+      "phonetic_colloquial_construct_state": {
+        "rule": "Write construct Taa Marbuta as phonetic 'تْ' without Fusha genitive kasra '-ti'.",
+        "examples": {
+          "وسادة ريش": "وِسَادَتْ رِيشْ",
+          "دنية خير": "دِنْيَتْ خَيرْ"
+        }
+      },
+      "diphthongs_and_boundary_sukun_locks": {
+        "rule": "Leave medial glide letters (ي, و) unmarked inside diphthongs to prevent abrupt Madd gating, and lock a single crisp Sukun (ْ) on closed word-final consonants before spaces or '..' to block cross-word slurring and Fusha case endings.",
+        "examples": [
+          "إِحْسَينْ",
+          "خَيرْ",
+          "زَينْ",
+          "وَينْ",
+          "بَينْ",
+          "زَينَبْ",
+          "رَادَوْ",
+          "مِشَوْ",
+          "بَسْ إِمْسَحْ",
+          "أَبُوكْ إِحْسَينْ"
+        ]
+      },
+      "colloquial_particles_participles_and_homographs": {
+        "على_iraqi": "إِعْلَه",
+        "على_bahrani": "عَلَه",
+        "واو_العطف_الدارجة": "وِعَرِّفْنِي / وِيْبَانْ / وِحُطْ / وِرَاوِينِي (Kasra liaison before consonants; 'وَ آنَه' before open Alif)",
+        "اسم_الفاعل_الدارج": "يَالمِطِّينِي / مِطِّينِي / يَالمِفَارِگَكْ (Colloquial 'mi-', never Fusha 'mu-')",
+        "الموصولة_العراقية": "إِلْ مِثِلْ زَينَبْ (Separated so model reads 'il-mithil', never 'al-mithil')",
+        "منع_لبس_الرسم": "وَادِمْ (for 'وآدم' meaning people, preventing misreading as 'آدَم')"
+      }
+    },
+    "open_feminine_haa_without_sukun_rule": {
+      "rule": "Always write word-final feminine Haa/Taa Marbuta (ه) open WITHOUT Sukun so Lyria pronounces a soft colloquial /-a/ instead of an aspirated '-HHH'.",
+      "examples": [
+        "غَرِيبَه",
+        "حِچَايَه",
+        "خَرَابَه",
+        "سَبِيَّه",
+        "عَلَوِيَّه",
+        "صَوَانِيَّه",
+        "تَرْجِيَّه",
+        "سَكْتَه",
+        "عَمْتَه",
+        "إِلَّه",
+        "يُمَّه",
+        "بُويَه",
+        "خُويَه"
+      ]
+    },
+    "anti_slurring_word_de_cliticization_module_41": {
+      "default_tatweel_mode": false,
+      "vocatives": {
+        "ياحسين": "يَا إِحْسَينْ",
+        "يبوفاضل": "يَا بُو فَاضِلْ",
+        "يبو السجاد": "يَا بُو السَّجَّادْ",
+        "يزينب": "يَا زَينَبْ",
+        "يم البنين": "يَا أُمّ البَنِينْ"
+      },
+      "prepositions_and_demonstratives": {
+        "عالباب": "إِعْلَه البَابْ",
+        "عالرمضا": "إِعْلَه الرَّمْضَه",
+        "عالجمر": "إِعْلَه الجَمُرْ",
+        "للشام": "لِلشَّامْ (keep sun-letter assimilation attached)",
+        "هالحچايه": "هَلْ حِچَايَه",
+        "هالمسيه": "هَلْ مَسِيَّه",
+        "هالگفره": "هَلْ گُفْرَه"
+      },
+      "iraqi_interrogatives_and_gaf_normalization": {
+        "شصار": "إِشْ صَارْ",
+        "شنگول": "إِشْ نْگُولْ",
+        "شحچي": "إِشْ أَحْچِي",
+        "اشلون": "إِشْلُونْ",
+        "شيصير": "شِيصِيرْ",
+        "شيجيبه": "شِيجِيبَه",
+        "اشگد": "إِشْگَدْ",
+        "يفگدله": "يِفْگِدْلَه",
+        "كَـ_orthographic": "گ (إِشْگَدْ، گُوَّه، أَشْهَگْ، گِدَّامِي، فُوگِي، إِبْگَاعْ)",
+        "first_person_pronoun": "آنَه / وَ آنَه"
+      }
+    },
+    "dialectal_and_prosodic_tanween_compiler_module_40": {
+      "colloquial_mid_line_tanween": "Convert '-ٍ' to '-ِنْ' and vocalize imperfect verb prefix with Kasra (عينٍ تسيل -> عَينِنْ تِسِيلْ، جرحٍ چبير -> جَرْحِنْ چِبِيرْ، عذراً -> عِذْرَنْ).",
+      "fusha_mid_line_and_pause_tanween": "Convert mid-line Tanween phonetically (أماناً يا -> أَمَانَنْ يَا، مستمسكاً بيدي -> مُسْتَمْسِكَنْ بِيَدِي); convert pause '-اً' to '-َا' (ظَامِئَا) and drop '-ٌ/-ٍ' to Sukun (ْ).",
+      "pre_pause_sukun_placement": "Place end-of-hemistich Sukun (ْ) on closed final consonants BEFORE '..', never on open feminine Haa ('ـه') and never after '..'."
+    },
+    "dialect_schools_comparison_and_articulation_module_43": {
+      "bahrani_school": {
+        "markers": [
+          "بُويِي",
+          "خُويِي",
+          "وِنِّتِي",
+          "هَلْ گُفْرَه",
+          "إِمْسَاعَدْ",
+          "إِشْحَالِكْ",
+          "إِشْحَالِشْ",
+          "لَچِنْ",
+          "الرَّاعِبِيَّه",
+          "هَلْ مَسِيَّه",
+          "عَلَه"
+        ],
+        "cvc_medial_vowels": [
+          "گَلِبْ",
+          "صَبِرْ",
+          "دَرِبْ",
+          "گَبِرْ",
+          "جَمِرْ",
+          "حَرِبْ"
+        ],
+        "dhad_articulation": "Standard/Bahrani Dhad (ض: فَاضِلْ، ضْلُوعِي، ضَايِعْ)",
+        "maqam_articulation": "Soft Bahrani Imala on open vowels + signature 3rd-word Faizi microtonal throat vibrato + gentle Bahrani Wannah cadence."
+      },
+      "iraqi_karbalai_euphrates_school": {
+        "markers": [
+          "بُويَه",
+          "خُويَه",
+          "يُمَّه",
+          "وْلِيدِي",
+          "دَلَّالِي",
+          "إِشْلُونْ",
+          "شِيصِيرْ",
+          "بْلَيَّاكْ",
+          "مَا ظَلْ",
+          "هَلْ حِچَايَه",
+          "مَشْبُوگَه",
+          "تِشْتَاگْ",
+          "إِعْلَه"
+        ],
+        "cvc_medial_vowels": [
+          "گَلُبْ",
+          "صَبُرْ",
+          "جَمُرْ",
+          "دَرُبْ",
+          "گَبُرْ",
+          "حَرُبْ",
+          "چَبِدْ",
+          "عِشِگْ",
+          "حِزِنْ"
+        ],
+        "dhad_articulation": "Emphatic Iraqi Euphrates Dhaa (ظ: مَا ظَلْ، وِظَايِعْ، بْظْلُوعِي)",
+        "maqam_articulation": "Deep Iraqi emphatic Tafkheem on open Alif (طَاحْ، رَاحْ، المَايْ، الشَّامْ) + soaring Jawab chest climb + Euphrates Maqam Lami descending cadence."
+      },
+      "iraqi_bahrani_neutral_fusion": {
+        "cvc_medial_vowels": [
+          "قَلْبِي",
+          "صَبْرِي",
+          "جَمْرَه",
+          "دَمْعِي",
+          "وِنَّه",
+          "ضُلُوعِي",
+          "فَاضِلْ"
+        ],
+        "maqam_articulation": "Faizi 3rd-word microtonal vibrato fused with Karbalaei Qarar cadence in Maqam Saba/Bayati."
+      }
+    }
+  },
+  "4_legendary_latmiya_architecture_meters_and_atwar_modules_38_42_46_48_52": {
+    "five_golden_pillars_module_48": {
+      "pillar_1_estehlal_hook": "4 short vertical hemistichs (3-4 words / 6-8 syllables per line) wrapped in '(...)' for 100% unison Raddada choir delivery with natural open Madd vowels.",
+      "pillar_2_dramatic_scene_embodiment": "Vivid first-person dramatic embodiment grounded in authentic Maqtal sources.",
+      "pillar_3_unified_3_part_golden_architecture": {
+        "total_vertical_lines": 20,
+        "section_1_estehlal": {
+          "tag": "[المُسْتَهَلّ]",
+          "lines": 4,
+          "performer": "100% Unison Male Raddada Choir wrapped in '(...)'",
+          "register": "Qarar & Jawab octave unison"
+        },
+        "section_2_nazla": {
+          "tag": "[النَّزْلَة الأُولَى]",
+          "lines": 8,
+          "performer": "Solo Jawhari Baritone Radood (unwrapped lines)",
+          "register": "Lines 1-4 Mayan/Qarar -> Lines 5-8 soaring Jawab climb (zero mid-verse '(...)' interruptions)"
+        },
+        "section_3_kaser_and_estehlal": {
+          "tag": "[الكَسْرَة وَالمُسْتَهَلّ]",
+          "lines": 8,
+          "structure": "4 unwrapped solo Maqam Lami Kasra lines + 4 '(...)' wrapped unison Raddada Estehlal lines returning to Qarar tonic"
+        },
+        "strictly_forbidden_section_tags": [
+          "[Bridge]",
+          "[Pre-Chorus]",
+          "[Chorus]",
+          "[Verse]"
+        ],
+        "parentheses_rule": "Reserve (...) strictly for sung unison Raddada congregation lines, never stage directions"
+      },
+      "pillar_4_theme_to_tor_and_bpm_alignment": [
+        {
+          "theme": "نعي وفجيعة ومناجاة وجدانية ثقيلة",
+          "tor": "طور النزلة الكربلائية الثقيلة واللامي الفراتي",
+          "maqam_arc": "Bayati & Saba -> Lami Rukbani -> Saba Zamzam & Hijaz Jawab -> Lami Qafla",
+          "bpm": 60
+        },
+        {
+          "theme": "دمج عراقي-بحراني عاشورائي فخم",
+          "tor": "طور الفايزي والنزلة الثقيلة",
+          "maqam_arc": "Saba Qarar -> Saba/Bayati Jawab -> Saba Qarar",
+          "bpm": 58
+        },
+        {
+          "theme": "غربة وعتاب وسفر السبايا",
+          "tor": "طور الركباني والنصاري الكربلائي",
+          "maqam_arc": "Lami & Bayati Wasat -> Saba/Hijaz Jawab -> Lami Kasra",
+          "bpm": 64
+        },
+        {
+          "theme": "فخر بالخدمة الحسينية وولاء موكبي",
+          "tor": "طور الدرج الموكبي والمشاية",
+          "maqam_arc": "Bayati -> Hijaz Jawab -> Bayati Qarar",
+          "bpm": 74
+        },
+        {
+          "theme": "رثاء وتوشيح ووقفة بحرانية",
+          "tor": "طور التوشيح والوقفة الفائزية البحرانية",
+          "maqam_arc": "Hijaz & Bayati -> Saba Faizi Jawab -> Hijaz Waqfa",
+          "bpm": 84
+        }
+      ],
+      "pillar_5_stage_1_iso_syllabic_lock": "All Stage-1 hemistichs must maintain uniform prosodic syllable counts (max spread <= 3); isolate Fusha intros in a separate 0 BPM session and defer polymetric Gireez/Shoor transitions to Remix > Extend."
+    },
+    "dynamic_4_stage_maqam_and_atwar_progression_module_52": {
+      "stage_0_optional_fusha_minbar_intro": "Separate 0 BPM Rubato session on Maqam Saba (exclusive home for phrase-ending weeping).",
+      "stage_1_root_track_60bpm": "Heavy Karbalai Nazla on Maqam Bayati & Saba locking Jawhari Baritone voice, unison Raddada choir, and 60 BPM pulse.",
+      "stage_2_extend_1_60bpm": "Common Jins modulation into Euphrates Maqam Lami & Bayati (Rukbani/Nassari phrasing).",
+      "stage_3_extend_2_climax_60bpm": "Dramatic Karbalai Jawab peak on Maqam Saba Zamzam & High Hijaz.",
+      "stage_4_extend_3_finale_58bpm": "Solemn Maqam Lami Kasra resolution and gradual Raddada congregation fade-out."
+    },
+    "poetic_meters_vs_performance_atwar_module_46": {
+      "poetic_meters_wazn": {
+        "nassari": {
+          "rhyme": "AAAB",
+          "syllables": [7, 9],
+          "compatible_atwar": [
+            "tor_nai_kashi",
+            "tor_ashouri",
+            "tor_rukbani",
+            "tor_janoubi",
+            "tor_zaarijawi",
+            "tor_muthakkal",
+            "tor_darj_karbalai"
+          ]
+        },
+        "faizi": {
+          "rhyme": "AAAB / AABB",
+          "syllables": [8, 11],
+          "compatible_atwar": [
+            "tor_faizi_bahrani",
+            "tor_muthakkal_bahrani",
+            "tor_tawshih_bahrani",
+            "tor_waqfa_bahrani"
+          ]
+        },
+        "mujarradat": {
+          "rhyme": "AAAA",
+          "syllables": [7, 9],
+          "compatible_atwar": [
+            "tor_nai_mujarrad",
+            "tor_ashouri",
+            "tor_muthakkal",
+            "tor_mullai"
+          ]
+        },
+        "abudhiyah": {
+          "rhyme": "3 homophonous Jinas lines + 4th ending in -يَّه",
+          "syllables": [10, 12],
+          "compatible_atwar": [
+            "tor_lami_iraqi",
+            "tor_huwaizawi",
+            "tor_zaarijawi",
+            "tor_shushtari",
+            "tor_nayli"
+          ]
+        },
+        "zuhayri_mawal": {
+          "rhyme": "7 lines (AAA B AAA or AAA BBB A with 4th-line Arq pivot)",
+          "syllables": [11, 14],
+          "compatible_atwar": [
+            "tor_mawal_iraqi",
+            "tor_rukbani",
+            "tor_dashti",
+            "tor_kashi"
+          ]
+        },
+        "rukbani": {
+          "rhyme": "AAAB / ABCB",
+          "syllables": [6, 8],
+          "compatible_atwar": [
+            "tor_rukbani",
+            "tor_hadi",
+            "tor_darj_karbalai",
+            "tor_ashouri"
+          ]
+        },
+        "muwashah": {
+          "rhyme": "Multi-stanza with unified Lazima",
+          "syllables": [6, 10],
+          "compatible_atwar": [
+            "tor_tawshih_bahrani",
+            "tor_bahrani_thulathi",
+            "tor_bahrani_rubai",
+            "tor_bahrani_haidari",
+            "tor_darj_karbalai"
+          ]
+        },
+        "iraqi_hosa": {
+          "rhyme": "3+1 Arjooza (AAA fast delivery + B 115-130 BPM crowd Ribat)",
+          "syllables": [7, 10],
+          "compatible_atwar": [
+            "tor_hosa_iraqi"
+          ]
+        }
+      },
+      "bahrani_heritage_modes": {
+        "bahrani_muthakkal": {
+          "bpm": 56,
+          "maqam": "saba",
+          "pattern": "Slow dignified grief with microtonal Bahrani Wannah cadence at hemistich end"
+        },
+        "faizi_bahrani": {
+          "bpm": 62,
+          "maqam": "hijaz",
+          "pattern": "Steady opening -> elongated 3rd-word microtonal vibrato -> final Wannah"
+        },
+        "bahrani_rubai": {
+          "bpm": 72,
+          "maqam": "bayati",
+          "pattern": "3 balanced Mawkib strikes + 4th heavy anchor strike with Antiphonal Faujain"
+        },
+        "bahrani_thulathi": {
+          "bpm": 76,
+          "maqam": "bayati",
+          "pattern": "2 close chest strikes (Dum-Dum) + 3rd deep strike + 4th-beat breath rest"
+        },
+        "bahrani_haidari": {
+          "bpm": 96,
+          "maqam": "hijaz",
+          "pattern": "Epic driving chest strikes for Abbasid/heroic elegies"
+        },
+        "bahrani_waqfa": {
+          "bpm": 104,
+          "maqam": "saba",
+          "pattern": "Climactic stationary Mawkib Tajneeza with Antiphonal Dual-Choir ([الفَوْج الأَوَّل] / [الفَوْج الثَّانِي])"
+        }
+      },
+      "interactive_ashouri_rule": "Append '.. (آه .. آه) ..' after couplets so the reciter cuts cleanly leaving a 1.5s congregation response gap."
+    },
+    "24_edo_maqam_frequencies_hz_and_common_jins_graph": {
+      "tuning_system": "24-EDO Arabic Microtonal Quarter-Tones (Zero 12-TET Robotic Auto-Tune)",
+      "maqam_drone_frequencies_hz": {
+        "bayati": [146.83, 160.0, 174.61, 220.0],
+        "saba": [146.83, 160.0, 174.61, 207.65],
+        "hijaz": [146.83, 155.56, 185.0, 220.0],
+        "lami": [146.83, 155.56, 174.61, 207.65],
+        "kurd": [146.83, 155.56, 174.61, 220.0],
+        "rast": [130.81, 146.83, 160.0, 196.0],
+        "nahawand": [146.83, 164.81, 174.61, 220.0],
+        "sikah": [160.0, 174.61, 196.0, 220.0]
+      },
+      "common_jins_compatible_transitions": {
+        "bayati": ["saba", "kurd", "hijaz", "lami", "sikah"],
+        "saba": ["bayati", "lami", "hijaz", "rast"],
+        "hijaz": ["bayati", "saba", "kurd", "sikah"],
+        "lami": ["saba", "bayati", "kurd"],
+        "kurd": ["bayati", "lami", "hijaz"],
+        "rast": ["saba", "bayati", "hijaz", "sikah"],
+        "sikah": ["bayati", "hijaz", "rast", "saba"]
+      }
+    },
+    "muharram_and_safar_10_nights_compass_module_42": {
+      "nights_1_to_3_muharram": {
+        "theme": "هلال محرم ومسير الركب والورود لكربلاء",
+        "maqam": "Hijaz & Bayati",
+        "bpm": "60-68 BPM"
+      },
+      "nights_4_and_5_muharram": {
+        "theme": "مسلم بن عقيل (ع) والحر الرياحي",
+        "maqam": "Bayati & Rast",
+        "bpm": "58-64 BPM"
+      },
+      "night_6_muharram": {
+        "theme": "حبيب بن مظاهر وأنصار الحسين (ع)",
+        "maqam": "Bayati & Hijaz",
+        "bpm": "68-76 BPM"
+      },
+      "night_7_muharram": {
+        "theme": "أبو الفضل العباس (ع)",
+        "maqam": "Hijaz & Rast (Stage 1: 80-105 BPM) -> Saba & Lami (Stage 2: 58 BPM)"
+      },
+      "night_8_muharram": {
+        "theme": "القاسم بن الحسن (ع)",
+        "maqam": "Kurd, Bayati & Saba",
+        "bpm": "60 BPM or 88 BPM"
+      },
+      "night_9_muharram": {
+        "theme": "علي الأكبر (ع)",
+        "maqam": "Kurd, Saba & Lami",
+        "bpm": "58-62 BPM"
+      },
+      "night_10_ashura": {
+        "theme": "عبد الله الرضيع (ع) والمصرع الأعظم",
+        "maqam": "Pure Saba, Saba Zamzam & Lami",
+        "bpm": "58-60 BPM Thaqeel / 132 BPM Shoor"
+      },
+      "night_11_wahsha": {
+        "theme": "السيدة زينب (ع) وليلة الوحشة",
+        "maqam": "Lami & Saba",
+        "bpm": "0 BPM Rubato Minbar Na'i or 58 BPM Solemn Lami"
+      },
+      "arbaeen_mashaya": {
+        "theme": "مسير السبايا وجابر الأنصاري والمشاية",
+        "maqam": "Bayati, Sikah & Hijaz",
+        "bpm": "72-84 BPM"
+      }
+    }
+  },
+  "5_master_sound_prompts_library_modules_36_44_46_48_52": {
+    "karbalai_nazla_60bpm_bayati_saba_v48_5_root": "Traditional Iraqi Hussaini Latmiya, heavy Karbalai Nazla style, Maqam Bayati and Saba, 60 BPM, authentic Iraqi colloquial dialect, commanding deep resonant Baritone lead vocal, powerful high chest-voice climbs, natural vocal rasp, passionate microtonal melisma, heavy 55Hz bare-palm chest thud, 285ms tape echo, 3.2s Husseiniya hall reverb, wide unison male Raddada response, Pure Acapella No Instruments",
+    "rukbani_nassari_60bpm_lami_bayati_v48_5_stage2": "Traditional Iraqi Karbalaei Hussaini Rukbani and Nassari Latmiya, Maqam Lami and Bayati, 60 BPM, authentic Iraqi colloquial dialect, commanding deep resonant Baritone lead vocal, powerful high chest-voice climbs, natural vocal rasp, prolonged microtonal vowel elongations, heavy 55Hz bare-palm chest thud, 285ms tape echo, 3.2s Husseiniya hall reverb, wide unison male Raddada response, Pure Acapella No Instruments",
+    "karbalai_jawab_climax_60bpm_saba_zamzam_hijaz_v48_5_stage3": "Traditional Iraqi Hussaini Latmiya, dramatic Karbalai Nazla climax, Maqam Saba Zamzam and Hijaz, 60 BPM, authentic Iraqi colloquial dialect, commanding deep resonant Baritone lead vocal, soaring high chest-voice climbs, natural vocal rasp, passionate microtonal melisma, heavy 55Hz bare-palm chest thud, 285ms tape echo, 3.2s Husseiniya hall reverb, wide unison male Raddada response, Pure Acapella No Instruments",
+    "karbalai_lami_kasra_58bpm_finale_v48_5_stage4": "Traditional Iraqi Hussaini Latmiya, solemn Karbalai Lami Kasra style, Maqam Lami and Saba, 58 BPM, authentic Iraqi colloquial dialect, commanding deep resonant Baritone lead vocal, soulful microtonal melisma, natural vocal rasp, prolonged vowel elongations, slow heavy 55Hz bare-palm chest thud, 320ms tape echo, 3.5s Husseiniya hall reverb, wide unison male Raddada response, Pure Acapella No Instruments",
+    "iraqi_bahrani_58bpm_saba_fusion_master": "Traditional Iraqi and Bahrani Hussaini Latmiya, Thaqeel Faizi and Nazla style, Maqam Saba, 58 BPM, authentic Iraqi and Bahrani colloquial dialect, commanding deep resonant Baritone lead vocal, powerful high chest-voice climbs, natural vocal rasp, passionate microtonal melisma, heavy 55Hz bare-palm chest thud, 285ms analog tape echo, 3.2s Husseiniya hall reverb, wide unison male Raddada choir response, Pure Acapella No Instruments",
+    "euphrates_nassari_58bpm_lami": "Traditional Southern Iraqi Euphrates Hussaini Latmiya, Bahr Al-Nassari style, Maqam Lami, 58 BPM, authentic Southern Iraqi colloquial dialect, commanding deep resonant Baritone lead vocal, natural vocal rasp, prolonged microtonal vowel elongations, slow heavy 55Hz bare-palm chest thud, 285ms analog tape echo, 3.2s Husseiniya hall reverb, unison male Raddada response, Pure Acapella No Instruments",
+    "karbalai_mawkib_daraj_74bpm_bayati_hijaz": "Passionate Iraqi Karbalaei Hussaini Mawkib Daraj Latmiya chant, 74 BPM, dignified Maqam Bayati and Hijaz on D rising to powerful Jawab, commanding resonant Karbalaei Baritone Radood vocal, natural vocal rasp, booming unison male Mawkib congregation Raddada responses, deep synchronized 55Hz bare-chest Latm thud in Husseiniya hall, Pure Acapella No Instruments",
+    "iraqi_keadia_74bpm_kurd": "Traditional Iraqi Hussaini Keadia Latmiya, Maqam Kurd, 74 BPM, authentic Iraqi colloquial dialect, high-power full-chest belted Baritone lead vocal, natural vocal rasp, passionate microtonal melisma, rhythmic 55Hz bare-palm chest-slap pulse, 250ms analog slapback echo, 2.5s Husseiniya hall reverb, energetic unison male Raddada choir response, Pure Acapella No Instruments",
+    "bahrani_tawshih_faizi_66bpm_hijaz": "Traditional Bahrani Hussaini Tawshih and Faizi Latmiya, Maqam Hijaz, 66 BPM, authentic Bahrani colloquial dialect, wide majestic Baritone lead vocal, trembling microtonal vowel elongations, powerful high chest-voice climbs, synchronous 55Hz bare-palm chest thud, 260ms analog tape delay, 2.8s Matam hall reverb, wide unison male Raddada choir response, Pure Acapella No Instruments",
+    "bahrani_muthakkal_56bpm_saba": "Mournful Bahrani Qatifi Muthakkal Hussaini Latmiya lament, 56 BPM, solemn Maqam Saba and Bayati on D, authentic Bahrani colloquial dialect, commanding deep resonant Baritone Radood vocal, soulful Faizi microtonal melisma, deep slow 55Hz bare-chest Latm thud in Matam hall, unison male Raddada responses, Pure Acapella No Instruments",
+    "bahrani_waqfa_84bpm_hijaz_bayati": "Mournful Bahrani Hussaini Waqfa Latmiya chant, 84 BPM, solemn Maqam Hijaz and Bayati with Faizi microtonal vibrato, commanding resonant Baritone Radood, strong synchronized Bahrani 55Hz bare-chest slaps, unison male Matam congregation responses, Pure Acapella No Instruments",
+    "bahrani_haidari_96bpm_hijaz": "Epic Bahrani Haidari Mawkib Hussaini Latmiya chant, 96 BPM, commanding Maqam Hijaz on D, authentic Bahrani colloquial dialect, powerful resonant Baritone Radood vocal, driving synchronized Bahrani 55Hz bare-chest strikes, antiphonal dual-choir Matam congregation responses, Pure Acapella No Instruments",
+    "zanjeel_procession_80bpm_hijaz": "Traditional Hussaini Zanjeel procession chant, Maqam Hijaz, 80 BPM, authentic Iraqi colloquial dialect, thunderous heroic Bass-Baritone lead vocal, commanding epic chest projection, deep acoustic Dammam drum strikes locked with metallic shoulder Zanjeel chains and brass Tasa cymbals, 1.2s open-air street slapback echo, massive unison male Raddada response, No Melodic Instruments",
+    "karbalai_shoor_132bpm_kurd": "Traditional Iraqi Karbalaei Shoor Latmiya, Maqam Kurd, 132 BPM, authentic Iraqi colloquial dialect, impassioned raspy Baritone lead vocal, powerful high chest-voice climbs, rapid driving 55Hz bare-palm chest slaps, continuous deep male congregation rhythmic Hussain chant, 1.5s tight Husseiniya hall reverb, Pure Acapella No Instruments",
+    "minbar_nai_0bpm_rubato_saba_exclusive_weeping": "Traditional Iraqi and Bahrani Minbar Na'i vocal lament, strict Rubato free tempo with zero rhythmic grid, Maqam Saba, authentic Arabic recitation, deep velvet mournful Baritone solo voice, raw weeping cracks on phrase endings, prolonged microtonal vowel cries, 450ms analog tape echo, 3.8s large Husseiniya cathedral reverb, Pure Solo Acapella No Percussion No Instruments"
+  },
+  "6_post_generation_dsp_and_5_track_daw_engine_modules_37_44_46": {
+    "flowmusic_producer_apply_effect_chain": {
+      "tool": "audio__apply_effect",
+      "command_template": "Apply audio__apply_effect on the generated clip: HighPass filter at 85Hz, AdvancedEqualizer (cut 450Hz by -2.5dB, boost mid 1200Hz by +1.5dB, boost high-mid presence 2500Hz by +4.5dB), Compressor (ratio 3:1, threshold -12dB), Reverb (room_size 0.55, wet mix 0.18), and Limiter at -1.0dB.",
+      "high_pass_filter_hz": 85,
+      "advanced_equalizer": [
+        {
+          "frequency_hz": 450,
+          "gain_db": -2.5,
+          "purpose": "Remove low-mid boxiness/muddiness"
+        },
+        {
+          "frequency_hz": 1200,
+          "gain_db": 1.5,
+          "purpose": "Warm Jawhari Baritone chest-voice body"
+        },
+        {
+          "frequency_hz": 2500,
+          "gain_db": 4.5,
+          "purpose": "Jawhari vocal presence and crisp Arabic consonant clarity"
+        }
+      ],
+      "compressor": {
+        "ratio": "3:1",
+        "threshold_db": -12.0
+      },
+      "reverb": {
+        "room_size": 0.55,
+        "wet_mix": 0.18,
+        "husseiniya_rt60_sec": 3.2
+      },
+      "limiter_ceiling_db": -1.0
+    },
+    "local_5_track_dsp_montage_engine": {
+      "script": "scripts/hussaini_dsp_montage.py",
+      "supported_modes": [
+        "latm",
+        "heavy_clip",
+        "thaqeel_muwazza",
+        "studio_arranged",
+        "bahrani_fast",
+        "bahrani_thulathi",
+        "bahrani_rubai",
+        "bahrani_haidari",
+        "bahrani_waqfa",
+        "bahrani_muthakkal",
+        "zanjeel_iraqi",
+        "zanjeel_bahrani",
+        "shoor",
+        "bandari",
+        "mawal",
+        "nai"
+      ],
+      "stem_aware_percussion_replacement": {
+        "flag": "--replace-ai-percussion",
+        "vocal_cleaning": "4th-order SOS HPF @ 120Hz + fast/slow RMS transient de-clicker (ratio > 1.85) + LPF @ 4500Hz before rebuilding multi-layer human Latm"
+      },
+      "tempo_synced_delay_formula": "delay_ms = clip(60000 / (bpm * 2), 210, 460) (450ms for Rubato)",
+      "rosenberg_formant_ahaat_synthesis": {
+        "note": "Synthesize Ahaat locally here—never write 'Ahaat vocal drone' inside Flow Music Sound description.",
+        "glottal_model": "Rosenberg pulse (Tp=0.40, Tn=0.16) + 3% aspiration breath noise",
+        "formants_hz": {
+          "F1": 730.0,
+          "F2": 1090.0,
+          "F3": 2440.0
+        },
+        "ensemble_detune_cents": [-4.0, 0.0, 4.0]
+      },
+      "sidechain_ducking_and_mastering": {
+        "sidechain_threshold_dbfs": -28.0,
+        "ducking_depth_db": -3.0,
+        "master_glue_compressor_ratio": "1.5:1",
+        "target_loudness_lufs": -14.0,
+        "true_peak_ceiling_dbtp": -1.0
+      }
+    }
+  },
+  "7_quality_control_and_empirical_gates_qc1_qc18": {
+    "qc_matrix": {
+      "QC1_flat_spoken_reading": "Use 58-60 BPM for Thaqeel Latmiya (never <55 BPM), remove '...', purge Fusha Tanween, and enforce short vertical lines.",
+      "QC2_harsh_screaming": "Ban 'wailing / screaming / tear-choked'; use 'powerful high chest-voice climbs, natural vocal rasp, passionate microtonal melisma'.",
+      "QC3_muddy_background": "Keep Sound prompt concise (45-56 words) ending with 'Pure Acapella No Instruments'; run EQ via audio__apply_effect.",
+      "QC4_pop_instrument_leakage": "Never write negative instrument names ('--no piano, guitar') or 'strings/synth/Nahawand' in Sound; end strictly with 'Pure Acapella No Instruments'.",
+      "QC5_english_vocal_readout": "Purge all Latin characters [a-zA-Z] from Lyrics; use pure Arabic bracketed headers ([المُسْتَهَلّ]).",
+      "QC6_melodic_drift": "Enforce vertical short lines (3-4 words/line) and collective Estehlal return after stanzas.",
+      "QC7_cloning_mismatch": "Keep reference_clip_id=null for new poems; match Tor and BPM to the poem's prosodic syllable count.",
+      "QC8_thin_vocal_timbre": "Ban the word 'tenor'; lock 'commanding deep resonant Baritone lead vocal'.",
+      "QC9_single_dialect_purity": "Declare ONLY the poem's actual dialect ('authentic Iraqi colloquial dialect' OR 'authentic Bahrani colloquial dialect') unless explicitly fusing both.",
+      "QC10_sung_stage_directions": "Never place structural labels inside parentheses (...); reserve (...) strictly for actual sung unison Raddada choir lines.",
+      "QC11_word_boundary_slurring": "De-cliticize attached vocatives/interrogatives via Module 41 and lock final consonant Sukuns before spaces ('بَسْ إِمْسَحْ').",
+      "QC12_tanween_mispronunciation": "Convert mid-line Tanween phonetically ('-ِنْ / -َنْ') and end closed hemistichs with Sukun BEFORE '..'.",
+      "QC13_fusha_dialect_vocal_clash": "Purge Fusha initial dammas ('عُيُونِي', 'حُسَيْن', 'مُطِّينِي'), Fusha 'عَلَى', and construct '-ti'; lock pure prosthetic Iraqi forms ('إِبْچَفَّكْ', 'إِعْيُونِي', 'إِعْلَه', 'إِحْسَينْ', 'العَافْيَه', 'وِسَادَتْ رِيشْ').",
+      "QC14_diphthong_and_madd_clipping": "Leave medial diphthong glides unmarked ('إِحْسَينْ', 'خَيرْ', 'زَينَبْ') so Maddat elongate smoothly without glottal stop gating.",
+      "QC15_background_crying_clutter": "Ban 'emotional weep cracks / weeping / sobbing / majlis cries' from all rhythmic Latmiya Sound prompts; restrict weeping strictly to 0 BPM Rubato Minbar Na'i sessions.",
+      "QC16_western_12tet_maqam_collapse": "Ban 'legato phrasing', 'wordless pharyngeal Ahaat vocal drone', and 'calm / serene' in Sound prompts; preserve 24-EDO Maqam soul via 'heavy Karbalai Nazla style', 'natural vocal rasp', and 'passionate microtonal melisma'.",
+      "QC17_inline_json_rtl_corruption": "Never paste JSON braces '{...}' inside Compose Panel Lyrics; send JSON orchestration in Producer Chat and paste only pure vocalized Arabic lines in Lyrics.",
+      "QC18_solo_estehlal_violation": "Wrap all 4 hemistichs of every '[المُسْتَهَلّ]' block in parentheses '(...)' so they are sung 100% exclusively by the unison male Raddada congregation choir."
+    },
+    "human_and_doctrinal_review_gate": {
+      "pre_generation_lint_threshold": 85,
+      "ethical_emulation": "Translate living Radood/Khateeb schools into acoustic descriptors (reference_clip_id=null default).",
+      "historical_accuracy": "Verify narrative faithfulness to authentic Maqtal sources and preserve poet attribution."
+    }
+  }
+}
