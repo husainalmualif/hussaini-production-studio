@@ -1,6 +1,6 @@
-# بروتوكول التهيئة المسبقة بصيغة `JSON` والاحتراف الكامل لواجهة `Flow Music Studio` (`Module 39 & 51`) — V48.5 OMNI-ARCHITECT
+# بروتوكول التهيئة المسبقة بصيغة `JSON` والاحتراف الكامل لواجهة `Flow Music Studio` (`Modules 39, 51 & 53`) — V48.5 OMNI-ARCHITECT (Rev 2)
 
-يوثق هذا الملف بروتوكول التهيئة المسبقة للجلسة (`JSON Session Pre-Conditioning` عبر الدستور المرجعي `references/hussaini_os_v48_5_constitution.json`) والقواعد الهندسية الصارمة للتعامل الاحترافي ثنائي القناة مع واجهة وأدوات `https://www.flowmusic.app/` (`New session`، لوحة `Compose` المباشرة، وقائمة `Remix > Extend / Trim / Replace / Cover / Variation / Use prompt / Split stems`).
+يوثق هذا الملف بروتوكول التهيئة المسبقة للجلسة (`JSON Session Pre-Conditioning` عبر الدستور المرجعي `references/hussaini_os_v48_5_constitution.json` بوضع `"Pre_Conditioning_Lock_Wait_For_Stage_JSON"`)، وحزم المراحل الإلزامية (`Module 53` — `--build-stage-json`)، والقواعد الهندسية الصارمة للتعامل الاحترافي ثنائي القناة مع واجهة وأدوات `https://www.flowmusic.app/` (`New session`، لوحة `Compose` المباشرة، وقائمة `Remix > Extend / Trim / Replace / Cover / Variation / Use prompt / Split stems`).
 
 ---
 
@@ -17,16 +17,18 @@
 ```python
 from scripts.hussaini_dsp_montage import (
     build_flowmusic_json_preconditioning,
+    build_stage_orchestration_json,
     load_v48_5_constitution,
 )
 
-# 1) تحميل الدستور التجريبي الكامل V48.5 لإرساله في Producer Chat (القناة 1):
+# 1) تحميل الدستور التجريبي الكامل V48.5 (Rev 2) لإرساله في Producer Chat (القناة 1):
 constitution = load_v48_5_constitution()
 
-# 2) توليد كائن التهيئة المخصص للجلسة (بدون فرض clip ID مسبق):
-payload = build_flowmusic_json_preconditioning(dialect="iraqi", maqam="bayati_and_saba", bpm=60)
-# payload["protocol_name"] -> "Hussaini_Production_Studio_OS_V48_5_OMNI_ARCHITECT"
+# 2) توليد كائن التهيئة المخصص للجلسة وحزمة المرحلة الأولى (Module 53):
+payload = build_flowmusic_json_preconditioning(dialect="iraqi", maqam="saba_zamzam", bpm=58)
+# payload["session_mode"] -> "Pre_Conditioning_Lock_Wait_For_Stage_JSON"
 # payload["reference_clip_id"] -> None
+stage_1 = build_stage_orchestration_json("[المُسْتَهَلّ]\nيَا إِحْسَينْ إِبْگَلْبِي ..")
 ```
 
 ---
