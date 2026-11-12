@@ -1,68 +1,33 @@
-# هندسة الإنتاج الاستوديوي الحديث، المحاكاة الصوتية البشرية (`Vocal Synth`)، والكليبات الثقيلة (`Module 44`) — V50.0 OMNI-PERFECTION
+# هندسة الإنتاج الاستوديوي الحديث، المحاكاة الصوتية البشرية (`Rosenberg Formant Ahaat`)، والكليبات الثقيلة (`Module 44 & 50`) — V48.5 OMNI-ARCHITECT
 
-يوثق هذا المرجع المعماري المراحل المتكاملة لإنتاج اللطمية الحسينية من الفكرة والقصيدة إلى التوزيع الاستوديوي، وتقنيات **الكورال البشري المحاكي للآلات (`Vocal Synth`)**، وهندسة **الكليبات الاستوديوية الثقيلة (`Heavy Studio Clips 60–75 BPM`)**، والعمق ثلاثي الأبعاد (`3D Soundstage`)، والمؤثرات البيئية (`Foley`)، والانقطاع الدرامي (`Audio Drop`).
-
----
-
-## أولاً: المكونات الأساسية للإنتاج (من الفكرة إلى الأداء)
-
-1. **القصيدة والبحور الشعرية (`Poetic Meters`):**
-   - توازن بين القيمة العقائدية الرصينة والعاطفة الوجدانية، وتُصاغ على بحور تناسب أوزان اللطم والأداء المنبري: **الرباعي (`Quatrain`)، الموشح (`Muwashah`)، الفزاعية (`Fazza'iya`)، أو النثر الحسيني الحديث (`Modern Strophic Elegy`)**.
-2. **الطور والمقام الجنائزي (`Tor, Maqam & Qarar/Jawab Transitions`):**
-   - اختيار المقام الحزين المطابق لروح النص: **الصبا (مقام البكاء المطلق)، الحجاز، البيات، الكرد، أو النهاوند الحزين**.
-   - هندسة التنقل السلس بين **"القرار" (`Low Chest Register`)** في التمهيد والسرد، و**"الجواب" (`High Emotional Climax`)** في ذروة المصيبة، مع التزام الأداء المتصل والبطيء (`Legato`) الخالي من أي قفزات إيقاعية راقصة.
-3. **الأداء والميزان الإيقاعي (`Beat-Locked Radood Delivery`):**
-   - إيصال الشجن واللوعة مع ضبط الميزان الإيقاعي ليتطابق حرفياً مع "اللطمة" دون الخروج عن الوزن العروضي.
+يوثق هذا المرجع المعماري المستويات الثلاثة لإنتاج اللطمية الحسينية من الأداء المنبري الأصيل إلى **الكليبات الاستوديوية الثقيلة (`Heavy Studio Clips 60–75 BPM`)**، والعمق ثلاثي الأبعاد (`3D Soundstage`)، والمؤثرات البيئية (`Foley`)، والانقطاع الدرامي (`Audio Drop`)، مع تطبيق جدار الحماية الصارم في `Module 50` بين ما يُكتب في `Flow Music` وما يُولَّد محلياً في محرك `scripts/hussaini_dsp_montage.py`.
 
 ---
 
-## ثانياً: مستويات التوزيع الصوتي والبدائل البشرية (`The 3 Studio Production Tiers`)
+## أولاً: مستويات التوزيع الصوتي والبدائل البشرية (`The 3 Studio Production Tiers`)
 
-يدعم المحرك ثلاث مدارس إنتاجية حسب طبيعة العمل (محافظ كلاسيكي، استوديو محافظ بالبدائل البشرية، أو كليب استوديوي سينمائي ثقيل):
+### 1. المستوى الأول: العزاء التراثي المحافظ (`Tier 1 — Pure Heritage Acapella`)
+- **في المنتصف (`Center 0%`):** صوت رادود باريتون جوهري رخيم (`Commanding Deep Resonant Jawhari Baritone`) جاف وقريب مع صدى شريطي مضبوط الإيقاع (`285ms Tape Echo`).
+- **في الأطراف (`Wide Stereo L/R`):** لطم صدري بشري متراكب (`55Hz Bare-Palm Chest Thud`) + جمهور الردّادة الموحد (`Wide Unison Male Raddada Choir`) داخل قبة حسينية (`3.2s Hall Reverb`).
 
-### 1. المستوى الأول: العزاء الكلاسيكي المحافظ (`Pure Heritage Acapella & Matam`)
-- **إيقاع اللطم البشري المدمج (`Stereo Layered Crowd Latm`):** دمج عدة طبقات من اللطم البشري (خفيفة، عميقة، ممتلئة) وتوزيعها `Stereo L/R` مع `Compression` و`EQ` لإعطاء إيحاء بجمهور عزاء كبير داخل حسينية واسعة.
-- **الجواب والقرار البشري (الردّادة) + `Vocal Pad`:** مجموعة الردّادة تردد المستهل بطبقات مختلفة لإسناد الرادود، مع أرضية نغمية بشرية ممدودة (`Vocal Pad`) تملأ الفراغات بخشوع.
-- **الآهات البلعومية (`Pharyngeal Vocal Humming`) وصرخات العزاء العفوية (`Spontaneous Majlis Cries`):** تنهدات "آه" ممدودة من الدهاليز الصوتية للبلعوم، مع دمج نداءات عفوية خافتة في الخلفية (`يا حسين، يا مظلوم`) في الفواصل وخلف الأبيات المؤثرة.
+### 2. المستوى الثاني: الآهات البلعومية الفورمانتية المحافظة (`Tier 2 — Local Rosenberg + Formant Vocal Synth`)
+- **تحذير تجريبي صارم (`Module 50 — QC4 & QC16`):** يُحظر قطعيّاً كتابة `strings`، `synth`، `humming`، `pads`، أو `wordless pharyngeal Ahaat vocal drone` داخل حقل `Sound` في `Flow Music` لأنها تحول العمل إلى ترنيمة غربية (`12-TET`).
+- **التوليد المحلي النقي:** تُولَّد طبقة الآهات البشرية محلياً داخل `scripts/hussaini_dsp_montage.py` عبر دالة `synthesize_ahaat_drone` و`synthesize_vocal_synth_strings_pad` باستخدام النبضة الحنجرية **`Rosenberg Pulse (Tp=0.40, Tn=0.16) + 3% Breath Noise`** ورنانات الفورمانت **`F1=730Hz, F2=1090Hz, F3=2440Hz`** مع تباين كورالي **`[-4, 0, +4] cents`** وخفض جانبي **`-3.0 dB Sidechain Ducking`**.
 
-### 2. المستوى الثاني: الكورال البشري المحاكي للآلات والأجواء السينمائية (`Vocal Synth & Ambient Pads`)
-- **الكورال البشري المحاكي للوتريات (`Vocal Synth / Vocal Strings`):**
-  - في الأعمال المحافظة التي تمنع الآلات الموسيقية، تُؤخذ آهات بشرية ممدودة (`Humming`) وتُعالج رقمياً عبر فلاتر `Equalizers` و`Pitch/Formant Correction` لتحويلها إلى نوتة موسيقية مستمرة تشبه آلة الوتريات أو الكمان الهادئ جداً (`Vocal Strings Pad`) دون استخدام آلة حقيقية (`--mode heavy_clip` في محرك الـ DSP).
-- **السينمائية الصوتية (`Cinematic Ambient Pads`):**
-  - نوتات صوتية رقمية/بشرية عريضة خالية من الإيقاع الموسيقي تصنع خلفية "ضبابية" مهيبة تملأ الفراغ خلف صوت الرادود على غرار الموسيقى التصويرية للأفلام التاريخية.
-
-### 3. المستوى الثالث: الكليبات الاستوديوية الثقيلة والملحمة الصوتية (`Heavy Studio Clips — 60 to 75 BPM`)
-عند إنتاج كليب استوديوي ثقيل (أو عند سماح العمل بالفواصل التصويرية الحزينة):
-1. **بنية الإيقاع واللطم الثقيل (`The Heavy Beat — Double Layering + Human Sub-Bass`):**
-   - **الضربة المزدوجة (`Double Layering`):** دمج ضربة **"الصدر"** البشرية العميقة (`Low-End ~52–58Hz`) للعمق والهيبة، وفوقها ضربة **"الكف"** الواضحة (`Clicky/Snap Palm Transient ~1.8kHz–3.4kHz`) لإعطاء حدة ووظيفة إيقاعية واضحة.
-   - **السرعة والوزن (`60–75 BPM`):** إيقاع بطيء وموزون يمنح العمل هيبة ويترك مساحة واسعة للنوتات الخلفية لتتحرك براحة.
-   - **الـ `Sub-Bass` البشري (`Beat-Synced Human Sub-Bass Hum ~42–48Hz`):** أصوات "همهمة" بشرية منخفضة التردد جداً تتزامن مع ضربة اللطم لإعطاء ثقل وضخامة في سماعات الصوت وأنظمة السيارات.
-2. **الفواصل الروحية وآلات النفخ الخشبية الحزينة (`The Bridges — Sorrowful Solo Woodwinds`):**
-   - بين بيت وبيت (في الفواصل التي يتوقف فيها اللطم)، تخفّ جميع الأصوات وتبرز نوتة `Solo Legato` بطيئة وباكية من آلات ترتبط ثقافياً بالشجن والأنين (عند سماح العمل بها): **الناي (`Ney`)**، **الدودوك الأرمني (`Duduk`)**، أو **الكلارينيت الشرقي (`Clarinet`)**، أو **الوتريات البشرية الممدودة (`Vocal Strings`)** على مقامات الصبا والنهاوند والكرد والبيات.
-3. **صناعة العمق ثلاثي الأبعاد (`3D Soundstage`) وفلاتر الحسينية الافتراضية (`Convolution Reverb`):**
-   - **صوت الرادود (`Center Dry & Intimate`):** يوضع في المنتصف تماماً (`100% Center`) ويكون جافاً وقريباً جداً من أذن المستمع، مع `Delay` مدروس في نهايات الكلمات (خاصة في المستهل).
-   - **الكورال والآهات والنوتات (`Extreme L/R Panning`):** تُوزع في أقصى اليمين واليسار (`±75% to ±100%`) مع تطبيق بصمة صدى حقيقية من حسينيات ضخمة (`Convolution Reverb IR`).
-4. **السيناريو الصوتي (`Foley & Sound Design`) وتقنية الـ `Audio Drop`:**
-   - **المؤثرات البيئية التمثيلية (`--foley <wind|water|horses>`):**
-     - عند ذكر العطش والغربة: صوت رياح الصحراء الجافة (`wind`).
-     - عند ذكر الفرات والشاطئ: صوت قطرات وجريان الماء الخافت (`water`).
-     - عند ذكر الخيل والعاشر: صوت صهيل ومسير خيل خافت مغلف بالصدى (`horses`).
-   - **الـ `Audio Drop` الدرامي (`--audio-drop-sec <sec>`):** خفض اللطم والنوتات الخلفية فجأة عند الوصول إلى بيت شعري شديد الحزن، ليبقى صوت الرادود وحيداً ومكسوراً (`Solo Broken Vocal`)، ثم يعود الإيقاع الثقيل والكورال بقوة مع المستهل.
+### 3. المستوى الثالث: الكليبات الاستوديوية الثقيلة (`Tier 3 — Heavy Studio Clips 60–75 BPM`)
+تُنفَّذ في مونتاج المسارات الخمسة (`--mode heavy_clip` ومع `--replace-ai-percussion` عند الحاجة):
+1. **الضربة المزدوجة + همهمة القرار البشرية:** دمج ضربة الصدر العميقة (`54Hz`) + صفعة الكف (`1.8–3.2kHz`) + نبضة همهمة قرار بشرية متزامنة (`44Hz Human Sub-Bass Hum`).
+2. **تنظيف مسار الرادود واستبدال إيقاع الذكاء الاصطناعي (`--replace-ai-percussion`):**
+   - تطبيق فلتر `4th-order SOS HPF @ 120Hz` + كاشف العابرات السريع/البطيء (`Fast/Slow RMS Transient De-Clicker, ratio > 1.85`) + `LPF @ 4500Hz` لتجريد صوت الرادود من أي إيقاع آلي مشوّه قبل بناء اللطم البشري المتعدد الطبقات تحته.
+3. **المؤثرات البيئية (`--foley <none|wind|water|horses>`) والانقطاع الدرامي (`--audio-drop-sec <sec>`):**
+   - رياح الصحراء (`wind`)، جريان الماء (`water`)، وصهيل/عدو الخيل البعيد (`horses`)، مع خفض الخلفية لمدة `3.0s` لإبراز صوت الرادود منفرداً في بيت الذروة.
 
 ---
 
-## ثالثاً: قاعِدة منع الانحراف الغنائي (`Anti-Pop-Melody Funeral Lock`) وقوالب `Sound Prompt`
+## ثانياً: قاعدة الكسر العمودي للأسطر الطويلة (`Vertical Short-Line Splitting`) وقالب `Sound` القياسي
 
-> [!IMPORTANT]
-> **لماذا قد ينحرف المقطع الثاني في `Flow Music` إلى "لحن غنائي" وكيف نمنعه؟**
-> 1. **حظر كلمات `strings` و`synth` و`Nahawand` داخل حقل `Sound` في `Flow Music`:** حتى لو كتبتَ `vocal-synth strings pad` أو `Nahawand`، فإن مُرمِّز النصوص في نموذج `Lyria` يقرأ كلمتي `strings` و`synth` كآلات موسيقية غربية ويقرأ `Nahawand` كسلّم `Minor Pop Ballad`، فينحرف اللحن تدريجياً إلى مسار غنائي راقص.
->    - **البديل الصحيح في `Sound Prompt`:** اكتب دائماً **`sustained pharyngeal Ahaat vocal humming drone, wordless male mourning choir pad`**، واحصر المقام في **`funeral Maqam Saba Zamzam and Bayati, strictly non-musical mourning recitative, no pop melody, no melodic leaps`** (بينما تُولَّد طبقة الـ `Vocal Synth` برمجياً في المحرك المحلي [`synthesize_vocal_synth_strings_pad`](file:///C:/Users/husai/.gemini/config/skills/hussaini-production-studio/scripts/hussaini_dsp_montage.py#L852-L870)).
-> 2. **قاعدة الكسر العمودي للأسطر الطويلة (`Vertical Short-Line Splitting — split_long_lines_for_steady_pacing`) وصناعة «متعة الحزن»:**
->    - **لماذا ينحرف الأداء بعد الدقيقة `1:27` إلى أسلوب سريع ومزعج، بينما يكون رائعاً وشجياً في الأسطر القصيرة (مثل `0:00–1:27` أو `1:40–النهاية`)؟**
->      لأن نموذج `Lyria` يخصص لكل **سطر مكتوب (`\n`)** دورةً إيقاعية واحدة (`Bar ≈ 3.8s`). فإذا كان السطر قصيراً (`3–4 كلمات / 6–8 مقاطع`)، يمدّ الرادود حروف العلة بشجن وهدوء يشدّ الأذن (**متعة الحزن**). أما إذا واجه سطراً طويلاً (`8–10 كلمات / 16 مقطعاً` في سطر واحد مثل الثلاثيات السردية)، فإنه يضاعف سرعة النطق فجأة لحشر الكلمات في نفس الدورة، فيتحول إلى إلقاء سريع ومزعج!
->    - **الحل الإلزامي:** استخدام الدالة [`split_long_lines_for_steady_pacing`](file:///C:/Users/husai/.gemini/config/skills/hussaini-production-studio/scripts/hussaini_dsp_montage.py#L558-L584) لكسر كل بيت طويل عمودياً إلى **سطرين مستقلين قصيرين (`3–4 كلمات في السطر الواحد`)** ينتهي كلٌّ منهما بوقفة `..`، مع إدراج جواب الكورال `(ذِبْحَوْا أَحْلَامِي)` أو `(آهْ يَا زَيْنَبْ)` بانتظام بعد كل رباعية قصيرة.
-
-### أ) قالب الكليب الاستوديوي الثقيل الجنائزي المحافظ (`Funeral Heavy Studio Clip 3D — Zero Song Drift`):
+- يخصص نموذج `Lyria` لكل سطر (`\n`) دورةً إيقاعية واحدة؛ لذا تُقسم الأبيات الطويلة عمودياً عبر `split_long_lines_for_steady_pacing` إلى أشطر قصيرة (`3–4 كلمات / 6–8 مقاطع`) منتهية بـ `..`.
+- **قالب `Sound` المعتمد في `Flow Music` قبل الماسترنغ المحلي للكليبات الثقيلة (`60 BPM — Zero 12-TET Drift`):**
 ```text
-Solemn Funeral Iraqi Hussaini Latmiya, mournful Maqam Saba Zamzam and Bayati on D, 62 BPM, strictly non-musical Husseiniya mourning recitative, no pop melody, no melodic leaps, dry intimate center Baritone lead vocal, slow weeping legato phrasing, double-layered 55Hz bare-palm chest thud and crisp palm slap with synchronized deep human vocal sub-bass hum, wide 3D stereo pharyngeal Ahaat vocal humming choir drone, spontaneous distant Ya Hussain majlis cries, Husseiniya hall convolution reverb, Pure Acapella Matam No Instruments
+Traditional Iraqi Hussaini Latmiya, heavy Karbalai Nazla style, Maqam Bayati and Saba, 60 BPM, authentic Iraqi colloquial dialect, commanding deep resonant Baritone lead vocal, powerful high chest-voice climbs, natural vocal rasp, passionate microtonal melisma, heavy 55Hz bare-palm chest thud, 285ms tape echo, 3.2s Husseiniya hall reverb, wide unison male Raddada response, Pure Acapella No Instruments
 ```
