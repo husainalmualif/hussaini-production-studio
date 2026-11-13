@@ -1269,7 +1269,7 @@ def repair_word_initial_sukun_and_diphthongs(text):
     # QC14: Leave medial diphthong glides (ي, و after Fatha) unmarked when followed by a letter in-word
     result = re.sub(
         r"\u064E([يو])\u0652(?=[\u0621-\u063A\u0641-\u064A\u067E\u0686\u06AF])",
-        r"\u064E\1",
+        "\u064E\1",
         result,
     )
     # Strip any remaining Sukun directly on word-final feminine Haa/Taa Marbuta before space/pause/paren/EOL
