@@ -1238,7 +1238,7 @@ def enforce_collective_estehlal_parentheses(text):
                 if not (core.startswith("(") and core.endswith(")")):
                     core = f"({core})"
                 wrapped_lines.append(f"{core} .." if has_dots else core)
-            out_chunks.append("\n".join(wrapped_lines))
+            out_chunks.append("\n".join(wrapped_lines) + (chr(10) if chunk.endswith(chr(10)) else ""))
         elif _is_kasra_estehlal_tag(current_tag):
             lines = chunk.splitlines()
             non_empty_indices = [i for i, ln in enumerate(lines) if ln.strip()]
@@ -1254,7 +1254,7 @@ def enforce_collective_estehlal_parentheses(text):
                 if not (core.startswith("(") and core.endswith(")")):
                     core = f"({core})"
                 wrapped_lines.append(f"{core} .." if has_dots else core)
-            out_chunks.append("\n".join(wrapped_lines))
+            out_chunks.append("\n".join(wrapped_lines) + (chr(10) if chunk.endswith(chr(10)) else ""))
         else:
             out_chunks.append(chunk)
     return "".join(out_chunks)
