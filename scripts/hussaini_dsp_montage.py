@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# pylint: disable=too-many-lines,too-many-return-statements,too-many-branches,too-many-locals,too-many-statements,too-many-arguments,too-many-positional-arguments,no-member
+# pylint: disable=too-many-lines,too-many-return-statements,too-many-branches,too-many-locals,too-many-statements,too-many-arguments,too-many-positional-arguments,no-member,chained-comparison
 """Hussaini Audio Omni-Architect DSP, 5-Track DAW & Phonetics Compiler (V48.5 OMNI-ARCHITECT).
 
 Standalone empirical production engine implementing Hussaini_Production_Studio_OS_V48_5_OMNI_ARCHITECT:
@@ -2764,7 +2764,7 @@ def apply_husseiniya_reverb(signal, sample_rate, rt60_sec=2.8, pre_delay_ms=24.0
 
     pre_samples = max(0, int((pre_delay_ms / 1000.0) * sample_rate))
     convolved = fftconvolve(signal, ir)[: len(signal)]
-    if pre_samples > 0 and pre_samples < len(convolved):
+    if 0 < pre_samples < len(convolved):
         convolved = np.concatenate((np.zeros(pre_samples, dtype=np.float64), convolved[:-pre_samples]))
     return (1.0 - wet) * signal + wet * convolved
 
