@@ -1506,7 +1506,7 @@ NON_SPLIT_PARTICLES = {
 def _strip_arabic_diacritics(text):
     """Remove Arabic Tashkeel, Tatweel, and punctuation for rhyme/Jinas comparison."""
     cleaned = re.sub(r"[\u064B-\u0652\u0670\u0640]", "", text)
-    cleaned = re.sub(r"[\(\)\[\]،.؟!:«»"'\\-]", "", cleaned)
+    cleaned = re.sub(r"[\(\)\[\]\u060C.\u061F!:\u00AB\u00BB\x22\x27\-]", "", cleaned)
     return cleaned.strip()
 
 
@@ -1529,7 +1529,7 @@ def segment_arabic_prosodic_syllables(hemistich):
     """Segment an Arabic hemistich into prosodic CV/CVV/CVC syllables."""
     clean = re.sub(r"\[[^\]]*\]", " ", hemistich)
     clean = clean.replace("..", " ")
-    clean = re.sub(r"[\(\)،.؟!:«»"']", " ", clean)
+    clean = re.sub(r"[\(\)\u060C.\u061F!:\u00AB\u00BB\x22\x27]", " ", clean)
     tokens = [tok.strip() for tok in clean.split() if tok.strip()]
     if not tokens:
         return []
