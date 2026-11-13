@@ -183,7 +183,7 @@ def test_module_51_collective_estehlal_and_qc1_to_qc18_linter():
     assert clean_lint["solo_estehlal_violation"] is False
     assert clean_lint["inline_json_in_lyrics"] is False
     assert clean_lint["fusha_dialect_clash_detected"] == []
-    assert clean_lint["ready_for_generation"] is True
+    assert clean_lint["ready_for_generation"] is True, f"DEBUG clean_lint: {clean_lint}"
 
     pillars = hds.audit_legendary_latmiya_pillars(repaired)
     assert pillars["all_five_pillars_passed"] is True
