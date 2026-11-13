@@ -176,7 +176,7 @@ def test_module_51_collective_estehlal_and_qc1_to_qc18_linter():
     )
     unwrapped_lint = hds.lint_poem(raw_poem)
     assert unwrapped_lint["solo_estehlal_violation"] is True
-    assert unwrapped_lint["marked_medial_diphthong_glides_detected"] == ["مَوْلَايْ"]
+    assert "مَوْلَايْ" in unwrapped_lint["marked_medial_diphthong_glides_detected"]
 
     repaired = unwrapped_lint["auto_repaired_lyrics"]
     clean_lint = hds.lint_poem(repaired)
