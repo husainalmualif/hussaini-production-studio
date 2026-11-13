@@ -42,7 +42,7 @@
     },
     "two_channel_json_vs_ui_routing_module_51": {
       "channel_1_producer_chat": "Send session pre-conditioning JSON and complete per-stage/per-section orchestration JSON payloads directly inside Producer Chat (textarea[aria-label='Chat message']).",
-      "channel_2_compose_panel_manual_fallback": "When manually using Compose Panel instead of Producer Chat JSON, paste ONLY 'sound_description' into Sound and ONLY 'section_tag' + 'lyrics_arabic' lines into Lyrics—never paste raw '{...}' braces directly into the Lyrics textarea.",
+      "channel_2_compose_panel_manual_fallback": "When manually using Compose Panel instead of Producer Chat JSON, paste ONLY 'sound_description' into Sound and ONLY 'section_tag' + 'lyrics_arabic' lines into Lyrics—never paste raw '{...}' braces directly into the Lyrics textarea."
     },
     "mandatory_collective_estehlal_rule_module_51": {
       "rule": "Every [المُسْتَهَلّ] section—at opening, between stanzas, and in the final 4 lines of [الكَسْرَة وَالمُسْتَهَلّ]—must be sung 100% EXCLUSIVELY by the wide unison male Raddada congregation choir (zero solo Radood lead).",
