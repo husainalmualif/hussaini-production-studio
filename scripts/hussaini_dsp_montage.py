@@ -1202,6 +1202,18 @@ def _is_kasra_estehlal_tag(tag_str):
     """Return True if tag is [الكسرة والمستهل]."""
     clean = re.sub(r"[[]ً-ْ]", "", tag_str).strip()
     return "كسر" in clean and "مستهل" in clean
+  
+
+  
+def enforce_collective_estehlal_parentheses(text):
+  
+    """Module 51 (QC18): Wrap all Estehlal choir hemistichs in '('...)' before '..'."""
+  
+    blocks = re.split(r"(\[[^\]]+\])", text)
+
+
+
+
     if len(blocks) == 1:
         return text
 
