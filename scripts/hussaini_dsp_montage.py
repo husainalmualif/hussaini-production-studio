@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# pylint: disable=too-many-lines,too-many-return-statements,too-many-branches,too-many-locals,too-many-statements,too-many-arguments,too-many-positional-arguments,no-member,chained-comparison
+# pylint: disable=too-many-lines,too-many-return-statements,too-many-branches,too-many-locals,too-many-statements,too-many-arguments,too-many-positional-arguments,no-member,chained-comparison,trailing-whitespace
 """Hussaini Audio Omni-Architect DSP, 5-Track DAW & Phonetics Compiler (V48.5 OMNI-ARCHITECT).
 
 Standalone empirical production engine implementing Hussaini_Production_Studio_OS_V48_5_OMNI_ARCHITECT:
