@@ -1179,7 +1179,7 @@ HYBRID_WORD_SHAPING_MAP = {
 
 def classify_section_tag(tag_str):
     """Normalize any Arabic or English bracketed section header to chorus/verse/intro_outro."""
-    clean = re.sub(r"[[]ً-ْ]", "", tag_str).strip()
+    clean = re.sub(r"[\u064B-\u0652]", "", tag_str).replace("[", "").replace("]", "").strip()
     lower = clean.lower()
     if lower.startswith("chorus") or any(k in clean for k in ("مستهل", "كسر", "لازمة", "لازمه")):
         return "chorus"
@@ -1194,13 +1194,13 @@ def classify_section_tag(tag_str):
 
 def _is_pure_estehlal_tag(tag_str):
     """Return True if tag is [المستهل] (not [الكسرة والمستهل])."""
-    clean = re.sub(r"[[]ً-ْ]", "", tag_str).strip()
+    clean = re.sub(r"[\u064B-\u0652]", "", tag_str).replace("[", "").replace("]", "").strip()
     return ("مستهل" in clean and "كسر" not in clean) or clean.lower() == "chorus"
 
 
 def _is_kasra_estehlal_tag(tag_str):
     """Return True if tag is [الكسرة والمستهل]."""
-    clean = re.sub(r"[[]ً-ْ]", "", tag_str).strip()
+    clean = re.sub(r"[\u064B-\u0652]", "", tag_str).replace("[", "").replace("]", "").strip()
     return "كسر" in clean and "مستهل" in clean
   
 
