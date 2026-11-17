@@ -1,10 +1,10 @@
 ---
 name: hussaini-production-studio
-description: Comprehensive Hussaini audio production (V52.0 OMNI-ARCHITECT), 175-track empirical corpus across 9 Schools, Pre-Generation Consultation vs. Auto-Pilot, Stage-1 Gate before EXTEND, NC1-NC17, 23.5s 3-Line Kasra Law, Strict Iraqi/Bahrani/Fusha G2P & 127-section corpus compiler, Style Taxonomy, Historical Verifier & Stage Planner, and 18-mode Pure-Vocal/5-track EBU R128 DSP engine.
+description: Comprehensive Hussaini audio production (V53.0 OMNI-ARCHITECT), 175-track empirical corpus across 9 Schools, Consultation vs. Auto-Pilot, Stage-1 Gate, NC1-NC17, 23.5s 3-Line Kasra Law, Iraqi/Bahrani/Fusha G2P & 261-section corpus compiler (99.9%+), QC34 Pre-Hamza lock, Muqatila Historical Verifier & Stage Planner, and 18-mode Pure-Vocal/5-track EBU R128 DSP engine.
 ---
-# Hussaini Production Studio (V52.0 OMNI-ARCHITECT)
+# Hussaini Production Studio (V53.0 OMNI-ARCHITECT)
 
-End-to-end **Super-Algorithmic Husseini Production Agent** built on the **175-Track Empirical Corpus (`24.24h` / `9` Master Schools)**, **Pre-Generation Consultation vs. Auto-Pilot (`Module 66`)**, **Stage-1 Gate Before `EXTEND`**, **`NC1–NC17` & `23.5s` 3-Line `XA/XB/6C` Extend Law**, **Strict Dialect G2P (`Iraqi/Bahrani/Fusha`, `99.62%` across `127` corpus sections)**, **Style Taxonomy**, **Wazn/Tor Router (`Module 54`)**, **24-EDO 6-Stage Maqam Progression**, **Historical Verifier & Stage Planner (`--verify-history`, `--plan-stages`)**, and **18-Mode Pure-Vocal/5-Track EBU R128 DSP (`--mode vocal_pure_master`, `--audit-audio`, `-14.0 LUFS / -1.0 dBTP`; ban cloud Step 4 EQ)**.
+End-to-end **Super-Algorithmic Husseini Production Agent** built on the **175-Track Empirical Corpus (`24.24h` / `9` Schools)**, **Consultation vs. Auto-Pilot (`Module 66`)**, **Stage-1 Gate**, **`NC1–NC17` & `23.5s` 3-Line `XA/XB/6C` Law**, **Dialect G2P (`Iraqi/Bahrani/Fusha`, `99.9%+` / `0` idempotency errors across `261` sections + Flow-audited `QC34`)**, **Style Taxonomy**, **Wazn/Tor/Maqam Router**, **11-Rule Historical Verifier & Stage Planner**, and **18-Mode EBU R128 DSP (`vocal_pure_master`, `--audit-audio`, `-14 LUFS / -1 dBTP`; ban cloud Step 4 EQ)**.
 
 ## Mandatory Pre-Generation Protocol: Interactive Consultation vs. Auto-Pilot (`Module 66`)
 
@@ -26,7 +26,7 @@ End-to-end **Super-Algorithmic Husseini Production Agent** built on the **175-Tr
 
 ## Modular Reference Map (Load Only What You Need)
 
-1. **`references/modules/module_67_v52_pure_vocal_dsp_corpus_phonetics_and_history.md`, `module_66_v51_field_evaluation_consultation_and_style_taxonomy.md` & `references/hussaini_os_v50_0_constitution.json`**: `V52.0` Pure-Vocal DSP (`vocal_pure_master`, EBU R128, `--verify-history`, `--plan-stages`, `--audit-audio`), `NC1–NC17`, `23.5s` 3-Line Law, Consultation/Auto-Pilot & Taxonomy.
+1. **`references/modules/module_68_v53_dual_corpus_flow_bahrani_iraqi_mastery.md`, `module_67_v52...md`, `module_66_v51...md` & `references/hussaini_os_v50_0_constitution.json`**: `V53.0` Flow Bahrani/Iraqi audit (`QC34`), `261`-section compiler (`99.9%+`), Pure-Vocal DSP (`vocal_pure_master`), `--verify-history`, `--plan-stages`, `NC1–NC17` & Taxonomy.
 2. **`references/modules/module_39_json_preconditioning.md`, `references/modules/module_51_two_channel_routing_and_collective_estehlal.md` & `references/modules/module_53_per_stage_and_section_json_orchestration.md`**: `New session` isolation, **Common Step 1 (`Producer Chat` Pre-Conditioning JSON) + Two Generation Methods** (**Method 1:** `Compose > Lyrics` with `Sound` in Stage 1 Root only; **Method 2:** `Stage & Section JSON` in `Producer Chat`), and `(...)` unison choir wrapping.
 3. **`references/modules/module_49_pure_dialect_isolation_and_iraqi_prosthetic_clusters.md`, `references/modules/module_40_41_43_phonetics_and_dialects.md` & `references/modules/module_45_dialect_orthoepy_and_tashkeel_mastery.md`**: Pure single-dialect lock (`QC9/QC13/NC10`), CVC epenthetic vowels, selective prosthetic `إِCْ` (`QC33`), and `Lyria 3.5` G2P locks (`QC20–QC34, NC3–NC8`).
 4. **`references/modules/module_50_crying_isolation_and_anti_12tet_firewall.md`, `references/modules/module_44_studio_production_and_heavy_clips.md` & `references/modules/module_47_genre_taxonomy_latmiya_nasheed_ibtihalat_tawashih.md`**: Crying isolation to `0 BPM` Rubato (`QC15`), 36-term anti-12TET firewall (`QC4/QC16`), and genre taxonomy.

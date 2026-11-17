@@ -19,7 +19,7 @@ import hussaini_dsp_montage as hds  # noqa: E402
 
 def test_single_source_version_and_v50_architecture():
     """Verify V51.2 OMNI-ARCHITECT version lock, SKILL.md router budget, JSON constitution, and Module 66."""
-    assert hds.SKILL_VERSION == "V52.0 OMNI-ARCHITECT"
+    assert hds.SKILL_VERSION == "V53.0 OMNI-ARCHITECT"
     skill_md = os.path.join(ROOT_DIR, "SKILL.md")
     assert os.path.isfile(skill_md)
     assert os.path.getsize(skill_md) <= 10500
@@ -53,16 +53,23 @@ def test_single_source_version_and_v50_architecture():
         "modules",
         "module_67_v52_pure_vocal_dsp_corpus_phonetics_and_history.md",
     )
+    v53_module_doc = os.path.join(
+        ROOT_DIR,
+        "references",
+        "modules",
+        "module_68_v53_dual_corpus_flow_bahrani_iraqi_mastery.md",
+    )
     assert os.path.isfile(v50_module_doc)
     assert os.path.isfile(v51_module_doc)
     assert os.path.isfile(v52_module_doc)
+    assert os.path.isfile(v53_module_doc)
 
     constitution = hds.load_v50_0_constitution()
     assert (
         constitution["protocol_metadata"]["protocol_name"]
         == "Hussaini_Production_Studio_OS_V50_0_OMNI_ARCHITECT"
     )
-    assert constitution["protocol_metadata"]["skill_version"] == "V52.0 OMNI-ARCHITECT"
+    assert constitution["protocol_metadata"]["skill_version"] == "V53.0 OMNI-ARCHITECT"
     assert len(constitution["5_master_sound_prompts_library_modules_36_44_46_48_52"]) == 25
     assert len(hds.MASTER_SOUND_PROMPTS_V50) == 25
     assert len(constitution["8_v50_empirical_175_corpus_and_9_schools_modules_54_65"]["unified_9_schools_architecture"]) == 9
@@ -76,6 +83,9 @@ def test_single_source_version_and_v50_architecture():
     v52_block = constitution["v52_0_module_67_upgrades"]
     assert v52_block["version"] == "V52.0 OMNI-ARCHITECT"
     assert v52_block["supported_dsp_modes_count"] == 18
+    v53_block = constitution["v53_0_module_68_upgrades"]
+    assert v53_block["version"] == "V53.0 OMNI-ARCHITECT"
+    assert v53_block["dual_corpus_benchmark"]["idempotency_failures"] == 0
 
 
 def test_module_41_49_57_58_64_iraqi_prosthetic_clusters_and_v50_g2p_locks():
@@ -539,3 +549,74 @@ def test_v52_historical_verifier_stage_planner_and_atwar_routing():
 
     assert hds.main(["--verify-history", clean_poem]) == 0
     assert hds.main(["--plan-stages", clean_poem]) == 0
+
+
+def test_v53_dual_corpus_bahrani_iraqi_ear_locks_and_audio_profiler(tmp_path):
+    """Verify V53 Kashida healing, Tawshih guard, QC34 pre-Hamza lock, Bahrani isolation, 11 Muqatila rules & profiler."""
+    raw_social = (
+        "المجموعة الرابعة\n"
+        "اللهم صل على محمد وال محمد وعجل فرجهم\n"
+        "●●●●●●●●●●●●\n"
+        "لــو مــا وجـهـته كــربلة •.•.• إبأرض الشام ما بگت خوان\n"
+        "✍ مـوسـى الخـادم\n"
+        "#قصائد_السبي_محرم_الحرام_١٤٤٤_هـ"
+    )
+    sanitized = hds.sanitize_poem_decorations(raw_social)
+    assert "لــو" not in sanitized and "ل و" not in sanitized
+    assert "لو ما وجهته كربلة" in sanitized
+    assert "اللهم صل" not in sanitized and "●●●●" not in sanitized
+
+    shaped_res = hds.detect_and_shape_dialect(sanitized)
+    shaped = shaped_res["shaped_lyrics"]
+    assert "بِأَرْضِ" in shaped and "إِبْأَرْضِ" not in shaped
+    assert "بِگَتْ" in shaped and "إِخْوَانْ" in shaped
+
+    # Ensure banner 'صل على' or vocalized Fazzaiya header routes accurately
+    rec_latm = hds.recommend_tor_and_rhythm_for_poem("اللهم صل على محمد وال محمد\n[فَزَّاعِيَّة]\nوسفه كربلا سبي")
+    assert rec_latm["recommended_dsp_mode"] == "fazzaiya"
+    assert rec_latm["recommended_bpm"] == 84
+    assert len(rec_latm["recommended_maqam_progression"]) == 4
+    assert "الفزاعية" in rec_latm["detected_poetic_wazn_ar"]
+
+    # Bahrani 2nd-fem '-ish' isolation and standard Dhad preservation
+    bahr = hds.detect_and_shape_dialect("عَلَه التَّلْ عيونش وگلبش يا خويي فاضل")
+    assert bahr["detected_dialect"] == "bahrani"
+    assert "عِيُونِشْ" in bahr["shaped_lyrics"] and "گَلْبِشْ" in bahr["shaped_lyrics"]
+    assert "فَاضِلْ" in bahr["shaped_lyrics"]
+
+    # Idempotency with ماضل + بكلبي + Kaf-Fatha inflections
+    p_idem = "ماضل بكلبي وكال الكمر .. بلحضه هالضلام واضلوعنه"
+    pass1 = hds.detect_and_shape_dialect(p_idem)["shaped_lyrics"]
+    pass2 = hds.detect_and_shape_dialect(pass1)["shaped_lyrics"]
+    assert pass1 == pass2
+    assert "بِگَلْبِي" in pass1 or "إِبْگَلْبِي" in pass1
+    assert "گَالْ" in pass1 and "الگَمَرْ" in pass1
+    assert "لَحْظَه" in pass1 and "هَلظَّلَامْ" in pass1 and "أَضْلُوعْنَه" in pass1
+
+    # Expanded Muqatila & Aqida rules
+    hv = hds.verify_historical_narratives(
+        "ألف جرح وتسعميه .. تقل كن فيكون .. شرب الماي العباس .. رقية ماتت بكربلا"
+    )
+    rule_ids = {w["rule_id"] for w in hv["distortions_and_warnings"]}
+    assert {
+        "legendary_wound_count_1900",
+        "ghuluw_divine_attribution",
+        "abbas_drinking_water_claim",
+        "ruqayyah_died_in_karbala_error",
+    }.issubset(rule_ids)
+    assert hds.verify_historical_narratives("العباس ما شرب الماي على العلقمي")["is_historically_clean"] is True
+
+    # Windowed Baritone f0 median & BPM profiler accuracy check
+    sr = 16000
+    dur = 4.0
+    t_arr = np.linspace(0.0, dur, int(sr * dur), endpoint=False)
+    beat_hz = 85.0 / 60.0
+    env = 0.35 + 0.65 * (0.5 * (1.0 + np.cos(2.0 * np.pi * beat_hz * t_arr))) ** 6
+    sig = 0.25 * env * np.sin(2.0 * np.pi * 147.0 * t_arr)
+    wav_test = tmp_path / "prof_85bpm.wav"
+    wavfile.write(str(wav_test), sr, (sig * 32767).astype(np.int16))
+    prof = hds.extract_reference_audio_profile(str(wav_test))
+    assert 80 <= prof["estimated_bpm"] <= 90
+    assert 140.0 <= prof["estimated_fundamental_hz"] <= 155.0
+    assert prof["recommended_dsp_mode"] == "fazzaiya"
+    assert prof["integrated_lufs"] == prof["integrated_lufs_approx"]

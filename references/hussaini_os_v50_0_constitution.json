@@ -1,7 +1,7 @@
 {
   "protocol_metadata": {
     "protocol_name": "Hussaini_Production_Studio_OS_V50_0_OMNI_ARCHITECT",
-    "skill_version": "V52.0 OMNI-ARCHITECT",
+    "skill_version": "V53.0 OMNI-ARCHITECT",
     "previous_baseline_version": "V50.0 OMNI-ARCHITECT & V48.5 OMNI-ARCHITECT (Rev 2)",
     "previous_baseline_commit_sha": "497a5cbb4672e8c6f27136fde5c5aabd0f492d29",
     "canonical_repository": "https://github.com/husainalmualif/hussaini-production-studio",
@@ -1994,6 +1994,28 @@
       "ebu_r128_and_audit": "True ITU-R BS.1770-4 / EBU R128 Stage-1/Stage-2 K-weighting, 400ms gated blocks, 4x oversampled lookahead True-Peak limiter (-1.0 dBTP), O(N) chunked boxcar smoothing, 8/16/24/32-bit PCM/Float RIFF I/O, and --audit-audio stereo compliance verification.",
       "historical_verifier_and_planner": "--verify-history audits lyrics against canonical Ahl al-Bayt sources (Al-Irshad, Al-Luhuf, Nafas al-Mahmum); --plan-stages automates NC16 3-line Extend partitioning and emits Method 2 +60s trailing-pad warnings.",
       "corpus_phonetics_benchmark": "COMMON_CORPUS_LEXICON_V52 (216 forms) + Swash-Kaf/kaf-tanween/Daad-Dhaa normalizers achieve 14,867/14,924 (99.62%) vocalization and 0 idempotency failures across all 127 corpus sections."
+    }
+  },
+  "v53_0_module_68_upgrades": {
+    "version": "V53.0 OMNI-ARCHITECT",
+    "module_reference": "references/modules/module_68_v53_dual_corpus_flow_bahrani_iraqi_mastery.md",
+    "dual_corpus_benchmark": {
+      "new_103kb_sections": 132,
+      "new_103kb_vocalization": "14425/14437 (99.92%)",
+      "old_105kb_sections": 129,
+      "old_105kb_vocalization": "14356/14370 (99.90%)",
+      "idempotency_failures": 0
+    },
+    "flow_music_field_tests": {
+      "v53_test1_bahrani_muthakkal": "Lyria 3.5 raw 177.28s (-15.07 LUFS, 0.0 dBTP clipped) -> local vocal_pure_master (-14.0 LUFS, -1.44 dBTP, broadcast_compliant=true).",
+      "v53_test2_iraqi_fazzaiya": "Lyria 3.5 raw 178.411s (-14.70 LUFS, 0.0 dBTP clipped) -> local vocal_pure_master (-14.0 LUFS, -1.71 dBTP, broadcast_compliant=true)."
+    },
+    "v53_engineering_improvements": {
+      "qc34_pre_hamza_firewall": "Forbid prosthetic 'إِبْـ' before initial Hamza vowels ('إِبْأَرْضِ -> بِأَرْضِ'); enforce 'بِگَتْ' Kasra over 'بُگَتْ', 'إِخْوَانْ' over 'خُوَّانْ', and 'بِگَى/ظَلْ' over Qaf-ambiguous 'بُقَه'.",
+      "kashida_and_banner_healing": "Strip mid-word Tatweel cleanly to '' (never breaking words into letters) and purge social dividers/WhatsApp banners.",
+      "tawshih_false_positive_fix": "Sanitize & strip diacritics before matching Tor/Wazn keywords; stop matching banner 'صل على' as Tawashih; add recommended_maqam_progression and detected_poetic_wazn_ar.",
+      "historical_verifier_expansion": "11 Muqatila/Aqida rules adding 1900 wounds, Ghuluw ('كن فيكون'), Abbas water chronology, Ruqayyah Sham vs. Karbala, and Sajjad combat checks.",
+      "audio_profiler_upgrade": "nfft=16384 windowed Baritone f0 median, unbiased onset tempo tracker, and dynamic BPM prompt matching."
     }
   }
 }

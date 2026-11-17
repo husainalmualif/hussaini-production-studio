@@ -9,7 +9,7 @@ on:
 
 jobs:
   validate-skill-and-dsp:
-    name: Validate V52.0 Docs, Pylint, Unit Tests & 18-Mode DSP (Py ${{ matrix.python-version }})
+    name: Validate V53.0 Docs, Pylint, Unit Tests & 18-Mode DSP (Py ${{ matrix.python-version }})
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -56,6 +56,7 @@ jobs:
           test -f references/modules/module_54_to_65_v50_super_algorithm_and_175_corpus.md
           test -f references/modules/module_66_v51_field_evaluation_consultation_and_style_taxonomy.md
           test -f references/modules/module_67_v52_pure_vocal_dsp_corpus_phonetics_and_history.md
+          test -f references/modules/module_68_v53_dual_corpus_flow_bahrani_iraqi_mastery.md
           test -f scripts/hussaini_dsp_montage.py
           test -f tests/test_hussaini_modules.py
           ! test -f references/hussaini_os_v48_5_constitution.json
@@ -64,7 +65,7 @@ jobs:
           ! test -f references/modules/module_50_melody_composition_and_24edo_guide_synth.md
           ! test -f references/modules/module_51_6dialects_g2p_and_25_atwar_encyclopedia.md
           ! test -f references/modules/module_52_pro_dsp_dynamic_ahaat_and_multi_ai_router.md
-          python -c "import json, pathlib; assert pathlib.Path('VERSION').read_text(encoding='utf-8').strip() == 'V52.0 OMNI-ARCHITECT'; assert pathlib.Path('SKILL.md').stat().st_size <= 10500; data = json.loads(pathlib.Path('references/hussaini_os_v50_0_constitution.json').read_text(encoding='utf-8')); assert data['protocol_metadata']['protocol_name'] == 'Hussaini_Production_Studio_OS_V50_0_OMNI_ARCHITECT'; assert data['protocol_metadata']['skill_version'] == 'V52.0 OMNI-ARCHITECT'"
+          python -c "import json, pathlib; assert pathlib.Path('VERSION').read_text(encoding='utf-8').strip() == 'V53.0 OMNI-ARCHITECT'; assert pathlib.Path('SKILL.md').stat().st_size <= 10500; data = json.loads(pathlib.Path('references/hussaini_os_v50_0_constitution.json').read_text(encoding='utf-8')); assert data['protocol_metadata']['protocol_name'] == 'Hussaini_Production_Studio_OS_V50_0_OMNI_ARCHITECT'; assert data['protocol_metadata']['skill_version'] == 'V53.0 OMNI-ARCHITECT'"
 
       - name: Run Pylint Static Analysis
         run: |

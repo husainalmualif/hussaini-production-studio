@@ -1,15 +1,14 @@
 #!/usr/bin/env python3
 # pylint: disable=too-many-lines,too-many-return-statements,too-many-branches,too-many-locals,too-many-statements,too-many-arguments,too-many-positional-arguments,no-member,chained-comparison
-"""Hussaini Audio Omni-Architect DSP, 5-Track DAW & Phonetics Compiler (V52.0 OMNI-ARCHITECT).
+"""Hussaini Audio Omni-Architect DSP, 5-Track DAW & Phonetics Compiler (V53.0 OMNI-ARCHITECT).
 
 Standalone empirical production engine implementing Hussaini_Production_Studio_OS_V50_0_OMNI_ARCHITECT
-and V52.0 field upgrades:
+and V52.0–V53.0 field upgrades:
 - Single-Source Version Management via root VERSION file & JSON constitution
 - Pure-Python WAV I/O + ITU-R BS.1770-4 / EBU R128 K-Weighted Gated Loudness + 4x True-Peak Limiter
-- Module 67 (V52.0): Pure Vocal Mastering (`vocal_pure_master`), Organic Chest-Thud & Beat Alignment,
-  Tail Trim/Fade (--trim-end-sec/--fade-out-sec), Seam Audio Auditor (--audit-audio), Fazzaiya/Tawshih
-  Atwar & Stage Planning (--plan-stages), Swash-Kaf/Kaf-Fatha/Daad-Dhaa Firewall, Morphological Arabic
-  Vocalizer (>90% diacritization across real Husseini poetry), and Ahl al-Bayt Historical Verifier
+- Module 67–68 (V52.0–V53.0): Pure Vocal Mastering (`vocal_pure_master`), Tail Trim/Fade, Stereo Auditor
+  (--audit-audio), Flow-Audited Bahrani/Iraqi G2P & QC34 Pre-Hamza Firewall, Dual-Corpus 99.9%+ Vocalizer,
+  Diacritic-Safe Tor/Wazn/Maqam Router, Voice-Tracked Audio Profiler, and 11-Rule Historical Verifier
 """
 
 import argparse
@@ -563,6 +562,9 @@ WORD_SEPARATION_MAP = {
     "يحبيبه": "يَا حَبِيبَه",
     "يافاطم": "يَا فَاطِمْ",
     "ابأرض": "بِأَرْضِ",
+    "إبأرض": "بِأَرْضِ",
+    "مابگت": "مَا بِگَتْ",
+    "مابقت": "مَا بِگَتْ",
     "عالباب": "إِعْلَه البَابْ",
     "عالرمضا": "إِعْلَه الرَّمْضَه",
     "عالرمضه": "إِعْلَه الرَّمْضَه",
@@ -695,26 +697,45 @@ BAHRANI_MARKERS = (
     "يا بويي",
     "إشحالش",
     "اشحالش",
+    "شلونش",
     "گلبش",
+    "عيونش",
+    "دمعش",
+    "خدرش",
+    "بيتش",
+    "روحش",
+    "حالش",
     "عفتش",
+    "شفتش",
     "هالمسيه",
     "هالمسية",
+    "ويش",
+    "بهالشكل",
+    "هالشكل",
+    "أحين",
+    "الحين",
+    "إلين",
     "عَلَه",
 )
 
 IRAQI_MARKERS = (
     "بويه",
     "خويه",
+    "يخويه",
     "يمه",
     "وليدي",
     "دلالي",
     "شلون",
+    "اشلون",
     "إش صار",
     "شصار",
     "شنگول",
     "شيصير",
+    "شگد",
+    "شكد",
     "بلياك",
     "ما ظل",
+    "ماظل",
     "چلبت",
     "وگفت",
     "هسه",
@@ -722,6 +743,7 @@ IRAQI_MARKERS = (
     "هالحچاية",
     "مشبوگه",
     "يبچي",
+    "ابچي",
     "تشتاگ",
     "تگله",
     "متوني",
@@ -739,10 +761,17 @@ IRAQI_MARKERS = (
     "يلحگ",
     "ينخونك",
     "بچفك",
+    "اچفوف",
+    "چفين",
     "بگلبي",
+    "بكلبي",
     "بگاع",
     "بهداي",
     "بعفه",
+    "بگت",
+    "وسفه",
+    "تظل",
+    "يحاچيني",
     "إعله",
     "اعله",
     "وسادة ريش",
@@ -752,6 +781,26 @@ IRAQI_MARKERS = (
     "مطيني",
     "يالمطيني",
     "يفگدله",
+    "آنه",
+    "چنت",
+    "چان",
+    "چانت",
+    "چا",
+    "موش",
+    "اويلاه",
+    "أويلاه",
+    "گوه",
+    "گمت",
+    "گعد",
+    "گال",
+    "هيج",
+    "موذر",
+    "مچتوف",
+    "مگطع",
+    "العلگمي",
+    "فاگد",
+    "تبرالي",
+    "يبرالي",
 )
 
 FUSHA_MARKERS = (
@@ -1302,6 +1351,36 @@ BAHRANI_WORD_SHAPING_MAP = {
     "وين": "وَينْ",
     "بين": "بَينْ",
     "زينب": "زَينَبْ",
+    "شلونش": "إِشْلُونِشْ",
+    "عيونش": "عِيُونِشْ",
+    "دمعش": "دَمْعِشْ",
+    "خدرش": "خِدْرِشْ",
+    "بيتش": "بَيتِشْ",
+    "روحش": "رُوحِشْ",
+    "حالش": "حَالِشْ",
+    "شفتش": "شِفْتِشْ",
+    "ويش": "وِيشْ",
+    "شنهو": "شِنْهُو",
+    "أحين": "أَحِينْ",
+    "احين": "أَحِينْ",
+    "إلين": "إِلَينْ",
+    "فجر": "فَجِرْ",
+    "بحر": "بَحِرْ",
+    "نصر": "نَصِرْ",
+    "متن": "مَتِنْ",
+    "بدر": "بَدِرْ",
+    "ذكر": "ذِكِرْ",
+    "صدر": "صَدِرْ",
+    "گعد": "گِعَدْ",
+    "گاعد": "گَاعِدْ",
+    "مشينه": "مِشِينَه",
+    "بچينه": "بِچِينَه",
+    "ضلوع": "ضْلُوعْ",
+    "ضل": "ضَلْ",
+    "ضلت": "ضَلَّتْ",
+    "ضليت": "ضَلَّيتْ",
+    "ظليت": "ضَلَّيتْ",
+    "يوبه": "يُوبَه",
 }
 
 HYBRID_WORD_SHAPING_MAP = {
@@ -1346,6 +1425,36 @@ HYBRID_WORD_SHAPING_MAP = {
     "وين": "وَينْ",
     "بين": "بَينْ",
     "زينب": "زَينَبْ",
+    "شلونش": "إِشْلُونِشْ",
+    "عيونش": "عِيُونِشْ",
+    "دمعش": "دَمْعِشْ",
+    "خدرش": "خِدْرِشْ",
+    "بيتش": "بَيتِشْ",
+    "روحش": "رُوحِشْ",
+    "حالش": "حَالِشْ",
+    "شفتش": "شِفْتِشْ",
+    "ويش": "وِيشْ",
+    "شنهو": "شِنْهُو",
+    "أحين": "أَحِينْ",
+    "احين": "أَحِينْ",
+    "إلين": "إِلَينْ",
+    "فجر": "فَجِرْ",
+    "بحر": "بَحِرْ",
+    "نصر": "نَصِرْ",
+    "متن": "مَتِنْ",
+    "بدر": "بَدِرْ",
+    "ذكر": "ذِكِرْ",
+    "صدر": "صَدِرْ",
+    "گعد": "گِعَدْ",
+    "گاعد": "گَاعِدْ",
+    "مشينه": "مِشِينَه",
+    "بچينه": "بِچِينَه",
+    "ضلوع": "ضْلُوعْ",
+    "ضل": "ضَلْ",
+    "ضلت": "ضَلَّتْ",
+    "ضليت": "ضَلَّيتْ",
+    "ظليت": "ضَلَّيتْ",
+    "يوبه": "يُوبَه",
 }
 
 # V52.0 Corpus-Validated High-Frequency Iraqi/Husseini Lexicon, Kaf-Fatha & Daad/Dhaa Locks
@@ -1354,20 +1463,25 @@ KAF_FATHA_TO_GAF_LEXICON = {
     "كَلبي": "گَلْبِي",
     "كَلبك": "گَلْبَكْ",
     "كَلبه": "گَلْبَه",
+    "كَلبها": "گَلْبْهَا",
+    "وكَلبه": "وَ گَلْبَه",
     "لكَبر": "لِـ گَبِرْ",
     "كَبر": "گَبِرْ",
     "كَبره": "گَبْرَه",
     "تخنكَني": "تِخْنِگْنِي",
     "ينكَل": "يِنْگِلْ",
     "خانكَته": "خَانِگْتَه",
+    "خانكَني": "خَانِگْنِي",
     "الفركَه": "الفِرْگَه",
     "فركَه": "فِرْگَه",
     "فركَتك": "فِرْگِتَكْ",
     "فركَتهم": "فِرْگَتْهُمْ",
+    "ابفركَتك": "إِبْفِرْگِتَكْ",
     "فاكَد": "فَاگِدْ",
     "فاكَدين": "فَاگْدِينْ",
     "ملكَاك": "مَلْگَاكْ",
     "الكَفه": "الگِفَه",
+    "كَفاه": "گِفَاهْ",
     "كَعد": "گِعَدْ",
     "كَعدت": "گَعْدَتْ",
     "وكَع": "وُگَعْ",
@@ -1375,31 +1489,62 @@ KAF_FATHA_TO_GAF_LEXICON = {
     "تندكَ": "تِنْدَگْ",
     "مكَطوع": "مَگْطُوعْ",
     "مكَطوعه": "مَگْطُوعَه",
+    "المكَطع": "المْگَطَّعْ",
     "تكًول": "تْگُولْ",
     "تكول": "تْگُولْ",
     "تكَول": "تْگُولْ",
     "دكَول": "دْگُولْ",
+    "ادكَول": "تِدْگُولْ",
+    "يالتكَول": "يَالْتِگُولْ",
+    "كَالو": "گَالَوْ",
+    "وكَالت": "وَ گَالَتْ",
     "لكَيت": "لِگَيتْ",
     "لكَيته": "لِگَيتَه",
     "يلكَه": "يِلْگَه",
+    "وتلكَه": "وَ تِلْگَه",
     "عكَب": "عُگُبْ",
     "عكَبه": "عُگْبَه",
     "بكَاع": "إِبْگَاعْ",
     "الكَاع": "الگَاعْ",
     "كَاع": "گَاعْ",
+    "كَمر": "گَمَرْ",
+    "شكَد": "إِشْگَدْ",
+    "كَدامك": "گِدَّامَكْ",
+    "كَبلك": "گَبْلَكْ",
+    "كَبله": "گَبْلَه",
+    "كَامت": "گَامَتْ",
+    "كَمت": "گِمِتْ",
+    "كَوه": "گُوَّه",
+    "اكَدر": "أَگْدَرْ",
+    "فوكَاهه": "فُوگَاهَا",
+    "ابكَربه": "إِبْگُرْبَه",
+    "شبكَته": "شِبْگَتَه",
+    "اتشاكَف": "إِتْشَاگَفْ",
+    "وباكَك": "وَ بَاگَكْ",
+    "وتنكَضي": "وَ تِنْگِضِي",
+    "تكَطر": "تْگَطِّرْ",
+    "وتكَنطر": "وَ تْگَنْطَرْ",
+    "كَظيان": "گِضْيَانْ",
+    "اكَظيهم": "أَگْضِيهُمْ",
+    "تشكَ": "تِشِگْ",
+    "حلكَ": "حَلِگْ",
 }
 
 DAAD_DHAA_SPELLING_FIX_MAP = {
     "الغاظريه": "الغَاضْرِيَّه",
     "الغاظرية": "الغَاضْرِيَّه",
+    "للغاظريه": "لِلْغَاضْرِيَّه",
     "أظلوع": "أَضْلُوعْ",
     "اظلوع": "أَضْلُوعْ",
+    "اضلوعنه": "أَضْلُوعْنَه",
+    "الظلوع": "الضُّلُوعْ",
     "أظلاع": "أَضْلَاعْ",
     "اظلاع": "أَضْلَاعْ",
     "فظه": "فِضَّه",
     "بفظه": "بِفِضَّه",
     "مظيف": "مَضِيفْ",
     "لمظيفه": "لِمَضِيفَه",
+    "ومظيفه": "وَ مَضِيفَه",
     "ارظ": "أَرْضْ",
     "أرظ": "أَرْضْ",
     "ظرب": "ضَرَبْ",
@@ -1408,16 +1553,24 @@ DAAD_DHAA_SPELLING_FIX_MAP = {
     "تنظرب": "تِنْضَرِبْ",
     "انضر": "أَنْظُرْ",
     "أنضر": "أَنْظُرْ",
+    "انضرلك": "أَنْظُرْلَكْ",
     "تنضر": "تِنْظُرْ",
+    "هالتنضر": "هَلْتِنْظُرْ",
     "ينضر": "يِنْظُرْ",
     "نضر": "نَظَرْ",
     "نضره": "نَظْرَه",
+    "نضرة": "نَظْرَه",
     "نضرات": "نَظْرَاتْ",
+    "نضراته": "نَظْرَاتَه",
     "ناضر": "نَاظِرْ",
     "الناضرين": "النَّاظْرِينْ",
     "لحضه": "لَحْظَه",
     "لحضة": "لَحْظَه",
+    "بلحضه": "بْلَحْظَه",
+    "لحضرته": "لْحَضْرْتَه",
     "لحضات": "لَحْظَاتْ",
+    "حظرت": "حَضْرَتْ",
+    "اليحظر": "اليِحْضَرْ",
     "ضالم": "ظَالِمْ",
     "الضالم": "الظَّالِمْ",
     "ضلمه": "ظُلْمَه",
@@ -1425,10 +1578,12 @@ DAAD_DHAA_SPELLING_FIX_MAP = {
     "الضلمه": "الظُّلْمَه",
     "ضلام": "ظَلَامْ",
     "الضلام": "الظَّلَامْ",
+    "هالضلام": "هَلظَّلَامْ",
     "ضهر": "ظَهَرْ",
     "بضهر": "بِظَهَرْ",
     "ضهره": "ظَهْرَه",
     "بضهره": "بِظَهْرَه",
+    "وبضهره": "وَ بْظَهْرَه",
     "مضلوم": "مَظْلُومْ",
     "مضلومه": "مَظْلُومَه",
     "يضل": "يِظَلْ",
@@ -1437,6 +1592,7 @@ DAAD_DHAA_SPELLING_FIX_MAP = {
     "ضلت": "ظَلَّتْ",
     "ضليت": "ظَلَّيتْ",
     "ضلينه": "ظَلَّينَه",
+    "فاصل": "فَاضِلْ",
 }
 
 COMMON_CORPUS_LEXICON_V52 = {
@@ -1463,6 +1619,7 @@ COMMON_CORPUS_LEXICON_V52 = {
     "العباس": "العَبَّاسْ",
     "ابوفاضل": "أَبُو فَاضِلْ",
     "أبوفاضل": "أَبُو فَاضِلْ",
+    "يبوفاضل": "يَبُو فَاضِلْ",
     "ابو": "أَبُو",
     "أبو": "أَبُو",
     "يبن": "يَبِنْ",
@@ -1476,8 +1633,39 @@ COMMON_CORPUS_LEXICON_V52 = {
     "اخوها": "أَخُوهَا",
     "اخوي": "أَخُويْ",
     "أخوي": "أَخُويْ",
+    "كلبي": "گَلْبِي",
+    "وكلبي": "وَ گَلْبِي",
+    "بكلبي": "إِبْگَلْبِي",
+    "كلبه": "گَلْبَه",
+    "وكلبه": "وَ گَلْبَه",
+    "كلبها": "گَلْبْهَا",
+    "كلبك": "گَلْبَكْ",
+    "كال": "گَالْ",
+    "وكال": "وَ گَالْ",
+    "كالو": "گَالَوْ",
+    "كالوا": "گَالَوْ",
+    "كالت": "گَالَتْ",
+    "كمر": "گَمَرْ",
+    "الكمر": "الگَمَرْ",
+    "ملكاك": "مَلْگَاكْ",
+    "وكت": "وَكِتْ",
+    "الوكت": "الوَكِتْ",
+    "كلش": "كِلِّشْ",
+    "اكدر": "أَگْدَرْ",
+    "تكدر": "تِگْدَرْ",
+    "كدام": "گِدَّامْ",
+    "كدامك": "گِدَّامَكْ",
+    "اوكف": "أَوْگَفْ",
+    "أوكف": "أَوْگَفْ",
     "اه": "آهْ",
     "آه": "آهْ",
+    "الآه": "الآهْ",
+    "آيه": "آيَه",
+    "الايه": "الآيَه",
+    "ايه": "إِيَه",
+    "أوف": "أُوفْ",
+    "و": "وَ",
+    "آ": "آ",
     "وي": "وِيْ",
     "ويه": "وِيَّه",
     "وياي": "وِيَّايْ",
@@ -1656,6 +1844,16 @@ COMMON_CORPUS_LEXICON_V52 = {
     "انذبح": "انْذِبَحْ",
     "انكسر": "انْكِسَرْ",
     "انگطع": "انْگِطَعْ",
+    "بگت": "بِگَتْ",
+    "بقت": "بِگَتْ",
+    "بگيت": "بِگَيتْ",
+    "بقيت": "بِگَيتْ",
+    "بقه": "بِگَه",
+    "خوان": "إِخْوَانْ",
+    "خوّان": "إِخْوَانْ",
+    "اخوان": "إِخْوَانْ",
+    "إخوان": "إِخْوَانْ",
+    "خواتي": "خَوَاتِي",
 }
 
 
@@ -1780,35 +1978,99 @@ def _format_tatweel(text_val, use_tatweel=False):
 
 
 def sanitize_poem_decorations(text):
-    """Strip social-media emojis, decorative divider glyphs, and poet signature lines safely."""
+    """Module 68 (V53.0): Strip emojis, channel dividers, inline kashida, and poet banners safely."""
     out_lines = []
-    signature_prefixes = ("تمت", "الشاعر", "كلمات", "الرادود", "اداء", "أداء", "اللهم صل", "السلام على الحسين")
+    boilerplate_prefixes = (
+        "تمت",
+        "الشاعر",
+        "كلمات",
+        "الرادود",
+        "اداء",
+        "أداء",
+        "اللهم صل على محمد",
+        "اللهم عجل لوليك",
+        "السلام على الحسين",
+        "قصائد حسينية مكتوبة",
+        "قثائد حسينية مكتوبة",
+        "قصائد محرم",
+        "قصائد السبي",
+        "المجموعة الا",
+        "المجموعة الث",
+        "المجموعة الر",
+        "المجموعة الخ",
+        "المجموعة الس",
+        "المجموعة الت",
+        "لايسمح",
+        "لا يسمح",
+        "نسألكم الدعاء",
+        "نسالكم الدعاء",
+        "الفاتحه لروح",
+        "الفاتحة لروح",
+        "رابط ",
+    )
+    arabic_letter_re = re.compile(r"[\u0621-\u064A\u067E\u0686\u06AF]")
     for raw_ln in text.splitlines():
-        cleaned = re.sub(r"[💔❤😭✏★☆۞◆◇▪✦🙨🙜#*_=/\\-]+", " ", raw_ln)
-        cleaned = re.sub(r"ـ{2,}", " ", cleaned)
-        cleaned = re.sub(r"\s+", " ", cleaned).strip()
-        if not cleaned:
+        stripped_ln = raw_ln.strip()
+        if not stripped_ln:
             continue
-        bare = re.sub(r"[\u064B-\u0652\s:.]", "", cleaned)
-        if any(bare.startswith(p.replace(" ", "")) for p in signature_prefixes) and len(cleaned.split()) <= 5:
+        if stripped_ln.startswith(("#", "✍")):
+            continue
+        if re.fullmatch(r"[\s💔❤😭✏★☆۞◆◇▪✦🙨🙜❀✿↻↺✍•●○■□►◄▲▼#@+*~=_ـ./\\|\-،:؛؟!⊰⊱─═\d\u0660-\u0669⁰¹²³⁴⁵⁶⁷⁸⁹()]+", stripped_ln):
+            continue
+
+        cleaned = raw_ln.replace("\u06C6", "و ").replace("\u06A9", "ك").replace("\u06AA", "ك").replace("\u06CC", "ي").replace("\u06BE", "ه")
+        cleaned = re.sub(r"[💔❤😭✏★☆۞◆◇▪✦🙨🙜❀✿↻↺✍•●○■□►◄▲▼#@+*~=_/\\|\-«»\"“”⊰⊱─═⁰¹²³⁴⁵⁶⁷⁸⁹]+", " ", cleaned)
+        cleaned = re.sub(r"\(\s*[عس]\s*\)", " ", cleaned)
+        cleaned = re.sub(r"ك(?:\u064e\u0640|\u0640\u064e|\u064b)", "گ", cleaned)
+        # Heal mid-word expressive poet kashida (ـ) without breaking spacing
+        cleaned = re.sub(
+            r"(?<=[\u0621-\u064A\u064B-\u0652\u067E\u0686\u06AF])\u0640+(?=[\u0621-\u064A\u064B-\u0652\u067E\u0686\u06AF])",
+            "",
+            cleaned,
+        )
+        cleaned = re.sub(r"\s+\u0640+\s+|\s+\u0640+$|^\u0640+\s+", " ", cleaned)
+        cleaned = re.sub(r"(?<!\.)\.\.(?!\.)", " .. ", cleaned)
+        cleaned = re.sub(r"\.{3,}|…", " .. ", cleaned)
+        cleaned = re.sub(r"\s+", " ", cleaned).strip()
+        if not cleaned or not arabic_letter_re.search(cleaned):
+            continue
+
+        bare = re.sub(r"[\u064B-\u0652\s:.،؛/\\0-9\u0660-\u0669]", "", cleaned)
+        if not bare:
+            continue
+        if any(bare.startswith(p.replace(" ", "")) for p in boilerplate_prefixes):
+            continue
+        if len(cleaned.split()) <= 4 and re.search(r"(?:^|\s)(?:خادم|الخادم|الكربلائي|الدراجي|الخفاجي|البديري|الشويلي|الطائي|الشاعر|الركابي|الغنامي|الابراهيمي|البزوني|المياحي|الخيكاني|العكيلي|المبارك|السعيدي|الربيعي|اللامي|العارضي|الذبحاوي|الجحيشي)(?:\s|$)", cleaned):
             continue
         out_lines.append(cleaned)
     return "\n".join(out_lines)
 
 
 def normalize_iraqi_orthographic_gaf(text):
-    """Normalize Swash Kaf, Kaf+Fatha/Tanween+Tatweel, and known Kaf+Fatha Iraqi Gaf words into 'گ'."""
-    norm = text.replace("\u06AA", "ك").replace("\u06BE", "ه").replace("\u06CC", "ي")
+    """Normalize Swash Kaf, Kaf+Fatha/Tanween+Tatweel, and attested Iraqi Kaf+Fatha Gaf stems into 'گ'."""
+    norm = text.replace("\u06AA", "ك").replace("\u06A9", "ك").replace("\u06BE", "ه").replace("\u06CC", "ي").replace("\u06C6", "و")
     norm = re.sub(r"ك(?:\u064e\u0640|\u0640\u064e|\u064b)", "گ", norm)
     for raw_kaf_gaf, shaped_gaf in KAF_FATHA_TO_GAF_LEXICON.items():
         norm = re.sub(rf"(?<!\S){re.escape(raw_kaf_gaf)}(?!\S)", shaped_gaf, norm)
+    # Catch prefixed/suffixed inflections of high-frequency Iraqi Gaf roots written with Kaf+Fatha (كَ)
+    norm = re.sub(
+        r"ك\u064E(?=(?:لب|عد|اع|مر|بل|در|طع|ض[يى]|ظي|طر|دام|وه|ام|ف[اه]|نطر|الو|الت))",
+        "گ",
+        norm,
+    )
+    norm = re.sub(
+        r"(?<=[افملن])ك\u064E(?=(?:د|اك|اع|اه|ع|ف|ط))",
+        "گ",
+        norm,
+    )
     return norm
 
 
 def normalize_daad_dhaa_homographs(text):
-    """Correct common Iraqi poet Daad/Dhaa spelling swaps before G2P shaping."""
+    """Correct common Iraqi poet Daad/Dhaa spelling swaps (including 'و' clitic prefix) before G2P shaping."""
     result = text
     for wrong_tok, fixed_tok in DAAD_DHAA_SPELLING_FIX_MAP.items():
+        result = re.sub(rf"(?<!\S)و{re.escape(wrong_tok)}(?!\S)", f"وَ {fixed_tok}", result)
         result = re.sub(rf"(?<!\S){re.escape(wrong_tok)}(?!\S)", fixed_tok, result)
     # Disambiguate standalone 'ضل' (remained -> ظَلْ) except when meaning straying 'ضل الطريق/السبيل'
     result = re.sub(r"(?<!\S)ضل(?!\S)(?!\s+(?:الطريق|السبيل|عن|من))", "ظَلْ", result)
@@ -1828,14 +2090,15 @@ def normalize_demonstrative_hal(text, dialect="iraqi"):
 
 
 def repair_word_initial_sukun_and_diphthongs(text):
-    """Module 49 (QC13 & QC14): Repair plain initial Sukun, strip feminine Haa Sukun, and leave
-    medial diphthong glides (ي, و after Fatha) unmarked so Maddat elongate smoothly.
-    """
-    result = text
+    """Module 49 & 68 (QC13, QC14 & QC34): Repair plain initial Sukun, block prosthetic pre-Hamza 'إِبْأ', strip feminine Haa Sukun, and leave medial diphthongs unmarked."""
+    result = re.sub(r"(?<!\S)إِبْ([أإآ])", r"بِ\1", text)
     for bad_sukun, repaired in WORD_INITIAL_SUKUN_REPAIR_MAP.items():
         result = re.sub(rf"(?<!\S){re.escape(bad_sukun)}(?!\S)", repaired, result)
     for fusha_diph, coll_mono in DIALECTAL_DIPHTHONG_AND_VOWEL_MAP.items():
         result = re.sub(rf"(?<!\S){re.escape(fusha_diph)}(?!\S)", coll_mono, result)
+    # Fallback repair for any remaining unmapped word-initial consonant+Sukun (QC13 guard)
+    result = re.sub(r"(?<![\u0621-\u064A\u067E\u0686\u06AF\u064B-\u0652])([حعخغ])\u0652", r"\1ِ", result)
+    result = re.sub(r"(?<![\u0621-\u064A\u067E\u0686\u06AF\u064B-\u0652])([\u0628-\u064A\u067E\u0686\u06AF])\u0652", r"\1ِ", result)
     # QC14: Leave medial diphthong glides (ي, و after Fatha) unmarked when followed by a letter in-word
     result = re.sub(
         r"\u064E([يو])\u0652(?=[\u0621-\u063A\u0641-\u064A\u067E\u0686\u06AF])",
@@ -1852,6 +2115,12 @@ def de_cliticize_and_separate_words(text, use_tatweel=False):
     result = re.sub(r"[ \t]*(?<!\.)\.\.(?!\.)[ \t]*", " .. ", text)
     result = re.sub(r" +", " ", result)
     result = normalize_iraqi_orthographic_gaf(result)
+    # Remove mid-word kashida safely while keeping trailing prefix tatweel if requested
+    result = re.sub(
+        r"(?<=[\u0621-\u064A\u064B-\u0652\u067E\u0686\u06AF])\u0640+(?=[\u0621-\u064A\u064B-\u0652\u067E\u0686\u06AF])",
+        "",
+        result,
+    )
     result = normalize_daad_dhaa_homographs(result)
     for raw_phrase, shaped_phrase in COLLOQUIAL_PHRASE_MAP.items():
         result = result.replace(raw_phrase, shaped_phrase)
@@ -2079,7 +2348,7 @@ def shape_unseen_corpus_tokens(text, dialect="iraqi", use_tatweel=False):
             if not tok or tok == "..":
                 new_tokens.append(tok)
                 continue
-            m = re.match(r"^([\(\[،]*)(.*?)([\)\]،\.\u2026؛:!؟]*)$", tok)
+            m = re.match(r"^([\(\[\{\"“«'،\.\u2026•✦★✍]*)(.*?)([\)\]\}\"»'،\.\u2026؛:!؟•✦★]*)$", tok)
             if not m:
                 new_tokens.append(tok)
                 continue
@@ -2096,8 +2365,9 @@ def shape_unseen_corpus_tokens(text, dialect="iraqi", use_tatweel=False):
 
 
 def _count_dialect_markers(text):
-    """Count Iraqi vs. Bahrani markers stably on diacritic-stripped tokens/phrases."""
-    bare_text = re.sub(r"[\u064B-\u0652]", "", text)
+    """Count Iraqi vs. Bahrani markers stably on diacritic-stripped & ortho-normalized text."""
+    ortho = normalize_daad_dhaa_homographs(normalize_iraqi_orthographic_gaf(text))
+    bare_text = re.sub(r"[\u064B-\u0652]", "", ortho)
     bahrani_hits = 0
     for marker in BAHRANI_MARKERS:
         if marker == "عَلَه":
@@ -2105,7 +2375,7 @@ def _count_dialect_markers(text):
                 bahrani_hits += 1
         else:
             bare_m = re.sub(r"[\u064B-\u0652]", "", marker)
-            if bare_m and bare_m in bare_text:
+            if bare_m and re.search(rf"(?<!\S){re.escape(bare_m)}(?!\S)", bare_text):
                 bahrani_hits += 1
     iraqi_hits = 0
     for marker in IRAQI_MARKERS:
@@ -2906,6 +3176,31 @@ def verify_historical_narratives(text):
             r"(?:ثلاثمية\s+ألف|مئات\s+الألوف|مليون\s+قتيل).{0,30}(?:بسيف|طبر|ذبح)",
             "مبالغة روائية غير منضبطة: استعمل أوصاف البسالة الموثقة دون أرقام خرافية تصادم المقاتل الرصينة.",
         ),
+        (
+            "legendary_wound_count_1900",
+            r"(?:ألف|الف)\s+جرح\s+وتسعمي[هة]|تسعمي[هة]\s+(?:جرح|طعنة)",
+            "تدقيق مقاتلي: رقم (1900) جرح ورد في روايات متأخرة؛ والأثبت في المصادر الأولى عشرات الطعنات والضربات والسهام.",
+        ),
+        (
+            "ghuluw_divine_attribution",
+            r"(?:تقل|تقول)\s+كن\s+فيكون|انت\s+الخالق|انت\s+الرب",
+            "تحذير عقائدي (الغلو): يجب تنزيه المقامات عن نسبة الخلق والتكوين المستقل عن الله سبحانه؛ التزم بتفويضهم وعبوديتهم لله.",
+        ),
+        (
+            "abbas_drinking_water_claim",
+            r"(?:(?:العباس|ابو\s*فاضل|ابوالفضل).{0,25}(?<!ما\s)(?<!لم\s)(?<!لا\s)(?:شرب\s+الماي|ارتوى\s+من\s+الماي)|(?<!ما\s)(?<!لم\s)(?<!لا\s)(?:شرب\s+الماي|ارتوى\s+من\s+الماي).{0,20}(?:العباس|ابو\s*فاضل|ابوالفضل))",
+            "خطأ روائي: أبو الفضل العباس (ع) غرف الماء من الفرات ثم رماه وفاءً لعطش الحسين (ع) ولم يشرب منه.",
+        ),
+        (
+            "ruqayyah_died_in_karbala_error",
+            r"رقية.{0,30}(?:ماتت\s+بكربلا|انذبحت\s+بالطف|اندفنت\s+بالطف)",
+            "خطأ مكاني: السيدة رقية (ع) توفيت في خربة الشام لا في أرض كربلاء.",
+        ),
+        (
+            "sajjad_combat_error",
+            r"(?:السجاد|العليل|زين\s*العابدين).{0,30}(?:شهر\s+سيفه\s+وقاتل|قتل\s+الاف|بارز\s+الفرسان)",
+            "تحقيق تاريخي: الإمام السجاد (ع) كان مثقلاً بالمرض يوم العاشر حفظاً للإمامة، وجهاده الأعظم كان بالخطابة في الكوفة والشام.",
+        ),
     ]
     for rule_id, pattern, msg in distortion_rules:
         if re.search(pattern, clean):
@@ -3018,10 +3313,12 @@ def plan_poem_extend_stages(poem_text, target_method="both", bpm=60):
 
 
 def recommend_tor_and_rhythm_for_poem(text):
-    """Module 46, 48, 52 & 67: Recommend Poetic Meter, Performance Tor, DSP Mode, BPM & Prompt."""
-    dialect_info = detect_and_shape_dialect(text)
+    """Module 46, 48, 52, 67 & 68: Recommend Meter, Performance Tor, DSP Mode, BPM, Maqam Arc & Prompt."""
+    clean_text = sanitize_poem_decorations(text) or text
+    bare_text = re.sub(r"[\u064B-\u0652]", "", clean_text)
+    dialect_info = detect_and_shape_dialect(clean_text)
     dialect = dialect_info["detected_dialect"]
-    iso = validate_stage1_iso_syllabic_lock(text)
+    iso = validate_stage1_iso_syllabic_lock(clean_text)
     avg_syl = (
         int(round(sum(iso["syllable_counts"]) / len(iso["syllable_counts"])))
         if iso["syllable_counts"]
@@ -3031,39 +3328,40 @@ def recommend_tor_and_rhythm_for_poem(text):
     service_kw = ("خادم", "خدمنك", "أخدمنك", "هنيالي", "موكب", "مشايه", "مشاية", "راية")
     heroic_kw = ("عباس", "كفيل", "حيدر", "كرار", "صوله", "سيف", "زنجيل")
     shoor_kw = ("شور", "شوور", "حسين حسين", "لبيك", "مامدفون والينه")
-    fazzaiya_kw = ("فزاعيه", "فزاعية", "رباطات فزاعية", "گوم", "تبرالي")
-    tawshih_kw = ("سورة", "الكوثر", "المباهلة", "أهل الكساء", "تواشيح", "صل على")
+    fazzaiya_kw = ("فزاعيه", "فزاعية", "رباطات فزاعية", "تبرالي")
+    tawshih_kw = ("[تواشيح]", "[ابتهالات]", "تواشيح", "أهل الكساء", "المباهلة", "أنشودة", "نشيد")
+    tragedy_kw = ("كربلا", "عاشور", "سبي", "سبايا", "مذبوح", "حوافر", "شمر", "مشرعة", "علگمي", "علقمي", "خرابة", "خرابه", "نحر", "صدر")
     nai_explicit_kw = ("[نعي]", "[موال]", "[أبوذية]")
 
-    if any(k in text for k in nai_explicit_kw):
+    if any(k in bare_text for k in nai_explicit_kw):
         mode = "nai"
         bpm = 0
         maqam = "saba"
         meter = "mujarradat"
         tor = "tor_nai_kashi"
         prompt = MASTER_SOUND_PROMPTS_V48_5["minbar_nai_0bpm_rubato_saba_exclusive_weeping"]
-    elif any(k in text for k in shoor_kw):
+    elif any(k in bare_text for k in shoor_kw):
         mode = "shoor"
         bpm = 132
         maqam = "kurd"
         meter = "rukbani"
         tor = "tor_darj_karbalai"
         prompt = MASTER_SOUND_PROMPTS_V48_5["karbalai_shoor_132bpm_kurd"]
-    elif any(k in text for k in tawshih_kw):
+    elif any(k in bare_text for k in tawshih_kw) and not any(k in bare_text for k in tragedy_kw):
         mode = "vocal_pure_master"
         bpm = 86
         maqam = "rast"
         meter = "muwashah"
         tor = "tor_tawshih_shia"
         prompt = EXTENDED_ATWAR_PROMPTS_V52["shia_tawshih_nasheed_86bpm_rast_hijaz_v52"]
-    elif any(k in text for k in fazzaiya_kw) and not any(k in text for k in heroic_kw):
+    elif any(k in bare_text for k in fazzaiya_kw) or ("گوم" in bare_text and not any(k in bare_text for k in heroic_kw)):
         mode = "fazzaiya"
         bpm = 84
         maqam = "hijaz"
         meter = "fazzaiya"
         tor = "tor_fazzaiya_karbalai"
         prompt = EXTENDED_ATWAR_PROMPTS_V52["karbalai_fazzaiya_84bpm_hijaz_bayati_v52"]
-    elif any(k in text for k in heroic_kw):
+    elif any(k in bare_text for k in heroic_kw):
         if dialect == "bahrani":
             mode = "bahrani_haidari"
             bpm = 96
@@ -3071,13 +3369,6 @@ def recommend_tor_and_rhythm_for_poem(text):
             meter = "muwashah"
             tor = "tor_bahrani_haidari"
             prompt = MASTER_SOUND_PROMPTS_V48_5["bahrani_haidari_96bpm_hijaz"]
-        elif any(k in text for k in fazzaiya_kw):
-            mode = "fazzaiya"
-            bpm = 84
-            maqam = "hijaz"
-            meter = "fazzaiya"
-            tor = "tor_fazzaiya_karbalai"
-            prompt = EXTENDED_ATWAR_PROMPTS_V52["karbalai_fazzaiya_84bpm_hijaz_bayati_v52"]
         else:
             mode = "zanjeel_iraqi"
             bpm = 80
@@ -3085,7 +3376,7 @@ def recommend_tor_and_rhythm_for_poem(text):
             meter = "muwashah"
             tor = "tor_darj_karbalai"
             prompt = MASTER_SOUND_PROMPTS_V48_5["zanjeel_procession_80bpm_hijaz"]
-    elif any(k in text for k in service_kw):
+    elif any(k in bare_text for k in service_kw):
         mode = "bandari"
         bpm = 74
         maqam = "bayati"
@@ -3109,19 +3400,37 @@ def recommend_tor_and_rhythm_for_poem(text):
     else:
         mode = "thaqeel_muwazza"
         bpm = 60
-        maqam = "bayati"
+        maqam = "lami" if any(k in bare_text for k in ("سبي", "خرابة", "خرابه", "غربة", "غربه", "عليل")) else "bayati"
         meter = "nassari" if avg_syl >= 7 else "rukbani"
         tor = "tor_ashouri"
         prompt = MASTER_SOUND_PROMPTS_V48_5["karbalai_nazla_60bpm_bayati_saba_v48_5_root"]
 
+    wazn_map = {
+        "mujarradat": "مجردات / نعي منبري حر",
+        "rukbani": "بحر الركباني",
+        "muwashah": "الموشح الملحمي / التوشيح",
+        "fazzaiya": "طور الفزاعية والرباطات",
+        "faizi": "البحر الفائزي البحراني",
+        "nassari": "بحر النصاري الفراتي/الكربلائي",
+    }
+    stage_key = "bahrani" if dialect == "bahrani" else ("iraqi_bahrani" if dialect == "iraqi_bahrani" else "iraqi")
+    progression = build_four_stage_latmiya_plan(dialect=stage_key)
+    maqam_arc = [
+        progression["stage_1_root_track"]["maqam"],
+        progression["stage_2_extend_1_narrative"]["maqam"],
+        progression["stage_3_extend_2_jawab_climax"]["maqam"],
+        progression["stage_4_extend_3_kasra_finale"]["maqam"],
+    ]
     return {
         "detected_dialect": dialect,
         "average_syllables_per_hemistich": avg_syl,
         "recommended_poetic_meter": meter,
+        "detected_poetic_wazn_ar": wazn_map.get(meter, "بحر النصاري"),
         "recommended_performance_tor": tor,
         "recommended_dsp_mode": mode,
         "recommended_bpm": bpm,
         "recommended_maqam": maqam,
+        "recommended_maqam_progression": maqam_arc,
         "master_sound_prompt": prompt,
     }
 
@@ -3134,6 +3443,22 @@ def build_vocal_genre_profile(genre="latmiya", dialect="iraqi", maqam=None, bpm=
         chosen_bpm = 60 if bpm is None else int(bpm)
         if chosen_bpm == 0:
             prompt = MASTER_SOUND_PROMPTS_V48_5["minbar_nai_0bpm_rubato_saba_exclusive_weeping"]
+        elif chosen_bpm >= 115:
+            prompt = MASTER_SOUND_PROMPTS_V48_5["karbalai_shoor_132bpm_kurd"]
+        elif chosen_bpm >= 92:
+            prompt = (
+                MASTER_SOUND_PROMPTS_V48_5["bahrani_haidari_96bpm_hijaz"]
+                if dialect == "bahrani"
+                else MASTER_SOUND_PROMPTS_V48_5["zanjeel_procession_80bpm_hijaz"]
+            )
+        elif chosen_bpm >= 82:
+            prompt = (
+                MASTER_SOUND_PROMPTS_V48_5["bahrani_waqfa_84bpm_hijaz_bayati"]
+                if dialect == "bahrani"
+                else EXTENDED_ATWAR_PROMPTS_V52["karbalai_fazzaiya_84bpm_hijaz_bayati_v52"]
+            )
+        elif chosen_bpm >= 70:
+            prompt = MASTER_SOUND_PROMPTS_V48_5["karbalai_mawkib_daraj_74bpm_bayati_hijaz"]
         elif dialect == "bahrani":
             prompt = MASTER_SOUND_PROMPTS_V48_5["bahrani_muthakkal_56bpm_saba"]
             chosen_bpm = 56 if bpm is None else chosen_bpm
@@ -3633,44 +3958,75 @@ def _classify_maqam_from_pitches(detected_hz):
 
 
 def extract_reference_audio_profile(input_path):
-    """Module 45: Reverse-engineer BPM, fundamental Hz, closest 24-EDO Maqam, and LUFS from WAV."""
-    sample_rate, mono, channels, bit_depth = read_wav_any_depth(input_path)
+    """Module 45 & 68: Reverse-engineer chest-beat BPM, Baritone f0 median, Maqam & ITU-R LUFS."""
+    sample_rate, stereo, channels, bit_depth = read_wav_any_depth(input_path, return_stereo=True)
+    mono = np.mean(stereo, axis=1) if stereo.shape[0] > 0 else np.zeros(0, dtype=np.float64)
     duration_sec = round(len(mono) / max(1.0, float(sample_rate)), 3)
 
-    rms = float(np.sqrt(np.mean(mono**2)) + 1e-9)
-    lufs_approx = round(float(-0.691 + 20.0 * np.log10(rms)), 2)
+    loud_stats = measure_ebu_r128_loudness(stereo if channels > 1 else mono, sample_rate)
+    lufs_approx = loud_stats["integrated_lufs"]
 
-    spec = np.abs(np.fft.rfft(mono * np.hanning(max(1, len(mono)))))
-    freqs = np.fft.rfftfreq(max(1, len(mono)), d=1.0 / sample_rate)
-    vocal_mask = (freqs >= 85.0) & (freqs <= min(450.0, 0.45 * sample_rate))
-    if np.any(vocal_mask):
-        sub_spec = spec[vocal_mask]
-        sub_freqs = freqs[vocal_mask]
-        dom_hz = float(sub_freqs[int(np.argmax(sub_spec))])
-    else:
-        dom_hz = 146.83
+    # Zero-padded windowed Baritone fundamental median (100-235 Hz, ~3 Hz precision)
+    frame_len = max(256, int(0.12 * sample_rate))
+    nfft = 16384
+    f0_estimates = []
+    if len(mono) >= frame_len:
+        hop_f = max(frame_len, int(0.40 * sample_rate))
+        n_frames_f = max(1, (len(mono) - frame_len) // hop_f + 1)
+        rms_vals = [
+            float(np.sqrt(np.mean(mono[i * hop_f : i * hop_f + frame_len] ** 2)))
+            for i in range(n_frames_f)
+        ]
+        rms_gate = max(1e-4, 0.25 * max(rms_vals, default=0.0))
+        hann = np.hanning(frame_len)
+        freqs_w = np.fft.rfftfreq(nfft, d=1.0 / sample_rate)
+        v_mask = (freqs_w >= 100.0) & (freqs_w <= min(235.0, 0.45 * sample_rate))
+        if np.any(v_mask):
+            f_sub = freqs_w[v_mask]
+            for i, r_val in enumerate(rms_vals):
+                if r_val < rms_gate:
+                    continue
+                seg = mono[i * hop_f : i * hop_f + frame_len] * hann
+                mag = np.abs(np.fft.rfft(seg, n=nfft))[v_mask]
+                if mag.size:
+                    f0_estimates.append(float(f_sub[int(np.argmax(mag))]))
+    dom_hz = float(np.median(f0_estimates)) if f0_estimates else 146.83
 
     closest_maqam = _classify_maqam_from_pitches(dom_hz)
 
+    # Fullband onset envelope autocorrelation (unbiased by overlap length)
     hop = max(1, int(0.02 * sample_rate))
     n_frames = len(mono) // hop
     estimated_bpm = 60
     if n_frames >= 20:
-        env = np.array(
-            [np.sqrt(np.mean(mono[i * hop : (i + 1) * hop] ** 2)) for i in range(n_frames)],
-            dtype=np.float64,
-        )
+        frames = mono[: n_frames * hop].reshape(n_frames, hop)
+        env = np.sqrt(np.mean(frames**2, axis=1) + 1e-12)
         onset = np.maximum(0.0, np.diff(env, prepend=env[0]))
         onset -= np.mean(onset)
         if float(np.std(onset)) > 1e-6:
             acorr = np.correlate(onset, onset, mode="full")[len(onset) - 1 :]
-            min_lag = max(1, int((60.0 / 145.0) / 0.02))
+            acorr = acorr / np.maximum(1, len(onset) - np.arange(len(acorr)))
+            min_lag = max(1, int((60.0 / 138.0) / 0.02))
             max_lag = min(len(acorr) - 1, int((60.0 / 48.0) / 0.02))
             if max_lag > min_lag:
                 best_lag = min_lag + int(np.argmax(acorr[min_lag : max_lag + 1]))
+                if best_lag * 2 <= max_lag and acorr[best_lag * 2] >= 0.72 * acorr[best_lag]:
+                    best_lag *= 2
                 estimated_bpm = int(round(60.0 / (best_lag * 0.02)))
 
-    rec_mode = "shoor" if estimated_bpm >= 115 else ("bandari" if estimated_bpm >= 72 else "thaqeel_muwazza")
+    if estimated_bpm >= 115:
+        rec_mode = "shoor"
+    elif estimated_bpm >= 92:
+        rec_mode = "bahrani_haidari"
+    elif estimated_bpm >= 80:
+        rec_mode = "fazzaiya"
+    elif estimated_bpm >= 70:
+        rec_mode = "bandari"
+    elif estimated_bpm >= 63:
+        rec_mode = "studio_arranged"
+    else:
+        rec_mode = "thaqeel_muwazza"
+
     profile_prompt = build_vocal_genre_profile(
         genre="latmiya", dialect="iraqi", maqam=closest_maqam, bpm=estimated_bpm
     )["sound_prompt"]
@@ -3685,6 +4041,7 @@ def extract_reference_audio_profile(input_path):
         "estimated_bpm": estimated_bpm,
         "estimated_fundamental_hz": round(dom_hz, 2),
         "closest_maqam": closest_maqam,
+        "integrated_lufs": loud_stats["integrated_lufs"],
         "integrated_lufs_approx": lufs_approx,
         "recommended_dsp_mode": rec_mode,
         "recommended_sound_prompt": profile_prompt,
