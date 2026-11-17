@@ -4263,14 +4263,14 @@ def _compute_dual_band_bpm(mono, sample_rate):
         onset = np.maximum(0.0, on_raw - loc)
         onset -= np.mean(onset)
         if float(np.std(onset)) <= 1e-7:
-            return 60, 0.0, 0.0
+            return 60, 0.0, 0.0, 0.0
         ac = np.correlate(onset, onset, mode="full")[len(onset) - 1 :]
         ac = ac / np.maximum(1, len(onset) - np.arange(len(ac)))
         ac0 = max(float(ac[0]), 1e-12)
         min_l = max(2, int((60.0 / 145.0) / 0.02))
         max_l = min(len(ac) - 2, int((60.0 / 48.0) / 0.02))
         if max_l <= min_l:
-            return 60, 0.0, 0.0
+            return 60, 0.0, 0.0, 0.0
         pks = [k for k in range(min_l, max_l + 1) if ac[k] >= ac[k - 1] and ac[k] >= ac[k + 1] and ac[k] > 0.0]
         if not pks:
             return 0, 0.0, 0.0, 0.0
