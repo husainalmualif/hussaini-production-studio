@@ -1,10 +1,10 @@
-# استوديو الإنتاج الحسيني الشامل — Hussaini Production Studio (V51.2 OMNI-ARCHITECT)
+# استوديو الإنتاج الحسيني الشامل — Hussaini Production Studio (V52.0 OMNI-ARCHITECT)
 
-منظومة هندسية متكاملة ومثبتة تجريبياً للتأليف الشعري الحسيني، وهندسة المقامات الميكروتونالية (`24-EDO`) والأطوار المنبرية والموكبية، وتوليد اللطميات والنواعي بالذكاء الاصطناعي (**Google Flow Music / Lyria 3.5, Suno, Udio**) بدقة نطق وأداء تقارب 100% عبر **الدستور التجريبي الموحّد (`references/hussaini_os_v50_0_constitution.json` & `references/hussaini_os_v48_5_constitution.json`)**، و**الفهرس المرجعي الشامل لـ 175 لطمية والمدارس الحسينية التسع (`Module 64 — 9 Master Schools & 25 Master Sound Prompts`)**، و**بروتوكول الاستكشاف والتشاور الإلزامي قبل التوليد مقابل وضع التفويض الكامل (`Module 66 — Interactive Consultation vs. Auto-Pilot`)**، و**القواعد السلبية الدائمة (`NC1–NC17`) وقانون الأسطر العمودية الثلاثة في الكسرة ضمن نافذة التمديد `23.5s` (`NC16 & NC17`)**، و**بروتوكول حزم `Stage JSON` مع النسخ الحرفي `lyrics_register_verbatim` (`Modules 53 & 59 — QC19, QC29`)**، مع **محرك المونتاج الصوتي ذي الـ 16 وضعاً والمسارات الخمسة (`scripts/hussaini_dsp_montage.py` — `--replace-ai-percussion`, `Rosenberg + Formant Ahaat`, `-28 dBFS RMS Ducking`, `-14.0 LUFS` & `-1.0 dBTP`)**.
+منظومة هندسية متكاملة ومثبتة تجريبياً للتأليف الشعري الحسيني، وهندسة المقامات الميكروتونالية (`24-EDO`) والأطوار المنبرية والموكبية، وتوليد اللطميات والنواعي بالذكاء الاصطناعي (**Google Flow Music / Lyria 3.5, Suno, Udio**) بدقة نطق وأداء تقارب 100% عبر **الدستور التجريبي الموحّد (`references/hussaini_os_v50_0_constitution.json`)**، و**الفهرس المرجعي الشامل لـ 175 لطمية والمدارس الحسينية التسع (`Module 64 — 9 Master Schools & 25 Master Sound Prompts + V52 Extended Atwar`)**، و**بروتوكول الاستكشاف والتشاور الإلزامي قبل التوليد مقابل وضع التفويض الكامل (`Module 66 — Interactive Consultation vs. Auto-Pilot`)**، و**القواعد السلبية الدائمة (`NC1–NC17`) وقانون الأسطر العمودية الثلاثة في الكسرة ضمن نافذة التمديد `23.5s` (`NC16 & NC17`)**، و**بروتوكول حزم `Stage JSON` مع النسخ الحرفي `lyrics_register_verbatim` (`Modules 53 & 59 — QC19, QC29`)**، ومع **وحدة V52 (`Module 67`): محرك التشكيل وتصريف اللهجات (`99.62%` على 127 مقطعاً)، والمحقق التاريخي (`--verify-history`)، ومخطط مراحل التمديد (`--plan-stages`)، ومحرك المونتاج الصوتي النقي ذو الـ 18 وضعاً (`scripts/hussaini_dsp_montage.py` — `--mode vocal_pure_master`, `--trim-end-sec`, `--fade-out-sec`, `--audit-audio`, `-14.0 LUFS` & `-1.0 dBTP` EBU R128)** (مع حظر ماسترنغ Flow Step 4 السحابي الذي يسبب Clipping).
 
 ---
 
-## أبرز ركائز الإصدار `V51.2 OMNI-ARCHITECT` (توحيد `V50.0` + `Module 66` + `NC1–NC17` + تحليل 175 لطمية)
+## أبرز ركائز الإصدار `V52.0 OMNI-ARCHITECT` (توحيد `V50.0` + `Module 66` + `NC1–NC17` + تحليل 175 لطمية)
 
 1. **بروتوكول الاستكشاف والتشاور قبل التوليد وبوابة الجودة قبل التمديد (`Module 66`):**
    - يُمنع البدء بتوليد أي مقطع صوتي مباشرة قبل إجراء جلسة استيضاح سريعة مع المستخدم (تحليل البحر العروضي واللهجة والجو الدرامي، ثم عرض الخيارات العملية للمدرسة والأسلوب، الطور والمقام، الإيقاع والـ BPM، المؤثرات الصوتية، وتوزيع الرادود والكورال)، **إلا** إذا فوض المستخدمُ الوكيلَ صراحةً بعبارة مثل *«اختر كل شيء بنفسك»* (`Auto-Pilot Mode`).
@@ -67,9 +67,11 @@ python3 scripts/hussaini_dsp_montage.py --lint-poem "[المُسْتَهَلّ]\
 
 # 3) استعراض خطة المراحل وتصدير دستور V50.0 OMNI-ARCHITECT (25 Master Sound Prompts & 9 Schools)
 python3 scripts/hussaini_dsp_montage.py --stage-plan iraqi
+python3 scripts/hussaini_dsp_montage.py --verify-history "صوت أم البنين يصيح يبن حذلم"
+python3 scripts/hussaini_dsp_montage.py --plan-stages "[المُسْتَهَلّ]\nصوت أم البنين يصيح يبن حذلم\n[الكوبليه الأول]\nيا ناشد على الطف وعندك علم"
 python3 scripts/hussaini_dsp_montage.py --export-constitution
 
-# 4) المونتاج الصوتي ذو الـ 5 مسارات والـ 16 وضعاً مع تنظيف الإيقاع الآلي (--replace-ai-percussion) وماسترنغ -14 LUFS
+# 4) المونتاج الصوتي ذو الـ 18 وضعاً: الوضع النقي (--mode vocal_pure_master لحفظ لطمة Flow الطبيعية) أو الـ 5 مسارات مع تنظيف الإيقاع الآلي وماسترنغ EBU R128 (-14.0 LUFS / -1.0 dBTP) + فحص --audit-audio
 python3 scripts/hussaini_dsp_montage.py \
   --input "split_vocals.wav" \
   --output "mastered_heavy_clip.wav" \
@@ -87,16 +89,16 @@ pytest -v --cov=scripts --cov-fail-under=75 tests/test_hussaini_modules.py
 
 ---
 
-## ثالثاً: هيكل ملفات المهارة وبيئة الفحص الآلي (`Repository Structure — 26 Canonical Files`)
+## ثالثاً: هيكل ملفات المهارة وبيئة الفحص الآلي (`Repository Structure — 27 Canonical Files`)
 
 ```text
 hussaini-production-studio/
-├── VERSION                                                                  # مصدر الحقيقة الموحد للإصدار (V51.2 OMNI-ARCHITECT)
+├── VERSION                                                                  # مصدر الحقيقة الموحد للإصدار (V52.0 OMNI-ARCHITECT)
 ├── SKILL.md                                                                 # الموجّه المهيكل الرشيق (<= 10.5KB Router)
 ├── README.md                                                                # الدليل الشامل للاستخدام والمرجع السريع
 ├── requirements.txt                                                         # المتطلبات البرمجية الخفيفة (numpy, scipy, pylint, pytest, pytest-cov)
 ├── references/
-│   ├── hussaini_os_v50_0_constitution.json                                  # الدستور التجريبي الموحّد لـ V51.2 OMNI-ARCHITECT (9 Schools, 25 Prompts, QC1–QC35, NC1–NC17)
+│   ├── hussaini_os_v50_0_constitution.json                                  # الدستور التجريبي الموحّد لـ V52.0 OMNI-ARCHITECT (9 Schools, 25 Prompts, QC1–QC35, NC1–NC17)
 │   ├── atwar_maqamat_and_poetry_guide.md                                    # الموسوعة المرجعية الشاملة للأطوار والمقامات والعروض (Sections 1–19)
 │   ├── radoods_and_khutaba_encyclopedia.md                                  # موسوعة 20+ رادوداً (14 مدرسة) و8 من خطباء المنبر
 │   └── modules/
@@ -115,11 +117,12 @@ hussaini-production-studio/
 │       ├── module_52_dynamic_4stage_maqam_progression_and_master_prompts.md # التدرج المقامي الرباعي ومصفوفة البرومبتات القياسية
 │       ├── module_53_per_stage_and_section_json_orchestration.md            # إلزامية حزم Stage/Section JSON ومنع النص المجرّد (QC19)
 │       ├── module_54_to_65_v50_super_algorithm_and_175_corpus.md            # خوارزمية V50.0 الفائقة، المدارس التسع، قانون الـ 80 ثانية، ومصفوفة QC20–QC35
-│       └── module_66_v51_field_evaluation_consultation_and_style_taxonomy.md # بروتوكول V51.2، الاستشارة مقابل التفويض، القواعد السلبية NC1–NC17، وقانون الأسطر الـ 3
+│       ├── module_66_v51_field_evaluation_consultation_and_style_taxonomy.md # بروتوكول V51.2، الاستشارة مقابل التفويض، القواعد السلبية NC1–NC17، وقانون الأسطر الـ 3
+│       └── module_67_v52_pure_vocal_dsp_corpus_phonetics_and_history.md      # بروتوكول V52.0: vocal_pure_master، EBU R128، --verify-history، --plan-stages، ومصرف الـ 127 مقطعاً
 ├── scripts/
-│   └── hussaini_dsp_montage.py                                              # المحرك المستقل للنطق الصوتي والـ 16-Mode 5-Track DSP (Pylint 10/10)
+│   └── hussaini_dsp_montage.py                                              # المحرك المستقل للنطق الصوتي والـ 18-Mode Pure-Vocal / 5-Track DSP (EBU R128)
 ├── tests/
-│   └── test_hussaini_modules.py                                             # اختبارات الوحدات الشاملة لـ Modules 34–66 وQC1–QC35 وNC1–NC17 والـ DSP
+│   └── test_hussaini_modules.py                                             # اختبارات الوحدات الشاملة لـ Modules 34–67 وQC1–QC35 وNC1–NC17 والـ DSP
 └── .github/
     └── workflows/
         └── ci.yml                                                           # فحص GitHub Actions CI عبر Python 3.10, 3.11, 3.12

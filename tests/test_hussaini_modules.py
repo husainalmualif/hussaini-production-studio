@@ -19,7 +19,7 @@ import hussaini_dsp_montage as hds  # noqa: E402
 
 def test_single_source_version_and_v50_architecture():
     """Verify V51.2 OMNI-ARCHITECT version lock, SKILL.md router budget, JSON constitution, and Module 66."""
-    assert hds.SKILL_VERSION == "V51.2 OMNI-ARCHITECT"
+    assert hds.SKILL_VERSION == "V52.0 OMNI-ARCHITECT"
     skill_md = os.path.join(ROOT_DIR, "SKILL.md")
     assert os.path.isfile(skill_md)
     assert os.path.getsize(skill_md) <= 10500
@@ -47,21 +47,35 @@ def test_single_source_version_and_v50_architecture():
         "modules",
         "module_66_v51_field_evaluation_consultation_and_style_taxonomy.md",
     )
+    v52_module_doc = os.path.join(
+        ROOT_DIR,
+        "references",
+        "modules",
+        "module_67_v52_pure_vocal_dsp_corpus_phonetics_and_history.md",
+    )
     assert os.path.isfile(v50_module_doc)
     assert os.path.isfile(v51_module_doc)
+    assert os.path.isfile(v52_module_doc)
 
     constitution = hds.load_v50_0_constitution()
     assert (
         constitution["protocol_metadata"]["protocol_name"]
         == "Hussaini_Production_Studio_OS_V50_0_OMNI_ARCHITECT"
     )
-    assert constitution["protocol_metadata"]["skill_version"] == "V51.2 OMNI-ARCHITECT"
+    assert constitution["protocol_metadata"]["skill_version"] == "V52.0 OMNI-ARCHITECT"
     assert len(constitution["5_master_sound_prompts_library_modules_36_44_46_48_52"]) == 25
     assert len(hds.MASTER_SOUND_PROMPTS_V50) == 25
     assert len(constitution["8_v50_empirical_175_corpus_and_9_schools_modules_54_65"]["unified_9_schools_architecture"]) == 9
+    assert len(hds.SUPPORTED_DSP_MODES) == 18
+    assert "vocal_pure_master" in hds.SUPPORTED_DSP_MODES
+    assert "fazzaiya" in hds.SUPPORTED_DSP_MODES
+    assert len(hds.EXTENDED_ATWAR_PROMPTS_V52) == 2
     v51_block = constitution["v51_0_protocol_negative_constraints_and_style_taxonomy"]
     assert v51_block["version"] == "V51.2 OMNI-ARCHITECT"
     assert len(v51_block["permanent_negative_constraints_nc1_to_nc17"]) >= 17
+    v52_block = constitution["v52_0_module_67_upgrades"]
+    assert v52_block["version"] == "V52.0 OMNI-ARCHITECT"
+    assert v52_block["supported_dsp_modes_count"] == 18
 
 
 def test_module_41_49_57_58_64_iraqi_prosthetic_clusters_and_v50_g2p_locks():
@@ -418,3 +432,110 @@ def test_16_dsp_modes_24bit_wav_profile_and_percussion_cleaning(tmp_path):
     assert hds.main(["--stage-plan", "iraqi"]) == 0
     assert hds.main(["--export-constitution"]) == 0
     assert hds.main(["--extract-profile", str(in_16)]) == 0
+
+
+def test_v52_float32_wav_ebu_r128_pure_master_and_audit(tmp_path):
+    """Verify 32-bit Float WAV I/O, EBU R128 loudness, vocal_pure_master trim/fade, and --audit-audio."""
+    sr = 16000
+    t_vec = np.linspace(0.0, 2.2, int(sr * 2.2), endpoint=False)
+    mono_sig = 0.28 * np.sin(2.0 * np.pi * 190.0 * t_vec) + 0.14 * np.sin(2.0 * np.pi * 55.0 * t_vec)
+    stereo_f32 = np.column_stack((mono_sig, 0.92 * mono_sig)).astype(np.float32)
+
+    in_f32 = tmp_path / "in_f32.wav"
+    wavfile.write(str(in_f32), sr, stereo_f32)
+
+    read_sr, read_st, chans, depth = hds.read_wav_any_depth(str(in_f32), return_stereo=True)
+    assert read_sr == sr
+    assert chans == 2
+    assert depth == "32-bit Float"
+    assert read_st.shape == stereo_f32.shape
+
+    raw_stats = hds.measure_ebu_r128_loudness(read_st, sr)
+    assert -30.0 < raw_stats["integrated_lufs"] < -5.0
+
+    # Verify short-clip O(N) boxcar smoothing never mismatches array lengths
+    short_clip = mono_sig[:600]
+    assert len(hds.strip_ai_percussion_from_vocal(short_clip, sr)) == 600
+    assert len(hds.compute_smart_sidechain_ducking(short_clip, sr)) == 600
+
+    out_pure = tmp_path / "out_pure_v52.wav"
+    res = hds.process_audio_file(
+        str(in_f32),
+        str(out_pure),
+        mode="vocal_pure_master",
+        bpm=60,
+        trim_end_sec=1.6,
+        fade_out_sec=0.35,
+        no_synth_rhythm=True,
+    )
+    assert res["pure_vocal_master"] is True
+    audit = hds.audit_rendered_audio(str(out_pure))
+    assert audit["duration_sec"] == 1.6
+    assert abs(audit["integrated_lufs"] - res["integrated_lufs"]) <= 0.1
+    assert abs(audit["true_peak_dbtp"] - res["true_peak_dbtp"]) <= 0.1
+    assert audit["true_peak_dbtp"] <= -0.9
+    assert audit["tail_last_150ms_dbfs"] < -24.0
+    assert audit["abrupt_tail_cutoff_risk"] is False
+    assert audit["broadcast_compliant"] is True
+    assert hds.main(["--audit-audio", str(out_pure)]) == 0
+
+
+def test_v52_corpus_phonetics_kaf_daad_sanitization_and_idempotency():
+    """Verify V52 decorator sanitization, Swash-Kaf/kaf-tanween Gaf normalization, Daad/Dhaa & idempotency."""
+    sanitized = hds.sanitize_poem_decorations("۞ [المستهل] 💔 صَوتْ أم البنين — ..\nالشاعر: فلان")
+    assert "[المستهل]" in sanitized
+    assert "💔" not in sanitized
+    assert "فلان" not in sanitized
+
+    gaf_norm = hds.normalize_iraqi_orthographic_gaf("كًلبي کلب گعدت \u06AA\u064E\u0640ال")
+    assert gaf_norm.startswith("گلبي")
+    assert "\u06AA" not in gaf_norm
+
+    daad_norm = hds.normalize_daad_dhaa_homographs("ضل يبچي على الضلع")
+    assert "ظَلْ" in daad_norm
+    assert "الضلع" in daad_norm
+
+    fusha_res = hds.detect_and_shape_dialect("إِنَّا أَعْطَيْنَاكَ الْكَوْثَرَ وَجِسْمًا طَاهِرًا")
+    assert fusha_res["detected_dialect"] in ("fusha", "iraqi_bahrani", "iraqi")
+
+    colloquial_poem = "[النزلة]\nوي اهلي ويه وياي وياهم واليه ..\nوعلى الحرام اخت القمر .."
+    first = hds.detect_and_shape_dialect(colloquial_poem)["shaped_lyrics"]
+    second = hds.detect_and_shape_dialect(first)["shaped_lyrics"]
+    assert first == second
+
+
+def test_v52_historical_verifier_stage_planner_and_atwar_routing():
+    """Verify --verify-history, --plan-stages NC16 partitioner, and Fazzaiya/Tawashih routing."""
+    clean_poem = (
+        "[المستهل]\nصوت أم البنين يصيح يبن حذلم\n"
+        "[الكوبليه الأول]\nيا ناشد على الطف وعندك علم\nأربع إخوة راحوا وما ظل سهم\n"
+        "يا عباس عالعلگمي والمشرعة"
+    )
+    hist_ok = hds.verify_historical_narratives(clean_poem)
+    assert hist_ok["is_historically_clean"] is True
+    assert hist_ok["historical_accuracy_score"] == 100
+    assert any(m["motif_id"] == "umm_al_banin_madina" for m in hist_ok["verified_authentic_motifs"])
+    assert "الإرشاد للشيخ المفيد" in hist_ok["canonical_sources"]
+
+    hist_bad = hds.verify_historical_narratives("أم البنين بالخيم بكربلا وشفت عرس القاسم")
+    assert hist_bad["is_historically_clean"] is False
+    assert len(hist_bad["distortions_and_warnings"]) >= 2
+
+    plan = hds.plan_poem_extend_stages(clean_poem, target_method="both", bpm=60)
+    assert plan["extend_stages"]
+    assert all(blk["nc16_three_line_compliant"] for blk in plan["extend_stages"])
+    assert all("method_2_pad_warning" in blk for blk in plan["extend_stages"])
+    assert "vocal_pure_master" in plan["mastering_recommendation"]
+
+    faz = hds.recommend_tor_and_rhythm_for_poem("فزاعية حماس گوم وياي")
+    assert faz["recommended_dsp_mode"] == "fazzaiya"
+    assert faz["recommended_bpm"] == 84
+    assert "Fazzaiya" in faz["master_sound_prompt"]
+
+    taw = hds.recommend_tor_and_rhythm_for_poem("تواشيح أهل الكساء صل على محمد")
+    assert taw["recommended_dsp_mode"] == "vocal_pure_master"
+    assert taw["recommended_bpm"] == 86
+    assert "Tawashih" in taw["master_sound_prompt"]
+
+    assert hds.main(["--verify-history", clean_poem]) == 0
+    assert hds.main(["--plan-stages", clean_poem]) == 0

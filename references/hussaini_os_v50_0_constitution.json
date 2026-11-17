@@ -1,7 +1,7 @@
 {
   "protocol_metadata": {
     "protocol_name": "Hussaini_Production_Studio_OS_V50_0_OMNI_ARCHITECT",
-    "skill_version": "V51.2 OMNI-ARCHITECT",
+    "skill_version": "V52.0 OMNI-ARCHITECT",
     "previous_baseline_version": "V50.0 OMNI-ARCHITECT & V48.5 OMNI-ARCHITECT (Rev 2)",
     "previous_baseline_commit_sha": "497a5cbb4672e8c6f27136fde5c5aabd0f492d29",
     "canonical_repository": "https://github.com/husainalmualif/hussaini-production-studio",
@@ -1973,6 +1973,27 @@
       "NC15_zero_english_or_directions_in_lyrics": "Never place English words, parenthetical performance instructions, or punctuation other than (..) and choral (...) inside the Lyrics box.",
       "NC16_three_vertical_line_kasra_extend_law": "Every Extend window is 23.5s (~7.5s per vertical line at 60 BPM). Format every Kasra (2B, 3B, 4B, 5B, 6B) as strictly 3 vertical lines (Line 1: Hemistich 1 .. Hemistich 2 .. / Line 2: Hemistich 3 .. / Line 3: Closing Qafla Couplet) with no 5th choral repeat line so بيت القفلة is 100% sung without cutoff.",
       "NC17_mandatory_lyrics_buffer_purge_before_extend": "Always clear the Compose > Lyrics text box (Ctrl+A -> Delete) before every Extend step in both Method 1 and Method 2 so zero previous stanza lines remain or blend."
+    }
+  },
+  "v52_0_module_67_upgrades": {
+    "version": "V52.0 OMNI-ARCHITECT",
+    "module_reference": "references/modules/module_67_v52_pure_vocal_dsp_corpus_phonetics_and_history.md",
+    "supported_dsp_modes_count": 18,
+    "new_dsp_modes": [
+      "vocal_pure_master",
+      "fazzaiya"
+    ],
+    "extended_atwar_prompts_v52": {
+      "karbalai_fazzaiya_84bpm_hijaz_bayati_v52": "Urgent Traditional Iraqi Hussaini Fazzaiya chant, Maqam Hijaz and Bayati, 84 BPM, authentic Iraqi colloquial dialect, commanding fiery middle-register Baritone lead vocal, sharp crisp Arabic consonant articulation, synchronized rapid 55Hz bare-palm chest Matam thuds, 220ms analog delay, 2.5s Husseiniya hall reverb, booming unison male Raddada congregation response, Pure Acapella No Instruments",
+      "shia_tawshih_nasheed_86bpm_rast_hijaz_v52": "Dignified Spiritual Shia Islamic Choral Tawashih and Nasheed, Maqam Rast and Hijaz, 86 BPM, eloquent Classical Arabic and devotional articulation, resonant Baritone solo verse answered by rich unison male choir, sacred mosque dome reverb, light respectful frame percussion only, zero chest Latm, zero Western instruments"
+    },
+    "step4_cloud_mastering_ban": "NEVER use Flow Music Step 4 cloud audio__apply_effect EQ/Compression (pushes -8.1/-8.6 LUFS and clips +0.6/+0.7 dBFS). Export raw Flow WAV/audio and master locally with '--mode vocal_pure_master --trim-end-sec <end> --fade-out-sec 3.0' to achieve exact -14.0 LUFS / -1.0 dBTP broadcast compliance.",
+    "v52_cli_and_engine_capabilities": {
+      "vocal_pure_master": "Preserves Flow Music organic 42Hz+ bare-palm chest Matam, skips AI percussion stripping and synthetic rhythm/Ahaat beds (--no-synth-rhythm), adds asymmetric 2.1s dome reverb + subtle glue compression.",
+      "precision_trim_and_fade": "CLI flags --trim-end-sec and --fade-out-sec prevent abrupt 12:02 platform cutoffs with raised-cosine fade to <-60 dBFS tail.",
+      "ebu_r128_and_audit": "True ITU-R BS.1770-4 / EBU R128 Stage-1/Stage-2 K-weighting, 400ms gated blocks, 4x oversampled lookahead True-Peak limiter (-1.0 dBTP), O(N) chunked boxcar smoothing, 8/16/24/32-bit PCM/Float RIFF I/O, and --audit-audio stereo compliance verification.",
+      "historical_verifier_and_planner": "--verify-history audits lyrics against canonical Ahl al-Bayt sources (Al-Irshad, Al-Luhuf, Nafas al-Mahmum); --plan-stages automates NC16 3-line Extend partitioning and emits Method 2 +60s trailing-pad warnings.",
+      "corpus_phonetics_benchmark": "COMMON_CORPUS_LEXICON_V52 (216 forms) + Swash-Kaf/kaf-tanween/Daad-Dhaa normalizers achieve 14,867/14,924 (99.62%) vocalization and 0 idempotency failures across all 127 corpus sections."
     }
   }
 }

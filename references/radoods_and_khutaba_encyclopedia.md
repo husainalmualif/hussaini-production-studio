@@ -14,8 +14,8 @@
 
 ### 1. الحاج باسم الكربلائي (المدرسة التجديدية الأوركسترالية — سلطان المنبر الحسيني)
 - **الهوية الفنية والمساحة الصوتية:** يمتلك مساحة صوتية تغطي **أربعة أوكتافات (`4 Octaves`)** تتيح الانتقال السلس من أخفض طبقات القرار إلى أعلى طبقات الجواب وجواب الجواب (`powerful high chest-voice climbs`) دون فقدان الدفء الصدري.
-- **الأطوار والمقامات المعتمدة:** الطور الكربلائي الأصيل الثقيل (`58–60 BPM`), الفاطمي والزينبي على الصبا واللامي، الموشح الحماسي على الحجاز والكرد، والشور الملحمي (`132 BPM`).
-- **النماذج المرجعية الأسطورية:** `أين أنت يا جابر` (`play-fq2ux`), `أم البنين` (`play-zsnpe`), `وجود لوجودي` (`play-da3b9`), `حلم مذبوح` (`play-bNqR0`), `أقول اسمك` (`play-ZJpsw`), `علامات الحزن` (`play-3vuOX`), `ألم وعتاب` (`play-MOcJn`), `يا حبيبي يا حسين` (`play-Am3rB`), `يا أكبر جبل` (`play-uG52R`), `لسان الوحي` (`play-JmMVU`), `إن شاء الله` (`GDsdpmzeLqw`), `أوتار التكبير` (`rMVIUkUZ4bU`), `شاب وطفل` (`RhQdSDt1-mg`), `بعيونك حزن ينشاف` (`bnuiKoJigFA`).
+- **الأطوار والمقامات المعتمدة:** الطور الكربلائي الأصيل الثقيل (`58–60 BPM`)، الفاطمي والزينبي على الصبا واللامي، الموشح الحماسي على الحجاز والكرد، والشور الملحمي (`132 BPM`).
+- **النماذج المرجعية الأسطورية:** `أين أنت يا جابر` (`play-fq2ux`)، `أم البنين` (`play-zsnpe`)، `وجود لوجودي` (`play-da3b9`)، `حلم مذبوح` (`play-bNqR0`)، `أقول اسمك` (`play-ZJpsw`)، `علامات الحزن` (`play-3vuOX`)، `ألم وعتاب` (`play-MOcJn`)، `يا حبيبي يا حسين` (`play-Am3rB`)، `يا أكبر جبل` (`play-uG52R`)، `لسان الوحي` (`play-JmMVU`)، `إن شاء الله` (`GDsdpmzeLqw`)، `أوتار التكبير` (`rMVIUkUZ4bU`)، `شاب وطفل` (`RhQdSDt1-mg`)، `بعيونك حزن ينشاف` (`bnuiKoJigFA`).
 - **البرومبت القياسي المعتمد (`V48.5`):**
   `Traditional Iraqi and Bahrani Hussaini Latmiya, Thaqeel Faizi and Nazla style, Maqam Saba, 58 BPM, authentic Iraqi and Bahrani colloquial dialect, commanding deep resonant Baritone lead vocal, powerful high chest-voice climbs, natural vocal rasp, passionate microtonal melisma, heavy 55Hz bare-palm chest thud, 285ms analog tape echo, 3.2s Husseiniya hall reverb, wide unison male Raddada choir response, Pure Acapella No Instruments`
 
@@ -34,7 +34,7 @@
   `Traditional Iraqi Hussaini Latmiya, heavy Karbalai Nazla style, Maqam Bayati and Saba, 60 BPM, authentic Iraqi colloquial dialect, commanding deep resonant Baritone lead vocal, powerful high chest-voice climbs, natural vocal rasp, passionate microtonal melisma, heavy 55Hz bare-palm chest thud, 285ms tape echo, 3.2s Husseiniya hall reverb, wide unison male Raddada response, Pure Acapella No Instruments`
 
 ### 5. الرادود سيد سلام الحسيني (مدرسة الشجن العراقي الحديث والروحية العالية)
-- **النماذج المرجعية الأسطورية:** `الذكريات` (`KS0DidCff70`), `مو انه يا حزن` (`i9CunjgHGPA`), `سلام وعن بعد` (`HsKdW96ckM0`), `بندرية عرس بارض الطفوف` (`VWzjqewppG8`), `غريبة هالحچاية`.
+- **النماذج المرجعية الأسطورية:** `الذكريات` (`KS0DidCff70`)، `مو انه يا حزن` (`i9CunjgHGPA`)، `سلام وعن بعد` (`HsKdW96ckM0`)، `بندرية عرس بارض الطفوف` (`VWzjqewppG8`)، `غريبة هالحچاية`.
 - **البرومبت القياسي المعتمد (`V48.5`):**
   `Traditional Iraqi Hussaini Keadia Latmiya, Maqam Kurd, 74 BPM, authentic Iraqi colloquial dialect, high-power full-chest belted Baritone lead vocal, natural vocal rasp, passionate microtonal melisma, rhythmic 55Hz bare-palm chest-slap pulse, 250ms analog slapback echo, 2.5s Husseiniya hall reverb, energetic unison male Raddada choir response, Pure Acapella No Instruments`
 
@@ -57,12 +57,12 @@
   `Epic Bahrani Haidari Mawkib Hussaini Latmiya chant, 96 BPM, commanding Maqam Hijaz on D, authentic Bahrani colloquial dialect, powerful resonant Baritone Radood vocal, driving synchronized Bahrani 55Hz bare-chest strikes, antiphonal dual-choir Matam congregation responses, Pure Acapella No Instruments`
 
 ### 10. السيد هاني الوداعي والسيد عصام الهاشمي وحسين خير الدين (المدرسة البحرانية التراثية)
-- **النماذج المرجعية الأسطورية:** `نوح الراعبية` (`c-7qBrZjIkc`), `في درب فاطمة` (`x6SAJcKf4gE`).
+- **النماذج المرجعية الأسطورية:** `نوح الراعبية` (`c-7qBrZjIkc`)، `في درب فاطمة` (`x6SAJcKf4gE`).
 - **البرومبت القياسي المعتمد (`V48.5`):**
   `Mournful Bahrani Qatifi Muthakkal Hussaini Latmiya lament, 56 BPM, solemn Maqam Saba and Bayati on D, authentic Bahrani colloquial dialect, commanding deep resonant Baritone Radood vocal, soulful Faizi microtonal melisma, deep slow 55Hz bare-chest Latm thud in Matam hall, unison male Raddada responses, Pure Acapella No Instruments`
 
 ### 11. الملا مرتضى حرب (مدرسة مزج الأطوار الفراتية التراثية بالحماسة والشور الاستغراقي)
-- **النماذج التطبيقية المرجعية:** `يا يمة شلون`, `يا عباس جيب الماي`.
+- **النماذج التطبيقية المرجعية:** `يا يمة شلون`، `يا عباس جيب الماي`.
 - **البرومبت القياسي المعتمد (`V48.5`):**
   `Traditional Iraqi Karbalaei Hussaini Rukbani and Nassari Latmiya, Maqam Lami and Bayati, 60 BPM, authentic Iraqi colloquial dialect, commanding deep resonant Baritone lead vocal, powerful high chest-voice climbs, natural vocal rasp, prolonged microtonal vowel elongations, heavy 55Hz bare-palm chest thud, 285ms tape echo, 3.2s Husseiniya hall reverb, wide unison male Raddada response, Pure Acapella No Instruments`
 

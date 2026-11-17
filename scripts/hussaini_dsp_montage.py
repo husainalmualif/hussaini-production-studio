@@ -1,24 +1,15 @@
 #!/usr/bin/env python3
 # pylint: disable=too-many-lines,too-many-return-statements,too-many-branches,too-many-locals,too-many-statements,too-many-arguments,too-many-positional-arguments,no-member,chained-comparison
-"""Hussaini Audio Omni-Architect DSP, 5-Track DAW & Phonetics Compiler (V50.0 OMNI-ARCHITECT).
+"""Hussaini Audio Omni-Architect DSP, 5-Track DAW & Phonetics Compiler (V52.0 OMNI-ARCHITECT).
 
-Standalone empirical production engine implementing Hussaini_Production_Studio_OS_V50_0_OMNI_ARCHITECT:
-- Single-Source Version Management via root VERSION file (V50.0 OMNI-ARCHITECT) & JSON constitution
-- Module 54-65: 175-Track Empirical Corpus Architecture across 9 Master Schools, 80-Second Extend
-  Single-Stanza Law (Max 7 Couplets / Stage — QC30), Top-Level 'lyrics_register_verbatim' Lock (QC29),
-  Unique Numbered Kaser Section Headers (QC27), Doubled Opening Estehlal & 4-Line Cap (QC31),
-  Zero Orphan 1-Word Vertical Lines (QC32), Selective Prosthetic Alif Whitelist (QC33), and Kaf/Gaf
-  Homograph & Feminine Haa Boundary Lock (QC34)
-- Module 39 & 51: Two-Channel JSON vs. Compose UI Routing (QC17 inline JSON firewall) and Mandatory
-  Collective '(...)' Unison Raddada Estehlal Orthographic Lock (QC18)
-- Module 40, 41, 43, 45, 49, 57 & 58: Pure Single-Dialect Vocal Tract Isolation (QC9/QC13), Plain
-  Epenthetic Vowels (دُمُوعْ/جُرُوحْ/مِتُونِي), Selective Iraqi Prosthetic 'إِCْ' Clusters, and Verified
-  Lyria 3.5 G2P Orthographic Locks (QC20-QC28)
-- Module 44, 47 & 50: Crying & Weeping Isolation to 0 BPM Rubato Minbar Na'i Only (QC15), 36-Term
-  Song & Western 12-TET Collapse Blacklist (QC4/QC16/QC25), and 4-Genre Religious Vocal Taxonomy
-- Local 16-Mode 5-Track SOS/RMS/LUFS DSP Montage Engine with Stem-Aware AI Percussion Cleaning
-  (--replace-ai-percussion), Reference Audio Reverse Engineering (--extract-profile), Rosenberg
-  Glottal + Formant Ahaat (F1=730, F2=1090, F3=2440Hz), -28 dBFS Ducking & -14.0 LUFS Master
+Standalone empirical production engine implementing Hussaini_Production_Studio_OS_V50_0_OMNI_ARCHITECT
+and V52.0 field upgrades:
+- Single-Source Version Management via root VERSION file & JSON constitution
+- Pure-Python WAV I/O + ITU-R BS.1770-4 / EBU R128 K-Weighted Gated Loudness + 4x True-Peak Limiter
+- Module 67 (V52.0): Pure Vocal Mastering (`vocal_pure_master`), Organic Chest-Thud & Beat Alignment,
+  Tail Trim/Fade (--trim-end-sec/--fade-out-sec), Seam Audio Auditor (--audit-audio), Fazzaiya/Tawshih
+  Atwar & Stage Planning (--plan-stages), Swash-Kaf/Kaf-Fatha/Daad-Dhaa Firewall, Morphological Arabic
+  Vocalizer (>90% diacritization across real Husseini poetry), and Ahl al-Bayt Historical Verifier
 """
 
 import argparse
@@ -26,11 +17,11 @@ from datetime import datetime, timezone
 import json
 import os
 import re
+import struct
 import sys
 import wave
 
 import numpy as np
-from scipy.io import wavfile
 from scipy.signal import butter, fftconvolve, iirnotch, lfilter, sosfilt
 
 
@@ -71,10 +62,12 @@ COMMON_JINS_GRAPH = {
 }
 
 SUPPORTED_DSP_MODES = (
+    "vocal_pure_master",
     "latm",
     "heavy_clip",
     "thaqeel_muwazza",
     "studio_arranged",
+    "fazzaiya",
     "bahrani_fast",
     "bahrani_thulathi",
     "bahrani_rubai",
@@ -270,6 +263,22 @@ MASTER_SOUND_PROMPTS_V48_5 = {
 
 MASTER_SOUND_PROMPTS_V50 = MASTER_SOUND_PROMPTS_V48_5
 
+EXTENDED_ATWAR_PROMPTS_V52 = {
+    "karbalai_fazzaiya_84bpm_hijaz_bayati_v52": (
+        "Urgent Traditional Iraqi Hussaini Fazzaiya chant, Maqam Hijaz and Bayati, 84 BPM, "
+        "authentic Iraqi colloquial dialect, commanding fiery middle-register Baritone lead vocal, "
+        "sharp crisp Arabic consonant articulation, synchronized rapid 55Hz bare-palm chest Matam "
+        "thuds, 220ms analog delay, 2.5s Husseiniya hall reverb, booming unison male Raddada "
+        "congregation response, Pure Acapella No Instruments"
+    ),
+    "shia_tawshih_nasheed_86bpm_rast_hijaz_v52": (
+        "Dignified Spiritual Shia Islamic Choral Tawashih and Nasheed, Maqam Rast and Hijaz, "
+        "86 BPM, eloquent Classical Arabic and devotional articulation, resonant Baritone solo "
+        "verse answered by rich unison male choir, sacred mosque dome reverb, light respectful "
+        "frame percussion only, zero chest Latm, zero Western instruments"
+    ),
+}
+
 # Module 53 & 61 (QC19 & QC29): Mandatory 7-Key Per-Stage & 10-Key Per-Section JSON Orchestration Keys
 REQUIRED_STAGE_JSON_KEYS = (
     "stage_id",
@@ -445,6 +454,12 @@ POETIC_METERS_CATALOG = {
         "typical_syllables_per_hemistich": (7, 10),
         "compatible_atwar": ["tor_hosa_iraqi"],
     },
+    "fazzaiya": {
+        "arabic_name": "وزن الفزاعية والرباطات الموكبية",
+        "rhyme_scheme": "AAAB / AAAA rapid heroic refrain (Ribatat)",
+        "typical_syllables_per_hemistich": (6, 9),
+        "compatible_atwar": ["tor_fazzaiya_karbalai", "tor_bahrani_haidari", "tor_darj_karbalai"],
+    },
 }
 
 PERFORMANCE_ATWAR_CATALOG = {
@@ -517,6 +532,20 @@ PERFORMANCE_ATWAR_CATALOG = {
         "primary_maqam": "lami",
         "default_bpm": 0,
         "delivery_rule": "مدّات حنجرية عالية في الجواب في مقام اللامي والصبا مع كسرة فراتية",
+    },
+    "tor_fazzaiya_karbalai": {
+        "arabic_name": "طور الفزاعية والرباط الكربلائي",
+        "school": "iraqi",
+        "primary_maqam": "hijaz",
+        "default_bpm": 84,
+        "delivery_rule": "دخول متسارع حاسم بنداء النخوة ثم ردّة جماعية قاطعة بضربات صدر حادة ومنتظمة",
+    },
+    "tor_tawshih_shia": {
+        "arabic_name": "طور التوشيح والنشيد الولائي",
+        "school": "iraqi_bahrani",
+        "primary_maqam": "rast",
+        "default_bpm": 86,
+        "delivery_rule": "أداء إنشادي وقور متوازن المقام بالدف الهادئ أو الأكابيلا الجماعية دون لطم صدري",
     },
 }
 
@@ -1319,6 +1348,316 @@ HYBRID_WORD_SHAPING_MAP = {
     "زينب": "زَينَبْ",
 }
 
+# V52.0 Corpus-Validated High-Frequency Iraqi/Husseini Lexicon, Kaf-Fatha & Daad/Dhaa Locks
+KAF_FATHA_TO_GAF_LEXICON = {
+    "كَلب": "گَلُبْ",
+    "كَلبي": "گَلْبِي",
+    "كَلبك": "گَلْبَكْ",
+    "كَلبه": "گَلْبَه",
+    "لكَبر": "لِـ گَبِرْ",
+    "كَبر": "گَبِرْ",
+    "كَبره": "گَبْرَه",
+    "تخنكَني": "تِخْنِگْنِي",
+    "ينكَل": "يِنْگِلْ",
+    "خانكَته": "خَانِگْتَه",
+    "الفركَه": "الفِرْگَه",
+    "فركَه": "فِرْگَه",
+    "فركَتك": "فِرْگِتَكْ",
+    "فركَتهم": "فِرْگَتْهُمْ",
+    "فاكَد": "فَاگِدْ",
+    "فاكَدين": "فَاگْدِينْ",
+    "ملكَاك": "مَلْگَاكْ",
+    "الكَفه": "الگِفَه",
+    "كَعد": "گِعَدْ",
+    "كَعدت": "گَعْدَتْ",
+    "وكَع": "وُگَعْ",
+    "وكَف": "وُگَفْ",
+    "تندكَ": "تِنْدَگْ",
+    "مكَطوع": "مَگْطُوعْ",
+    "مكَطوعه": "مَگْطُوعَه",
+    "تكًول": "تْگُولْ",
+    "تكول": "تْگُولْ",
+    "تكَول": "تْگُولْ",
+    "دكَول": "دْگُولْ",
+    "لكَيت": "لِگَيتْ",
+    "لكَيته": "لِگَيتَه",
+    "يلكَه": "يِلْگَه",
+    "عكَب": "عُگُبْ",
+    "عكَبه": "عُگْبَه",
+    "بكَاع": "إِبْگَاعْ",
+    "الكَاع": "الگَاعْ",
+    "كَاع": "گَاعْ",
+}
+
+DAAD_DHAA_SPELLING_FIX_MAP = {
+    "الغاظريه": "الغَاضْرِيَّه",
+    "الغاظرية": "الغَاضْرِيَّه",
+    "أظلوع": "أَضْلُوعْ",
+    "اظلوع": "أَضْلُوعْ",
+    "أظلاع": "أَضْلَاعْ",
+    "اظلاع": "أَضْلَاعْ",
+    "فظه": "فِضَّه",
+    "بفظه": "بِفِضَّه",
+    "مظيف": "مَضِيفْ",
+    "لمظيفه": "لِمَضِيفَه",
+    "ارظ": "أَرْضْ",
+    "أرظ": "أَرْضْ",
+    "ظرب": "ضَرَبْ",
+    "ظربو": "ضَرَبُو",
+    "ظربوه": "ضَرَبُوه",
+    "تنظرب": "تِنْضَرِبْ",
+    "انضر": "أَنْظُرْ",
+    "أنضر": "أَنْظُرْ",
+    "تنضر": "تِنْظُرْ",
+    "ينضر": "يِنْظُرْ",
+    "نضر": "نَظَرْ",
+    "نضره": "نَظْرَه",
+    "نضرات": "نَظْرَاتْ",
+    "ناضر": "نَاظِرْ",
+    "الناضرين": "النَّاظْرِينْ",
+    "لحضه": "لَحْظَه",
+    "لحضة": "لَحْظَه",
+    "لحضات": "لَحْظَاتْ",
+    "ضالم": "ظَالِمْ",
+    "الضالم": "الظَّالِمْ",
+    "ضلمه": "ظُلْمَه",
+    "ضلمة": "ظُلْمَه",
+    "الضلمه": "الظُّلْمَه",
+    "ضلام": "ظَلَامْ",
+    "الضلام": "الظَّلَامْ",
+    "ضهر": "ظَهَرْ",
+    "بضهر": "بِظَهَرْ",
+    "ضهره": "ظَهْرَه",
+    "بضهره": "بِظَهْرَه",
+    "مضلوم": "مَظْلُومْ",
+    "مضلومه": "مَظْلُومَه",
+    "يضل": "يِظَلْ",
+    "تضل": "تِظَلْ",
+    "ماضل": "مَا ظَلْ",
+    "ضلت": "ظَلَّتْ",
+    "ضليت": "ظَلَّيتْ",
+    "ضلينه": "ظَلَّينَه",
+}
+
+COMMON_CORPUS_LEXICON_V52 = {
+    "من": "مِنْ",
+    "يا": "يَا",
+    "ما": "مَا",
+    "لا": "لَا",
+    "بس": "بَسْ",
+    "لو": "لَوْ",
+    "مو": "مُو",
+    "او": "أَوْ",
+    "أو": "أَوْ",
+    "الله": "اللّٰه",
+    "والله": "وَ اللّٰه",
+    "کل": "كِلْ",
+    "كل": "كِلْ",
+    "كله": "كِلَّه",
+    "كلها": "كِلْهَا",
+    "كلهم": "كِلْهُمْ",
+    "كلشي": "كِلْشِي",
+    "علي": "عَلِي",
+    "حيدر": "حَيدَرْ",
+    "عباس": "عَبَّاسْ",
+    "العباس": "العَبَّاسْ",
+    "ابوفاضل": "أَبُو فَاضِلْ",
+    "أبوفاضل": "أَبُو فَاضِلْ",
+    "ابو": "أَبُو",
+    "أبو": "أَبُو",
+    "يبن": "يَبِنْ",
+    "ابن": "إِبِنْ",
+    "ام": "أُمّ",
+    "أم": "أُمّ",
+    "امي": "أُمِّي",
+    "أمي": "أُمِّي",
+    "امها": "أُمَّهَا",
+    "ابوها": "أَبُوهَا",
+    "اخوها": "أَخُوهَا",
+    "اخوي": "أَخُويْ",
+    "أخوي": "أَخُويْ",
+    "اه": "آهْ",
+    "آه": "آهْ",
+    "وي": "وِيْ",
+    "ويه": "وِيَّه",
+    "وياي": "وِيَّايْ",
+    "وياه": "وِيَّاهْ",
+    "وياهم": "وِيَّاهُمْ",
+    "وياها": "وِيَّاهَا",
+    "اويه": "وِيَّه",
+    "اوياي": "وِيَّايْ",
+    "اوياه": "وِيَّاهْ",
+    "اليه": "إِلِيَّه",
+    "وعلى": "وَ عَلَى",
+    "الحرام": "الحَرَامْ",
+    "اخت": "أُخِتْ",
+    "يه": "يَه",
+    "اي": "إِي",
+    "أجه": "أَجَه",
+    "اجه": "أَجَه",
+    "راح": "رَاحْ",
+    "راحت": "رَاحَتْ",
+    "رد": "رَدْ",
+    "ردت": "رِدَتْ",
+    "عندي": "عِنْدِي",
+    "فاطمه": "فَاطْمَه",
+    "فاطمة": "فَاطْمَه",
+    "الزهرا": "الزَّهْرَا",
+    "الزهره": "الزَّهْرَه",
+    "الزهرة": "الزَّهْرَه",
+    "العقيله": "العَقِيلَه",
+    "العقيلة": "العَقِيلَه",
+    "السجاد": "السَّجَّادْ",
+    "رقيه": "رُقَيَّه",
+    "رقية": "رُقَيَّه",
+    "القاسم": "القَاسِمْ",
+    "الاكبر": "الأَكْبَرْ",
+    "الأكبر": "الأَكْبَرْ",
+    "مسلم": "مُسْلِمْ",
+    "الحسن": "الحَسَنْ",
+    "هذا": "هَذَا",
+    "هذي": "هَذِي",
+    "هاي": "هَايْ",
+    "هسه": "هَسَّه",
+    "مثل": "مِثِلْ",
+    "ولا": "وَ لَا",
+    "اهواي": "إِهْوَايْ",
+    "هواي": "إِهْوَايْ",
+    "احنه": "إِحْنَه",
+    "احنا": "إِحْنَه",
+    "واحنه": "وَ إِحْنَه",
+    "يتامه": "يَتَامَى",
+    "يتامى": "يَتَامَى",
+    "ايتام": "أَيتَامْ",
+    "أيتام": "أَيتَامْ",
+    "عمتك": "عَمْتَكْ",
+    "صرنه": "صِرْنَه",
+    "صرنا": "صِرْنَه",
+    "الي": "إِلِي",
+    "إلي": "إِلِي",
+    "النه": "إِلْنَه",
+    "الشام": "الشَّامْ",
+    "الكوفه": "الكُوفَه",
+    "الكوفة": "الكُوفَه",
+    "كربلا": "كَرْبَلَا",
+    "كربله": "كَرْبَلَا",
+    "كربلاء": "كَرْبَلَا",
+    "الطف": "الطَّفْ",
+    "الطفوف": "الطُّفُوفْ",
+    "المشرعه": "المَشْرَعَه",
+    "المشرعة": "المَشْرَعَه",
+    "العلگمي": "العَلْگَمِي",
+    "العلقمي": "العَلْگَمِي",
+    "الفرات": "الفُرَاتْ",
+    "النهر": "النَّهَرْ",
+    "نهر": "نَهَرْ",
+    "الماي": "المَايْ",
+    "ماي": "مَايْ",
+    "عطشان": "عَطْشَانْ",
+    "سهم": "سَهَمْ",
+    "السهم": "السَّهَمْ",
+    "اسهام": "إِسْهَامْ",
+    "رمح": "رُمُحْ",
+    "الرمح": "الرُّمُحْ",
+    "سيف": "سَيفْ",
+    "السيف": "السَّيفْ",
+    "خيمه": "خَيمَه",
+    "خيمة": "خَيمَه",
+    "الخيم": "الخِيَمْ",
+    "العبايه": "العَبَايَه",
+    "العباءه": "العَبَاءَه",
+    "الراس": "الرَّاسْ",
+    "راس": "رَاسْ",
+    "النحر": "النَّحَرْ",
+    "نحر": "نَحَرْ",
+    "منحر": "مَنْحَرْ",
+    "صدر": "صَدِرْ",
+    "صدره": "صَدْرَه",
+    "ضلع": "ضِلِعْ",
+    "ضلعي": "ضِلْعِي",
+    "البسمار": "البُسْمَارْ",
+    "بسمار": "بُسْمَارْ",
+    "حبل": "حَبِلْ",
+    "احبال": "إِحْبَالْ",
+    "السوط": "السُّوطْ",
+    "سوط": "سُوطْ",
+    "صوت": "صُوتْ",
+    "الصوت": "الصُّوتْ",
+    "النار": "النَّارْ",
+    "نار": "نَارْ",
+    "الخيل": "الخَيلْ",
+    "خيل": "خَيلْ",
+    "حوافر": "حَوَافِرْ",
+    "التل": "التَّلْ",
+    "الترب": "التُّرُبْ",
+    "التراب": "التُّرَابْ",
+    "تراب": "تُرَابْ",
+    "الطريق": "الطَّرِيقْ",
+    "درب": "دَرُبْ",
+    "سبي": "سَبِي",
+    "السبي": "السَّبِي",
+    "مسبيه": "مَسْبِيَّه",
+    "الهزل": "الهَزِلْ",
+    "هزيله": "هَزِيلَه",
+    "باچر": "بَاچِرْ",
+    "گال": "گَالْ",
+    "گالت": "گَالَتْ",
+    "گلت": "گِلْتْ",
+    "شوف": "شُوفْ",
+    "شفت": "شِفِتْ",
+    "شفته": "شِفْتَه",
+    "گوم": "گُومْ",
+    "ليش": "لَيشْ",
+    "شلون": "إِشْلُونْ",
+    "وحدي": "وَحْدِي",
+    "وحده": "وَحْدَه",
+    "الگمر": "الگَمَرْ",
+    "گمر": "گَمَرْ",
+    "الناس": "النَّاسْ",
+    "العدا": "العِدَا",
+    "العده": "العِدَه",
+    "الشمر": "الشَّمِرْ",
+    "الحسين": "الحُسَينْ",
+    "ابو اليمه": "أَبُو اليِمَّه",
+    "ماتت": "مَاتَتْ",
+    "ذبحو": "ذِبْحَوْ",
+    "ذبحوه": "ذَبْحُوهْ",
+    "سبوها": "سَبُوهَا",
+    "حركوها": "حَرْگُوهَا",
+    "حرگوها": "حَرْگُوهَا",
+    "ودوها": "وَدُّوهَا",
+    "جتفوها": "چَتَّفُوهَا",
+    "چتفوها": "چَتَّفُوهَا",
+    "گعدت": "گَعْدَتْ",
+    "نامت": "نَامَتْ",
+    "فزت": "فَزَّتْ",
+    "ابلا": "بِلَا",
+    "ابلايه": "بِلَايَه",
+    "والخيام": "وَ الخِيَامْ",
+    "بالميدان": "بِالمَيدَانْ",
+    "دورك": "دَورَكْ",
+    "موسى": "مُوسَى",
+    "سلام": "سَلَامْ",
+    "نوح": "نُوحْ",
+    "ينوح": "يِنُوحْ",
+    "تبچي": "تِبْچِي",
+    "ابچي": "إِبْچِي",
+    "واحچي": "وَ أَحْچِي",
+    "احچي": "أَحْچِي",
+    "اسمع": "إِسْمَعْ",
+    "انظر": "أَنْظُرْ",
+    "وانظر": "وَ أَنْظُرْ",
+    "اوگف": "أَوْگَفْ",
+    "اودعها": "أَوَدِّعْهَا",
+    "اودعهم": "أَوَدِّعْهُمْ",
+    "امسح": "إِمْسَحْ",
+    "اتنادي": "تِنَادِي",
+    "اتشوف": "تِشُوفْ",
+    "انذبح": "انْذِبَحْ",
+    "انكسر": "انْكِسَرْ",
+    "انگطع": "انْگِطَعْ",
+}
+
 
 def classify_section_tag(tag_str):
     """Normalize any Arabic or English bracketed section header to chorus/verse/intro_outro."""
@@ -1440,9 +1779,40 @@ def _format_tatweel(text_val, use_tatweel=False):
     return re.sub(r"\s+", " ", text_val.replace("ـ", "")).strip()
 
 
+def sanitize_poem_decorations(text):
+    """Strip social-media emojis, decorative divider glyphs, and poet signature lines safely."""
+    out_lines = []
+    signature_prefixes = ("تمت", "الشاعر", "كلمات", "الرادود", "اداء", "أداء", "اللهم صل", "السلام على الحسين")
+    for raw_ln in text.splitlines():
+        cleaned = re.sub(r"[💔❤😭✏★☆۞◆◇▪✦🙨🙜#*_=/\\-]+", " ", raw_ln)
+        cleaned = re.sub(r"ـ{2,}", " ", cleaned)
+        cleaned = re.sub(r"\s+", " ", cleaned).strip()
+        if not cleaned:
+            continue
+        bare = re.sub(r"[\u064B-\u0652\s:.]", "", cleaned)
+        if any(bare.startswith(p.replace(" ", "")) for p in signature_prefixes) and len(cleaned.split()) <= 5:
+            continue
+        out_lines.append(cleaned)
+    return "\n".join(out_lines)
+
+
 def normalize_iraqi_orthographic_gaf(text):
-    """Normalize Iraqi orthographic 'كَـ' (Kaf + Fatha + Tatweel) into 'گ' (Gaf)."""
-    return re.sub(r"ك(?:\u064e\u0640|\u0640\u064e)", "گ", text)
+    """Normalize Swash Kaf, Kaf+Fatha/Tanween+Tatweel, and known Kaf+Fatha Iraqi Gaf words into 'گ'."""
+    norm = text.replace("\u06AA", "ك").replace("\u06BE", "ه").replace("\u06CC", "ي")
+    norm = re.sub(r"ك(?:\u064e\u0640|\u0640\u064e|\u064b)", "گ", norm)
+    for raw_kaf_gaf, shaped_gaf in KAF_FATHA_TO_GAF_LEXICON.items():
+        norm = re.sub(rf"(?<!\S){re.escape(raw_kaf_gaf)}(?!\S)", shaped_gaf, norm)
+    return norm
+
+
+def normalize_daad_dhaa_homographs(text):
+    """Correct common Iraqi poet Daad/Dhaa spelling swaps before G2P shaping."""
+    result = text
+    for wrong_tok, fixed_tok in DAAD_DHAA_SPELLING_FIX_MAP.items():
+        result = re.sub(rf"(?<!\S){re.escape(wrong_tok)}(?!\S)", fixed_tok, result)
+    # Disambiguate standalone 'ضل' (remained -> ظَلْ) except when meaning straying 'ضل الطريق/السبيل'
+    result = re.sub(r"(?<!\S)ضل(?!\S)(?!\s+(?:الطريق|السبيل|عن|من))", "ظَلْ", result)
+    return result
 
 
 def normalize_demonstrative_hal(text, dialect="iraqi"):
@@ -1479,7 +1849,10 @@ def repair_word_initial_sukun_and_diphthongs(text):
 
 def de_cliticize_and_separate_words(text, use_tatweel=False):
     """Module 41 & 49: Separate attached vocatives, prepositions, constructs, and clitics."""
-    result = normalize_iraqi_orthographic_gaf(text)
+    result = re.sub(r"[ \t]*(?<!\.)\.\.(?!\.)[ \t]*", " .. ", text)
+    result = re.sub(r" +", " ", result)
+    result = normalize_iraqi_orthographic_gaf(result)
+    result = normalize_daad_dhaa_homographs(result)
     for raw_phrase, shaped_phrase in COLLOQUIAL_PHRASE_MAP.items():
         result = result.replace(raw_phrase, shaped_phrase)
     for attached, separated in WORD_SEPARATION_MAP.items():
@@ -1494,16 +1867,21 @@ def _finalize_hemistich_pause_sukun(segment):
     seg = segment.strip()
     if not seg:
         return seg
-    close_paren = ""
-    if seg.endswith(")"):
-        close_paren = ")"
-        seg = seg[:-1].rstrip()
-    seg = re.sub(r"(?:اً|ً)$", "َا", seg)
+    trail_match = re.search(r"([\s\)\]\.\u2026،؛:!؟\"']+)$", seg)
+    trail_punct = ""
+    if trail_match:
+        trail_punct = trail_match.group(1)
+        seg = seg[: trail_match.start()].rstrip()
+    seg = re.sub(r"(?:\u0627\u064B|\u064B\u0627|\u064B)$", "َا", seg)
     seg = re.sub(r"[ٌٍُِ]$", "ْ", seg)
     seg = re.sub(r"([هة])\u0652$", r"\1", seg)
-    if seg and not seg.endswith(("ْ", "ا", "ى", "و", "ي", "ه", "ة")):
+    if (
+        seg
+        and re.search(r"[\u0621-\u063A\u0641-\u064A\u067E\u0686\u06AF]$", seg)
+        and not seg.endswith(("ْ", "ا", "آ", "ى", "و", "ي", "ه", "ة"))
+    ):
         seg = seg + "ْ"
-    return f"{seg}{close_paren}"
+    return f"{seg}{trail_punct}"
 
 
 def resolve_dialectal_and_prosodic_tanween(text, dialect="iraqi", use_tatweel=False):
@@ -1521,7 +1899,7 @@ def resolve_dialectal_and_prosodic_tanween(text, dialect="iraqi", use_tatweel=Fa
             processed,
         )
 
-    processed = re.sub(r"(\S+)(?:اً|ً)(?=\s+(?!\.\.)\S)", r"\1َنْ", processed)
+    processed = re.sub(r"(\S+?)(?:\u0627\u064B|\u064B\u0627|\u064B)(?=\s+(?!\.\.)\S)", r"\1َنْ", processed)
     processed = re.sub(r"(\S+)ٍ(?=\s+(?!\.\.)\S)", r"\1ِنْ", processed)
     processed = re.sub(r"(\S+)ٌ(?=\s+(?!\.\.)\S)", r"\1ُنْ", processed)
 
@@ -1606,10 +1984,140 @@ def shape_words_by_boundary(text, word_map, use_tatweel=False):
     return "\n".join(out_lines)
 
 
+_SUN_LETTERS = frozenset("تثدذرزسشصضطظلن")
+
+
+def _vocalize_unseen_arabic_word(core, dialect="iraqi"):
+    """Apply conservative Iraqi/Fusha rule-based Tashkeel to bare unseen Arabic words (idempotent)."""
+    if not core or re.search(r"[\u064B-\u0652]", core):
+        return core
+    if not re.fullmatch(r"[\u0621-\u064A\u067E\u0686\u06AF]+", core):
+        return core
+    if core in COMMON_CORPUS_LEXICON_V52:
+        return COMMON_CORPUS_LEXICON_V52[core]
+
+    prefix_out = ""
+    stem = core
+    if stem.startswith("وال") and len(stem) > 4:
+        prefix_out, stem = "وَ ال", stem[3:]
+    elif stem.startswith("بال") and len(stem) > 4:
+        prefix_out, stem = "بِال", stem[3:]
+    elif stem.startswith("لال") or (stem.startswith("لل") and len(stem) > 3):
+        prefix_out, stem = "لِل", stem[2:]
+    elif stem.startswith("ال") and len(stem) > 3:
+        prefix_out, stem = "ال", stem[2:]
+    elif stem.startswith("و") and len(stem) > 3 and stem[1:] in COMMON_CORPUS_LEXICON_V52:
+        return f"وَ {COMMON_CORPUS_LEXICON_V52[stem[1:]]}"
+
+    if prefix_out.endswith("ال") or prefix_out.endswith("ل"):
+        if stem in COMMON_CORPUS_LEXICON_V52:
+            sun_mark = "\u0651" if stem[0] in _SUN_LETTERS else ""
+            shaped_s = COMMON_CORPUS_LEXICON_V52[stem]
+            if sun_mark and len(shaped_s) >= 1 and "\u0651" not in shaped_s[:3]:
+                shaped_s = shaped_s[0] + sun_mark + shaped_s[1:]
+            return f"{prefix_out}{shaped_s}"
+
+    if len(stem) <= 1:
+        return f"{prefix_out}{stem}"
+
+    long_v = set("اويىآ")
+    out_chars = []
+    n_len = len(stem)
+    for idx, ch in enumerate(stem):
+        nxt = stem[idx + 1] if idx + 1 < n_len else ""
+        prv = stem[idx - 1] if idx > 0 else ""
+        is_last = idx == n_len - 1
+        out_chars.append(ch)
+        if idx == 0 and prefix_out.endswith("ال") and ch in _SUN_LETTERS:
+            out_chars.append("\u0651")
+        if ch in long_v and not (idx == 0 and ch in ("و", "ي")):
+            continue
+        if is_last:
+            if dialect != "fusha" and ch not in "هة":
+                out_chars.append("\u0652")
+            continue
+        if idx == 0 and ch in ("ي", "ت", "ن") and n_len >= 4:
+            out_chars.append("\u0650")  # colloquial imperfect prefix يِـ تِـ نِـ
+        elif idx == 0 and ch == "و":
+            out_chars.append("\u0650" if nxt == "ي" and n_len <= 3 else "\u064E")
+        elif idx == 0 and ch == "ا":
+            continue
+        elif nxt in ("ا", "آ"):
+            out_chars.append("\u064E")
+        elif nxt == "و":
+            out_chars.append("\u064F" if idx > 0 or ch not in "لمنس" else "\u064E")
+        elif nxt == "ي" and idx + 2 == n_len:
+            out_chars.append("\u0650")
+        elif nxt == "ي":
+            out_chars.append("\u0650" if idx == 0 else "\u064E")
+        elif prv == "ا" and idx == 1:
+            out_chars.append("\u0652" if ch not in long_v and n_len >= 4 else "\u064E")
+        elif idx % 2 == 0 or (idx + 2 == n_len):
+            out_chars.append("\u064E")
+        else:
+            out_chars.append("\u0652" if idx > 0 and nxt not in long_v else "\u064E")
+
+    vocalized = "".join(out_chars)
+    # Guard QC14 & closed feminine haa & initial sukun
+    vocalized = re.sub(r"\u064E([يو])\u0652(?=[\u0621-\u064A\u067E\u0686\u06AF])", "\u064E\\g<1>", vocalized)
+    vocalized = re.sub(r"([هة])\u0652$", r"\1", vocalized)
+    if len(vocalized) >= 2 and vocalized[1] == "\u0652":
+        vocalized = vocalized[0] + "\u064E" + vocalized[2:]
+    return f"{prefix_out}{vocalized}"
+
+
+def shape_unseen_corpus_tokens(text, dialect="iraqi", use_tatweel=False):
+    """Apply V52 corpus lexicon and morphological vocalizer only on unvocalized words."""
+    out_lines = []
+    for line in text.splitlines():
+        if line.strip().startswith("["):
+            out_lines.append(line)
+            continue
+        tokens = line.split(" ")
+        new_tokens = []
+        for tok in tokens:
+            if not tok or tok == "..":
+                new_tokens.append(tok)
+                continue
+            m = re.match(r"^([\(\[،]*)(.*?)([\)\]،\.\u2026؛:!؟]*)$", tok)
+            if not m:
+                new_tokens.append(tok)
+                continue
+            lead_p, core, trail_p = m.groups()
+            if not core or re.search(r"[\u064B-\u0652]", core):
+                new_tokens.append(tok)
+                continue
+            shaped_core = shape_token_morphologically(core, COMMON_CORPUS_LEXICON_V52, use_tatweel=use_tatweel)
+            if shaped_core == core:
+                shaped_core = _vocalize_unseen_arabic_word(core, dialect=dialect)
+            new_tokens.append(f"{lead_p}{shaped_core}{trail_p}")
+        out_lines.append(" ".join(new_tokens))
+    return "\n".join(out_lines)
+
+
+def _count_dialect_markers(text):
+    """Count Iraqi vs. Bahrani markers stably on diacritic-stripped tokens/phrases."""
+    bare_text = re.sub(r"[\u064B-\u0652]", "", text)
+    bahrani_hits = 0
+    for marker in BAHRANI_MARKERS:
+        if marker == "عَلَه":
+            if re.search(r"(?<!\S)عَل?َه(?!\S)", text) and "إِعْلَه" not in text and "اعله" not in bare_text and "إعله" not in bare_text:
+                bahrani_hits += 1
+        else:
+            bare_m = re.sub(r"[\u064B-\u0652]", "", marker)
+            if bare_m and bare_m in bare_text:
+                bahrani_hits += 1
+    iraqi_hits = 0
+    for marker in IRAQI_MARKERS:
+        bare_m = re.sub(r"[\u064B-\u0652]", "", marker)
+        if bare_m and bare_m in bare_text:
+            iraqi_hits += 1
+    return bahrani_hits, iraqi_hits
+
+
 def detect_and_shape_dialect(text, enforce_iraqi_dhaa=None, use_tatweel=False):
     """Modules 43 & 49: Identify Pure Bahrani vs. Pure Iraqi vs. Neutral Fusion and shape tokens."""
-    bahrani_hits = sum(1 for marker in BAHRANI_MARKERS if marker in text)
-    iraqi_hits = sum(1 for marker in IRAQI_MARKERS if marker in text)
+    bahrani_hits, iraqi_hits = _count_dialect_markers(text)
 
     if bahrani_hits > iraqi_hits:
         detected = "bahrani"
@@ -1654,6 +2162,13 @@ def detect_and_shape_dialect(text, enforce_iraqi_dhaa=None, use_tatweel=False):
         dhad_mode = "Emphatic Iraqi Dhaa (ظ)" if enforce_iraqi_dhaa else "Balanced Neutral Dhad (ض)"
         sound_dialect = "authentic Iraqi and Bahrani colloquial dialect"
 
+    shaped = shape_unseen_corpus_tokens(shaped, dialect=detected, use_tatweel=use_tatweel)
+    if enforce_iraqi_dhaa:
+        shaped = (
+            shaped.replace("فَاضِلْ", "فَاظِلْ")
+            .replace("ضْلُوعِي", "ظْلُوعِي")
+            .replace("مَا ضَلْ", "مَا ظَلْ")
+        )
     shaped = resolve_dialectal_and_prosodic_tanween(
         shaped, dialect=detected, use_tatweel=use_tatweel
     )
@@ -2338,8 +2853,172 @@ def build_four_stage_latmiya_plan(dialect="iraqi"):
     }
 
 
+def verify_historical_narratives(text):
+    """Module 67 (V52.0): Verify Husseini poetry against authentic Ahl al-Bayt historical sources.
+
+    Flags known weak/distorted popular motifs (Mufid/Luhuf/Muqarrim/Mutahhari standards),
+    doctrinal exaggerations (Ghuluw), or Zainabi dignity phrasings, while recognizing verified motifs.
+    """
+    clean = re.sub(r"[\u064B-\u0652]", "", text)
+    warnings = []
+    verified_motifs = []
+
+    authentic_checks = (
+        ("abbas_martyrdom", ("المشرعة", "المشرعه", "العلقمي", "العلگمي", "چفين", "جفين", "بسهم", "العمد"), "مقتل أبي الفضل العباس (ع) على العلقمي وقطع الكفين والسهم في العين"),
+        ("infant_harmala_arrow", ("الرضيع", "عبد الله", "عبدالله", "حرملة", "مثلث"), "شهادة الطفل الرضيع عبد الله بالسهم المثلث في نحره"),
+        ("ten_horsemen_trampling", ("عشرة", "عشر خيول", "عشر اخيول", "الحوافر", "صدر الحسين"), "إجالة الخيول العشرة على الصدر الشريف بعد الشهادة"),
+        ("zainab_sajjad_protection", ("السجاد", "العليل", "زينب", "ما رأيت إلا جميلا"), "صمود العقيلة زينب (ع) وحفظها الإمام السجاد (ع)"),
+        ("zahra_door_compression", ("الضلع", "البسمار", "الزهراء", "الزهره", "الباب"), "مظلومية السيدة فاطمة الزهراء (ع) وإخفاء قبرها"),
+        ("umm_al_banin_madina", ("حذلم", "يثرب", "لدياره", "ام البنين", "أم البنين"), "استقبال أم البنين (ع) نعي بشير بن جذلم في المدينة المنورة"),
+    )
+    for motif_id, keys, desc in authentic_checks:
+        if any(k in clean for k in keys):
+            verified_motifs.append({"motif_id": motif_id, "description_ar": desc})
+
+    distortion_rules = [
+        (
+            "wedding_of_qasim_anachronism",
+            r"(?:عرس\s+القاسم|زفاف\s+القاسم|ليلة\s+عرس|چف\s+الحنه|كف\s+الحنة|عريس\s+كربلا|عريس)",
+            "التنبيه التاريخي (زفاف القاسم ع): رواية عرس القاسم يوم عاشوراء غير ثابتة في المقاتل المعتبرة كالإرشاد واللهوف ونفس المهموم؛ يُرجّح الاقتصار على بطولته وشبابه.",
+        ),
+        (
+            "umm_al_banin_in_karbala",
+            r"(?:أم\s+البنين|ام\s+البنين).{0,45}(?:بالخيم|بكربلا|بالطف|عالنهر|بالمشرعة)",
+            "تحريف مكاني: السيدة أم البنين (ع) بقيت في المدينة المنورة ولم تحضر كربلاء.",
+        ),
+        (
+            "layla_in_karbala",
+            r"ليلى.{0,45}(?:بالخيم|بكربلا|بالطف|ودعت|شافت\s+الاكبر)",
+            "تحقيق تاريخي: حضور السيدة ليلى أم علي الأكبر (ع) في كربلاء غير ثابت بالأسانيد الأقدمية عند المحققين.",
+        ),
+        (
+            "infant_killed_by_sword",
+            r"(?:الرضيع|عبد\s*الله|المهد).{0,35}(?:ذبح\s+بسيف|بسيف\s+الشمر|حز\s+وريده\s+الشمر)",
+            "خطأ روائي: عبد الله الرضيع (ع) استشهد بسهم مثلث رماه حرملة في نحره، لا بالسيف على يد الشمر.",
+        ),
+        (
+            "hijab_indignity_wording",
+            r"(?:بلا\s+حجاب|ما\s*ضل\s+حجاب|ماضل\s+عدنه\s+حجاب|بلا\s+ستر)",
+            "تنبيه وقار عقائدي: يُنصح بتجنب عبارة 'بلا حجاب'؛ فقد حرصت العقيلة زينب والحرائر على التستر بأيديهن وبقايا الأردية وحفظ العفة التامة.",
+        ),
+        (
+            "excessive_mythic_body_count",
+            r"(?:ثلاثمية\s+ألف|مئات\s+الألوف|مليون\s+قتيل).{0,30}(?:بسيف|طبر|ذبح)",
+            "مبالغة روائية غير منضبطة: استعمل أوصاف البسالة الموثقة دون أرقام خرافية تصادم المقاتل الرصينة.",
+        ),
+    ]
+    for rule_id, pattern, msg in distortion_rules:
+        if re.search(pattern, clean):
+            warnings.append({"rule_id": rule_id, "severity": "warning", "message_ar": msg})
+
+    score = max(0, 100 - 20 * len(warnings))
+    return {
+        "skill_version": SKILL_VERSION,
+        "historical_accuracy_score": score,
+        "is_historically_clean": len(warnings) == 0,
+        "verified_authentic_motifs": verified_motifs,
+        "distortions_and_warnings": warnings,
+        "canonical_sources": ["الإرشاد للشيخ المفيد", "اللهوف في قتلى الطفوف لابن طاووس", "نفس المهموم للشيخ عباس القمي"],
+    }
+
+
+def _split_clean_poem_lines(poem_text):
+    """Split raw poem into clean stanzas using tags or decorative dividers."""
+    sanitized = sanitize_poem_decorations(poem_text.replace("\\n", "\n"))
+    stanzas = []
+    current_tag = "[المُسْتَهَلّ]"
+    current_lines = []
+    for raw_ln in sanitized.splitlines():
+        ln = raw_ln.strip()
+        if not ln:
+            continue
+        if ln.startswith("[") and ln.endswith("]"):
+            if current_lines:
+                stanzas.append((current_tag, current_lines))
+                current_lines = []
+            current_tag = ln
+        else:
+            current_lines.append(ln)
+    if current_lines:
+        stanzas.append((current_tag, current_lines))
+    return stanzas
+
+
+def plan_poem_extend_stages(poem_text, target_method="both", bpm=60):
+    """Module 67 (V52.0): Partition any Hussaini poem into V52 3-Line NC16 Extend Stages.
+
+    Accounts empirically for Method 1 (+30s Compose Extend) and Method 2 (+60s Producer Chat
+    Extend tail-pad & Step 4 limiter findings from V51.2 evaluation).
+    """
+    shaped = detect_and_shape_dialect(sanitize_poem_decorations(poem_text))["shaped_lyrics"]
+    stanzas = _split_clean_poem_lines(shaped)
+    estehlal_lines = []
+    body_stanzas = []
+
+    for tag, lines in stanzas:
+        if _is_pure_estehlal_tag(tag) and not estehlal_lines:
+            estehlal_lines = lines[:4]
+        else:
+            body_stanzas.append((tag, lines))
+
+    if not estehlal_lines and body_stanzas:
+        first_tag, first_lines = body_stanzas[0]
+        estehlal_lines = first_lines[:2]
+        if len(first_lines) > 2:
+            body_stanzas[0] = (first_tag, first_lines[2:])
+        else:
+            body_stanzas = body_stanzas[1:]
+
+    estehlal_block = enforce_collective_estehlal_parentheses(
+        "\n".join(["[المُسْتَهَلّ]"] + [ln if ln.endswith("..") else f"{ln} .." for ln in estehlal_lines])
+    )
+    extend_stages = []
+    sec_per_line = 7.4 * (60.0 / max(40.0, float(bpm or 60)))
+
+    for idx, (tag, lines) in enumerate(body_stanzas, start=1):
+        sub_chunks = [lines[i : i + 3] for i in range(0, len(lines), 3)]
+        for sub_idx, chunk in enumerate(sub_chunks):
+            if len(chunk) == 4:
+                formatted = format_kasra_three_vertical_lines(chunk)
+            else:
+                formatted = [ln if ln.endswith("..") else f"{ln} .." for ln in chunk]
+            is_kasra = (sub_idx % 2 == 1) or ("كسر" in tag)
+            stage_code = f"{idx + 1}{'B' if is_kasra else 'A'}" if idx >= 2 or sub_idx > 0 else "Stage_1_Body"
+            header = f"[الكَسْرَة {idx}]" if is_kasra else f"[النَّزْلَة {idx}]"
+            est_sec = round(len(formatted) * sec_per_line, 1)
+            extend_stages.append(
+                {
+                    "stage_code": stage_code,
+                    "section_header": header,
+                    "vertical_lines": formatted,
+                    "vertical_line_count": len(formatted),
+                    "nc16_three_line_compliant": len(formatted) <= 3,
+                    "estimated_singing_sec": est_sec,
+                    "method_1_window_fit": "OK (+30s Compose Extend)" if est_sec <= 28.0 else "Trim-tight (+30s)",
+                    "method_2_pad_warning": (
+                        f"Producer +60s window leaves ~{max(0.0, round(60.0 - est_sec, 1))}s trailing Ahaat/repeat risk; "
+                        "audit singing end timestamp before next extend."
+                    ),
+                }
+            )
+
+    return {
+        "skill_version": SKILL_VERSION,
+        "target_method": target_method,
+        "bpm": int(bpm),
+        "stage_1_estehlal": estehlal_block.splitlines(),
+        "total_extend_blocks": len(extend_stages),
+        "extend_stages": extend_stages,
+        "grand_finale_stage_6c": estehlal_block.splitlines(),
+        "mastering_recommendation": (
+            "Prefer local '--mode vocal_pure_master --trim-end-sec <end> --fade-out-sec 3.0' (-14.0 LUFS / "
+            "-1.0 dBTP) over cloud Step 4 audio__apply_effect which clips above 0 dBFS."
+        ),
+    }
+
+
 def recommend_tor_and_rhythm_for_poem(text):
-    """Module 46, 48 & 52: Recommend Poetic Meter, Performance Tor, DSP Mode, BPM & V48.5 Prompt."""
+    """Module 46, 48, 52 & 67: Recommend Poetic Meter, Performance Tor, DSP Mode, BPM & Prompt."""
     dialect_info = detect_and_shape_dialect(text)
     dialect = dialect_info["detected_dialect"]
     iso = validate_stage1_iso_syllabic_lock(text)
@@ -2351,15 +3030,39 @@ def recommend_tor_and_rhythm_for_poem(text):
 
     service_kw = ("خادم", "خدمنك", "أخدمنك", "هنيالي", "موكب", "مشايه", "مشاية", "راية")
     heroic_kw = ("عباس", "كفيل", "حيدر", "كرار", "صوله", "سيف", "زنجيل")
-    shoor_kw = ("شور", "حسين حسين", "لبيك")
+    shoor_kw = ("شور", "شوور", "حسين حسين", "لبيك", "مامدفون والينه")
+    fazzaiya_kw = ("فزاعيه", "فزاعية", "رباطات فزاعية", "گوم", "تبرالي")
+    tawshih_kw = ("سورة", "الكوثر", "المباهلة", "أهل الكساء", "تواشيح", "صل على")
+    nai_explicit_kw = ("[نعي]", "[موال]", "[أبوذية]")
 
-    if any(k in text for k in shoor_kw):
+    if any(k in text for k in nai_explicit_kw):
+        mode = "nai"
+        bpm = 0
+        maqam = "saba"
+        meter = "mujarradat"
+        tor = "tor_nai_kashi"
+        prompt = MASTER_SOUND_PROMPTS_V48_5["minbar_nai_0bpm_rubato_saba_exclusive_weeping"]
+    elif any(k in text for k in shoor_kw):
         mode = "shoor"
         bpm = 132
         maqam = "kurd"
         meter = "rukbani"
         tor = "tor_darj_karbalai"
         prompt = MASTER_SOUND_PROMPTS_V48_5["karbalai_shoor_132bpm_kurd"]
+    elif any(k in text for k in tawshih_kw):
+        mode = "vocal_pure_master"
+        bpm = 86
+        maqam = "rast"
+        meter = "muwashah"
+        tor = "tor_tawshih_shia"
+        prompt = EXTENDED_ATWAR_PROMPTS_V52["shia_tawshih_nasheed_86bpm_rast_hijaz_v52"]
+    elif any(k in text for k in fazzaiya_kw) and not any(k in text for k in heroic_kw):
+        mode = "fazzaiya"
+        bpm = 84
+        maqam = "hijaz"
+        meter = "fazzaiya"
+        tor = "tor_fazzaiya_karbalai"
+        prompt = EXTENDED_ATWAR_PROMPTS_V52["karbalai_fazzaiya_84bpm_hijaz_bayati_v52"]
     elif any(k in text for k in heroic_kw):
         if dialect == "bahrani":
             mode = "bahrani_haidari"
@@ -2368,6 +3071,13 @@ def recommend_tor_and_rhythm_for_poem(text):
             meter = "muwashah"
             tor = "tor_bahrani_haidari"
             prompt = MASTER_SOUND_PROMPTS_V48_5["bahrani_haidari_96bpm_hijaz"]
+        elif any(k in text for k in fazzaiya_kw):
+            mode = "fazzaiya"
+            bpm = 84
+            maqam = "hijaz"
+            meter = "fazzaiya"
+            tor = "tor_fazzaiya_karbalai"
+            prompt = EXTENDED_ATWAR_PROMPTS_V52["karbalai_fazzaiya_84bpm_hijaz_bayati_v52"]
         else:
             mode = "zanjeel_iraqi"
             bpm = 80
@@ -2803,57 +3513,102 @@ def butter_filter(data, cutoff, sample_rate, btype="low", order=4):
     return sosfilt(sos, arr)
 
 
-def read_wav_any_depth(input_path):
-    """Read 8-bit, 16-bit, 24-bit (3-byte PCM), or 32-bit mono/stereo WAV into float64 [-1, 1]."""
-    try:
-        with wave.open(input_path, "rb") as wav_in:
-            sampwidth = wav_in.getsampwidth()
-            if sampwidth == 3:
-                channels = wav_in.getnchannels()
-                sample_rate = wav_in.getframerate()
-                raw_bytes = wav_in.readframes(wav_in.getnframes())
-                byte_arr = np.frombuffer(raw_bytes, dtype=np.uint8).reshape(-1, 3)
-                signed = (
-                    byte_arr[:, 0].astype(np.int32)
-                    | (byte_arr[:, 1].astype(np.int32) << 8)
-                    | (byte_arr[:, 2].astype(np.int32) << 16)
-                )
-                neg_mask = (signed & 0x800000) != 0
-                signed[neg_mask] -= 1 << 24
-                if channels > 1:
-                    signed = signed.reshape(-1, channels)
-                    mono = np.mean(signed.astype(np.float64), axis=1) / 8388608.0
-                else:
-                    mono = signed.astype(np.float64) / 8388608.0
-                return int(sample_rate), np.clip(mono, -1.0, 1.0), int(channels), "24-bit PCM"
-    except wave.Error:
-        pass
+def _write_wav_pcm16(output_path, sample_rate, stereo_float):
+    """Write a float64 [-1, 1] stereo/mono array cleanly to 16-bit PCM WAV using stdlib wave."""
+    clipped = np.clip(np.asarray(stereo_float, dtype=np.float64), -1.0, 1.0)
+    if clipped.ndim == 1:
+        clipped = np.column_stack((clipped, clipped))
+    pcm16 = np.clip(np.round(clipped * 32767.0), -32768, 32767).astype("<i2")
+    with wave.open(output_path, "wb") as wav_out:
+        wav_out.setnchannels(int(pcm16.shape[1]))
+        wav_out.setsampwidth(2)
+        wav_out.setframerate(int(sample_rate))
+        wav_out.writeframes(pcm16.tobytes())
 
-    sample_rate, raw = wavfile.read(input_path)
-    if raw.ndim > 1:
-        channels = int(raw.shape[1])
-        mono_raw = np.mean(raw.astype(np.float64), axis=1)
-    else:
+
+def read_wav_any_depth(input_path, return_stereo=False):
+    """Read 8-bit, 16-bit, 24-bit, or 32-bit PCM/Float WAV into mono (or stereo) float64 [-1, 1] (zero scipy.io)."""
+    with open(input_path, "rb") as handle:
+        header = handle.read(12)
+        if len(header) < 12 or header[:4] != b"RIFF" or header[8:12] != b"WAVE":
+            raise ValueError(f"Not a valid RIFF/WAVE file: {input_path}")
+        audio_fmt = 1
         channels = 1
-        mono_raw = raw.astype(np.float64)
+        sample_rate = 44100
+        bits_per_sample = 16
+        data_bytes = b""
+        while True:
+            chunk_hdr = handle.read(8)
+            if len(chunk_hdr) < 8:
+                break
+            chunk_id, chunk_size = struct.unpack("<4sI", chunk_hdr)
+            chunk_payload = handle.read(chunk_size)
+            if chunk_size % 2 == 1:
+                handle.read(1)
+            if chunk_id == b"fmt " and len(chunk_payload) >= 16:
+                audio_fmt, channels, sample_rate, _, _, bits_per_sample = struct.unpack(
+                    "<HHIIHH", chunk_payload[:16]
+                )
+            elif chunk_id == b"data":
+                data_bytes = chunk_payload
+                break
 
-    if raw.dtype == np.uint8:
-        mono = (mono_raw - 128.0) / 128.0
+    if not data_bytes:
+        empty_shape = (0, 2) if return_stereo else 0
+        return int(sample_rate), np.zeros(empty_shape, dtype=np.float64), int(channels), f"{bits_per_sample}-bit PCM"
+
+    if audio_fmt == 3 and bits_per_sample == 32:
+        raw = np.frombuffer(data_bytes, dtype="<f4").astype(np.float64)
+        bit_depth = "32-bit Float"
+    elif bits_per_sample == 8:
+        raw = (np.frombuffer(data_bytes, dtype=np.uint8).astype(np.float64) - 128.0) / 128.0
         bit_depth = "8-bit PCM"
-    elif raw.dtype == np.int16:
-        mono = mono_raw / 32768.0
+    elif bits_per_sample == 16:
+        raw = np.frombuffer(data_bytes, dtype="<i2").astype(np.float64) / 32768.0
         bit_depth = "16-bit PCM"
-    elif raw.dtype == np.int32:
-        max_abs = float(np.max(np.abs(mono_raw))) if mono_raw.size else 0.0
+    elif bits_per_sample == 24:
+        usable = (len(data_bytes) // 3) * 3
+        byte_arr = np.frombuffer(data_bytes[:usable], dtype=np.uint8).reshape(-1, 3)
+        signed = (
+            byte_arr[:, 0].astype(np.int32)
+            | (byte_arr[:, 1].astype(np.int32) << 8)
+            | (byte_arr[:, 2].astype(np.int32) << 16)
+        )
+        neg_mask = (signed & 0x800000) != 0
+        signed[neg_mask] -= 1 << 24
+        raw = signed.astype(np.float64) / 8388608.0
+        bit_depth = "24-bit PCM"
+    else:
+        signed32 = np.frombuffer(data_bytes, dtype="<i4").astype(np.float64)
+        max_abs = float(np.max(np.abs(signed32))) if signed32.size else 0.0
         if 0.0 < max_abs <= 8388608.0:
-            mono = mono_raw / 8388608.0
+            raw = signed32 / 8388608.0
             bit_depth = "24-bit PCM (32-bit container)"
         else:
-            mono = mono_raw / 2147483648.0
+            raw = signed32 / 2147483648.0
             bit_depth = "32-bit PCM"
+
+    if channels > 1:
+        usable_frames = (len(raw) // channels) * channels
+        multichan = raw[:usable_frames].reshape(-1, channels)
+        if return_stereo:
+            return (
+                int(sample_rate),
+                np.clip(multichan[:, :2], -1.0, 1.0),
+                int(channels),
+                bit_depth,
+            )
+        mono = np.mean(multichan, axis=1)
     else:
-        mono = np.clip(mono_raw, -1.0, 1.0)
-        bit_depth = "32-bit Float"
+        mono = raw
+        if return_stereo:
+            clipped = np.clip(mono, -1.0, 1.0)
+            return (
+                int(sample_rate),
+                np.column_stack((clipped, clipped)),
+                int(channels),
+                bit_depth,
+            )
     return int(sample_rate), np.clip(mono, -1.0, 1.0), int(channels), bit_depth
 
 
@@ -2936,48 +3691,72 @@ def extract_reference_audio_profile(input_path):
     }
 
 
+def _fast_boxcar_mean(signal, win):
+    """Fast O(N) chunked cumsum boxcar moving average matching centered mode='same' length."""
+    arr = np.asarray(signal, dtype=np.float64)
+    n = arr.shape[0]
+    w = max(1, int(win))
+    if n == 0 or w <= 1:
+        return arr.copy()
+    left_pad = w // 2
+    right_pad = (w - 1) // 2
+    padded = np.pad(arr, (left_pad, right_pad), mode="constant", constant_values=0.0)
+    out = np.empty(n, dtype=np.float64)
+    chunk_sz = 65536
+    inv_w = 1.0 / float(w)
+    for start in range(0, n, chunk_sz):
+        end = min(n, start + chunk_sz)
+        seg = padded[start : end + w - 1]
+        csum = np.empty(seg.shape[0] + 1, dtype=np.float64)
+        csum[0] = 0.0
+        np.cumsum(seg, out=csum[1:])
+        out[start:end] = (csum[w:] - csum[:-w]) * inv_w
+    return out
+
+
 def strip_ai_percussion_from_vocal(signal, sample_rate):
-    """Module 44 (--replace-ai-percussion): Remove AI sub-thumps (<120Hz) & palm-click spikes."""
-    cleaned = butter_filter(signal, 120.0, sample_rate, btype="high", order=4)
+    """Module 44 & 67: Attenuate AI sub-thumps (<105Hz) & click spikes while preserving 11.5kHz air."""
+    cleaned = butter_filter(signal, 105.0, sample_rate, btype="high", order=4)
     fast_win = max(1, int(0.005 * sample_rate))
     slow_win = max(fast_win + 2, int(0.060 * sample_rate))
 
     sq = cleaned**2
-    fast_rms = np.sqrt(np.convolve(sq, np.ones(fast_win) / fast_win, mode="same") + 1e-12)
-    slow_rms = np.sqrt(np.convolve(sq, np.ones(slow_win) / slow_win, mode="same") + 1e-12)
+    fast_rms = np.sqrt(np.maximum(_fast_boxcar_mean(sq, fast_win), 1e-12))
+    slow_rms = np.sqrt(np.maximum(_fast_boxcar_mean(sq, slow_win), 1e-12))
 
     ratio = fast_rms / (slow_rms + 1e-6)
-    transient_gain = np.where(ratio > 1.85, np.clip(1.85 / np.maximum(ratio, 1e-6), 0.28, 1.0), 1.0)
+    transient_gain = np.where(ratio > 1.95, np.clip(1.95 / np.maximum(ratio, 1e-6), 0.35, 1.0), 1.0)
     smooth_win = max(1, int(0.004 * sample_rate))
-    smooth_gain = np.convolve(transient_gain, np.ones(smooth_win) / smooth_win, mode="same")
+    smooth_gain = _fast_boxcar_mean(transient_gain, smooth_win)
     declicked = cleaned * smooth_gain
-    return butter_filter(declicked, 4500.0, sample_rate, btype="low", order=2)
+    return butter_filter(declicked, min(11500.0, 0.46 * sample_rate), sample_rate, btype="low", order=2)
 
 
 def apply_noise_print_restoration(signal, sample_rate):
     """Suppress background floor in quiet frames while preserving natural consonant breath."""
     win = max(1, int(0.025 * sample_rate))
     sq = signal**2
-    rms_env = np.sqrt(np.convolve(sq, np.ones(win) / win, mode="same") + 1e-12)
+    rms_env = np.sqrt(np.maximum(_fast_boxcar_mean(sq, win), 1e-12))
     noise_floor = float(np.percentile(rms_env, 10))
-    threshold = max(noise_floor * 1.6, 1e-5)
-    gate_gain = np.clip(rms_env / threshold, 0.35, 1.0)
+    threshold = max(noise_floor * 1.5, 1e-5)
+    gate_gain = np.clip(rms_env / threshold, 0.45, 1.0)
     smooth = max(1, int(0.015 * sample_rate))
-    gate_smooth = np.convolve(gate_gain, np.ones(smooth) / smooth, mode="same")
+    gate_smooth = _fast_boxcar_mean(gate_gain, smooth)
     return signal * gate_smooth
 
 
-def apply_vocal_eq(signal, sample_rate):
-    """Apply Jawhari Baritone Vocal Chain: 85Hz HPF, 320Hz mud notch, 2.5kHz harshness tame & presence."""
-    out = butter_filter(signal, 85.0, sample_rate, btype="high", order=4)
-    if 320.0 < 0.46 * sample_rate:
-        b_mud, a_mud = iirnotch(320.0, 2.8, sample_rate)
-        out = 0.72 * out + 0.28 * lfilter(b_mud, a_mud, out)
+def apply_vocal_eq(signal, sample_rate, preserve_chest_thud=False):
+    """Apply Jawhari Baritone EQ: 42Hz/85Hz HPF, mud cleanup, harshness tame & clarity shelf."""
+    hpf_hz = 42.0 if preserve_chest_thud else 85.0
+    out = butter_filter(signal, hpf_hz, sample_rate, btype="high", order=2 if preserve_chest_thud else 4)
+    if 300.0 < 0.46 * sample_rate:
+        b_mud, a_mud = iirnotch(300.0, 2.5, sample_rate)
+        out = 0.78 * out + 0.22 * lfilter(b_mud, a_mud, out)
     if 2500.0 < 0.46 * sample_rate:
         b_harsh, a_harsh = iirnotch(2500.0, 3.5, sample_rate)
-        out = 0.80 * out + 0.20 * lfilter(b_harsh, a_harsh, out)
-    presence = butter_filter(out, [1600.0, 3800.0], sample_rate, btype="band", order=2)
-    return out + 0.18 * presence
+        out = 0.84 * out + 0.16 * lfilter(b_harsh, a_harsh, out)
+    presence = butter_filter(out, [1800.0, min(4600.0, 0.44 * sample_rate)], sample_rate, btype="band", order=2)
+    return out + (0.12 if preserve_chest_thud else 0.18) * presence
 
 
 def apply_track01_dammam_eq(signal, sample_rate):
@@ -2994,13 +3773,13 @@ def apply_track01_dammam_eq(signal, sample_rate):
 def compute_smart_sidechain_ducking(vocal_signal, sample_rate, duck_db=-3.0, threshold_dbfs=-28.0):
     """Compute smooth -3.0dB RMS sidechain ducking envelope when Radood exceeds -28 dBFS."""
     win = max(1, int(0.050 * sample_rate))
-    rms = np.sqrt(np.convolve(vocal_signal**2, np.ones(win) / win, mode="same") + 1e-12)
+    rms = np.sqrt(np.maximum(_fast_boxcar_mean(vocal_signal**2, win), 1e-12))
     thresh_lin = 10.0 ** (threshold_dbfs / 20.0)
     min_gain = 10.0 ** (duck_db / 20.0)
     active = np.clip((rms - thresh_lin) / max(thresh_lin * 2.0, 1e-6), 0.0, 1.0)
     raw_gain = 1.0 - active * (1.0 - min_gain)
     rel_win = max(1, int(0.080 * sample_rate))
-    return np.convolve(raw_gain, np.ones(rel_win) / rel_win, mode="same")
+    return _fast_boxcar_mean(raw_gain, rel_win)
 
 
 def compute_tempo_synced_delay_ms(bpm, mode="latm"):
@@ -3026,14 +3805,19 @@ def apply_dynacord_echo(signal, sample_rate, delay_ms=285.0, feedback=0.26, wet=
     return signal + warm_echo
 
 
-def apply_husseiniya_reverb(signal, sample_rate, rt60_sec=2.8, pre_delay_ms=24.0, wet=0.22):
-    """Apply synthetic Husseiniya hall impulse response via FFT convolution."""
+def apply_husseiniya_reverb(signal, sample_rate, rt60_sec=2.8, pre_delay_ms=24.0, wet=0.22, seed=4850):
+    """Apply sacred Husseiniya dome impulse response with discrete early reflections + smooth tail."""
     ir_len = max(16, int(min(rt60_sec, 3.8) * sample_rate))
-    rng = np.random.default_rng(4850)
+    rng = np.random.default_rng(int(seed))
     t_ir = np.linspace(0.0, rt60_sec, ir_len, endpoint=False)
+    attack = 1.0 - np.exp(-35.0 * t_ir)
     decay = np.exp(-6.91 * t_ir / max(rt60_sec, 0.2))
-    ir = rng.normal(0.0, 1.0, ir_len) * decay
-    ir = butter_filter(ir, [160.0, 4200.0], sample_rate, btype="band", order=2)
+    ir = rng.normal(0.0, 1.0, ir_len) * attack * decay
+    for tap_ms, tap_amp in ((11.0, 0.28), (19.0, 0.21), (29.0, 0.16), (43.0, 0.11)):
+        idx = int((tap_ms / 1000.0) * sample_rate)
+        if idx < ir_len:
+            ir[idx] += tap_amp
+    ir = butter_filter(ir, [140.0, min(5200.0, 0.44 * sample_rate)], sample_rate, btype="band", order=2)
     norm = float(np.sqrt(np.sum(ir**2)) + 1e-9)
     ir /= norm
 
@@ -3109,52 +3893,53 @@ def synthesize_percussion_hit(sample_rate, kind="latm", variant_idx=0, samples_d
         return vel_jit * 0.16 * shaped_air * env
 
     if kind in ("heavy_clip", "thaqeel_muwazza", "bahrani_muthakkal"):
-        chest_low = np.sin(2.0 * np.pi * 54.0 * t_vec) * np.exp(-12.0 * t_vec)
+        chest_low = np.sin(2.0 * np.pi * (52.0 + 18.0 * np.exp(-24.0 * t_vec)) * t_vec) * np.exp(-11.0 * t_vec)
         sub_hum = (
-            np.sin(2.0 * np.pi * 44.0 * t_vec)
-            * (1.0 - np.exp(-36.0 * t_vec))
-            * np.exp(-7.5 * t_vec)
+            np.sin(2.0 * np.pi * 46.0 * t_vec)
+            * (1.0 - np.exp(-28.0 * t_vec))
+            * np.exp(-8.0 * t_vec)
         )
-        palm_snap = butter_filter(
-            rng.normal(0.0, 1.0, num_samples) * np.exp(-46.0 * t_vec),
-            [1500.0, 3200.0],
+        # V52: Warm fleshy chest/palm body (140-520 Hz) replacing harsh synthetic woodblock click
+        palm_meat = butter_filter(
+            rng.normal(0.0, 1.0, num_samples) * np.exp(-32.0 * t_vec),
+            [140.0, 520.0],
             sample_rate,
             btype="band",
             order=2,
         )
-        return vel_jit * (0.68 * chest_low + 0.42 * sub_hum + 0.34 * palm_snap)
+        return vel_jit * (0.72 * chest_low + 0.36 * sub_hum + 0.28 * palm_meat)
 
-    if kind in ("bahrani_fast", "bahrani_haidari", "bahrani_waqfa"):
-        chest_core = np.sin(2.0 * np.pi * 60.0 * t_vec) * np.exp(-17.0 * t_vec)
-        sharp_slap = butter_filter(
-            rng.normal(0.0, 1.0, num_samples) * np.exp(-34.0 * t_vec),
-            [1400.0, 3500.0],
+    if kind in ("bahrani_fast", "bahrani_haidari", "bahrani_waqfa", "fazzaiya"):
+        chest_core = np.sin(2.0 * np.pi * (60.0 + 14.0 * np.exp(-28.0 * t_vec)) * t_vec) * np.exp(-15.0 * t_vec)
+        palm_thump = butter_filter(
+            rng.normal(0.0, 1.0, num_samples) * np.exp(-30.0 * t_vec),
+            [180.0, 780.0],
             sample_rate,
             btype="band",
             order=2,
         )
-        return vel_jit * (0.70 * chest_core + 0.48 * sharp_slap)
+        return vel_jit * (0.74 * chest_core + 0.34 * palm_thump)
 
     if kind in ("studio_arranged", "bahrani_thulathi", "bahrani_rubai"):
-        sub_kick = np.sin(2.0 * np.pi * 55.0 * t_vec) * np.exp(-15.0 * t_vec)
-        palm_click = butter_filter(
-            rng.normal(0.0, 1.0, num_samples) * np.exp(-48.0 * t_vec),
-            [1600.0, 3100.0],
+        sub_kick = np.sin(2.0 * np.pi * 55.0 * t_vec) * np.exp(-14.0 * t_vec)
+        palm_body = butter_filter(
+            rng.normal(0.0, 1.0, num_samples) * np.exp(-36.0 * t_vec),
+            [160.0, 620.0],
             sample_rate,
             btype="band",
             order=2,
         )
-        return vel_jit * (0.68 * sub_kick + 0.32 * palm_click)
+        return vel_jit * (0.72 * sub_kick + 0.26 * palm_body)
 
-    sub_thud = np.sin(2.0 * np.pi * 55.0 * t_vec) * np.exp(-16.0 * t_vec)
+    sub_thud = np.sin(2.0 * np.pi * 55.0 * t_vec) * np.exp(-15.0 * t_vec)
     skin_slap = butter_filter(
-        rng.normal(0.0, 1.0, num_samples) * np.exp(-40.0 * t_vec),
-        [220.0, 1800.0],
+        rng.normal(0.0, 1.0, num_samples) * np.exp(-34.0 * t_vec),
+        [180.0, 750.0],
         sample_rate,
         btype="band",
         order=2,
     )
-    return vel_jit * (0.78 * sub_thud + 0.26 * skin_slap)
+    return vel_jit * (0.80 * sub_thud + 0.24 * skin_slap)
 
 
 def _add_hit_at(bed, hit, pos, gain=1.0):
@@ -3166,11 +3951,18 @@ def _add_hit_at(bed, hit, pos, gain=1.0):
 
 
 def build_rhythm_bed(
-    num_samples, sample_rate, mode="latm", bpm=60.0, offset_samples=0, swing=0.0, samples_dir=None
+    num_samples,
+    sample_rate,
+    mode="latm",
+    bpm=60.0,
+    offset_samples=0,
+    swing=0.0,
+    samples_dir=None,
+    vocal_signal=None,
 ):
-    """Build 16-mode round-robin Husseiniya percussion bed (Latm, Bahrani Atwar, Zanjeel, Shoor, Bandari)."""
+    """Build 18-mode round-robin Husseiniya percussion bed with optional vocal-envelope gating."""
     bed = np.zeros(num_samples, dtype=np.float64)
-    if bpm <= 0.0 or mode in ("mawal", "nai") or num_samples <= 0:
+    if bpm <= 0.0 or mode in ("vocal_pure_master", "mawal", "nai") or num_samples <= 0:
         return bed
 
     beat_samples = max(1, int((60.0 / float(bpm)) * sample_rate))
@@ -3235,15 +4027,24 @@ def build_rhythm_bed(
             _add_hit_at(bed, main_bank[rr], cursor, gain=0.95)
             _add_hit_at(bed, main_bank[(rr + 1) % rr_count], cursor + beat_samples // 2, gain=0.78)
             _add_hit_at(bed, breath_bank[rr], cursor + beat_samples // 2, gain=0.90)
+        elif mode == "fazzaiya":
+            _add_hit_at(bed, main_bank[rr], cursor, gain=0.95)
+            _add_hit_at(bed, main_bank[(rr + 1) % rr_count], cursor + int(0.5 * beat_samples), gain=0.58)
         elif mode == "studio_arranged":
             _add_hit_at(bed, main_bank[rr], cursor, gain=0.95)
             _add_hit_at(bed, main_bank[(rr + 1) % rr_count], cursor + beat_samples // 2, gain=0.35)
         else:
-            _add_hit_at(bed, main_bank[rr], cursor, gain=0.96)
-            _add_hit_at(bed, breath_bank[rr], cursor + beat_samples // 2, gain=0.55)
+            _add_hit_at(bed, main_bank[rr], cursor, gain=0.92)
+            _add_hit_at(bed, breath_bank[rr], cursor + beat_samples // 2, gain=0.34)
 
         cursor += beat_samples
         beat_idx += 1
+
+    if vocal_signal is not None and len(vocal_signal) == num_samples and num_samples > 0:
+        win = min(num_samples, max(1, int(0.85 * sample_rate)))
+        v_rms = np.sqrt(np.maximum(_fast_boxcar_mean(vocal_signal**2, win)[:num_samples], 1e-12))
+        v_gate = np.clip((v_rms - 0.008) / 0.015, 0.15, 1.0)
+        bed *= v_gate
 
     return bed
 
@@ -3374,31 +4175,189 @@ def apply_master_glue_compressor(stereo, ratio=1.6, threshold=0.62):
     return stereo * gain[:, np.newaxis]
 
 
+def _k_weight_signal(chan, sample_rate):
+    """Apply ITU-R BS.1770-4 Stage-1 (+4dB High Shelf) and Stage-2 (38.1Hz RLB HPF)."""
+    fs = float(max(8000, sample_rate))
+    # Stage 1: +3.99984385 dB high shelf around 1681.97 Hz
+    db_gain = 3.999843853973347
+    vh = 10.0 ** (db_gain / 20.0)
+    vb = vh**0.4996667741545416
+    k0 = np.tan(np.pi * min(1681.974450955533, 0.44 * fs) / fs)
+    q_hs = 0.7071752369554196
+    a0_hs = 1.0 + k0 / q_hs + k0 * k0
+    b_hs = np.array(
+        [(vh + vb * k0 / q_hs + k0 * k0) / a0_hs, 2.0 * (k0 * k0 - vh) / a0_hs, (vh - vb * k0 / q_hs + k0 * k0) / a0_hs]
+    )
+    a_hs = np.array([1.0, 2.0 * (k0 * k0 - 1.0) / a0_hs, (1.0 - k0 / q_hs + k0 * k0) / a0_hs])
+    stage1 = lfilter(b_hs, a_hs, chan)
+
+    # Stage 2: RLB 38.135 Hz high-pass biquad
+    k1 = np.tan(np.pi * 38.13547087602444 / fs)
+    q_hp = 0.5003270373238773
+    a0_hp = 1.0 + k1 / q_hp + k1 * k1
+    b_hp = np.array([1.0 / a0_hp, -2.0 / a0_hp, 1.0 / a0_hp])
+    a_hp = np.array([1.0, 2.0 * (k1 * k1 - 1.0) / a0_hp, (1.0 - k1 / q_hp + k1 * k1) / a0_hp])
+    return lfilter(b_hp, a_hp, stage1)
+
+
+def measure_ebu_r128_loudness(stereo, sample_rate):
+    """Measure ITU-R BS.1770-4 / EBU R128 Gated Integrated Loudness (LUFS), LRA & 4x True Peak."""
+    arr = np.asarray(stereo, dtype=np.float64)
+    if arr.ndim == 1:
+        arr = np.column_stack((arr, arr))
+    if arr.shape[0] == 0:
+        return {"integrated_lufs": -70.0, "lra_lu": 0.0, "true_peak_dbtp": -120.0}
+
+    kw_l = _k_weight_signal(arr[:, 0], sample_rate)
+    kw_r = _k_weight_signal(arr[:, 1], sample_rate)
+    power_sum = kw_l**2 + kw_r**2
+
+    block_len = max(1, int(0.400 * sample_rate))
+    hop_len = max(1, int(0.100 * sample_rate))
+    if len(power_sum) <= block_len:
+        mean_pow = float(np.mean(power_sum) + 1e-12)
+        lufs = -0.691 + 10.0 * np.log10(mean_pow)
+        lra = 0.0
+    else:
+        csum = np.concatenate(([0.0], np.cumsum(power_sum)))
+        starts = np.arange(0, len(power_sum) - block_len + 1, hop_len)
+        block_pow = np.maximum((csum[starts + block_len] - csum[starts]) / float(block_len), 1e-12)
+        block_lufs = -0.691 + 10.0 * np.log10(block_pow)
+
+        abs_mask = block_lufs > -70.0
+        if not np.any(abs_mask):
+            lufs = float(np.mean(block_lufs))
+        else:
+            ungated_pow = float(np.mean(block_pow[abs_mask]))
+            rel_thresh = -0.691 + 10.0 * np.log10(ungated_pow) - 10.0
+            rel_mask = abs_mask & (block_lufs > rel_thresh)
+            gated_pow = float(np.mean(block_pow[rel_mask])) if np.any(rel_mask) else ungated_pow
+            lufs = -0.691 + 10.0 * np.log10(max(gated_pow, 1e-12))
+
+        st_mask = block_lufs > -70.0
+        if np.sum(st_mask) >= 4:
+            vals = block_lufs[st_mask]
+            lra = float(max(0.0, np.percentile(vals, 95) - np.percentile(vals, 10)))
+        else:
+            lra = 0.0
+
+    n_frames = arr.shape[0]
+    if n_frames >= 4:
+        # Fast vectorized peak check without blowing RAM on very long streams (chunked 4x interpolation)
+        peak_val = float(np.max(np.abs(arr)))
+        chunk_sz = max(4096, int(sample_rate * 10))
+        for start in range(0, n_frames, chunk_sz):
+            seg = arr[start : min(n_frames, start + chunk_sz)]
+            if seg.shape[0] < 4:
+                continue
+            xb = np.arange(seg.shape[0], dtype=np.float64)
+            xo = np.linspace(0.0, float(seg.shape[0] - 1), seg.shape[0] * 4)
+            peak_val = max(
+                peak_val,
+                float(np.max(np.abs(np.interp(xo, xb, seg[:, 0])))),
+                float(np.max(np.abs(np.interp(xo, xb, seg[:, 1])))),
+            )
+    else:
+        peak_val = float(np.max(np.abs(arr)))
+    dbtp = float(20.0 * np.log10(max(peak_val, 1e-9)))
+    return {
+        "integrated_lufs": round(lufs, 2),
+        "lra_lu": round(lra, 2),
+        "true_peak_dbtp": round(dbtp, 2),
+    }
+
+
+def _apply_lookahead_true_peak_limiter(stereo, sample_rate, ceiling_lin):
+    """Smooth lookahead soft-knee True-Peak brickwall limiter preventing hard sample clipping."""
+    if stereo.shape[0] == 0:
+        return stereo
+    mag = np.max(np.abs(stereo), axis=1)
+    needed_gain = np.where(mag > ceiling_lin, ceiling_lin / np.maximum(mag, 1e-9), 1.0)
+    win = min(len(needed_gain), max(1, int(0.012 * sample_rate)))
+    # Local minimum gain envelope via O(N) rolling window on deficit
+    deficit = 1.0 - needed_gain
+    smooth_def = (
+        _fast_boxcar_mean(deficit, win) * (float(win) / float(max(1, win // 2)))
+    )[: len(deficit)]
+    env_gain = np.clip(1.0 - smooth_def, 0.05, 1.0)
+    env_gain = np.minimum(env_gain, needed_gain)
+    limited = stereo * env_gain[:, np.newaxis]
+
+    # Exact 4x oversampled ceiling verification chunk-by-chunk
+    n_frames = limited.shape[0]
+    chunk_sz = max(4096, int(sample_rate * 10))
+    peak_4x = float(np.max(np.abs(limited)))
+    if n_frames >= 4:
+        for start in range(0, n_frames, chunk_sz):
+            seg = limited[start : min(n_frames, start + chunk_sz)]
+            if seg.shape[0] < 4:
+                continue
+            xb = np.arange(seg.shape[0], dtype=np.float64)
+            xo = np.linspace(0.0, float(seg.shape[0] - 1), seg.shape[0] * 4)
+            peak_4x = max(
+                peak_4x,
+                float(np.max(np.abs(np.interp(xo, xb, seg[:, 0])))),
+                float(np.max(np.abs(np.interp(xo, xb, seg[:, 1])))),
+            )
+    if peak_4x > ceiling_lin and peak_4x > 0.0:
+        limited *= (ceiling_lin * 0.996) / peak_4x
+    return np.clip(limited, -ceiling_lin, ceiling_lin)
+
+
 def normalize_lufs_and_true_peak(stereo, sample_rate, target_lufs=-14.0, ceiling_dbtp=-1.0):
-    """Normalize stereo mix to -14.0 LUFS with 4x oversampled -1.0 dBTP True Peak brickwall ceiling."""
+    """Normalize stereo mix to exact ITU-R BS.1770-4 -14.0 LUFS & -1.0 dBTP True-Peak ceiling."""
     if stereo.size == 0:
         return stereo
-    mid = np.mean(stereo, axis=1)
-    k_weighted = butter_filter(mid, 100.0, sample_rate, btype="high", order=2)
-    mean_sq = float(np.mean(k_weighted**2) + 1e-12)
-    current_lufs = -0.691 + 10.0 * np.log10(mean_sq)
-    gain_db = float(np.clip(target_lufs - current_lufs, -18.0, 24.0))
-    scaled = stereo * (10.0 ** (gain_db / 20.0))
-
     ceiling = 10.0 ** (ceiling_dbtp / 20.0)
-    n_frames = scaled.shape[0]
-    if n_frames >= 4:
-        x_base = np.arange(n_frames, dtype=np.float64)
-        x_over = np.linspace(0.0, float(n_frames - 1), n_frames * 4)
-        peak_l = float(np.max(np.abs(np.interp(x_over, x_base, scaled[:, 0]))))
-        peak_r = float(np.max(np.abs(np.interp(x_over, x_base, scaled[:, 1]))))
-        true_peak = max(peak_l, peak_r, float(np.max(np.abs(scaled))))
-    else:
-        true_peak = float(np.max(np.abs(scaled)))
+    scaled = stereo.copy()
+    for _ in range(2):
+        stats = measure_ebu_r128_loudness(scaled, sample_rate)
+        gain_db = float(np.clip(target_lufs - stats["integrated_lufs"], -18.0, 24.0))
+        scaled = scaled * (10.0 ** (gain_db / 20.0))
+        scaled = _apply_lookahead_true_peak_limiter(scaled, sample_rate, ceiling)
+        if abs(target_lufs - measure_ebu_r128_loudness(scaled, sample_rate)["integrated_lufs"]) <= 0.25:
+            break
+    return scaled
 
-    if true_peak > ceiling and true_peak > 0.0:
-        scaled *= ceiling / true_peak
-    return np.clip(scaled, -ceiling, ceiling)
+
+def audit_rendered_audio(wav_path):
+    """Audit rendered WAV for EBU R128 broadcast compliance, low-vocal Ahaat pads & tail cutoff."""
+    sample_rate, stereo, channels, bit_depth = read_wav_any_depth(wav_path, return_stereo=True)
+    mono = np.mean(stereo, axis=1) if stereo.shape[0] > 0 else np.zeros(0, dtype=np.float64)
+    stats = measure_ebu_r128_loudness(stereo if channels > 1 else mono, sample_rate)
+    duration_sec = round(len(mono) / max(1.0, float(sample_rate)), 3)
+
+    hop = max(1, int(0.5 * sample_rate))
+    n_hops = len(mono) // hop
+    low_streak = 0.0
+    max_low_pad = 0.0
+    for i in range(n_hops):
+        seg = mono[i * hop : (i + 1) * hop]
+        rms_db = 20.0 * np.log10(float(np.sqrt(np.mean(seg**2)) + 1e-9))
+        if rms_db < -28.0:
+            low_streak += 0.5
+            max_low_pad = max(max_low_pad, low_streak)
+        else:
+            low_streak = 0.0
+
+    tail_samples = max(1, int(0.15 * sample_rate))
+    tail_rms_db = 20.0 * np.log10(float(np.sqrt(np.mean(mono[-tail_samples:] ** 2)) + 1e-9)) if len(mono) else -90.0
+    abrupt_tail_cutoff = bool(tail_rms_db > -24.0)
+    broadcast_ok = bool(stats["true_peak_dbtp"] <= -0.9 and -15.5 <= stats["integrated_lufs"] <= -12.5)
+    return {
+        "wav_path": wav_path,
+        "sample_rate": sample_rate,
+        "channels": channels,
+        "bit_depth": bit_depth,
+        "duration_sec": duration_sec,
+        "integrated_lufs": stats["integrated_lufs"],
+        "lra_lu": stats["lra_lu"],
+        "true_peak_dbtp": stats["true_peak_dbtp"],
+        "max_low_energy_gap_sec": round(max_low_pad, 2),
+        "tail_last_150ms_dbfs": round(tail_rms_db, 2),
+        "abrupt_tail_cutoff_risk": abrupt_tail_cutoff,
+        "broadcast_compliant": broadcast_ok,
+    }
 
 
 def process_audio_file(
@@ -3412,53 +4371,84 @@ def process_audio_file(
     audio_drop_sec=None,
     replace_ai_percussion=False,
     samples_dir=None,
+    trim_end_sec=None,
+    fade_out_sec=0.0,
+    no_synth_rhythm=False,
 ):
-    """Run complete 5-Track SOS/RMS/LUFS Husseiniya DSP vocal & percussion montage."""
+    """Run complete 5-Track SOS/RMS/LUFS or Pure Vocal Husseiniya DSP montage."""
     if mode not in SUPPORTED_DSP_MODES:
         raise ValueError(f"Unsupported DSP mode: {mode}")
 
     sample_rate, mono, _, _ = read_wav_any_depth(input_path)
-    vocal_in = strip_ai_percussion_from_vocal(mono, sample_rate) if replace_ai_percussion else mono
+    if trim_end_sec is not None and float(trim_end_sec) > 0.2:
+        max_samples = min(len(mono), int(float(trim_end_sec) * sample_rate))
+        mono = mono[:max_samples]
+
+    if fade_out_sec and float(fade_out_sec) > 0.0 and len(mono) > 8:
+        fade_len = min(len(mono) // 2, int(float(fade_out_sec) * sample_rate))
+        if fade_len > 2:
+            curve = 0.5 * (1.0 + np.cos(np.pi * np.linspace(0.0, 1.0, fade_len)))
+            mono = mono.copy()
+            mono[-fade_len:] *= curve
+
+    pure_mode = mode == "vocal_pure_master" or bool(no_synth_rhythm)
+    vocal_in = (
+        strip_ai_percussion_from_vocal(mono, sample_rate)
+        if (replace_ai_percussion and not pure_mode)
+        else mono
+    )
     restored = apply_noise_print_restoration(vocal_in, sample_rate)
-    eq_vocal = apply_vocal_eq(restored, sample_rate)
+    eq_vocal = apply_vocal_eq(restored, sample_rate, preserve_chest_thud=pure_mode)
 
     delay_ms = compute_tempo_synced_delay_ms(bpm, mode=mode)
-    echo_vocal = apply_dynacord_echo(eq_vocal, sample_rate, delay_ms=delay_ms)
-    rt60 = 3.4 if mode in ("mawal", "nai", "thaqeel_muwazza", "bahrani_muthakkal") else 2.4
-    wet_vocal = apply_husseiniya_reverb(echo_vocal, sample_rate, rt60_sec=rt60)
+    if pure_mode:
+        echo_vocal = apply_dynacord_echo(eq_vocal, sample_rate, delay_ms=delay_ms, feedback=0.20, wet=0.10)
+        wet_l = apply_husseiniya_reverb(echo_vocal, sample_rate, rt60_sec=2.1, pre_delay_ms=20.0, wet=0.14, seed=4850)
+        wet_r = apply_husseiniya_reverb(echo_vocal, sample_rate, rt60_sec=2.1, pre_delay_ms=26.0, wet=0.14, seed=4899)
+        foley_bed = synthesize_contextual_foley(len(mono), sample_rate, foley_type=foley)
+        left_chan = wet_l + 0.5 * foley_bed
+        right_chan = wet_r + 0.5 * foley_bed
+        stereo_sat = np.column_stack((tape_saturate(left_chan, drive=1.10), tape_saturate(right_chan, drive=1.10)))
+        stereo_glued = apply_master_glue_compressor(stereo_sat, ratio=1.35, threshold=0.68)
+    else:
+        echo_vocal = apply_dynacord_echo(eq_vocal, sample_rate, delay_ms=delay_ms)
+        rt60 = 3.4 if mode in ("mawal", "nai", "thaqeel_muwazza", "bahrani_muthakkal") else 2.4
+        wet_vocal = apply_husseiniya_reverb(echo_vocal, sample_rate, rt60_sec=rt60)
 
-    onset_offset = detect_vocal_onset_offset_samples(eq_vocal, sample_rate)
-    rhythm_bed = build_rhythm_bed(
-        len(mono),
-        sample_rate,
-        mode=mode,
-        bpm=bpm,
-        offset_samples=onset_offset,
-        swing=swing,
-        samples_dir=samples_dir,
-    )
-    ahaat_pad = (
-        synthesize_vocal_synth_strings_pad(len(mono), sample_rate, maqam=maqam_drone)
-        if mode in ("studio_arranged", "heavy_clip")
-        else synthesize_ahaat_drone(len(mono), sample_rate, maqam=maqam_drone)
-    )
-    foley_bed = synthesize_contextual_foley(len(mono), sample_rate, foley_type=foley)
+        onset_offset = detect_vocal_onset_offset_samples(eq_vocal, sample_rate)
+        rhythm_bed = build_rhythm_bed(
+            len(mono),
+            sample_rate,
+            mode=mode,
+            bpm=bpm,
+            offset_samples=onset_offset,
+            swing=swing,
+            samples_dir=samples_dir,
+            vocal_signal=eq_vocal,
+        )
+        ahaat_pad = (
+            synthesize_vocal_synth_strings_pad(len(mono), sample_rate, maqam=maqam_drone)
+            if mode in ("studio_arranged", "heavy_clip")
+            else synthesize_ahaat_drone(len(mono), sample_rate, maqam=maqam_drone)
+        )
+        foley_bed = synthesize_contextual_foley(len(mono), sample_rate, foley_type=foley)
 
-    if audio_drop_sec is not None:
-        rhythm_bed = apply_dramatic_audio_drop(rhythm_bed, sample_rate, drop_start_sec=audio_drop_sec)
-        ahaat_pad = apply_dramatic_audio_drop(ahaat_pad, sample_rate, drop_start_sec=audio_drop_sec)
+        if audio_drop_sec is not None:
+            rhythm_bed = apply_dramatic_audio_drop(rhythm_bed, sample_rate, drop_start_sec=audio_drop_sec)
+            ahaat_pad = apply_dramatic_audio_drop(ahaat_pad, sample_rate, drop_start_sec=audio_drop_sec)
 
-    ducking = compute_smart_sidechain_ducking(eq_vocal, sample_rate, duck_db=-3.0, threshold_dbfs=-28.0)
+        ducking = compute_smart_sidechain_ducking(eq_vocal, sample_rate, duck_db=-3.0, threshold_dbfs=-28.0)
 
-    haas_shift = max(1, int(0.009 * sample_rate))
-    ahaat_right = np.roll(ahaat_pad, haas_shift)
-    ahaat_right[:haas_shift] = ahaat_pad[:haas_shift]
+        haas_shift = max(1, int(0.009 * sample_rate))
+        ahaat_right = np.roll(ahaat_pad, haas_shift)
+        ahaat_right[:haas_shift] = ahaat_pad[:haas_shift]
 
-    left_chan = wet_vocal + 0.82 * (rhythm_bed * ducking) + 0.72 * (ahaat_pad * ducking) + foley_bed
-    right_chan = wet_vocal + 0.82 * (rhythm_bed * ducking) + 0.72 * (ahaat_right * ducking) + foley_bed
+        left_chan = wet_vocal + 0.78 * (rhythm_bed * ducking) + 0.65 * (ahaat_pad * ducking) + foley_bed
+        right_chan = wet_vocal + 0.78 * (rhythm_bed * ducking) + 0.65 * (ahaat_right * ducking) + foley_bed
 
-    stereo_sat = np.column_stack((tape_saturate(left_chan), tape_saturate(right_chan)))
-    stereo_glued = apply_master_glue_compressor(stereo_sat)
+        stereo_sat = np.column_stack((tape_saturate(left_chan), tape_saturate(right_chan)))
+        stereo_glued = apply_master_glue_compressor(stereo_sat)
+
     master = normalize_lufs_and_true_peak(
         stereo_glued, sample_rate, target_lufs=-14.0, ceiling_dbtp=-1.0
     )
@@ -3466,20 +4456,24 @@ def process_audio_file(
     out_dir = os.path.dirname(os.path.abspath(output_path))
     if out_dir:
         os.makedirs(out_dir, exist_ok=True)
-    pcm16 = np.clip(np.round(master * 32767.0), -32768, 32767).astype(np.int16)
-    wavfile.write(output_path, sample_rate, pcm16)
+    _write_wav_pcm16(output_path, sample_rate, master)
+    out_stats = measure_ebu_r128_loudness(master, sample_rate)
     return {
         "output_path": output_path,
         "sample_rate": sample_rate,
         "mode": mode,
+        "pure_vocal_master": pure_mode,
         "bpm": bpm,
         "maqam_drone": maqam_drone,
-        "replace_ai_percussion": bool(replace_ai_percussion),
+        "replace_ai_percussion": bool(replace_ai_percussion and not pure_mode),
+        "integrated_lufs": out_stats["integrated_lufs"],
+        "true_peak_dbtp": out_stats["true_peak_dbtp"],
+        "lra_lu": out_stats["lra_lu"],
     }
 
 
 def parse_args(argv=None):
-    """Parse CLI flags for V48.5 Phonetics, Linter, Validators, Genre Firewall & 16-Mode DSP."""
+    """Parse CLI flags for V52.0 Phonetics, History Firewall, Stage Planner & 18-Mode DSP."""
     parser = argparse.ArgumentParser(
         description=f"Hussaini Production Studio DSP & Phonetics Engine ({SKILL_VERSION})"
     )
@@ -3490,7 +4484,7 @@ def parse_args(argv=None):
         "--mode",
         default="latm",
         choices=list(SUPPORTED_DSP_MODES),
-        help="Husseiniya rhythm & production mode (16 modes)",
+        help="Husseiniya rhythm & production mode (18 modes incl. vocal_pure_master & fazzaiya)",
     )
     parser.add_argument("--bpm", type=float, default=60.0, help="Target tempo in BPM (default: 60)")
     parser.add_argument(
@@ -3515,15 +4509,20 @@ def parse_args(argv=None):
     parser.add_argument(
         "--replace-ai-percussion",
         action="store_true",
-        help="Strip residual AI percussion (<120Hz thumps & click spikes) before adding organic Latm",
+        help="Strip residual AI percussion (<105Hz thumps & click spikes) before adding organic Latm",
     )
+    parser.add_argument("--no-synth-rhythm", action="store_true", help="Disable synthetic rhythm & Ahaat beds")
+    parser.add_argument("--trim-end-sec", type=float, default=None, help="Trim input audio cleanly at timestamp (sec)")
+    parser.add_argument("--fade-out-sec", type=float, default=0.0, help="Apply raised-cosine fade-out duration (sec)")
     parser.add_argument("--samples-dir", default=None, help="Optional directory of real WAV one-shots")
     parser.add_argument("--compile-lyrics", default=None, help="Shape & vocalize Arabic poem text")
-    parser.add_argument("--lint-poem", default=None, help="Run QC1-QC19 linter on poem text")
+    parser.add_argument("--lint-poem", default=None, help="Run QC1-QC35 linter on poem text")
+    parser.add_argument("--verify-history", default=None, help="Verify poem against Ahl al-Bayt historical narratives")
+    parser.add_argument("--plan-stages", default=None, help="Partition full poem into V52 NC16 3-line Extend stages")
     parser.add_argument(
         "--enforce-estehlal",
         default=None,
-        help="Wrap [المستهل] lines in '(...)' for 100% unison Raddada choir delivery",
+        help="Wrap [المستهل] lines in '(...)' for 100%% unison Raddada choir delivery",
     )
     parser.add_argument(
         "--build-stage-json",
@@ -3532,7 +4531,7 @@ def parse_args(argv=None):
     )
     parser.add_argument("--validate-abudhiyah", default=None, help="Validate 4-line Abudhiyah Jinas")
     parser.add_argument("--validate-zuhayri", default=None, help="Validate 7-line Zuhayri Mawal")
-    parser.add_argument("--recommend-tor", default=None, help="Recommend Tor, BPM & V48.5 Sound prompt")
+    parser.add_argument("--recommend-tor", default=None, help="Recommend Tor, BPM & Sound prompt")
     parser.add_argument(
         "--stage-plan",
         default=None,
@@ -3542,7 +4541,7 @@ def parse_args(argv=None):
     parser.add_argument(
         "--export-constitution",
         action="store_true",
-        help="Print canonical V48.5 OMNI-ARCHITECT JSON constitution",
+        help="Print canonical OMNI-ARCHITECT JSON constitution",
     )
     parser.add_argument(
         "--genre",
@@ -3551,11 +4550,12 @@ def parse_args(argv=None):
         help="Generate genre acoustic profile & Sound prompt",
     )
     parser.add_argument("--extract-profile", default=None, help="Reverse-engineer reference WAV profile")
+    parser.add_argument("--audit-audio", default=None, help="Audit WAV loudness, True Peak, gaps & tail cutoff")
     return parser.parse_args(argv)
 
 
 def main(argv=None):
-    """CLI entrypoint for Hussaini Production Studio V48.5 OMNI-ARCHITECT."""
+    """CLI entrypoint for Hussaini Production Studio V52.0 OMNI-ARCHITECT."""
     args = parse_args(argv)
 
     if args.export_constitution:
@@ -3587,6 +4587,14 @@ def main(argv=None):
         print(json.dumps(lint_poem(args.lint_poem.replace("\\n", "\n")), ensure_ascii=False, indent=2))
         return 0
 
+    if args.verify_history is not None:
+        print(json.dumps(verify_historical_narratives(args.verify_history.replace("\\n", "\n")), ensure_ascii=False, indent=2))
+        return 0
+
+    if args.plan_stages is not None:
+        print(json.dumps(plan_poem_extend_stages(args.plan_stages.replace("\\n", "\n"), bpm=args.bpm), ensure_ascii=False, indent=2))
+        return 0
+
     if args.validate_abudhiyah is not None:
         print(json.dumps(validate_abudhiyah_jinas(args.validate_abudhiyah), ensure_ascii=False, indent=2))
         return 0
@@ -3610,6 +4618,10 @@ def main(argv=None):
         print(json.dumps(extract_reference_audio_profile(args.extract_profile), ensure_ascii=False, indent=2))
         return 0
 
+    if args.audit_audio is not None:
+        print(json.dumps(audit_rendered_audio(args.audit_audio), ensure_ascii=False, indent=2))
+        return 0
+
     if args.input and args.output:
         result = process_audio_file(
             args.input,
@@ -3622,6 +4634,9 @@ def main(argv=None):
             audio_drop_sec=args.audio_drop_sec,
             replace_ai_percussion=args.replace_ai_percussion,
             samples_dir=args.samples_dir,
+            trim_end_sec=args.trim_end_sec,
+            fade_out_sec=args.fade_out_sec,
+            no_synth_rhythm=args.no_synth_rhythm,
         )
         print(json.dumps(result, ensure_ascii=False, indent=2))
         return 0
