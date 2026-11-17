@@ -1,13 +1,51 @@
 #!/usr/bin/env python3
-# pylint: disable=wrong-import-position,too-many-lines,no-member
-"""Comprehensive Unit & Integration Test Suite for Hussaini Production Studio (V48.5 OMNI-ARCHITECT)."""
+# pylint: disable=wrong-import-position,too-many-lines,no-member,too-few-public-methods
+"""Comprehensive Unit & Integration Test Suite for Hussaini Production Studio (V55.0 OMNI-ARCHITECT)."""
 
 import os
+import re
+import struct
 import sys
 import wave
 
 import numpy as np
-from scipy.io import wavfile
+
+try:
+    from scipy.io import wavfile
+except ImportError:  # pragma: no cover - pure-NumPy WAV writer fallback
+    class _WavfileFallback:
+        """Pure-Python/NumPy RIFF WAV writer matching scipy.io.wavfile.write."""
+
+        @staticmethod
+        def write(filename, rate, data):
+            """Write uint8, int16, or float32 mono/stereo array to RIFF WAV."""
+            arr = np.asarray(data)
+            chans = 1 if arr.ndim == 1 else int(arr.shape[1])
+            if arr.dtype == np.float32:
+                raw = arr.astype("<f4").tobytes()
+                fmt_chunk = struct.pack(
+                    "<HHIIHH", 3, chans, int(rate), int(rate) * chans * 4, chans * 4, 32
+                )
+                riff_sz = 36 + len(raw)
+                with open(filename, "wb") as fh:
+                    fh.write(
+                        b"RIFF"
+                        + struct.pack("<I", riff_sz)
+                        + b"WAVEfmt "
+                        + struct.pack("<I", 16)
+                        + fmt_chunk
+                    )
+                    fh.write(b"data" + struct.pack("<I", len(raw)) + raw)
+                return
+            sampwidth = 1 if arr.dtype == np.uint8 else 2
+            payload = arr.tobytes() if sampwidth == 1 else arr.astype("<i2").tobytes()
+            with wave.open(str(filename), "wb") as wf:
+                wf.setnchannels(chans)
+                wf.setsampwidth(sampwidth)
+                wf.setframerate(int(rate))
+                wf.writeframes(payload)
+
+    wavfile = _WavfileFallback()
 
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 SCRIPTS_DIR = os.path.join(ROOT_DIR, "scripts")
@@ -18,8 +56,8 @@ import hussaini_dsp_montage as hds  # noqa: E402
 
 
 def test_single_source_version_and_v50_architecture():
-    """Verify V54.0 OMNI-ARCHITECT version lock, SKILL.md router budget, JSON constitution, and Module 69."""
-    assert hds.SKILL_VERSION == "V54.0 OMNI-ARCHITECT"
+    """Verify V55.0 OMNI-ARCHITECT version lock, SKILL.md router budget, JSON constitution, and Module 70."""
+    assert hds.SKILL_VERSION == "V55.0 OMNI-ARCHITECT"
     skill_md = os.path.join(ROOT_DIR, "SKILL.md")
     assert os.path.isfile(skill_md)
     assert os.path.getsize(skill_md) <= 10500
@@ -65,25 +103,32 @@ def test_single_source_version_and_v50_architecture():
         "modules",
         "module_69_v54_175_mp3_acoustic_lab_24edo_and_studio_dsp.md",
     )
+    v55_module_doc = os.path.join(
+        ROOT_DIR,
+        "references",
+        "modules",
+        "module_70_v55_tabaa_al_bashar_7exp_lab_5stage_router_and_3poem_benchmark.md",
+    )
     assert os.path.isfile(v50_module_doc)
     assert os.path.isfile(v51_module_doc)
     assert os.path.isfile(v52_module_doc)
     assert os.path.isfile(v53_module_doc)
     assert os.path.isfile(v54_module_doc)
+    assert os.path.isfile(v55_module_doc)
 
     constitution = hds.load_v50_0_constitution()
     assert (
         constitution["protocol_metadata"]["protocol_name"]
         == "Hussaini_Production_Studio_OS_V50_0_OMNI_ARCHITECT"
     )
-    assert constitution["protocol_metadata"]["skill_version"] == "V54.0 OMNI-ARCHITECT"
+    assert constitution["protocol_metadata"]["skill_version"] == "V55.0 OMNI-ARCHITECT"
     assert len(constitution["5_master_sound_prompts_library_modules_36_44_46_48_52"]) == 25
     assert len(hds.MASTER_SOUND_PROMPTS_V50) == 25
     assert len(constitution["8_v50_empirical_175_corpus_and_9_schools_modules_54_65"]["unified_9_schools_architecture"]) == 9
     assert len(hds.SUPPORTED_DSP_MODES) == 18
     assert "vocal_pure_master" in hds.SUPPORTED_DSP_MODES
     assert "fazzaiya" in hds.SUPPORTED_DSP_MODES
-    assert len(hds.EXTENDED_ATWAR_PROMPTS_V52) == 4
+    assert len(hds.EXTENDED_ATWAR_PROMPTS_V52) == 6
     v51_block = constitution["v51_0_protocol_negative_constraints_and_style_taxonomy"]
     assert v51_block["version"] == "V51.2 OMNI-ARCHITECT"
     assert len(v51_block["permanent_negative_constraints_nc1_to_nc17"]) >= 17
@@ -96,6 +141,10 @@ def test_single_source_version_and_v50_architecture():
     v54_block = constitution["v54_0_module_69_upgrades"]
     assert v54_block["version"] == "V54.0 OMNI-ARCHITECT"
     assert v54_block["mp3_175_track_acoustic_lab"]["tracks_analyzed"] == 175
+    v55_block = constitution["v55_0_module_70_upgrades"]
+    assert v55_block["version"] == "V55.0 OMNI-ARCHITECT"
+    assert v55_block["tabaa_al_bashar_7_experiments_lab"]["experiments_executed"] == 7
+    assert v55_block["three_benchmark_poems_verification"]["unvocalized_tokens"] == 0
 
 
 def test_module_41_49_57_58_64_iraqi_prosthetic_clusters_and_v50_g2p_locks():
@@ -708,3 +757,122 @@ def test_v54_175track_dsp_deesser_optical_stereo_24edo_and_multi_tor(tmp_path):
     au_saba = hds.audit_rendered_audio(str(out_stereo))
     assert au_saba["broadcast_compliant"] is True
     assert au_saba["abrupt_tail_cutoff_risk"] is False and au_saba["tail_last_150ms_dbfs"] < -35.0
+
+
+def test_v55_three_benchmark_poems_g2p_5stage_router_and_nc18_nc22():
+    """Verify V55 Module 70: NC18-NC22 locks, 5-Stage Prosodic Router, and 3-Poem Benchmark (100% G2P & Idempotency)."""
+    # 1. Verify NC18 & NC19 on V55 prompts and preconditioning JSON
+    for p_key in ("ashura_majlis_noha_58bpm_saba_lami_v55", "pure_acapella_weeping_noha_auto_bpm_saba_lami_v55"):
+        prompt_str = hds.EXTENDED_ATWAR_PROMPTS_V52[p_key]
+        assert "55Hz" not in prompt_str and "53Hz" not in prompt_str and "320ms" not in prompt_str
+        assert "chest slaps" not in prompt_str.lower() and "no drums" not in prompt_str.lower()
+        assert "strictly no musical instruments" in prompt_str.lower()
+
+    pre = hds.build_flowmusic_json_preconditioning()
+    assert "Lyria 3.5" in pre["acoustic_lock"]["lyria_model_lock"]
+    assert pre["acoustic_lock"]["remix_cover_strength_cap"] <= 0.45
+
+    # 2. Verify NC21 (short-clause pause healing) & NC22 (liaison Kasra & open -a before الـ) + morphological fixes
+    tabaa_sample = (
+        "طبع البشر ينسه الوفه\n"
+        "بس انته مو مثل البشر\n"
+        "ناموسك بظل العرش\n"
+        "وتنزل هوى للمختنگ\n"
+        "والخدمه بالصدگ وجذب\n"
+        "الخدمه انكساري .. ودمعتي\n"
+        "الخدمه قراري .. بصفنتي .. مولاي\n"
+        "حامل جمرتي .. بديه\n"
+        "وتطلع حسرتي .. الرقيه .. مولاي\n"
+        "سهرانه عينك بالدمع\n"
+        "وسهرانه عيني بلا دمع\n"
+        "تاليها مطرت .. حوافر\n"
+        "وروحك تعلت .. بواتر .. مولاي\n"
+        "صار الطفل رزقه السهم .. والنار مرزوقه بمهد .. خيل عشره"
+    )
+    res_tabaa = hds.detect_and_shape_dialect(tabaa_sample)
+    assert res_tabaa["detected_dialect"] == "iraqi"
+    s_tabaa = res_tabaa["shaped_lyrics"]
+    assert hds.detect_and_shape_dialect(s_tabaa)["shaped_lyrics"] == s_tabaa
+    assert "طَبْعِ البَشَرْ يِنْسَى الوَفَا" in s_tabaa
+    assert "بَسْ إِنْتَ مُو مِثِلِ البَشَرْ" in s_tabaa
+    assert "نَامُوسَكْ" in s_tabaa and "نِامُوسَكْ" not in s_tabaa
+    assert "بِالصِّدِگْ" in s_tabaa and "بِالدَّمِعْ" in s_tabaa and "بِلَا دَمِعْ" in s_tabaa
+    assert "عَينَكْ" in s_tabaa and "عِينَكْ" not in s_tabaa
+    assert "الخِدْمَه إِنْكِسَارِي وَ دَمْعِتِي" in s_tabaa
+    assert "الخِدْمَه قَرَارِي بِصَفْنِتِي .. مَولَايْ" in s_tabaa
+    assert "الرُّقَيَّه .. مَولَايْ" in s_tabaa
+    assert "تَالِيهَا مِطْرَتْ حَوَافِرْ" in s_tabaa
+    assert "بَوَاتِرْ" in s_tabaa and "بُواتَرْ" not in s_tabaa
+
+    rec_tabaa = hds.recommend_tor_and_rhythm_for_poem(tabaa_sample)
+    assert rec_tabaa["recommended_bpm"] == 58
+    assert rec_tabaa["recommended_maqam"] == "saba_zamzam"
+    assert "five_stage_analysis" in rec_tabaa
+    assert rec_tabaa["five_stage_analysis"]["stage_5_phonetic_g2p_and_flowmusic_lock"]["lyria_model_lock"] == "Lyria 3.5"
+    hist_tabaa = hds.verify_historical_narratives(tabaa_sample)
+    assert hist_tabaa["is_historically_clean"] is True
+    motifs_tabaa = {m["motif_id"] for m in hist_tabaa["verified_authentic_motifs"]}
+    assert {"infant_harmala_arrow", "ten_horsemen_trampling"}.issubset(motifs_tabaa)
+
+    # 3. Verify Bahrani Benchmark Poem 2 («صورة جسد عالغبرة» — Nader Al-Tattan)
+    bahrani_sample = (
+        "أختصر كل الحدث و أستعجِل الظهيره\n"
+        "واندفن وجه النهر والكل جَمَد في حِيره\n"
+        "مات كل شي و رحل إلاّ الحُسين و حُبّه\n"
+        "صورة جسد عالغبره .. صورة جرح ما يبره\n"
+        "آه هذا الشمر .. بيه الحقد لواهب\n"
+        "الحُسين اعلى الثرى .. صاعد على صدره الشمر\n"
+        "ما صعد حافي بعد .. بنعاله جالس عالصدر\n"
+        "طوّل جلوسه اعلى الصدر .. واحسين يناظر للخدر\n"
+        "وش ناوي تفعل يا شمر .. صوب النحر\n"
+        "قبض الشيبه و بقى يحز بمنحره\n"
+        "مشى سيفه اعلى النحر أْو ظل يهبّره\n"
+        "والمُستقر جهنم .. والمجِد نصيبه .. يظل اسمه مُخلد للقيامه"
+    )
+    res_bahr = hds.detect_and_shape_dialect(bahrani_sample)
+    assert res_bahr["detected_dialect"] == "bahrani"
+    assert res_bahr["bahrani_score"] >= 6
+    s_bahr = res_bahr["shaped_lyrics"]
+    assert hds.detect_and_shape_dialect(s_bahr)["shaped_lyrics"] == s_bahr
+    assert "أَسْتَعْجِلْ الظَّهِيرَه" in s_bahr
+    assert "عَالْغَبْرَه" in s_bahr and "عَالصَّدِرْ" in s_bahr
+    assert "بِيه الحِقِدْ لَوَاهِبْ" in s_bahr
+    assert "المُسْتَقَرْ" in s_bahr and "مُخَلَّدْ لِلْقِيَامَه" in s_bahr
+    rec_bahr = hds.recommend_tor_and_rhythm_for_poem(bahrani_sample)
+    assert rec_bahr["detected_dialect"] == "bahrani"
+    assert rec_bahr["recommended_dsp_mode"] == "bahrani_muthakkal"
+    assert rec_bahr["recommended_bpm"] == 56
+    hist_bahr = hds.verify_historical_narratives(bahrani_sample)
+    assert any(m["motif_id"] == "shimr_chest_and_nahr_martyrdom" for m in hist_bahr["verified_authentic_motifs"])
+
+    # 4. Verify Iraqi Benchmark Poem 3 («فلسفة الانتظار» — Haidar Turki Al-Karbalaei)
+    intidhar_sample = (
+        "فلسفة الانتظار .. للغايب باختصار\n"
+        "اترجمها ام البنين\n"
+        "——-\n"
+        "يامن ناطر الغايب .. وحچي اسمعونك بكل يوم\n"
+        "المامذبوحله ابن ادم .. ايسولف حقه ماملچوم\n"
+        "——-\n"
+        "ابلايه انفاس ابو صالح .. كلشي الدنيا ماتسوه\n"
+        "هوه الفارگ احبابه .. روحه اتضل تواليها"
+    )
+    res_int = hds.detect_and_shape_dialect(hds.sanitize_poem_decorations(intidhar_sample))
+    assert res_int["detected_dialect"] == "iraqi"
+    s_int = res_int["shaped_lyrics"]
+    assert hds.detect_and_shape_dialect(s_int)["shaped_lyrics"] == s_int
+    assert "أُمّ البَنِينْ" in s_int and "البَنَينْ" not in s_int
+    assert "نَاطِرْ الغَايِبْ" in s_int and "وَ حَچِي يِسَمْعُونَكْ" in s_int
+    assert "تِوَالِيهَا" in s_int
+    plan_int = hds.plan_poem_extend_stages(intidhar_sample, bpm=58)
+    assert plan_int["total_extend_blocks"] >= 2
+    hist_int = hds.verify_historical_narratives(intidhar_sample)
+    motifs_int = {m["motif_id"] for m in hist_int["verified_authentic_motifs"]}
+    assert {"imam_mahdi_intidhar_and_loyalty", "umm_al_banin_madina"}.issubset(motifs_int)
+
+    # Check zero unvocalized >=2-letter tokens across all 3 samples
+    for shaped_poem in (s_tabaa, s_bahr, s_int):
+        for tok in shaped_poem.split():
+            core = re.sub(r"[^\u0621-\u064A\u067E\u0686\u06AF\u064B-\u0652\u0670]", "", tok)
+            letters = re.findall(r"[\u0621-\u064A\u067E\u0686\u06AF]", core)
+            if len(letters) >= 2:
+                assert re.search(r"[\u064B-\u0652\u0670]", core), f"Unvocalized token: {tok}"

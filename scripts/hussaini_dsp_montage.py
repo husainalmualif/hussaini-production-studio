@@ -1,15 +1,16 @@
 #!/usr/bin/env python3
 # pylint: disable=too-many-lines,too-many-return-statements,too-many-branches,too-many-locals,too-many-statements,too-many-arguments,too-many-positional-arguments,no-member,chained-comparison
-"""Hussaini Audio Omni-Architect DSP, 5-Track DAW & Phonetics Compiler (V54.0 OMNI-ARCHITECT).
+"""Hussaini Audio Omni-Architect DSP, 5-Track DAW & Phonetics Compiler (V55.0 OMNI-ARCHITECT).
 
 Standalone empirical production engine implementing Hussaini_Production_Studio_OS_V50_0_OMNI_ARCHITECT
-and V52.0–V54.0 field & 175-track empirical upgrades:
+and V52.0–V55.0 field & 175-track empirical upgrades:
 - Single-Source Version Management via root VERSION file & JSON constitution
 - Pure-Python WAV I/O (with transparent FFmpeg MP3/M4A/OGG decoding) + ITU-R BS.1770-4 / EBU R128
   K-Weighted Gated Loudness + 4x True-Peak Limiter
-- Module 67–69 (V52.0–V54.0): 175-Track Calibrated Vocal EQ + Arabic Sibilance De-Esser (5.5–8.5kHz) +
+- Module 67–70 (V52.0–V55.0): 175-Track Calibrated Vocal EQ + Arabic Sibilance De-Esser (5.5–8.5kHz) +
   Optical RMS Vocal Leveler + True Stereo Decorrelated Husseiniya Reverb, Singer-Relative 24-EDO Maqam &
-  Dual-Band BPM/Rubato Profiler, 9-School Prosodic Tor Router, QC34 Pre-Hamza Lock & 11-Rule Verifier
+  Dual-Band BPM/Rubato Profiler, 9-School 5-Stage Prosodic Tor Router, NC18–NC22 Flow Music Laws &
+  3-Poem Benchmark Verifier
 """
 
 import argparse
@@ -25,7 +26,84 @@ import sys
 import wave
 
 import numpy as np
-from scipy.signal import butter, fftconvolve, iirnotch, lfilter, sosfilt
+
+try:
+    from scipy.signal import butter, fftconvolve, iirnotch, lfilter, sosfilt
+except ImportError:  # pragma: no cover - pure-NumPy fallback when scipy DLLs are blocked
+    def fftconvolve(in1, in2, mode="full"):
+        """Pure-NumPy FFT convolution fallback matching scipy.signal.fftconvolve."""
+        a = np.asarray(in1, dtype=np.float64)
+        b = np.asarray(in2, dtype=np.float64)
+        n = a.size + b.size - 1
+        if n <= 0:
+            return np.zeros(0, dtype=np.float64)
+        nfft = 1 << (n - 1).bit_length()
+        out = np.fft.irfft(np.fft.rfft(a, nfft) * np.fft.rfft(b, nfft), nfft)[:n]
+        if mode == "same":
+            start = (b.size - 1) // 2
+            return out[start : start + a.size]
+        return out
+
+    def iirnotch(w0, q_factor, fs=2.0):
+        """Pure-NumPy 2nd-order IIR notch filter design matching scipy.signal.iirnotch."""
+        w0_rad = 2.0 * math.pi * float(w0) / float(fs)
+        alpha = math.sin(w0_rad) / (2.0 * max(float(q_factor), 1e-6))
+        cos_w0 = math.cos(w0_rad)
+        b = np.array([1.0, -2.0 * cos_w0, 1.0], dtype=np.float64) / (1.0 + alpha)
+        a = np.array(
+            [1.0, -2.0 * cos_w0 / (1.0 + alpha), (1.0 - alpha) / (1.0 + alpha)],
+            dtype=np.float64,
+        )
+        return b, a
+
+    def lfilter(b, a, x):
+        """Pure-NumPy frequency-domain IIR/FIR linear filter fallback."""
+        arr = np.asarray(x, dtype=np.float64)
+        if arr.size == 0:
+            return arr.copy()
+        b_arr = np.asarray(b, dtype=np.float64) / float(a[0])
+        a_arr = np.asarray(a, dtype=np.float64) / float(a[0])
+        nfft = 1 << max(4, (arr.size + 64 - 1).bit_length())
+        w = 2.0 * np.pi * np.fft.rfftfreq(nfft)
+        ejw = np.exp(-1j * w)
+        num = np.zeros_like(ejw, dtype=np.complex128)
+        den = np.zeros_like(ejw, dtype=np.complex128)
+        for idx_b, coef in enumerate(b_arr):
+            num += coef * (ejw**idx_b)
+        for idx_a, coef in enumerate(a_arr):
+            den += coef * (ejw**idx_a)
+        den = np.where(np.abs(den) < 1e-12, 1e-12, den)
+        return np.fft.irfft(np.fft.rfft(arr, nfft) * (num / den), nfft)[: arr.size]
+
+    def butter(order_n, wn_val, btype="low", output="sos"):
+        """Descriptor return for pure-NumPy Butterworth filter fallback."""
+        _ = output
+        return ("butter_spec", int(order_n), wn_val, str(btype))
+
+    def sosfilt(sos, x):
+        """Pure-NumPy zero-clipping Butterworth frequency response filter."""
+        arr = np.asarray(x, dtype=np.float64)
+        if arr.size == 0:
+            return arr.copy()
+        _, order, wn, btype = sos
+        nfft = 1 << max(4, (arr.size + 64 - 1).bit_length())
+        freqs = np.fft.rfftfreq(nfft) * 2.0
+        eps = 1e-12
+        if btype == "low":
+            fc = max(float(wn), eps)
+            h_mag = 1.0 / np.sqrt(1.0 + (freqs / fc) ** (2 * order))
+        elif btype == "high":
+            fc = max(float(wn), eps)
+            h_mag = 1.0 / np.sqrt(1.0 + (fc / np.maximum(freqs, eps)) ** (2 * order))
+            h_mag[0] = 0.0
+        else:
+            f_lo = max(float(wn[0]), eps)
+            f_hi = max(float(wn[1]), f_lo + eps)
+            hp = 1.0 / np.sqrt(1.0 + (f_lo / np.maximum(freqs, eps)) ** (2 * order))
+            hp[0] = 0.0
+            lp = 1.0 / np.sqrt(1.0 + (freqs / f_hi) ** (2 * order))
+            h_mag = hp * lp
+        return np.fft.irfft(np.fft.rfft(arr, nfft) * h_mag, nfft)[: arr.size]
 
 
 def get_skill_version():
@@ -292,6 +370,22 @@ EXTENDED_ATWAR_PROMPTS_V52 = {
         "authentic Iraqi colloquial dialect, commanding powerful Bass-Baritone solo lead answered "
         "by booming unified male Mawkib chorus refrain, synchronized 55Hz bare-palm chest thuds, "
         "240ms slapback echo, 2.4s open courtyard reverb, Pure Acapella No Instruments"
+    ),
+    "ashura_majlis_noha_58bpm_saba_lami_v55": (
+        "Authentic Shia Ashura Muharram Majlis Latmiya Noha in sorrowful Iraqi Maqam Saba and Lami, "
+        "slow 58 BPM tempo. Heartbroken veteran Iraqi Karbalaei Radood chanting with intense emotional "
+        "pain, weeping cracked baritone voice, soaring mournful climbs, and pure Iraqi colloquial "
+        "cadence inside a sacred Husseiniya shrine hall. Unison weeping male congregation joins the "
+        "chorus refrain with soft muffled bare chest thumping only. Pure human vocal acapella, "
+        "strictly no musical instruments."
+    ),
+    "pure_acapella_weeping_noha_auto_bpm_saba_lami_v55": (
+        "Raw unaccompanied acapella Shia Muharram Ashura Noha and Iraqi Minbar lamentation in "
+        "heartbreaking Maqam Saba and Lami. Devastated solo Iraqi Karbalaei male voice weeping and "
+        "lamenting in authentic Iraqi dialect with aching sustained melodies, raw vocal grief breaks, "
+        "and deeply emotional dynamic arcs from quiet sorrowful whispers to passionate high cries, "
+        "answered by grieving unison male congregation voices in natural mosque hall acoustics. "
+        "Pure vocal acapella only, strictly no musical instruments."
     ),
 }
 
@@ -669,9 +763,42 @@ COLLOQUIAL_PHRASE_MAP = {
     "انجسم نصين": "انْگِسَمْ نُصَّينْ",
     "يبشر گطعت إفادي": "بِشِرْ گَطَّعِتْ إِفَّادِي",
     "بشر گطعت إفادي": "بِشِرْ گَطَّعِتْ إِفَّادِي",
-    "ما أنشدك علأولادي": "مَا أَنْشِدَكْ عَلَى أَولَادِي",
-    "ما أنشدك على أولادي": "مَا أَنْشِدَكْ عَلَى أَولَادِي",
+    "ما أنشدك علأولادي": "مَا أَنْشِدَكْ إِعْلَه أَولَادِي",
+    "ما أنشدك على أولادي": "مَا أَنْشِدَكْ إِعْلَه أَولَادِي",
     "يا أهل يثرب": "يَا أَهْلَ يَثْرِبْ",
+    # Module 70 (V55.0 NC21-NC22 & 3-Poem Benchmark Locks):
+    "طبع البشر ينسه الوفه": "طَبْعِ البَشَرْ يِنْسَى الوَفَا",
+    "طبع البشر ينسى الوفا": "طَبْعِ البَشَرْ يِنْسَى الوَفَا",
+    "طبع البشر": "طَبْعِ البَشَرْ",
+    "بس انته مو مثل البشر": "بَسْ إِنْتَ مُو مِثِلِ البَشَرْ",
+    "بس إنت مو مثل البشر": "بَسْ إِنْتَ مُو مِثِلِ البَشَرْ",
+    "مو مثل البشر": "مُو مِثِلِ البَشَرْ",
+    "ناموسك بظل العرش": "نَامُوسَكْ إِبْظِلِّ العَرِشْ",
+    "وتنزل هوى للمختنگ": "وِتْنَزِّلْ هَوَى لِلْمِخْتِنِگْ",
+    "والخدمه بالصدگ وجذب": "وَ الخِدْمَه بِالصِّدِگْ وْچِذِبْ",
+    "حنين وماگلت مره شعليه": "حِنَيِّنْ وَ مَا گِلِتْ مَرَّه إِشْعَلَيَّه",
+    "بس ياويل أجلك خيل عشره": "بَسْ يَا وَيلْ إِجَوْ لَكْ خَيلْ عَشْرَه",
+    "طايح يغربيل الزلم": "طَايِحْ يَغِرْبِيلْ الزِّلِمْ",
+    "يمغربل الدنيا بنحر": "يِمْغَرْبِلْ الدِّنْيَا إِبْنَحَرْ",
+    "فلسفة الانتظار": "فَلْسَفَةُ الِانْتِظَارْ",
+    "وفلسفة الوفه يقره": "وَ فَلْسَفَة الوَفَا يِقْرَه",
+    "ودموع الانكسار": "وَ دُمُوعْ الِانْكِسَارْ",
+    "وحچي اسمعونك": "وَ حَچِي يِسَمْعُونَكْ",
+    "حچي اسمعونك": "حَچِي يِسَمْعُونَكْ",
+    "المامذبوحله إبن ادم": "المَا مَذْبُوحْ لَه إِبِنْ آدَمْ",
+    "والرايحله أبو اليمه": "وَ الرَّايِحْ لَه أَبُو اليِمَّه",
+    "الامامك شوگك امن ايقل": "لإِمَامَكْ شُوگَكْ إِمْنِ يْقِلْ",
+    "راح الكربلا وراحت": "رَاحْ لْكَرْبَلَا وَ رَاحَتْ",
+    "راح الكربله وراحت": "رَاحْ لْكَرْبَلَا وَ رَاحَتْ",
+    "تعلمنه اله فدوه": "تِعَلَّمْنَه إِلَه فِدْوَه",
+    "ومن انگول البذار": "وَ مِنْ نْگُولْ البِذَارْ",
+    "والاحزانه جهار": "وَ لأَحْزَانَه جِهَارْ",
+    "وجهه في وجهه اشيريد": "وَجْهَه فِي وَجْهَه إِشْيِرِيدْ",
+    "مشى سيفه اعلى النحر أو ظل يهبّره": "مِشَى سَيفَه إِعْلَى النَّحَرْ وَ ظَلْ يِهَبْرَه",
+    "مشى سيفه اعلى النحر أْو ظل يهبّره": "مِشَى سَيفَه إِعْلَى النَّحَرْ وَ ظَلْ يِهَبْرَه",
+    "تمشي علي جراحه": "تِمْشِي عَلَه جِرَاحَه",
+    "وانته الـ داستك أقدام الليالي": "وَ إِنْتَه إِلْ دَاسِتَكْ أَقْدَامْ اللَّيَالِي",
+    "وانته ال داستك أقدام الليالي": "وَ إِنْتَه إِلْ دَاسِتَكْ أَقْدَامْ اللَّيَالِي",
 }
 
 COLLOQUIAL_TANWEEN_MAP = {
@@ -733,6 +860,17 @@ BAHRANI_MARKERS = (
     "الحين",
     "إلين",
     "عَلَه",
+    "وش ناوي",
+    "اعلى الصدر",
+    "اعلى الثرى",
+    "اعلى النحر",
+    "عالصدر",
+    "عالغبره",
+    "عالغبرة",
+    "في حيره",
+    "في حيرة",
+    "في وجهه",
+    "صوب النحر",
 )
 
 IRAQI_MARKERS = (
@@ -818,6 +956,16 @@ IRAQI_MARKERS = (
     "فاگد",
     "تبرالي",
     "يبرالي",
+    "صدگ",
+    "منطيني",
+    "مختنگ",
+    "شعليه",
+    "تگلي",
+    "ملچوم",
+    "الفارگ",
+    "ابلايه",
+    "ماتسوه",
+    "المشتاگ",
 )
 
 FUSHA_MARKERS = (
@@ -1398,6 +1546,19 @@ BAHRANI_WORD_SHAPING_MAP = {
     "ضليت": "ضَلَّيتْ",
     "ظليت": "ضَلَّيتْ",
     "يوبه": "يُوبَه",
+    "اعلى": "إِعْلَى",
+    "عالصدر": "عَالصَّدِرْ",
+    "عالغبره": "عَالْغَبْرَه",
+    "عالغبرة": "عَالْغَبْرَه",
+    "گلبه": "گَلْبَه",
+    "بيه": "بِيهْ",
+    "نحره": "نَحْرَه",
+    "جسمه": "جِسْمَه",
+    "جَمَد": "جِمَدْ",
+    "بقى": "بِقَى",
+    "جَزِم": "جَزِمْ",
+    "مَر": "مَرْ",
+    "أْو": "وَ",
 }
 
 HYBRID_WORD_SHAPING_MAP = {
@@ -1472,6 +1633,19 @@ HYBRID_WORD_SHAPING_MAP = {
     "ضليت": "ضَلَّيتْ",
     "ظليت": "ضَلَّيتْ",
     "يوبه": "يُوبَه",
+    "اعلى": "إِعْلَى",
+    "عالصدر": "عَالصَّدِرْ",
+    "عالغبره": "عَالْغَبْرَه",
+    "عالغبرة": "عَالْغَبْرَه",
+    "گلبه": "گَلْبَه",
+    "بيه": "بِيهْ",
+    "نحره": "نَحْرَه",
+    "جسمه": "جِسْمَه",
+    "جَمَد": "جِمَدْ",
+    "بقى": "بِقَى",
+    "جَزِم": "جَزِمْ",
+    "مَر": "مَرْ",
+    "أْو": "وَ",
 }
 
 # V52.0 Corpus-Validated High-Frequency Iraqi/Husseini Lexicon, Kaf-Fatha & Daad/Dhaa Locks
@@ -1693,6 +1867,7 @@ COMMON_CORPUS_LEXICON_V52 = {
     "اوياي": "وِيَّايْ",
     "اوياه": "وِيَّاهْ",
     "اليه": "إِلِيَّه",
+    "واليه": "وَ إِلِيَّه",
     "ولو": "وَ لَوْ",
     "إحسين": "إِحْسَينْ",
     "سر": "سِرّ",
@@ -1893,6 +2068,535 @@ COMMON_CORPUS_LEXICON_V52 = {
     "اخوان": "إِخْوَانْ",
     "إخوان": "إِخْوَانْ",
     "خواتي": "خَوَاتِي",
+    # Module 70 (V55.0): 3-Benchmark-Poem Lexicon Locks (Tabaa Al-Bashar, Sowrat Jasad, Falsafat Al-Intidhar)
+    "ينسه": "يِنْسَى",
+    "ينسى": "يِنْسَى",
+    "ماتنسه": "مَا تِنْسَى",
+    "الوفه": "الوَفَا",
+    "الوفا": "الوَفَا",
+    "الوفاء": "الوَفَاءْ",
+    "انته": "إِنْتَه",
+    "أنته": "إِنْتَه",
+    "وانته": "وَ إِنْتَه",
+    "إنت": "إِنْتَ",
+    "انت": "إِنْتَ",
+    "اليزعلك": "اليِزَعْلَكْ",
+    "بالفعل": "بِالفِعِلْ",
+    "تفزعله": "تِفْزَعْلَه",
+    "عثر": "عِثَرْ",
+    "ناموسك": "نَامُوسَكْ",
+    "بظل": "إِبْظِلِّ",
+    "العرش": "العَرِشْ",
+    "وتنزل": "وِتْنَزِّلْ",
+    "هوى": "هَوَى",
+    "للمختنگ": "لِلْمِخْتِنِگْ",
+    "المختنگ": "المِخْتِنِگْ",
+    "الخدمه": "الخِدْمَه",
+    "الخدمة": "الخِدْمَه",
+    "والخدمه": "وَ الخِدْمَه",
+    "بالصدگ": "بِالصِّدِگْ",
+    "وجذب": "وْچِذِبْ",
+    "حاسبها": "حَاسِبْهَا",
+    "حتى": "حَتَّى",
+    "وحتى": "وَ حَتَّى",
+    "المو": "المُو",
+    "صدگ": "صِدِگْ",
+    "أليه": "إِلِيَّه",
+    "يساترني": "يْسَاتِرْنِي",
+    "وتحط": "وِتْحُطْ",
+    "أيدك": "إِيدَكْ",
+    "ايدك": "إِيدَكْ",
+    "إيدي": "إِيدِي",
+    "ايدي": "إِيدِي",
+    "عليه": "عَلَيَّه",
+    "حنين": "حِنَيِّنْ",
+    "وماگلت": "وَ مَا گِلِتْ",
+    "ماگلت": "مَا گِلِتْ",
+    "مره": "مَرَّه",
+    "شعليه": "إِشْعَلَيَّه",
+    "انكساري": "إِنْكِسَارِي",
+    "الانكسار": "الِانْكِسَارْ",
+    "الانتظار": "الِانْتِظَارْ",
+    "ودمعتي": "وَ دَمْعِتِي",
+    "دمعتي": "دَمْعِتِي",
+    "قراري": "قَرَارِي",
+    "بصفنتي": "بِصَفْنِتِي",
+    "صفنتي": "صَفْنِتِي",
+    "حامل": "حَامِلْ",
+    "جمرتي": "جَمُرْتِي",
+    "بديه": "بِيدَيَّه",
+    "بديها": "بِيدَيهَا",
+    "بديهن": "بِيدَيهِنْ",
+    "وتطلع": "وِتْطَلِّعْ",
+    "حسرتي": "حَسْرِتِي",
+    "الحسره": "الحَسْرَه",
+    "الرقيه": "الرُّقَيَّه",
+    "ورقيه": "وَ رُقَيَّه",
+    "سهرانه": "سَهْرَانَه",
+    "وسهرانه": "وَ سَهْرَانَه",
+    "عينك": "عَينَكْ",
+    "بالدمع": "بِالدَّمِعْ",
+    "بلا": "بِلَا",
+    "يالتنسمع": "يَالْتِنْسِمِعْ",
+    "لَمن": "لَمَّنْ",
+    "لمن": "لَمَّنْ",
+    "تون": "تِوِنْ",
+    "ضحكي": "ضِحْكِي",
+    "ينسمع": "يِنْسِمِعْ",
+    "صديت": "صَدَّيتْ",
+    "ماصديت": "مَا صَدَّيتْ",
+    "ألي": "إِلِي",
+    "ألك": "إِلَكْ",
+    "بعين": "إِبْعَينِ",
+    "العطف": "العَطُفْ",
+    "عطفك": "عَطْفَكْ",
+    "رازقني": "رَازِقْنِي",
+    "غير": "غَيرْ",
+    "أسئلك": "أَسْأَلَكْ",
+    "وأسئلك": "وَ أَسْأَلَكْ",
+    "ماتنتضرني": "مَا تِنْتِظِرْنِي",
+    "تنتضرني": "تِنْتِظِرْنِي",
+    "ترست": "تِرَسِتْ",
+    "بعطائك": "إِبْعَطَائَكْ",
+    "عطائك": "عَطَائَكْ",
+    "جميلك": "جَمِيلَكْ",
+    "يالمبللني": "يَالِمْبَلِّلْنِي",
+    "دخيلك": "دَخِيلَكْ",
+    "اتگلي": "تِگِلِّي",
+    "هاك": "هَاكْ",
+    "اجيلك": "أَجِيلَكْ",
+    "منطيني": "مِنْطِينِي",
+    "هيبه": "هَيبَه",
+    "بردائك": "بِرِدَائَكْ",
+    "ردائك": "رِدَائَكْ",
+    "شيبه": "شَيبَه",
+    "الشيبه": "الشَّيبَه",
+    "بخدمتك": "إِبْخِدْمِتَكْ",
+    "خدمتك": "خِدْمِتَكْ",
+    "ملتني": "مِلَتْنِي",
+    "زاير": "زَايِرْ",
+    "حضرتك": "حَضْرِتَكْ",
+    "جبتني": "جِبْتِنِي",
+    "أتنومس": "أَتْنَومَسْ",
+    "بفي": "إِبْفَيّ",
+    "رحمتك": "رَحْمِتَكْ",
+    "وماحسبت": "وَ مَا حِسَبِتْ",
+    "ماحسبت": "مَا حِسَبِتْ",
+    "بشمس": "إِبْشَمِسْ",
+    "معقوله": "مَعْقُولَه",
+    "خدك": "خَدَّكْ",
+    "بالترب": "بِالتُّرُبْ",
+    "ماعندي": "مَا عِنْدِي",
+    "احساس": "إِحْسَاسْ",
+    "وأحس": "وَ أَحِسْ",
+    "يابس": "يَابِسْ",
+    "رموشك": "رُمُوشَكْ",
+    "دمه": "دِمَا",
+    "تنفتح": "تِنْفِتِحْ",
+    "نظره": "نَظْرَه",
+    "النظره": "النَّظْرَه",
+    "لخيامك": "لِخْيَامَكْ",
+    "تصد": "تِصِدْ",
+    "اليذبحونك": "اليِذِبْحُونَكْ",
+    "أجو": "إِجَوْ",
+    "گبل": "گَبُلْ",
+    "لاتنذبح": "لَا تِنْذِبِحْ",
+    "وتريد": "وِتْرِيدْ",
+    "تريد": "تِرِيدْ",
+    "ياويل": "يَا وَيلْ",
+    "أجلك": "إِجَوْ لَكْ",
+    "عشره": "عَشْرَه",
+    "تشوفهن": "تِشُوفْهِنْ",
+    "غبره": "غَبْرَه",
+    "ياهو": "يَاهُو",
+    "التحشمه": "التِحَشْمَه",
+    "رميه": "رَمِيَّه",
+    "رمية": "رَمْيَةِ",
+    "التكلمه": "التِكَلْمَه",
+    "دميه": "دَمِيَّه",
+    "تاليها": "تَالِيهَا",
+    "مطرت": "مِطْرَتْ",
+    "وروحك": "وَ رُوحَكْ",
+    "تعلت": "تِعَلَّتْ",
+    "بواتر": "بَوَاتِرْ",
+    "طايح": "طَايِحْ",
+    "يغربيل": "يَغِرْبِيلْ",
+    "الزلم": "الزِّلِمْ",
+    "يمغربل": "يِمْغَرْبِلْ",
+    "الدنيا": "الدِّنْيَا",
+    "بنحر": "إِبْنَحَرْ",
+    "عايش": "عَايِشْ",
+    "بريبه": "إِبْرَيبَه",
+    "ثيابك": "ثِيَابَكْ",
+    "ماعبر": "مَا عِبَرْ",
+    "ساوموك": "سَاوِمُوكْ",
+    "أعله": "إِعْلَه",
+    "الطفل": "الطِّفِلْ",
+    "رجعت": "رَجَّعِتْ",
+    "واحد": "وَاحِدْ",
+    "أبد": "أَبَدْ",
+    "رزقه": "رِزْقَه",
+    "مرزوقه": "مَرْزُوقَه",
+    "بمهد": "إِبْمَهَدْ",
+    "ماخليت": "مَا خَلَّيتْ",
+    "خليت": "خَلَّيتْ",
+    "يوم": "يُومْ",
+    "عاشر": "عَاشِرْ",
+    "بضناك": "إِبْضَنَاكْ",
+    "معزب": "مْعَزِّبْ",
+    "حلوگ": "إِحْلُوگْ",
+    "الخناجر": "الخَنَاجِرْ",
+    "وصدرك": "وَ صَدْرَكْ",
+    "صدرك": "صَدْرَكْ",
+    "معبر": "مَعْبَرْ",
+    "للحوافر": "لِلْحَوَافِرْ",
+    "جاسم": "جَاسِمْ",
+    "فديته": "فِدَيتَه",
+    "بشهامه": "بِشَهَامَه",
+    "نطيته": "نِطَيتَه",
+    "بهيامه": "إِبْهِيَامَه",
+    "هيامه": "هِيَامَه",
+    "الرزيه": "الرَّزِيَّه",
+    "خوله": "خَولَه",
+    "سبيهن": "سَبِيهِنْ",
+    "أختصر": "أَخْتَصِرْ",
+    "الحدث": "الحَدَثْ",
+    "أستعجِل": "أَسْتَعْجِلْ",
+    "استعجل": "أَسْتَعْجِلْ",
+    "الظهيره": "الظَّهِيرَه",
+    "شي": "شِي",
+    "ومن": "وَ مِنَ",
+    "وامن": "وَ إِمْنِ",
+    "الصبح": "الصُّبُحْ",
+    "كسيره": "كَسِيرَه",
+    "واندفن": "وَ انْدِفَنْ",
+    "وجه": "وَجْهِ",
+    "وجهه": "وَجْهَه",
+    "والكل": "وَ الكِلْ",
+    "جمد": "جِمَدْ",
+    "في": "فِي",
+    "حيره": "حِيرَه",
+    "مات": "مَاتْ",
+    "رحل": "رَحَلْ",
+    "إلاّ": "إِلَّا",
+    "إلا": "إِلَّا",
+    "الحُسين": "الحُسَينْ",
+    "والحُسين": "وَ الحُسَينْ",
+    "وحُبّه": "وَ حُبَّه",
+    "الوكِت": "الوَكِتْ",
+    "اللحظه": "اللَّحْظَه",
+    "غُربه": "غُرْبَه",
+    "غربه": "غُرْبَه",
+    "إسم": "إِسْمِ",
+    "اسمه": "إِسْمَه",
+    "الأمل": "الأَمَلْ",
+    "والعيشه": "وَ العِيشَه",
+    "العيشه": "العِيشَه",
+    "صارت": "صَارَتْ",
+    "صعبه": "صَعْبَه",
+    "نبض": "نَبْضِ",
+    "الشمس": "الشَّمِسْ",
+    "واحسين": "وَ احْسَينْ",
+    "يوزع": "يِوَزِّعْ",
+    "گلبه": "گَلْبَه",
+    "وگلبه": "وَ گَلْبَه",
+    "أحچي": "أَحْچِي",
+    "عن": "عَنْ",
+    "حجر": "حَجَرْ",
+    "دم": "دَمْ",
+    "السما": "السَّمَا",
+    "منها": "مِنْهَا",
+    "انفجر": "انْفِجَرْ",
+    "مر": "مَرْ",
+    "وخلص": "وَ خِلَصْ",
+    "هالمشهد": "هَلْمَشْهَدْ",
+    "ذاك": "ذَاكْ",
+    "صورته": "صُورْتَه",
+    "الصوره": "الصُّورَه",
+    "الصور": "الصُّوَرْ",
+    "صوره": "صُورَه",
+    "صورة": "صُورَةْ",
+    "الأهم": "الأَهَمْ",
+    "طاح": "طَاحْ",
+    "وتعب": "وَ تِعَبْ",
+    "اتوسّد": "اتْوَسَّدْ",
+    "اتوسد": "اتْوَسَّدْ",
+    "واتوسّد": "وَ اتْوَسَّدْ",
+    "أطويها": "أَطْوِيهَا",
+    "خل": "خَلْ",
+    "الزمن": "الزَّمَنْ",
+    "يرويها": "يِرْوِيهَا",
+    "وحيده": "وَحِيدَه",
+    "اللي": "اللِّي",
+    "تظل": "تِظَلْ",
+    "يظل": "يِظَلْ",
+    "أوگف": "أَوْگَفْ",
+    "بحسره": "إِبْحَسْرَه",
+    "جسد": "جَسَدْ",
+    "عالغبره": "عَالْغَبْرَه",
+    "جرح": "جَرِحْ",
+    "يبره": "يِبْرَه",
+    "ومحد": "وَ مَحَّدْ",
+    "حرّك": "حَرَّكْ",
+    "حرك": "حَرَّكْ",
+    "رمش": "رِمِشْ",
+    "يشد": "يِشِدْ",
+    "مرمي": "مَرْمِي",
+    "الترايب": "التَّرَايِبْ",
+    "بالناب": "بِالنَّابْ",
+    "وبالمخالب": "وَ بِالمَخَالِبْ",
+    "بالمخالب": "بِالمَخَالِبْ",
+    "وجسمه": "وَ جِسْمَه",
+    "ذايب": "ذَايِبْ",
+    "بيه": "بِيهْ",
+    "بيها": "بِيهَا",
+    "الحقد": "الحِقِدْ",
+    "لواهب": "لَوَاهِبْ",
+    "حين": "حِينْ",
+    "التمر": "التِمُرْ",
+    "تمر": "تِمُرْ",
+    "يتحوّل": "يِتْحَوَّلْ",
+    "يتحول": "يِتْحَوَّلْ",
+    "العالم": "العَالَمْ",
+    "اعلى": "إِعْلَى",
+    "الثرى": "الثَّرَى",
+    "صاعد": "صَاعِدْ",
+    "صعد": "صِعَدْ",
+    "حافي": "حَافِي",
+    "بعد": "بَعَدْ",
+    "بنعاله": "بِانْعَالَه",
+    "انعاله": "إِنْعَالَه",
+    "جالس": "جَالِسْ",
+    "عالصدر": "عَالصَّدِرْ",
+    "الصدر": "الصَّدِرْ",
+    "اشيريد": "إِشْيِرِيدْ",
+    "ياربي": "يَا رَبِّي",
+    "الصبر": "الصَّبِرْ",
+    "طوّل": "طَوَّلْ",
+    "طول": "طَوَّلْ",
+    "جلوسه": "جُلُوسَه",
+    "يناظر": "يِنَاظِرْ",
+    "للخدر": "لِلْخِدِرْ",
+    "وش": "وِشْ",
+    "ناوي": "نَاوِي",
+    "تفعل": "تِفْعَلْ",
+    "شمر": "شِمِرْ",
+    "تستحي": "تِسْتَحِي",
+    "إتخيّل": "إِتْخَيَّلْ",
+    "اتخيل": "إِتْخَيَّلْ",
+    "استقر": "اسْتِقَرْ",
+    "يم": "يَمْ",
+    "رقبته": "رَقْبِتَه",
+    "صوب": "صُوبْ",
+    "يتخطى": "يِتْخَطَّى",
+    "ويخلي": "وَ يْخَلِّي",
+    "أثر": "أَثَرْ",
+    "يالواطي": "يَالْوَاطِي",
+    "راقب": "رَاقِبْ",
+    "قبض": "قَبَضْ",
+    "وبقى": "وَ بِقَى",
+    "يحز": "يِحِزْ",
+    "بمنحره": "إِبْمَنْحَرَه",
+    "مشى": "مِشَى",
+    "سيفه": "سَيفَه",
+    "سيفك": "سَيفَكْ",
+    "يهبّره": "يِهَبْرَه",
+    "يهبره": "يِهَبْرَه",
+    "ناحت": "نَاحَتْ",
+    "الأكوان": "الأَكْوَانْ",
+    "الدهر": "الدَّهَرْ",
+    "خجلان": "خَجْلَانْ",
+    "الأرض": "الأَرِضْ",
+    "ماجت": "مَاجَتْ",
+    "حمره": "حَمْرَه",
+    "حزّيت": "حَزَّيتْ",
+    "حزيت": "حَزَّيتْ",
+    "منحره": "مَنْحَرَه",
+    "نبي": "نَبِي",
+    "مرسول": "مَرْسُولْ",
+    "منقطع": "مُنْقَطِعْ",
+    "كافر": "كَافِرْ",
+    "مجرم": "مُجْرِمْ",
+    "فاجر": "فَاجِرْ",
+    "فعلتك": "فَعْلِتَكْ",
+    "شنيعه": "شَنِيعَه",
+    "ظالم": "ظَالِمْ",
+    "واهم": "وَاهِمْ",
+    "النادم": "النَّادِمْ",
+    "يذبح": "يِذْبَحْ",
+    "الشريعه": "الشَّرِيعَه",
+    "تطلب": "تِطْلُبْ",
+    "نعيم": "نَعِيمْ",
+    "راحه": "رَاحَه",
+    "فوز": "فَوزْ",
+    "مغنم": "مَغْنَمْ",
+    "تمشي": "تِمْشِي",
+    "يمشي": "يِمْشِي",
+    "جراحه": "جِرَاحَه",
+    "المُستقر": "المُسْتَقَرْ",
+    "المستقر": "المُسْتَقَرْ",
+    "جهنم": "جَهَنَّمْ",
+    "يتملك": "يِتْمَلَّكْ",
+    "المشاعر": "المَشَاعِرْ",
+    "ينكتب": "يِنْكِتِبْ",
+    "خلوده": "خُلُودَه",
+    "ويصبح": "وَ يِصْبِحْ",
+    "الشعاير": "الشَّعَايِرْ",
+    "والمجِد": "وَ المَجِدْ",
+    "المجد": "المَجِدْ",
+    "نصيبه": "نَصِيبَه",
+    "وايامه": "وَ أَيَّامَه",
+    "ايامها": "أَيَّامْهَا",
+    "ايام": "أَيَّامْ",
+    "تتبعه": "تِتْبَعَه",
+    "بدماها": "إِبْدِمَاهَا",
+    "للمحشر": "لِلْمَحْشَرْ",
+    "المناحر": "المَنَاحِرْ",
+    "مظلوم": "مَظْلُومْ",
+    "محروم": "مَحْرُومْ",
+    "يعيش": "يِعِيشْ",
+    "ايعيش": "يْعِيشْ",
+    "بكل": "إِبْكِلْ",
+    "ثابت": "ثَابِتْ",
+    "مُخلد": "مُخَلَّدْ",
+    "مخلد": "مُخَلَّدْ",
+    "للقيامه": "لِلْقِيَامَه",
+    "إخسأ": "إِخْسَأْ",
+    "دست": "دِسِتْ",
+    "داستك": "دَاسِتَكْ",
+    "أقدام": "أَقْدَامْ",
+    "الليالي": "اللَّيَالِي",
+    "واجزِم": "وَ أَجْزِمْ",
+    "واجزم": "وَ أَجْزِمْ",
+    "لك": "لَكْ",
+    "جزم": "جَزِمْ",
+    "منهزم": "مُنْهَزِمْ",
+    "انتصر": "انْتَصَرْ",
+    "يبالي": "يِبَالِي",
+    "فلسفة": "فَلْسَفَة",
+    "وفلسفة": "وَ فَلْسَفَة",
+    "للغايب": "لِلْغَايِبْ",
+    "الغايب": "الغَايِبْ",
+    "غايب": "غَايِبْ",
+    "غايبها": "غَايِبْهَا",
+    "غايبه": "غَايْبَه",
+    "باختصار": "بِاخْتِصَارْ",
+    "اترجمها": "إِتْرَجْمَهَا",
+    "البنين": "البَنِينْ",
+    "كلمن": "كِلْمَنْ",
+    "منتظر": "مُنْتَظِرْ",
+    "منتظره": "مُنْتَظْرَه",
+    "امن": "إِمْنِ",
+    "الوله": "الوَلَه",
+    "بغمار": "إِبْغِمَارْ",
+    "وجوب": "وُجُوبْ",
+    "ايخوض": "يْخُوضْ",
+    "يقره": "يِقْرَه",
+    "اتعلم": "إِتْعَلَّمْ",
+    "يمن": "يَمَنْ",
+    "يامن": "يَا مَنْ",
+    "للمهدي": "لِلْمَهْدِي",
+    "دمعتها": "دَمْعَتْهَا",
+    "تهل": "تِهِلْ",
+    "ودموع": "وَ دُمُوعْ",
+    "ناطر": "نَاطِرْ",
+    "وحچي": "وَ حَچِي",
+    "اسمعونك": "يْسَمْعُونَكْ",
+    "تره": "تَرَى",
+    "الاربعه": "الأَرْبَعَه",
+    "قبلك": "گَبْلَكْ",
+    "شبعت": "شِبْعَتْ",
+    "لوم": "لُومْ",
+    "المامذبوحله": "المَا مَذْبُوحْ لَه",
+    "ادم": "آدَمْ",
+    "ايسولف": "يْسُولِفْ",
+    "حقه": "حَقَّه",
+    "ماملچوم": "مَا مَلْچُومْ",
+    "والرايحله": "وَ الرَّايِحْ لَه",
+    "اليمه": "اليِمَّه",
+    "عاديه": "عَادِيَّه",
+    "يطلگ": "يِطَلِّگْ",
+    "النوم": "النُّومْ",
+    "والحدر": "وَ الحَدِرْ",
+    "اعيونه": "إِعْيُونَه",
+    "اعيونك": "إِعْيُونَكْ",
+    "اعيونچ": "إِعْيُونِچْ",
+    "عالم": "عَالَمْ",
+    "حبها": "حُبْهَا",
+    "رايد": "رَايِدْ",
+    "اتدرسه": "إِتْدَرْسَه",
+    "ابحب": "إِبْحُبّ",
+    "ابحث": "إِبْحَثْ",
+    "اخذه": "إِخْذَه",
+    "وطبقه": "وَ طَبْقَه",
+    "بنفسه": "إِبْنَفْسَه",
+    "اساس": "أَسَاسْ",
+    "المعرفه": "المَعْرِفَه",
+    "القصوى": "القُصْوَى",
+    "وكون": "وَ كُونْ",
+    "الامامك": "لإِمَامَكْ",
+    "شوگك": "شُوگَكْ",
+    "شوگه": "شُوگَه",
+    "ايقل": "يْقِلْ",
+    "اترسه": "إِتْرِسَه",
+    "اشواگك": "أَشْوَاگَكْ",
+    "مهما": "مَهْمَا",
+    "صار": "صَارْ",
+    "الكربلا": "لْكَرْبَلَا",
+    "الحلوه": "الحِلْوَه",
+    "مانسمه": "مَا نَسْمَه",
+    "بالطاهره": "بِالطَّاهِرَه",
+    "تهوه": "تِهْوَه",
+    "اعز": "أَعَزْ",
+    "مانمتلك": "مَا نِمْتِلِكْ",
+    "تعلمنه": "تِعَلَّمْنَه",
+    "اله": "إِلَه",
+    "فدوه": "فِدْوَه",
+    "بلايه": "بِلَايَه",
+    "انفاس": "أَنْفَاسْ",
+    "صالح": "صَالِحْ",
+    "ماتسوه": "مَا تِسْوَه",
+    "انگول": "نْگُولْ",
+    "البذار": "البِذَارْ",
+    "اتسولف": "تِسُولِفْ",
+    "والدمعات": "وَ الدَّمْعَاتْ",
+    "هوه": "هُوَّه",
+    "الفارگ": "الفَارَگْ",
+    "احبابه": "أَحْبَابَه",
+    "روحه": "رُوحَه",
+    "اتضل": "تِظَلْ",
+    "تواليها": "تِوَالِيهَا",
+    "تشتاگه": "تِشْتَاگَه",
+    "حاچيها": "حَاچِيهَا",
+    "گلها": "گِلْهَا",
+    "ابداعة": "إِبْدَاعَة",
+    "بيش": "بِيشْ",
+    "اطفيها": "أَطَفِّيهَا",
+    "الدمعه": "الدَّمْعَه",
+    "ونهار": "وَ نَهَارْ",
+    "المثل": "المِثِلْ",
+    "ينطر": "يِنْطُرْ",
+    "اعوام": "أَعْوَامْ",
+    "شما": "شْمَا",
+    "يحاچونه": "يِحَاچُونَه",
+    "المشتاگ": "المِشْتَاگْ",
+    "ماينلام": "مَا يِنْلَامْ",
+    "المنذبح": "المِنْذِبِحْ",
+    "متفزز": "مِتْفَزِّزْ",
+    "اجروحه": "جُرُوحَه",
+    "إسهام": "إِسْهَامْ",
+    "اليدور": "اليِدَوِّرْ",
+    "مستعد": "مِسْتَعِدْ",
+    "والاحزانه": "وَ لأَحْزَانَه",
+    "جهار": "جِهَارْ",
+    "جَمَد": "جِمَدْ",
+    "بقى": "بِقَى",
+    "جَزِم": "جَزِمْ",
+    "مَر": "مَرْ",
+    "أْو": "وَ",
+    "نحره": "نَحْرَه",
+    "جسمه": "جِسْمَه",
+    "الكربله": "لْكَرْبَلَا",
 }
 
 
@@ -2248,18 +2952,22 @@ def shape_token_morphologically(token, word_map, use_tatweel=False):
 
     if core in word_map:
         return f"{lead_punct}{_format_tatweel(word_map[core], use_tatweel=use_tatweel)}{trail_punct}"
+    if re.search(r"[\u064B-\u0652]", core):
+        return token
 
     b_sep = "بِـ " if use_tatweel else "بِ "
     k_sep = "كَـ " if use_tatweel else "كَ "
     l_sep = "لِـ " if use_tatweel else "لِ "
+    bal_pref = "بِـ ال" if use_tatweel else "بِال"
+    kal_pref = "كَـ ال" if use_tatweel else "كَال"
 
     prefix_rules = (
-        ("وبال", f"وَ {b_sep}ال"),
-        ("وكال", f"وَ {k_sep}ال"),
+        ("وبال", f"وَ {bal_pref}"),
+        ("وكال", f"وَ {kal_pref}"),
         ("ولل", "وَ لِلْ"),
         ("وال", "وَ ال"),
-        ("بال", f"{b_sep}ال"),
-        ("كال", f"{k_sep}ال"),
+        ("بال", bal_pref),
+        ("كال", kal_pref),
         ("وب", f"وَ {b_sep}"),
         ("وك", f"وَ {k_sep}"),
         ("ول", f"وَ {l_sep}"),
@@ -2273,8 +2981,18 @@ def shape_token_morphologically(token, word_map, use_tatweel=False):
     for raw_pref, vocalized_pref in prefix_rules:
         if core.startswith(raw_pref):
             stem = core[len(raw_pref) :]
-            if len(stem) >= 2 and stem in word_map:
+            min_stem = 3 if raw_pref in ("ب", "ك", "ل", "وب", "وك", "ول") else 2
+            if stem in ("يه", "اي", "وي", "اه", "آه"):
+                continue
+            if raw_pref == "و" and stem in ("لو", "لا", "ما", "من", "هو", "هي", "هم", "لك", "لي", "له", "يه", "بي", "في", "اي"):
+                continue
+            if len(stem) >= min_stem and stem in word_map:
                 shaped_stem = _format_tatweel(word_map[stem], use_tatweel=use_tatweel)
+                if vocalized_pref.endswith("ال") and stem[0] in _SUN_LETTERS and "\u0651" not in shaped_stem[:3]:
+                    if len(shaped_stem) >= 2 and "\u064B" <= shaped_stem[1] <= "\u0650":
+                        shaped_stem = shaped_stem[:2] + "\u0651" + shaped_stem[2:]
+                    else:
+                        shaped_stem = shaped_stem[0] + "\u0651" + shaped_stem[1:]
                 return f"{lead_punct}{vocalized_pref}{shaped_stem}{trail_punct}"
     return token
 
@@ -2293,6 +3011,9 @@ def shape_words_by_boundary(text, word_map, use_tatweel=False):
 
 
 _SUN_LETTERS = frozenset("تثدذرزسشصضطظلن")
+_INITIAL_LONG_I_STEMS = frozenset(
+    ("في", "بيه", "بيها", "بيهم", "بيهن", "بيش", "ريش", "عيش", "عيشه", "حيره", "سيره", "ديره", "طينه", "قيمه", "شيمه", "شيعه", "شيعتك", "جين", "حين", "دين")
+)
 
 
 def _vocalize_unseen_arabic_word(core, dialect="iraqi"):
@@ -2319,7 +3040,10 @@ def _vocalize_unseen_arabic_word(core, dialect="iraqi"):
     elif stem.startswith("و") and len(stem) == 5 and stem[2] == "ا":
         prefix_out, stem = "وَ ", stem[1:]
 
-    if prefix_out.endswith("ال") or prefix_out.endswith("ل"):
+    if prefix_out == "لِل" and len(stem) >= 1 and stem[0] not in _SUN_LETTERS:
+        prefix_out = "لِلْ"
+
+    if prefix_out.endswith(("ال", "ل", "لِلْ")):
         if stem in COMMON_CORPUS_LEXICON_V52:
             sun_mark = "\u0651" if stem[0] in _SUN_LETTERS else ""
             shaped_s = COMMON_CORPUS_LEXICON_V52[stem]
@@ -2340,13 +3064,18 @@ def _vocalize_unseen_arabic_word(core, dialect="iraqi"):
         out_chars.append(ch)
         if idx == 0 and prefix_out.endswith("ال") and ch in _SUN_LETTERS:
             out_chars.append("\u0651")
-        if ch in long_v and not (idx == 0 and ch in ("و", "ي")):
+        is_consonantal_glide = ch in ("و", "ي") and (
+            idx == 0 or nxt in ("ا", "آ") or (prv in ("ا", "آ") and not is_last)
+        )
+        if ch in long_v and not is_consonantal_glide:
             continue
         if is_last:
             if dialect != "fusha" and ch not in "هة":
                 out_chars.append("\u0652")
             continue
-        if idx == 0 and ch in ("ي", "ت", "ن") and n_len >= 4:
+        if prv in ("ا", "آ") and ch in ("و", "ي") and nxt not in ("ا", "آ"):
+            out_chars.append("\u0650")
+        elif idx == 0 and ch in ("ي", "ت", "ن") and n_len >= 4 and nxt not in ("ا", "آ", "ى"):
             out_chars.append("\u0650")  # colloquial imperfect prefix يِـ تِـ نِـ
         elif idx == 0 and ch == "و":
             out_chars.append("\u0650" if nxt == "ي" and n_len <= 3 else "\u064E")
@@ -2355,15 +3084,23 @@ def _vocalize_unseen_arabic_word(core, dialect="iraqi"):
         elif nxt in ("ا", "آ"):
             out_chars.append("\u064E")
         elif nxt == "و":
-            out_chars.append("\u064F" if idx > 0 or ch not in "لمنس" else "\u064E")
+            if idx + 2 < n_len and stem[idx + 2] in ("ا", "آ"):
+                out_chars.append("\u0650" if idx == 0 and ch in ("ت", "ي", "ن") else "\u064E")
+            else:
+                out_chars.append("\u064F" if idx > 0 or ch not in "لمنس" else "\u064E")
         elif nxt == "ي" and idx + 2 == n_len:
             out_chars.append("\u0650")
         elif nxt == "ي":
-            out_chars.append("\u0650" if idx == 0 else "\u064E")
+            if idx == 0:
+                out_chars.append("\u0650" if stem in _INITIAL_LONG_I_STEMS else "\u064E")
+            else:
+                rem_after_y = stem[idx + 2 :]
+                is_past_or_pron_diph = rem_after_y in ("ت", "تك", "ته", "تها", "تهم", "توا", "تو", "نا", "نه")
+                out_chars.append("\u064E" if is_past_or_pron_diph else "\u0650")
         elif prv == "ا" and idx == 1:
             out_chars.append("\u0652" if ch not in long_v and n_len >= 4 else "\u064E")
-        elif prv == "ا" and idx == 2 and n_len == 4 and ch not in long_v:
-            out_chars.append("\u0650")  # Active participle فَاعِلْ (خَالِقْ، صَادِقْ، عَاشِقْ)
+        elif prv == "ا" and idx == n_len - 2 and n_len in (4, 5) and ch not in long_v:
+            out_chars.append("\u0650")  # Active participle فَاعِلْ & broken plural مَفَاعِلْ / فَوَاعِلْ
         elif idx % 2 == 0 or (idx + 2 == n_len):
             out_chars.append("\u064E")
         else:
@@ -2378,8 +3115,21 @@ def _vocalize_unseen_arabic_word(core, dialect="iraqi"):
     return f"{prefix_out}{vocalized}"
 
 
+def _is_partially_vocalized_poet_word(core):
+    """Return True if core has only a poet Shadda or a single disambiguating vowel without Sukun."""
+    if not core or core in ("اللّٰه", "أُمّ", "حُبّ", "سِرّ", "وَ", "بِ", "لِ", "كَ", "فَ"):
+        return False
+    if core.endswith("\u0652") or "\u0652" in core:
+        return False
+    arabic_letters = re.findall(r"[\u0621-\u064A\u067E\u0686\u06AF]", core)
+    if len(arabic_letters) < 3:
+        return False
+    vowel_marks = re.findall(r"[\u064B-\u0650\u0670]", core)
+    return len(vowel_marks) <= 1
+
+
 def shape_unseen_corpus_tokens(text, dialect="iraqi", use_tatweel=False):
-    """Apply V52 corpus lexicon and morphological vocalizer only on unvocalized words."""
+    """Apply V52 corpus lexicon and morphological vocalizer on unvocalized or partially vocalized words."""
     out_lines = []
     for line in text.splitlines():
         if line.strip().startswith("["):
@@ -2396,8 +3146,24 @@ def shape_unseen_corpus_tokens(text, dialect="iraqi", use_tatweel=False):
                 new_tokens.append(tok)
                 continue
             lead_p, core, trail_p = m.groups()
-            if not core or re.search(r"[\u064B-\u0652]", core):
+            if not core:
                 new_tokens.append(tok)
+                continue
+            if core in COMMON_CORPUS_LEXICON_V52:
+                shaped_core = _format_tatweel(COMMON_CORPUS_LEXICON_V52[core], use_tatweel=use_tatweel)
+                new_tokens.append(f"{lead_p}{shaped_core}{trail_p}")
+                continue
+            if re.search(r"[\u064B-\u0652]", core):
+                if _is_partially_vocalized_poet_word(core):
+                    bare_core = re.sub(r"[\u064B-\u0652\u0670]", "", core)
+                    shaped_core = shape_token_morphologically(
+                        bare_core, COMMON_CORPUS_LEXICON_V52, use_tatweel=use_tatweel
+                    )
+                    if shaped_core == bare_core:
+                        shaped_core = _vocalize_unseen_arabic_word(bare_core, dialect=dialect)
+                    new_tokens.append(f"{lead_p}{shaped_core}{trail_p}")
+                else:
+                    new_tokens.append(tok)
                 continue
             shaped_core = shape_token_morphologically(core, COMMON_CORPUS_LEXICON_V52, use_tatweel=use_tatweel)
             if shaped_core == core:
@@ -2405,6 +3171,32 @@ def shape_unseen_corpus_tokens(text, dialect="iraqi", use_tatweel=False):
             new_tokens.append(f"{lead_p}{shaped_core}{trail_p}")
         out_lines.append(" ".join(new_tokens))
     return "\n".join(out_lines)
+
+
+def heal_nc21_short_clause_pauses(text):
+    """Module 70 (NC21): Remove mid-clause '..' before a single stranded word in 3-word Kasra lines."""
+    vocative_refrains = frozenset(("مولاي", "يحسين", "بويه", "يمه", "اه", "آه", "لا", "والله"))
+    healed_lines = []
+    for line in text.splitlines():
+        stripped = line.strip()
+        if not stripped or stripped.startswith("[") or ".." not in stripped:
+            healed_lines.append(line)
+            continue
+        trailing_pause = " .." if stripped.endswith("..") else ""
+        body = stripped[:-2].rstrip() if stripped.endswith("..") else stripped
+        if ".." not in body:
+            healed_lines.append(line)
+            continue
+        parts = [p.strip() for p in body.split("..") if p.strip()]
+        if len(parts) in (2, 3):
+            w1 = [w for w in parts[0].split() if _strip_arabic_diacritics(w) not in ("و", "ف", "ب", "ل")]
+            w2 = [w for w in parts[1].split() if _strip_arabic_diacritics(w) not in ("و", "ف", "ب", "ل")]
+            w2_bare = _strip_arabic_diacritics(w2[0]) if len(w2) == 1 else ""
+            if len(w1) == 2 and len(w2) == 1 and w2_bare not in vocative_refrains and not parts[1].startswith("("):
+                merged = f"{parts[0]} {parts[1]}"
+                parts = [merged] + parts[2:]
+        healed_lines.append(f"{' .. '.join(parts)}{trailing_pause}".strip())
+    return "\n".join(healed_lines)
 
 
 def _count_dialect_markers(text):
@@ -2443,6 +3235,7 @@ def detect_and_shape_dialect(text, enforce_iraqi_dhaa=None, use_tatweel=False):
         enforce_iraqi_dhaa = detected == "iraqi"
 
     shaped = de_cliticize_and_separate_words(text, use_tatweel=use_tatweel)
+    shaped = heal_nc21_short_clause_pauses(shaped)
     shaped = normalize_demonstrative_hal(shaped, dialect=detected)
     shaped = repair_word_initial_sukun_and_diphthongs(shaped)
     if detected == "bahrani":
@@ -2549,6 +3342,8 @@ def _infer_unvocalized_word_syllables(word):
     if n_chars <= 2:
         return ["CVC"]
     long_vowels = sum(1 for ch in letters[1:] if ch in "اويىآ")
+    if n_chars == 3 and long_vowels == 0:
+        return ["CV", "CVC"]
     est = max(1, min(n_chars - 1, long_vowels + max(1, (n_chars - long_vowels) // 2)))
     return ["CV"] * est
 
@@ -3178,8 +3973,10 @@ def verify_historical_narratives(text):
 
     authentic_checks = (
         ("abbas_martyrdom", ("المشرعة", "المشرعه", "العلقمي", "العلگمي", "چفين", "جفين", "بسهم", "العمد"), "مقتل أبي الفضل العباس (ع) على العلقمي وقطع الكفين والسهم في العين"),
-        ("infant_harmala_arrow", ("الرضيع", "عبد الله", "عبدالله", "حرملة", "مثلث"), "شهادة الطفل الرضيع عبد الله بالسهم المثلث في نحره"),
-        ("ten_horsemen_trampling", ("عشرة", "عشر خيول", "عشر اخيول", "الحوافر", "صدر الحسين"), "إجالة الخيول العشرة على الصدر الشريف بعد الشهادة"),
+        ("infant_harmala_arrow", ("الرضيع", "عبد الله", "عبدالله", "حرملة", "مثلث", "بمهد", "رزقه السهم", "الطفل رزقه السهم"), "شهادة الطفل الرضيع عبد الله بالسهم المثلث في نحره"),
+        ("ten_horsemen_trampling", ("عشرة", "عشر خيول", "عشر اخيول", "خيل عشره", "خيل عشرة", "الحوافر", "للحوافر", "حوافر", "صدر الحسين"), "إجالة الخيول العشرة على الصدر الشريف بعد الشهادة"),
+        ("shimr_chest_and_nahr_martyrdom", ("صاعد إعله صدره", "صاعد اعله صدره", "جلوسه اعلى الصدر", "عالصدر", "قبض الشيبه", "يحز بمنحره"), "جثوم الشمر على الصدر الشريف وقبض الشيبة المقدسة وحزّ المنحر"),
+        ("imam_mahdi_intidhar_and_loyalty", ("فلسفة الانتظار", "للمهدي", "أبو صالح", "ابو صالح", "ناطر الغايب"), "عقيدة انتظار الإمام المهدي (عج) والوفاء الحسيني على نهج أم البنين (ع)"),
         ("zainab_sajjad_protection", ("السجاد", "العليل", "زينب", "ما رأيت إلا جميلا"), "صمود العقيلة زينب (ع) وحفظها الإمام السجاد (ع)"),
         ("zahra_door_compression", ("الضلع", "البسمار", "الزهراء", "الزهره", "الباب"), "مظلومية السيدة فاطمة الزهراء (ع) وإخفاء قبرها"),
         ("umm_al_banin_madina", ("حذلم", "يثرب", "لدياره", "ام البنين", "أم البنين"), "استقبال أم البنين (ع) نعي بشير بن جذلم في المدينة المنورة"),
@@ -3262,40 +4059,80 @@ def verify_historical_narratives(text):
 
 def _split_clean_poem_lines(poem_text):
     """Split raw poem into clean stanzas using tags or decorative dividers."""
-    sanitized = sanitize_poem_decorations(poem_text.replace("\\n", "\n"))
+    norm_text = poem_text.replace("\\n", "\n")
+    divider_re = re.compile(
+        r"^[\s💔❤😭✏★☆۞◆◇▪✦🙨🙜❀✿↻↺✍•●○■□►◄▲▼#@+*~=_ـ./\\|\-،:؛؟!⊰⊱─═—–“”\"']+$"
+    )
+    raw_chunks = []
+    cur_chunk = []
+    for raw_ln in norm_text.splitlines():
+        s_ln = raw_ln.strip()
+        if s_ln and divider_re.fullmatch(s_ln):
+            if cur_chunk:
+                raw_chunks.append("\n".join(cur_chunk))
+                cur_chunk = []
+        else:
+            cur_chunk.append(raw_ln)
+    if cur_chunk:
+        raw_chunks.append("\n".join(cur_chunk))
+
     stanzas = []
     current_tag = "[المُسْتَهَلّ]"
     current_lines = []
-    for raw_ln in sanitized.splitlines():
-        ln = raw_ln.strip()
-        if not ln:
+    for idx_c, chunk_str in enumerate(raw_chunks):
+        sanitized = sanitize_poem_decorations(chunk_str)
+        if not sanitized.strip():
             continue
-        if ln.startswith("[") and ln.endswith("]"):
-            if current_lines:
-                stanzas.append((current_tag, current_lines))
-                current_lines = []
-            current_tag = ln
-        else:
-            current_lines.append(ln)
+        if idx_c > 0 and current_lines:
+            stanzas.append((current_tag, current_lines))
+            current_lines = []
+            current_tag = f"[المَقْطَع {len(stanzas)}]"
+        for raw_ln in sanitized.splitlines():
+            ln = raw_ln.strip()
+            if not ln:
+                continue
+            if ln.startswith("[") and ln.endswith("]"):
+                if current_lines:
+                    stanzas.append((current_tag, current_lines))
+                    current_lines = []
+                current_tag = ln
+            else:
+                current_lines.append(ln)
     if current_lines:
         stanzas.append((current_tag, current_lines))
     return stanzas
 
 
 def plan_poem_extend_stages(poem_text, target_method="both", bpm=60):
-    """Module 67 (V52.0): Partition any Hussaini poem into V52 3-Line NC16 Extend Stages.
+    """Module 67 & 70 (V52.0–V55.0): Partition any Hussaini poem into V52 3-Line NC16 Extend Stages.
 
     Accounts empirically for Method 1 (+30s Compose Extend) and Method 2 (+60s Producer Chat
     Extend tail-pad & Step 4 limiter findings from V51.2 evaluation).
     """
-    shaped = detect_and_shape_dialect(sanitize_poem_decorations(poem_text))["shaped_lyrics"]
-    stanzas = _split_clean_poem_lines(shaped)
+    raw_stanzas = _split_clean_poem_lines(poem_text)
+    stanzas = []
+    for tag, lines in raw_stanzas:
+        shaped_lines = [
+            ln.strip()
+            for ln in detect_and_shape_dialect("\n".join(lines))["shaped_lyrics"].splitlines()
+            if ln.strip()
+        ]
+        if shaped_lines:
+            stanzas.append((tag, shaped_lines))
+
     estehlal_lines = []
     body_stanzas = []
 
     for tag, lines in stanzas:
         if _is_pure_estehlal_tag(tag) and not estehlal_lines:
-            estehlal_lines = lines[:4]
+            if len(lines) > 4 and len(stanzas) == 1:
+                estehlal_lines = lines[:2]
+                body_stanzas.append(("[النَّزْلَة 1]", lines[2:]))
+            elif len(lines) > 4:
+                estehlal_lines = lines[:4]
+                body_stanzas.append(("[النَّزْلَة 1]", lines[4:]))
+            else:
+                estehlal_lines = lines[:4]
         else:
             body_stanzas.append((tag, lines))
 
@@ -3391,6 +4228,17 @@ def recommend_tor_and_rhythm_for_poem(text):
     tawshih_kw = ("[تواشيح]", "[ابتهالات]", "تواشيح", "أهل الكساء", "المباهلة", "أنشودة", "نشيد")
     tragedy_kw = ("كربلا", "عاشور", "سبي", "سبايا", "مذبوح", "حوافر", "شمر", "مشرعة", "علگمي", "علقمي", "خرابة", "خرابه", "نحر", "صدر")
     lami_grief_kw = ("سبي", "خرابة", "خرابه", "غربة", "غربه", "عليل", "سياط", "يمه", "تراب", "عطشان")
+    munajat_khidma_kw = (
+        "طبع البشر",
+        "الخدمه انكساري",
+        "الخدمة انكساري",
+        "سهرانه عينك",
+        "بخدمتك",
+        "بعطائك",
+        "فلسفة الانتظار",
+        "ناطر الغايب",
+        "اترجمها أم البنين",
+    )
     journey_kw = ("ناقة", "ناگه", "ظعن", "ضعن", "مسير", "سفر", "صحرا", "طويل", "ليل")
     thulathi_kw = ("[ثلاثي]", "ثلاثي", "وقفة", "وقفه", "زحف", "صمود")
     nai_explicit_kw = ("[نعي]", "[موال]", "[أبوذية]")
@@ -3455,7 +4303,17 @@ def recommend_tor_and_rhythm_for_poem(text):
             tor = "tor_fazzaiya_karbalai"
             school = "School 05/08 (الفزاعية والرباطات الفراتية)"
             prompt = EXTENDED_ATWAR_PROMPTS_V52["karbalai_fazzaiya_84bpm_hijaz_bayati_v52"]
-    elif any(k in bare_text for k in heroic_kw):
+    elif any(k in bare_text for k in munajat_khidma_kw):
+        mode = "thaqeel_muwazza"
+        bpm = 58
+        maqam = "saba_zamzam"
+        meter = "nassari"
+        tor = "tor_ashouri"
+        school = "School 01/06 (المناجاة الكربلائية الثقيلة وطور الخدمة — باسم الكربلائي)"
+        prompt = EXTENDED_ATWAR_PROMPTS_V52["ashura_majlis_noha_58bpm_saba_lami_v55"]
+    elif any(k in bare_text for k in heroic_kw) and not any(
+        k in bare_text for k in ("ام عباس", "أم عباس", "يا شمر", "سيفك النادم", "سيفه اعلى النحر", "صورة جسد")
+    ):
         if dialect == "bahrani":
             mode = "bahrani_haidari"
             bpm = 96
@@ -3580,6 +4438,38 @@ def recommend_tor_and_rhythm_for_poem(text):
         "recommended_bpm": bpm,
         "recommended_maqam": maqam,
         "recommended_maqam_progression": maqam_arc,
+        "five_stage_analysis": {
+            "stage_1_structural_and_prosodic": {
+                "detected_meter": meter,
+                "wazn_ar": wazn_map.get(meter, "بحر النصاري"),
+                "avg_syllables": avg_syl,
+                "syllable_spread": iso["syllable_spread"],
+            },
+            "stage_2_dramatic_and_thematic": {
+                "school": school,
+                "emotional_axis": (
+                    "munajat_and_loyalty"
+                    if any(k in bare_text for k in munajat_khidma_kw)
+                    else ("ashura_tragedy_and_masaaib" if any(k in bare_text for k in tragedy_kw) else "husseini_devotion")
+                ),
+            },
+            "stage_3_maqam_and_vocal_contour": {
+                "primary_maqam": maqam,
+                "four_stage_maqam_arc": maqam_arc,
+                "performance_tor": tor,
+            },
+            "stage_4_rhythmic_and_matam_architecture": {
+                "recommended_bpm": bpm,
+                "recommended_dsp_mode": mode,
+                "echo_delay_ms": compute_tempo_synced_delay_ms(bpm, mode=mode),
+            },
+            "stage_5_phonetic_g2p_and_flowmusic_lock": {
+                "detected_dialect": dialect,
+                "sound_prompt_dialect": dialect_info["sound_prompt_dialect_declaration"],
+                "lyria_model_lock": "Lyria 3.5",
+                "nc18_nc22_enforced": True,
+            },
+        },
         "recommended_dsp_params": {
             "echo_delay_ms": compute_tempo_synced_delay_ms(bpm, mode=mode),
             "reverb_rt60_sec": 3.4 if mode in ("mawal", "nai", "thaqeel_muwazza", "bahrani_muthakkal") else 2.4,
@@ -3738,6 +4628,9 @@ def build_flowmusic_json_preconditioning(
             "collective_estehlal_choir": "100% Unison Male Raddada Choir on all (...) Estehlal lines",
             "crying_isolation": "Zero background weeping in rhythmic 54-132 BPM Latmiyas (0 BPM Rubato only)",
             "single_stanza_extend_law": "Max 6-7 couplets (ONE SINGLE STANZA) per Remix > Extend stage (~80s window — QC30)",
+            "lyria_model_lock": "Lyria 3.5 (Strictly ban legacy Lyria 3 Pro — NC19)",
+            "remix_cover_strength_cap": 0.45,
+            "standalone_preconditioning_warning": "Never send Pre-Conditioning JSON in Producer Chat without Stage 1 poem (NC19)",
             "sound_prompt": profile["sound_prompt"],
         },
     }
@@ -3758,8 +4651,6 @@ def build_stage_orchestration_json(
         bpm_val = 0
     elif dialect == "bahrani":
         sound_desc = MASTER_SOUND_PROMPTS_V48_5["bahrani_muthakkal_56bpm_saba"]
-    elif dialect == "iraqi_bahrani":
-        sound_desc = MASTER_SOUND_PROMPTS_V48_5["iraqi_bahrani_58bpm_saba_fusion_master"]
     elif "stage_2" in stage_id:
         sound_desc = MASTER_SOUND_PROMPTS_V48_5["rukbani_nassari_58bpm_lami_saba_v48_5_stage2"]
     elif "stage_3" in stage_id:
@@ -3768,6 +4659,8 @@ def build_stage_orchestration_json(
         ]
     elif "stage_4" in stage_id:
         sound_desc = MASTER_SOUND_PROMPTS_V48_5["karbalai_wahsha_lami_kasra_56bpm_finale_v48_5_stage4"]
+    elif dialect == "iraqi_bahrani":
+        sound_desc = MASTER_SOUND_PROMPTS_V48_5["iraqi_bahrani_58bpm_saba_fusion_master"]
     elif bpm_val <= 58:
         sound_desc = MASTER_SOUND_PROMPTS_V48_5["karbalai_muthakkal_58bpm_saba_zamzam_v48_5_deep_root"]
     else:

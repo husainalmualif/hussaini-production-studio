@@ -1,6 +1,6 @@
-# Module 66: V51.0 Field Evaluation, Negative Constraints (NC1–NC10), Pre-Generation Consultation Protocol, Dialect Isolation, and Style Taxonomy
+# Module 66: V51.2 Field Evaluation, Negative Constraints (NC1–NC17), Pre-Generation Consultation Protocol, Dialect Isolation, and Style Taxonomy
 
-## 1. Empirical Root-Cause Analysis & Permanent Negative Constraints (`NC1–NC10`)
+## 1. Empirical Root-Cause Analysis & Permanent Negative Constraints (`NC1–NC17`)
 
 Derived from forensic second-by-second multimodal auditing of the 4 raw Stage-1 outputs (`Compose > Lyrics\Untitled.mp3`, `Compose > Lyrics\Untitled (1).mp3`, `JSON\صُوتْ أُمّ البَنِينْ يِصِيحْ — المرحلة 1 التأسيسية.mp3`, `JSON\صُوتْ أُمّ البَنِينْ يِصِيحْ — المرحلة 1 التأسيسية (1).mp3`):
 
@@ -49,7 +49,7 @@ Derived from forensic second-by-second multimodal auditing of the 4 raw Stage-1 
   - *Permanent Constraint:* Always use distinct numbered tags (`[المُسْتَهَلّ الأَوَّل]` and `[المُسْتَهَلّ الثَّانِي]`) inside JSON `sections[]`.
 
 - **`NC12–NC15` (Micro-Melismatic & Liaison Locks):**
-  - Lock `إِجَتْ أُمُّ الگَمَرْ` or pause `إِجَتَه .. أُمُّ الگَمَرْ` to prevent `/h/ + /ʔum/ -> /hum/` coalescence; write `إِبْنْ حَذْلَمْ` with Sukun on Baa to prevent melismatic stretching `إِبِينْ`; write `مْنِ عْلُومْ` to prevent `مِينْ عُلُومْ`; and write `تَرَى آنِي هْوَايْ` without initial Alif on `هْوَايْ`.
+  - Lock `إِجَتَه .. أُمّ الگَمَرْ وَتْصِيحْ` to prevent `/h/ + /ʔum/ -> /hum/` coalescence; write `لَمَّنْ رَدْ إِبِنْ حَذْلَمْ` (`NC7`); write `بِشِرْ گَطَّعِتْ إِفَّادِي` (never `يَبْشِرْ`); write `مَا أَنْشِدَكْ إِعْلَه أَولَادِي` (never `عَلْأَوْلَادِي`); and write `تَرَى آنِي هْوَايْ` without initial Alif on `هْوَايْ`.
 
 - **`NC16` (The 3-Vertical-Line / 23.5-Second `Extend` Law for Kasras — قاعدة الـ 3 أسطر العمودية للكسرة داخل نافذة الـ 23.5 ثانية):**
   - *Failure Observed:* In `صوت أم البنين (Extended).mp3`, every `Extend` step lasted `23.5s`. Because the Radood sings 1 vertical line per `~7.5s` musical phrase at `60 BPM`, all 5 Nazlas (`2A, 3A, 4A, 5A, 6A` — each having **3 vertical lines**) fit `100%` (`3 x 7.5s = 22.5s`), whereas all 5 Kasras (`2B, 3B, 4B, 5B, 6B` — formatted as **5 vertical lines**) spent all `23.5s` singing the first 3 short lines (`7.5s x 3 = 22.5s`) and cut off Line 4 (`بيت القفلة`) at `23.5s`!

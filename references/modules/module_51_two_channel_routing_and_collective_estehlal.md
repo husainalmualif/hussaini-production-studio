@@ -10,7 +10,7 @@
 
 | القناة | المحدد البرمجي في الواجهة (`DOM Selector`) | المحتوى المسموح حصرياً | المحتوى المحظور قطعيّاً |
 | :--- | :--- | :--- | :--- |
-| **القناة 1: `Producer Chat`** | `textarea[aria-label="Chat message"]` | 1) دستور التهيئة الشامل (`references/hussaini_os_v48_5_constitution.json`) في بداية `New session`.<br>2) أوامر الفلاتر اللاحقة للتوليد (`audio__apply_effect`). | خلط أبيات عربية غير مشكولة مع شروحات مرتجلة بدون قفل الدستور أولاً. |
+| **القناة 1: `Producer Chat`** | `textarea[aria-label="Chat message"]` | 1) دستور التهيئة الشامل (`references/hussaini_os_v50_0_constitution.json`) وحزم `Stage JSON` (`Module 53`). | إرسال كائن التهيئة منفرداً دون القصيدة (`NC19`)، أو استخدام `audio__apply_effect` السحابي الذي يسبب Clipping، أو خلط أبيات غير مشكولة. |
 | **القناة 2: `Compose Panel`** | • `textarea[aria-label="Lyrics"]`<br>• `textarea[aria-label="Sound description"]`<br>• `textarea[maxlength="100"]` (`Details`) | • في `Lyrics`: **نص عربي مشكول نقي 100%** مع عناوين عربية `[المُسْتَهَلّ]` وفواصل `..`.<br>• في `Sound`: وصف صوتي إنجليزي نقي (`45–56 كلمة`).<br>• في `Details`: عنوان القصيدة بالعربية. | • **يُحظر لصق أقواس `JSON` (`{...}`) داخل `Lyrics`** (`QC17`).<br>• **يُحظر وجود أي حرف لاتيني `[a-zA-Z]` أو وسوم `[Chorus] / [Verse] / [Bridge]` داخل `Lyrics`** (`QC5`). |
 
 ---

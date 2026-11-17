@@ -1,9 +1,9 @@
 {
   "protocol_metadata": {
     "protocol_name": "Hussaini_Production_Studio_OS_V50_0_OMNI_ARCHITECT",
-    "skill_version": "V54.0 OMNI-ARCHITECT",
-    "previous_baseline_version": "V50.0 OMNI-ARCHITECT & V48.5 OMNI-ARCHITECT (Rev 2)",
-    "previous_baseline_commit_sha": "497a5cbb4672e8c6f27136fde5c5aabd0f492d29",
+    "skill_version": "V55.0 OMNI-ARCHITECT",
+    "previous_baseline_version": "V54.0 OMNI-ARCHITECT & V50.0 OMNI-ARCHITECT",
+    "previous_baseline_commit_sha": "1b05158cfd253d0ec9f89ac4b29e2635163b758e",
     "canonical_repository": "https://github.com/husainalmualif/hussaini-production-studio",
     "primary_studio_url": "https://www.flowmusic.app/",
     "target_engines": [
@@ -128,7 +128,7 @@
         "replace": "Use Remix > Replace (inpainting) to repair single-word pronunciation by adjusting Tashkeel in Edit Lyrics without regenerating the full track.",
         "split_stems": "Use Split stems (Vocals, Drums, Bass, Other) to feed pure vocals into scripts/hussaini_dsp_montage.py."
       },
-      "step_4_post_generation_dsp": "Send Step 4 Master DSP JSON / command via Producer Chat (audio__apply_effect) AFTER generation, never as raw EQ numbers inside the Sound prompt."
+      "step_4_post_generation_dsp": "Export raw WAV/MP3 from Flow Music and run local EBU R128 mastering via scripts/hussaini_dsp_montage.py (--mode vocal_pure_master or 5-track --replace-ai-percussion to -14.0 LUFS / -1.0 dBTP); avoid cloud Step 4 audio__apply_effect which clips above 0 dBFS."
     },
     "optional_reference_clip_id": null,
     "reference_clip_policy": "Keep null by default to prevent cross-poem melody cloning and cross-account UUID errors; set to an account-owned <OPTIONAL_USER_CLIP_UUID> only when explicitly anchoring to a personal library clip."
@@ -275,7 +275,7 @@
           "بمجلسك": "إِبْمَجْلِسَكْ (/ɪb.madʒ.lɪ.sak/)",
           "بگلبي": "إِبْگَلْبِي (/ɪb.gal.biː/)",
           "بگاع": "إِبْگَاعْ (/ɪb.gaːʕ/)",
-          "خيام": "إِخْيَامْ (/ɪx.jaːm/)",
+          "خيام": "خِيَامْ (/xɪ.jaːm/ - QC33 no prosthetic Alif)",
           "بهداي": "إِبْهِدَايْ (/ɪb.hɪ.daːj/)",
           "بعفه": "إِبْعِفَّه",
           "استار الكون": "إِسْتَارِ الكُونْ"
@@ -895,10 +895,12 @@
     "local_5_track_dsp_montage_engine": {
       "script": "scripts/hussaini_dsp_montage.py",
       "supported_modes": [
+        "vocal_pure_master",
         "latm",
         "heavy_clip",
         "thaqeel_muwazza",
         "studio_arranged",
+        "fazzaiya",
         "bahrani_fast",
         "bahrani_thulathi",
         "bahrani_rubai",
@@ -944,7 +946,7 @@
     "qc_matrix": {
       "QC1_flat_spoken_reading": "Use 58-60 BPM for Thaqeel Latmiya (never <55 BPM), remove '...', purge Fusha Tanween, and enforce short vertical lines.",
       "QC2_harsh_screaming": "Ban 'wailing / screaming / tear-choked'; use 'powerful high chest-voice climbs, natural vocal rasp, passionate microtonal melisma'.",
-      "QC3_muddy_background": "Keep Sound prompt concise (45-56 words) ending with 'Pure Acapella No Instruments'; run EQ via audio__apply_effect.",
+      "QC3_muddy_background": "Keep Sound prompt concise (45-56 words) ending with 'Pure Acapella No Instruments'; run local 175-track calibrated EQ via scripts/hussaini_dsp_montage.py.",
       "QC4_pop_instrument_leakage": "Never write negative instrument names ('--no piano, guitar') or 'strings/synth/Nahawand' in Sound; end strictly with 'Pure Acapella No Instruments'.",
       "QC5_english_vocal_readout": "Purge all Latin characters [a-zA-Z] from Lyrics; use pure Arabic bracketed headers ([المُسْتَهَلّ]).",
       "QC6_melodic_drift": "Enforce vertical short lines (3-4 words/line) and collective Estehlal return after stanzas.",
@@ -1527,7 +1529,7 @@
             "spec_23_verifier_batch2.json",
             "spec_24_verifier_batch3.json"
           ],
-          "core_law": "Calibrate both Flow Music Producer Chat 'audio__apply_effect' and local 5-track 'scripts/hussaini_dsp_montage.py' against the 175-track empirical spectral envelope: HPF @ 80-85Hz, Sub-Chest/Latm Fundamental boost (+1.5dB @ 110Hz anchoring 53-68Hz chest thud), Low-Mid Mud cut (-2.8dB @ 450Hz), Pharyngeal Baritone Core boost (+1.8dB @ 1200Hz), Jawhari Presence & Slap boost (+4.5dB @ 2500Hz), Compressor 3:1 @ -12dB, Husseiniya Reverb (room_size 0.58-0.62, wet 0.18-0.21, RT60 3.2-3.6s), Rosenberg+Formant Ahaat (F1=730, F2=1090, F3=2440Hz, -28dBFS sidechain ducking -3.0dB), and Master Limiter (-14.0 LUFS / -1.0 dBTP, preserving 11-15dB Crest factor — QC34)."
+          "core_law": "Calibrate local 18-mode 'scripts/hussaini_dsp_montage.py' against the 175-track empirical spectral envelope: HPF @ 80-85Hz (42Hz in vocal_pure_master), Sub-Chest/Latm Fundamental boost (+1.5dB @ 110Hz anchoring 53-68Hz chest thud), Low-Mid Mud cut (-2.8dB @ 450Hz), Pharyngeal Baritone Core boost (+1.8dB @ 1200Hz), Jawhari Presence & Slap boost (+4.5dB @ 2500Hz), Arabic De-Esser (5.5-8.5kHz), Optical RMS Vocal Compressor, Husseiniya Stereo Decorrelated Reverb (RT60 2.2-3.4s), Rosenberg+Formant Ahaat (F1=730, F2=1090, F3=2440Hz, -28dBFS sidechain ducking -3.0dB), and Master Limiter (-14.0 LUFS / -1.0 dBTP, preserving 11-15dB Crest factor — QC34)."
         },
         "Module_64_Multilingual_and_Cross_Dialect_Orthoepy_Bridge": {
           "title": "Unified Iraqi, Bahrani, Fusha Tawshih & Persian/Arabic Bilingual Mashaya Orthoepy Compiler",
@@ -1572,7 +1574,7 @@
           "tier": "V48.5_Foundation",
           "name": "Muddy Background & Prompt Bloat Prevention",
           "failure_mode": "Long (>60 words) Sound prompts or inline EQ numbers cause muddy low-mid resonance around 400-500Hz.",
-          "resolution_law": "Keep Sound description strictly 45-56 English words ending with 'Pure Acapella No Instruments', and execute EQ (-2.8dB @ 450Hz, +4.5dB @ 2500Hz) post-generation via 'audio__apply_effect'."
+          "resolution_law": "Keep Sound description strictly 45-56 English words ending with 'Pure Acapella No Instruments', and execute EQ (-2.8dB @ 450Hz, +4.5dB @ 2500Hz) post-generation via local scripts/hussaini_dsp_montage.py."
         },
         {
           "gate_id": "QC4",
@@ -1642,7 +1644,7 @@
           "tier": "V48.5_Foundation",
           "name": "Fusha-Colloquial Clash & Mandatory Iraqi Prosthetic 'إِCْ' Clusters",
           "failure_mode": "Unprotected initial clusters ('بچفك', 'عيوني', 'حسين', 'بمجلسك', 'بگلبي') trigger Fusha vowels ('bi-', ''u-', 'ḥu-') inside Iraqi poems.",
-          "resolution_law": "Lock Iraqi labial/pharyngeal/velar onset clusters with prosthetic Kasra Alif + Sukun ('إِبْچَفَّكْ، إِعْيُونِي، إِحْسَينْ، إِبْمَجْلِسَكْ، إِبْگَلْبِي، إِبْگَاعْ، إِخْيَامْ، إِعْلَه'), syncopated feminine nouns ('العَافْيَه، حَافْيَه'), and phonetic construct 'تْ' ('وِسَادَتْ رِيشْ')."
+          "resolution_law": "Lock Iraqi labial/pharyngeal/velar onset clusters with prosthetic Kasra Alif + Sukun ('إِبْچَفَّكْ، إِعْيُونِي، إِحْسَينْ، إِبْمَجْلِسَكْ، إِبْگَلْبِي، إِبْگَاعْ، إِعْلَه'), keep 'خِيَامْ' without prosthetic Alif (QC33), syncopated feminine nouns ('العَافْيَه، حَافْيَه'), and phonetic construct 'تْ' ('وِسَادَتْ رِيشْ')."
         },
         {
           "gate_id": "QC14",
@@ -1796,7 +1798,7 @@
           "tier": "V50.0_Corpus_Upgrade",
           "name": "Trim-Before-Extend Seam Discipline, 5-Track -14 LUFS Mastering & Canonical V50.0 GitHub Gate",
           "failure_mode": "Extending without trimming trailing drift causes cross-stage word-bleed/vocal overlap at seams; uncalibrated EQ or version drift breaks 175-track spectral fidelity and CI validation.",
-          "resolution_law": "Always execute 'Remix > Trim' on trailing seconds (~1:20-1:25) before 'Remix > Extend' (with splice-completion prefix if needed), conclude with Step 4 audio__apply_effect and local 5-Track SOS/RMS/LUFS DSP montage (--replace-ai-percussion, 53-68Hz school-matched chest thud, Rosenberg+Formant Ahaat F1=730/F2=1090/F3=2440Hz ducked -3.0dB @ -28 dBFS, -14.0 LUFS / -1.0 dBTP), and enforce canonical V50.0 GitHub CI (SKILL.md <= 10.5KB, Pylint 10/10, Pytest >= 80%)."
+          "resolution_law": "Always execute 'Remix > Trim' on trailing seconds (~1:20-1:25) before 'Remix > Extend' (with splice-completion prefix if needed), conclude with local 18-mode SOS/RMS/LUFS DSP montage (vocal_pure_master or 5-track --replace-ai-percussion, 53-68Hz school-matched chest thud, Rosenberg+Formant Ahaat F1=730/F2=1090/F3=2440Hz ducked -3.0dB @ -28 dBFS, -14.0 LUFS / -1.0 dBTP), and enforce canonical GitHub CI (SKILL.md <= 10.5KB, Pylint 10/10, Pytest >= 75%)."
         }
       ]
     },
@@ -1911,25 +1913,6 @@
     }
   },
   "v51_0_protocol_negative_constraints_and_style_taxonomy": {
-    "permanent_negative_constraints_nc1_to_nc10": {
-      "NC3_iraqi_ingisam_orthography": "Write Iraqi reflexes of 'انقسم' with Gaf 'انْگِسَمْ نُصَّينْ', never 'انجسم', so G2P never misreads it as Fusha noun 'الجِسْم' (the body).",
-      "NC8_yathrib_and_anshidak_lock": "Write 'يَا أَهْلَ يَثْرِبْ' and 'أَنْشِدَكْ' (explicit Fatha-Sukun-Kasra-Fatha-Sukun, zero Shadda on Dal).",
-      "NC10_strict_dialect_isolation": "Never mix Fusha grammatical case endings (ضمة/فتحة/كسرة إعرابية) with Iraqi or Bahrani colloquial verses; enforce terminal Sukun (تسكين الأواخر) on colloquial words.",
-      "NC7_ibin_wasl_lock": "Write 'لَمَّنْ رَدْ إِبِنْ حَذْلَمْ' with explicit 'إِبِنْ' to prevent both 'أَبِنْ' and assimilated 'رَدِّنْ'.",
-      "NC9_middle_register_lock": "Ban high-octave screaming in Kasras; enforce 'controlled dignified middle-register baritone delivery, strictly no high-pitched screaming'.",
-      "NC2_root_duration_density_lock": "Lyria 3.5 Root generation spans ~135s-165s; either supply Stanzas 1+2 to fill the window or immediately apply Remix > Trim at the end of Stanza 1 (~01:15-01:25) to prevent solo filler or 3x refrain looping.",
-      "NC6_masculine_clitic_lock": "Write 'رَدْ لِدْيَارَهْ لَوْ بَعْدَهْ' with terminal Sukun on 'ـهْ' to prevent feminine stretching 'لِدْيَارَهَا'.",
-      "NC1_instrument_name_trigger_ban": "Never write Ney, Flute, Oud, Guitar, Violin, Cello, Piano, Clarinet, or Drum Kit anywhere in Lyria 3.5 prompts or Pre-Conditioning JSON (even as allowed with caution), as naming melodic instruments triggers 20s-45s tarab instrumental solos.",
-      "NC4_iraqi_ridat_orthography": "Write 'رِدَتْ نَشْدَه' (/rɪ.dat naʃ.da/) with Kasra on Raa and Fatha on un-geminated Dal to prevent Fusha 'رَدَّتْ' (/rad.dat/) and stretched 'رِدِيتْ' (/rɪ.diːt/).",
-      "NC5_umm_vowel_coalescence_lock": "Write 'صُوتْ أُمِّ البَنِينْ يِصِيحْ' (Shadda+Kasra on أُمِّ to prevent 'صُوتُومَ') and 'إِجَتَه .. أُمّ الگَمَرْ وَتْصِيحْ' (Fatha on الگَمَرْ and micro-pause before أُمّ to prevent 'إِجَتَهُمْ').",
-      "NC11_root_stanza1_only_completeness_lock": "Feed ONLY Stanza 1 (Mustahall + Nazla 1 + Kasra 1 + Mustahall) in Stage 1 Root so the 91s-100s window sings 100% of Stanza 1 with zero truncation.",
-      "NC12_stage1_verbatim_lyrics_array_lock": "In Method 2 (Producer Chat JSON), pass a single unified top-level lyrics block (plus lyrics_register_verbatim) so Producer Chat never drops the opening [المُسْتَهَلّ] at 00:00.",
-      "NC13_bashir_and_ala_awladi_orthography": "Write بِشِرْ گَطَّعِتْ إِفَّادِي (never يَبْشِرْ) and مَا أَنْشِدَكْ عَلَى أَوْلَادِي (two separate words, never attached عَلْأَوْلَادِي).",
-      "NC14_single_substage_per_extend_lock": "Never combine Nazla and Kasra in a single Extend step; execute 2A (Nazla) and 2B (Kasra) as separate Extend steps.",
-      "NC15_zero_english_or_directions_in_lyrics": "Never place English words, parenthetical performance instructions, or punctuation other than (..) and choral (...) inside the Lyrics box.",
-      "NC16_three_vertical_line_kasra_extend_law": "Every Extend window is 23.5s (~7.5s per vertical line at 60 BPM). Format every Kasra (2B, 3B, 4B, 5B, 6B) as strictly 3 vertical lines (Line 1: Hemistich 1 .. Hemistich 2 .. / Line 2: Hemistich 3 .. / Line 3: Closing Qafla Couplet) with no 5th choral repeat line so بيت القفلة is 100% sung without cutoff.",
-      "NC17_mandatory_lyrics_buffer_purge_before_extend": "Always clear the Compose > Lyrics text box (Ctrl+A -> Delete) before every Extend step in both Method 1 and Method 2 so zero previous stanza lines remain or blend."
-    },
     "mandatory_pre_generation_protocol": {
       "default_mode": "INTERACTIVE_CONSULTATION_MANDATORY_BEFORE_GENERATION",
       "stage_1_quality_gate_before_extend": "Strictly forbidden to proceed to EXTEND stages until Stage 1 Root is acoustically and linguistically verified and approved.",
@@ -1968,7 +1951,7 @@
       "NC5_umm_vowel_coalescence_lock": "Write 'صُوتْ أُمِّ البَنِينْ يِصِيحْ' (Shadda+Kasra on أُمِّ to prevent 'صُوتُومَ') and 'إِجَتَه .. أُمّ الگَمَرْ وَتْصِيحْ' (Fatha on الگَمَرْ and micro-pause before أُمّ to prevent 'إِجَتَهُمْ').",
       "NC11_root_stanza1_only_completeness_lock": "Feed ONLY Stanza 1 (Mustahall + Nazla 1 + Kasra 1 + Mustahall) in Stage 1 Root so the 91s-100s window sings 100% of Stanza 1 with zero truncation.",
       "NC12_stage1_verbatim_lyrics_array_lock": "In Method 2 (Producer Chat JSON), pass a single unified top-level lyrics block (plus lyrics_register_verbatim) so Producer Chat never drops the opening [المُسْتَهَلّ] at 00:00.",
-      "NC13_bashir_and_ala_awladi_orthography": "Write بِشِرْ گَطَّعِتْ إِفَّادِي (never يَبْشِرْ) and مَا أَنْشِدَكْ عَلَى أَوْلَادِي (two separate words, never attached عَلْأَوْلَادِي).",
+      "NC13_bashir_and_ala_awladi_orthography": "Write بِشِرْ گَطَّعِتْ إِفَّادِي (never يَبْشِرْ) and مَا أَنْشِدَكْ إِعْلَه أَولَادِي (two separate words, never attached عَلْأَوْلَادِي).",
       "NC14_single_substage_per_extend_lock": "Never combine Nazla and Kasra in a single Extend step; execute 2A (Nazla) and 2B (Kasra) as separate Extend steps.",
       "NC15_zero_english_or_directions_in_lyrics": "Never place English words, parenthetical performance instructions, or punctuation other than (..) and choral (...) inside the Lyrics box.",
       "NC16_three_vertical_line_kasra_extend_law": "Every Extend window is 23.5s (~7.5s per vertical line at 60 BPM). Format every Kasra (2B, 3B, 4B, 5B, 6B) as strictly 3 vertical lines (Line 1: Hemistich 1 .. Hemistich 2 .. / Line 2: Hemistich 3 .. / Line 3: Closing Qafla Couplet) with no 5th choral repeat line so بيت القفلة is 100% sung without cutoff.",
@@ -2050,6 +2033,35 @@
         "v54_test1_iraqi_shoor": "155.765s Lyria 3.5 raw -> 120 BPM detected, mastered -14.0 LUFS / -2.24 dBTP",
         "v54_test2_bahrani_thulathi": "164.309s Lyria 3.5 raw -> 75 BPM triplet 0.291 detected, mastered -14.0 LUFS / -1.90 dBTP, LRA 7.64"
       }
+    }
+  },
+  "v55_0_module_70_upgrades": {
+    "version": "V55.0 OMNI-ARCHITECT",
+    "module_reference": "references/modules/module_70_v55_tabaa_al_bashar_7exp_lab_5stage_router_and_3poem_benchmark.md",
+    "tabaa_al_bashar_7_experiments_lab": {
+      "experiments_executed": 7,
+      "breakthrough_rhythmic_prompt": "ashura_majlis_noha_58bpm_saba_lami_v55",
+      "breakthrough_pure_vocal_prompt": "pure_acapella_weeping_noha_auto_bpm_saba_lami_v55",
+      "exp4_sub_45_95_rel_db": -16.38,
+      "exp5_sub_45_95_rel_db": -45.28,
+      "exp6_remix_cover_042_sub_db": -43.6
+    },
+    "permanent_negative_constraints_nc18_to_nc22": {
+      "NC18_ban_raw_dsp_numbers_and_percussion_nouns_in_sound": "Never write raw frequencies/ms (53Hz, 55Hz, 320ms) or percussion/slap nouns (chest slaps, drums, no drums) in Flow Music Sound prompts; use ashura_majlis_noha_58bpm_saba_lami_v55 or pure_acapella_weeping_noha_auto_bpm_saba_lami_v55.",
+      "NC19_lock_lyria_35_and_ban_standalone_preconditioning": "Always lock Compose > Advanced > Model = Lyria 3.5 (never Lyria 3 Pro), ban soft pop adjectives (warm, sincere), and never send standalone Pre-Conditioning JSON in Producer Chat without Stage 1.",
+      "NC20_remix_cover_strength_cap_and_split_stems": "Keep Remix > Cover Strength <= 0.40-0.45 (More Similar) to preserve Arabic consonant articulation and use Split stems to isolate Vocals cleanly.",
+      "NC21_syntactic_pause_law_in_short_kasra_clauses": "Never place '..' inside a short 3-word clause before a single stranded word (الخِدْمَه إِنْكِسَارِي وَ دَمْعِتِي, never .. وَدَمْعِتِي).",
+      "NC22_open_vowel_liaison_and_definite_article_kasra_lock": "Before الـ, write open -a endings with ى/ا (طَبْعِ البَشَرْ يِنْسَى الوَفَا) and place a liaison Kasra on the preceding consonant (مُو مِثِلِ البَشَرْ)."
+    },
+    "three_benchmark_poems_verification": {
+      "poems_tested": [
+        "طبع البشر (محمد الإبراهيمي — Iraqi)",
+        "صورة جسد عالغبرة (نادر التتان — Bahrani)",
+        "فلسفة الانتظار — اترجمها أم البنين (حيدر تركي الكربلائي — Iraqi)"
+      ],
+      "unvocalized_tokens": 0,
+      "idempotency_failures": 0,
+      "five_stage_router_enabled": true
     }
   }
 }

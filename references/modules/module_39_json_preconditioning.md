@@ -1,6 +1,6 @@
-# بروتوكول التهيئة المسبقة بصيغة `JSON` والاحتراف الكامل لواجهة `Flow Music Studio` (`Modules 39, 51 & 53`) — V48.5 OMNI-ARCHITECT (Rev 2)
+# بروتوكول التهيئة المسبقة بصيغة `JSON` والاحتراف الكامل لواجهة `Flow Music Studio` (`Modules 39, 51 & 53`) — V55.0 OMNI-ARCHITECT
 
-يوثق هذا الملف بروتوكول التهيئة المسبقة للجلسة (`JSON Session Pre-Conditioning` عبر الدستور المرجعي `references/hussaini_os_v48_5_constitution.json` بوضع `"Pre_Conditioning_Lock_Wait_For_Stage_JSON"`)، وحزم المراحل الإلزامية (`Module 53` — `--build-stage-json`)، والقواعد الهندسية الصارمة للتعامل الاحترافي ثنائي القناة مع واجهة وأدوات `https://www.flowmusic.app/` (`New session`، لوحة `Compose` المباشرة، وقائمة `Remix > Extend / Trim / Replace / Cover / Variation / Use prompt / Split stems`).
+يوثق هذا الملف بروتوكول التهيئة المسبقة للجلسة (`JSON Session Pre-Conditioning` عبر الدستور المرجعي `references/hussaini_os_v50_0_constitution.json` بوضع `"Pre_Conditioning_Lock_Wait_For_Stage_JSON"`)، وحزم المراحل الإلزامية (`Module 53` — `--build-stage-json`)، والقواعد الهندسية الصارمة للتعامل الاحترافي ثنائي القناة مع واجهة وأدوات `https://www.flowmusic.app/` (`New session`، لوحة `Compose` المباشرة مع قفل `Lyria 3.5`، وقائمة `Remix > Extend / Trim / Replace / Cover <= 0.45 / Split stems`).
 
 ---
 
@@ -41,7 +41,7 @@ stage_1 = build_stage_orchestration_json("[المُسْتَهَلّ]\nيَا إ�
 
 ### ب) القاعدة الذهبية الثانية: التوجيه ثنائي القناة (`Two-Channel Routing — Module 51 & QC17`)
 1. **القناة الأولى (`Producer Chat` — `textarea[aria-label="Chat message"]`):**
-   - أرسل دستور `Hussaini_Production_Studio_OS_V48_5_OMNI_ARCHITECT` في بداية الجلسة لقفل الذاكرة، واستخدمها لاحقاً لتطبيق `audio__apply_effect`.
+   - أرسل دستور `Hussaini_Production_Studio_OS_V50_0_OMNI_ARCHITECT` متبوعاً بحزمة المرحلة الأولى (`Stage 1 JSON` — يُحظر إرسال التهيئة منفردة دون القصيدة، ويُحظر استخدام `audio__apply_effect` السحابي الذي يسبب Clipping؛ اعتمد الماسترنغ المحلي `vocal_pure_master` أو الـ 5 مسارات).
 2. **القناة الثانية (`Compose Panel`):**
    - **`Lyrics` (`textarea[aria-label="Lyrics"]`):** نص شعري عربي مشكول نقي 100% فقط، بعناوين عربية صريحة (`[المُسْتَهَلّ]`، `[النَّزْلَة الأُولَى]`، `[الكَسْرَة وَالمُسْتَهَلّ]`)، مع إحاطة جميع أشطر `[المُسْتَهَلّ]` بقوسين `(...)` قبل `..` (`QC18`)، و**صفر حروف لاتينية (`QC5`) وصفر أقواس `JSON` `{...}` (`QC17`)**. تأكد أن مفتاح `Toggle instrumental mode` مغلق (`OFF`).
    - **`Sound` (`textarea[aria-label="Sound description"]`):** وصف إنجليزي نقي (`45–56 كلمة`) من مكتبة `Module 52` مختوم بـ `Pure Acapella No Instruments` وبدون أي كلمات بكاء في الإيقاع (`QC15`).
