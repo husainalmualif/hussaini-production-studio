@@ -1,22 +1,26 @@
 #!/usr/bin/env python3
 # pylint: disable=too-many-lines,too-many-return-statements,too-many-branches,too-many-locals,too-many-statements,too-many-arguments,too-many-positional-arguments,no-member,chained-comparison
-"""Hussaini Audio Omni-Architect DSP, 5-Track DAW & Phonetics Compiler (V53.0 OMNI-ARCHITECT).
+"""Hussaini Audio Omni-Architect DSP, 5-Track DAW & Phonetics Compiler (V54.0 OMNI-ARCHITECT).
 
 Standalone empirical production engine implementing Hussaini_Production_Studio_OS_V50_0_OMNI_ARCHITECT
-and V52.0–V53.0 field upgrades:
+and V52.0–V54.0 field & 175-track empirical upgrades:
 - Single-Source Version Management via root VERSION file & JSON constitution
-- Pure-Python WAV I/O + ITU-R BS.1770-4 / EBU R128 K-Weighted Gated Loudness + 4x True-Peak Limiter
-- Module 67–68 (V52.0–V53.0): Pure Vocal Mastering (`vocal_pure_master`), Tail Trim/Fade, Stereo Auditor
-  (--audit-audio), Flow-Audited Bahrani/Iraqi G2P & QC34 Pre-Hamza Firewall, Dual-Corpus 99.9%+ Vocalizer,
-  Diacritic-Safe Tor/Wazn/Maqam Router, Voice-Tracked Audio Profiler, and 11-Rule Historical Verifier
+- Pure-Python WAV I/O (with transparent FFmpeg MP3/M4A/OGG decoding) + ITU-R BS.1770-4 / EBU R128
+  K-Weighted Gated Loudness + 4x True-Peak Limiter
+- Module 67–69 (V52.0–V54.0): 175-Track Calibrated Vocal EQ + Arabic Sibilance De-Esser (5.5–8.5kHz) +
+  Optical RMS Vocal Leveler + True Stereo Decorrelated Husseiniya Reverb, Singer-Relative 24-EDO Maqam &
+  Dual-Band BPM/Rubato Profiler, 9-School Prosodic Tor Router, QC34 Pre-Hamza Lock & 11-Rule Verifier
 """
 
 import argparse
 from datetime import datetime, timezone
 import json
+import math
 import os
 import re
+import shutil
 import struct
+import subprocess
 import sys
 import wave
 
@@ -275,6 +279,19 @@ EXTENDED_ATWAR_PROMPTS_V52 = {
         "86 BPM, eloquent Classical Arabic and devotional articulation, resonant Baritone solo "
         "verse answered by rich unison male choir, sacred mosque dome reverb, light respectful "
         "frame percussion only, zero chest Latm, zero Western instruments"
+    ),
+    "bahrani_thulathi_76bpm_bayati_hijaz_v54": (
+        "Passionate Bahrani Hussaini Thulathi triple-pulse Latmiya lament, Maqam Bayati and Hijaz, "
+        "76 BPM, authentic Bahrani colloquial dialect, majestic deep resonant Baritone lead vocal, "
+        "powerful high chest-voice climbs, natural vocal rasp, triple-cadence 55Hz bare-chest strikes, "
+        "260ms tape delay, 2.9s Matam hall reverb, wide unison male Raddada response, "
+        "Pure Acapella No Instruments"
+    ),
+    "hosa_iraqi_mawkib_88bpm_hijaz_v54": (
+        "Heroic Traditional Southern Iraqi Hussaini Hosa processional chant, Maqam Hijaz, 88 BPM, "
+        "authentic Iraqi colloquial dialect, commanding powerful Bass-Baritone solo lead answered "
+        "by booming unified male Mawkib chorus refrain, synchronized 55Hz bare-palm chest thuds, "
+        "240ms slapback echo, 2.4s open courtyard reverb, Pure Acapella No Instruments"
     ),
 }
 
@@ -1676,6 +1693,28 @@ COMMON_CORPUS_LEXICON_V52 = {
     "اوياي": "وِيَّايْ",
     "اوياه": "وِيَّاهْ",
     "اليه": "إِلِيَّه",
+    "ولو": "وَ لَوْ",
+    "إحسين": "إِحْسَينْ",
+    "سر": "سِرّ",
+    "حب": "حُبّ",
+    "الحب": "الحُبّ",
+    "حبه": "حُبَّه",
+    "هو": "هُوَ",
+    "نور": "نُورْ",
+    "نوره": "نُورَه",
+    "بگلب": "إِبْگَلْبِ",
+    "المحب": "المُحِبّ",
+    "الصدگ": "الصِّدِگْ",
+    "صدق": "صِدِگْ",
+    "شنهو": "شِنْهُو",
+    "تجلى": "تِجَلَّى",
+    "صلى": "صَلَّى",
+    "الجفن": "الجِفِنْ",
+    "الاصل": "الأَصِلْ",
+    "الأصل": "الأَصِلْ",
+    "نصرش": "نَصْرِشْ",
+    "اخوش": "أَخُوشْ",
+    "أخوش": "أَخُوشْ",
     "وعلى": "وَ عَلَى",
     "الحرام": "الحَرَامْ",
     "اخت": "أُخِتْ",
@@ -2105,8 +2144,8 @@ def repair_word_initial_sukun_and_diphthongs(text):
         "\u064E\\g<1>",
         result,
     )
-    # Strip any remaining Sukun directly on word-final feminine Haa/Taa Marbuta before space/pause/paren/EOL
-    result = re.sub(r"([هة])\u0652(?=\s|$|\.\.|[،\)])", r"\1", result)
+    # Strip any remaining Sukun directly on word-final feminine Haa/Taa Marbuta (preserving 'آهْ')
+    result = re.sub(r"(?<!آ)([هة])\u0652(?=\s|$|\.\.|[،\)])", r"\1", result)
     return result
 
 
@@ -2143,7 +2182,7 @@ def _finalize_hemistich_pause_sukun(segment):
         seg = seg[: trail_match.start()].rstrip()
     seg = re.sub(r"(?:\u0627\u064B|\u064B\u0627|\u064B)$", "َا", seg)
     seg = re.sub(r"[ٌٍُِ]$", "ْ", seg)
-    seg = re.sub(r"([هة])\u0652$", r"\1", seg)
+    seg = re.sub(r"(?<!آ)([هة])\u0652$", r"\1", seg)
     if (
         seg
         and re.search(r"[\u0621-\u063A\u0641-\u064A\u067E\u0686\u06AF]$", seg)
@@ -2234,7 +2273,7 @@ def shape_token_morphologically(token, word_map, use_tatweel=False):
     for raw_pref, vocalized_pref in prefix_rules:
         if core.startswith(raw_pref):
             stem = core[len(raw_pref) :]
-            if stem in word_map:
+            if len(stem) >= 2 and stem in word_map:
                 shaped_stem = _format_tatweel(word_map[stem], use_tatweel=use_tatweel)
                 return f"{lead_punct}{vocalized_pref}{shaped_stem}{trail_punct}"
     return token
@@ -2277,6 +2316,8 @@ def _vocalize_unseen_arabic_word(core, dialect="iraqi"):
         prefix_out, stem = "ال", stem[2:]
     elif stem.startswith("و") and len(stem) > 3 and stem[1:] in COMMON_CORPUS_LEXICON_V52:
         return f"وَ {COMMON_CORPUS_LEXICON_V52[stem[1:]]}"
+    elif stem.startswith("و") and len(stem) == 5 and stem[2] == "ا":
+        prefix_out, stem = "وَ ", stem[1:]
 
     if prefix_out.endswith("ال") or prefix_out.endswith("ل"):
         if stem in COMMON_CORPUS_LEXICON_V52:
@@ -2321,6 +2362,8 @@ def _vocalize_unseen_arabic_word(core, dialect="iraqi"):
             out_chars.append("\u0650" if idx == 0 else "\u064E")
         elif prv == "ا" and idx == 1:
             out_chars.append("\u0652" if ch not in long_v and n_len >= 4 else "\u064E")
+        elif prv == "ا" and idx == 2 and n_len == 4 and ch not in long_v:
+            out_chars.append("\u0650")  # Active participle فَاعِلْ (خَالِقْ، صَادِقْ، عَاشِقْ)
         elif idx % 2 == 0 or (idx + 2 == n_len):
             out_chars.append("\u064E")
         else:
@@ -3313,54 +3356,105 @@ def plan_poem_extend_stages(poem_text, target_method="both", bpm=60):
 
 
 def recommend_tor_and_rhythm_for_poem(text):
-    """Module 46, 48, 52, 67 & 68: Recommend Meter, Performance Tor, DSP Mode, BPM, Maqam Arc & Prompt."""
+    """Module 46, 48, 52, 67, 68 & 69: Recommend Meter, Tor, School, DSP Mode, BPM, Maqam & Prompt."""
     clean_text = sanitize_poem_decorations(text) or text
     bare_text = re.sub(r"[\u064B-\u0652]", "", clean_text)
     dialect_info = detect_and_shape_dialect(clean_text)
     dialect = dialect_info["detected_dialect"]
     iso = validate_stage1_iso_syllabic_lock(clean_text)
+    hemistichs = _extract_poem_hemistichs(clean_text.splitlines())
     avg_syl = (
         int(round(sum(iso["syllable_counts"]) / len(iso["syllable_counts"])))
         if iso["syllable_counts"]
         else 8
     )
+    avg_words = (
+        sum(len(h.split()) for h in hemistichs) / float(len(hemistichs))
+        if hemistichs
+        else 5.0
+    )
+
+    is_abudhiyah = (
+        len(hemistichs) == 4 and validate_abudhiyah_jinas(clean_text.splitlines()).get("is_valid_abudhiyah", False)
+    )
+    is_zuhayri = (
+        len(hemistichs) == 7 and validate_zuhayri_mawal(clean_text.splitlines()).get("is_valid_zuhayri", False)
+    )
 
     service_kw = ("خادم", "خدمنك", "أخدمنك", "هنيالي", "موكب", "مشايه", "مشاية", "راية")
     heroic_kw = ("عباس", "كفيل", "حيدر", "كرار", "صوله", "سيف", "زنجيل")
-    shoor_kw = ("شور", "شوور", "حسين حسين", "لبيك", "مامدفون والينه")
+    shoor_exact = bool(re.search(r"(?<!\S)(?:ال)?ش[و]+ر(?!\S)|\[(?:ال)?شور\]", bare_text))
+    shoor_kw = ("حسين حسين", "لبيك", "مامدفون والينه")
+    ecstatic_shoor_kw = ("مجنون", "جنون", "اهواك", "عشگ", "عشق", "شيعي", "حبيب")
     fazzaiya_kw = ("فزاعيه", "فزاعية", "رباطات فزاعية", "تبرالي")
+    hosa_kw = ("[هوسة]", "هوسه", "هوسة", "رباطات")
     tawshih_kw = ("[تواشيح]", "[ابتهالات]", "تواشيح", "أهل الكساء", "المباهلة", "أنشودة", "نشيد")
     tragedy_kw = ("كربلا", "عاشور", "سبي", "سبايا", "مذبوح", "حوافر", "شمر", "مشرعة", "علگمي", "علقمي", "خرابة", "خرابه", "نحر", "صدر")
+    lami_grief_kw = ("سبي", "خرابة", "خرابه", "غربة", "غربه", "عليل", "سياط", "يمه", "تراب", "عطشان")
+    journey_kw = ("ناقة", "ناگه", "ظعن", "ضعن", "مسير", "سفر", "صحرا", "طويل", "ليل")
+    thulathi_kw = ("[ثلاثي]", "ثلاثي", "وقفة", "وقفه", "زحف", "صمود")
     nai_explicit_kw = ("[نعي]", "[موال]", "[أبوذية]")
 
-    if any(k in bare_text for k in nai_explicit_kw):
+    if any(k in bare_text for k in nai_explicit_kw) or is_abudhiyah or is_zuhayri:
         mode = "nai"
         bpm = 0
         maqam = "saba"
-        meter = "mujarradat"
+        meter = "abudhiyah" if is_abudhiyah else ("zuhayri" if is_zuhayri else "mujarradat")
         tor = "tor_nai_kashi"
+        school = "School 04 (النعي المنبري والشجن العراقي)"
         prompt = MASTER_SOUND_PROMPTS_V48_5["minbar_nai_0bpm_rubato_saba_exclusive_weeping"]
-    elif any(k in bare_text for k in shoor_kw):
+    elif shoor_exact or any(k in bare_text for k in shoor_kw) or (
+        avg_words <= 4.3 and any(k in bare_text for k in ecstatic_shoor_kw) and not any(k in bare_text for k in ("شمر", "مذبوح", "حوافر"))
+    ):
         mode = "shoor"
         bpm = 132
         maqam = "kurd"
         meter = "rukbani"
         tor = "tor_darj_karbalai"
+        school = "School 05 (الشور الكربلائي والإيقاع الحماسي)"
         prompt = MASTER_SOUND_PROMPTS_V48_5["karbalai_shoor_132bpm_kurd"]
+    elif any(k in bare_text for k in hosa_kw):
+        if dialect == "bahrani":
+            mode = "bahrani_haidari"
+            bpm = 96
+            maqam = "hijaz"
+            meter = "hosa"
+            tor = "tor_bahrani_haidari"
+            school = "School 02/03 (الحيدري والأهزوجة البحرانية)"
+            prompt = MASTER_SOUND_PROMPTS_V48_5["bahrani_haidari_96bpm_hijaz"]
+        else:
+            mode = "zanjeel_iraqi"
+            bpm = 88
+            maqam = "hijaz"
+            meter = "hosa"
+            tor = "tor_hosa_iraqi"
+            school = "School 05 (الأهزوجة والهوسة الموكبية)"
+            prompt = EXTENDED_ATWAR_PROMPTS_V52["hosa_iraqi_mawkib_88bpm_hijaz_v54"]
     elif any(k in bare_text for k in tawshih_kw) and not any(k in bare_text for k in tragedy_kw):
         mode = "vocal_pure_master"
         bpm = 86
         maqam = "rast"
         meter = "muwashah"
         tor = "tor_tawshih_shia"
+        school = "School 03 (التوشيح والقصيدة الإنشادية — الأكرف)"
         prompt = EXTENDED_ATWAR_PROMPTS_V52["shia_tawshih_nasheed_86bpm_rast_hijaz_v52"]
     elif any(k in bare_text for k in fazzaiya_kw) or ("گوم" in bare_text and not any(k in bare_text for k in heroic_kw)):
-        mode = "fazzaiya"
-        bpm = 84
-        maqam = "hijaz"
-        meter = "fazzaiya"
-        tor = "tor_fazzaiya_karbalai"
-        prompt = EXTENDED_ATWAR_PROMPTS_V52["karbalai_fazzaiya_84bpm_hijaz_bayati_v52"]
+        if dialect == "bahrani":
+            mode = "bahrani_waqfa"
+            bpm = 84
+            maqam = "hijaz"
+            meter = "thulathi"
+            tor = "tor_bahrani_waqfa"
+            school = "School 03/07 (الوقفة البحرانية الفائزية)"
+            prompt = MASTER_SOUND_PROMPTS_V48_5["bahrani_waqfa_84bpm_hijaz_bayati"]
+        else:
+            mode = "fazzaiya"
+            bpm = 84
+            maqam = "hijaz"
+            meter = "fazzaiya"
+            tor = "tor_fazzaiya_karbalai"
+            school = "School 05/08 (الفزاعية والرباطات الفراتية)"
+            prompt = EXTENDED_ATWAR_PROMPTS_V52["karbalai_fazzaiya_84bpm_hijaz_bayati_v52"]
     elif any(k in bare_text for k in heroic_kw):
         if dialect == "bahrani":
             mode = "bahrani_haidari"
@@ -3368,6 +3462,7 @@ def recommend_tor_and_rhythm_for_poem(text):
             maqam = "hijaz"
             meter = "muwashah"
             tor = "tor_bahrani_haidari"
+            school = "School 02/03 (الحيدري البحراني والإحسائي الموكبي)"
             prompt = MASTER_SOUND_PROMPTS_V48_5["bahrani_haidari_96bpm_hijaz"]
         else:
             mode = "zanjeel_iraqi"
@@ -3375,41 +3470,94 @@ def recommend_tor_and_rhythm_for_poem(text):
             maqam = "hijaz"
             meter = "muwashah"
             tor = "tor_darj_karbalai"
+            school = "School 08 (مواكب البصرة والزنجيل الملحمي)"
             prompt = MASTER_SOUND_PROMPTS_V48_5["zanjeel_procession_80bpm_hijaz"]
     elif any(k in bare_text for k in service_kw):
-        mode = "bandari"
-        bpm = 74
-        maqam = "bayati"
-        meter = "rukbani"
-        tor = "tor_darj_karbalai"
-        prompt = MASTER_SOUND_PROMPTS_V48_5["karbalai_mawkib_daraj_74bpm_bayati_hijaz"]
+        if dialect == "bahrani":
+            mode = "bahrani_thulathi"
+            bpm = 76
+            maqam = "bayati"
+            meter = "thulathi"
+            tor = "tor_bahrani_thulathi"
+            school = "School 03/07 (اللطم الثلاثي والموكبي البحراني — الأكرف)"
+            prompt = EXTENDED_ATWAR_PROMPTS_V52["bahrani_thulathi_76bpm_bayati_hijaz_v54"]
+        else:
+            mode = "bandari"
+            bpm = 74
+            maqam = "bayati"
+            meter = "rukbani"
+            tor = "tor_darj_karbalai"
+            school = "School 05 (طور الدرج الموكبي والمشاية)"
+            prompt = MASTER_SOUND_PROMPTS_V48_5["karbalai_mawkib_daraj_74bpm_bayati_hijaz"]
     elif dialect == "bahrani":
-        mode = "bahrani_muthakkal"
-        bpm = 56
-        maqam = "saba"
-        meter = "faizi"
-        tor = "tor_muthakkal_bahrani"
-        prompt = MASTER_SOUND_PROMPTS_V48_5["bahrani_muthakkal_56bpm_saba"]
+        if any(k in bare_text for k in thulathi_kw) or (avg_syl <= 7 and len(hemistichs) >= 4):
+            mode = "bahrani_thulathi"
+            bpm = 76
+            maqam = "bayati"
+            meter = "thulathi"
+            tor = "tor_bahrani_thulathi"
+            school = "School 03/07 (اللطم الثلاثي والوقفة البحرانية — الأكرف)"
+            prompt = EXTENDED_ATWAR_PROMPTS_V52["bahrani_thulathi_76bpm_bayati_hijaz_v54"]
+        else:
+            mode = "bahrani_muthakkal"
+            bpm = 56
+            maqam = "saba"
+            meter = "faizi"
+            tor = "tor_muthakkal_bahrani"
+            school = "School 02/07 (المثكّل والفايزي البحراني/الإحسائي — بوجبارة وبوحمد)"
+            prompt = MASTER_SOUND_PROMPTS_V48_5["bahrani_muthakkal_56bpm_saba"]
     elif dialect == "iraqi_bahrani":
         mode = "thaqeel_muwazza"
         bpm = 58
         maqam = "saba"
         meter = "nassari"
         tor = "tor_ashouri"
+        school = "School 02/01 (الهجين العراقي-البحراني الفاخر — قافلة عاشوراء)"
         prompt = MASTER_SOUND_PROMPTS_V48_5["iraqi_bahrani_58bpm_saba_fusion_master"]
+    elif any(k in bare_text for k in lami_grief_kw) and not any(k in bare_text for k in heroic_kw):
+        if any(k in bare_text for k in journey_kw) and avg_syl >= 8:
+            mode = "studio_arranged"
+            bpm = 64
+            maqam = "lami"
+            meter = "tajleeba"
+            tor = "tor_rukbani_nassari"
+            school = "School 05/04 (الركباني والتجليبة الفراتية — حرب والعياشي)"
+            prompt = MASTER_SOUND_PROMPTS_V48_5["harb_ayyashi_turaathi_60bpm_lami_bayati_v50"]
+        else:
+            mode = "thaqeel_muwazza"
+            bpm = 56
+            maqam = "lami"
+            meter = "nassari"
+            tor = "tor_lami_iraqi"
+            school = "School 04 (الشجن العراقي الثقيل واللامي — السيد سلام)"
+            prompt = MASTER_SOUND_PROMPTS_V48_5["sayyid_salam_funeral_muthakkal_56bpm_lami_saba_v50"]
+    elif avg_words <= 4.6 and avg_syl <= 7 and len(hemistichs) >= 4:
+        mode = "studio_arranged"
+        bpm = 68
+        maqam = "bayati"
+        meter = "rukbani"
+        tor = "tor_darj_karbalai"
+        school = "School 06 (اللحن الحواري النجفي/الكربلائي — الجنامي والسيد محمد)"
+        prompt = MASTER_SOUND_PROMPTS_V48_5["janami_bayati_dialogic_68bpm_bayati_kurd_v50"]
     else:
         mode = "thaqeel_muwazza"
         bpm = 60
-        maqam = "lami" if any(k in bare_text for k in ("سبي", "خرابة", "خرابه", "غربة", "غربه", "عليل")) else "bayati"
+        maqam = "bayati"
         meter = "nassari" if avg_syl >= 7 else "rukbani"
         tor = "tor_ashouri"
+        school = "School 01 (المدرسة الكربلائية التأسيسية — باسم الكربلائي)"
         prompt = MASTER_SOUND_PROMPTS_V48_5["karbalai_nazla_60bpm_bayati_saba_v48_5_root"]
 
     wazn_map = {
+        "abudhiyah": "بحر الأبوذية المربوعة (جناس + قفلة -يَّه)",
+        "zuhayri": "الموال السبعوي (الزهيري AAABAAA)",
         "mujarradat": "مجردات / نعي منبري حر",
         "rukbani": "بحر الركباني",
+        "tajleeba": "بحر التجليبة والهزج الفراتي",
         "muwashah": "الموشح الملحمي / التوشيح",
         "fazzaiya": "طور الفزاعية والرباطات",
+        "hosa": "الأهزوجة والهوسة الحماسية",
+        "thulathi": "اللطم الثلاثي والوقفة البحرانية",
         "faizi": "البحر الفائزي البحراني",
         "nassari": "بحر النصاري الفراتي/الكربلائي",
     }
@@ -3427,10 +3575,18 @@ def recommend_tor_and_rhythm_for_poem(text):
         "recommended_poetic_meter": meter,
         "detected_poetic_wazn_ar": wazn_map.get(meter, "بحر النصاري"),
         "recommended_performance_tor": tor,
+        "recommended_school": school,
         "recommended_dsp_mode": mode,
         "recommended_bpm": bpm,
         "recommended_maqam": maqam,
         "recommended_maqam_progression": maqam_arc,
+        "recommended_dsp_params": {
+            "echo_delay_ms": compute_tempo_synced_delay_ms(bpm, mode=mode),
+            "reverb_rt60_sec": 3.4 if mode in ("mawal", "nai", "thaqeel_muwazza", "bahrani_muthakkal") else 2.4,
+            "pre_delay_ms": 22.0 if bpm <= 64 else 32.0,
+            "target_lra_lu": "6.5-8.5",
+            "deess_band_hz": "5500-8500",
+        },
         "master_sound_prompt": prompt,
     }
 
@@ -3458,7 +3614,11 @@ def build_vocal_genre_profile(genre="latmiya", dialect="iraqi", maqam=None, bpm=
                 else EXTENDED_ATWAR_PROMPTS_V52["karbalai_fazzaiya_84bpm_hijaz_bayati_v52"]
             )
         elif chosen_bpm >= 70:
-            prompt = MASTER_SOUND_PROMPTS_V48_5["karbalai_mawkib_daraj_74bpm_bayati_hijaz"]
+            prompt = (
+                EXTENDED_ATWAR_PROMPTS_V52["bahrani_thulathi_76bpm_bayati_hijaz_v54"]
+                if dialect == "bahrani"
+                else MASTER_SOUND_PROMPTS_V48_5["karbalai_mawkib_daraj_74bpm_bayati_hijaz"]
+            )
         elif dialect == "bahrani":
             prompt = MASTER_SOUND_PROMPTS_V48_5["bahrani_muthakkal_56bpm_saba"]
             chosen_bpm = 56 if bpm is None else chosen_bpm
@@ -3851,8 +4011,34 @@ def _write_wav_pcm16(output_path, sample_rate, stereo_float):
         wav_out.writeframes(pcm16.tobytes())
 
 
+def _decode_audio_with_ffmpeg(input_path, return_stereo=False):
+    """Decode compressed audio (.mp3/.m4a/.ogg/.flac) seamlessly via FFmpeg when available."""
+    ffmpeg_bin = shutil.which("ffmpeg")
+    if not ffmpeg_bin:
+        raise ValueError(f"FFmpeg required to decode non-WAV audio directly: {input_path}")
+    target_sr = 44100
+    raw = subprocess.check_output(
+        [
+            ffmpeg_bin, "-v", "error", "-i", input_path,
+            "-ac", "2", "-ar", str(target_sr), "-f", "s16le", "-",
+        ],
+        stderr=subprocess.DEVNULL,
+    )
+    arr = np.frombuffer(raw, dtype="<i2").astype(np.float64) / 32768.0
+    usable = (len(arr) // 2) * 2
+    stereo = np.clip(arr[:usable].reshape(-1, 2), -1.0, 1.0)
+    if return_stereo:
+        return target_sr, stereo, 2, "FFmpeg Decoded 16-bit PCM"
+    mono = np.mean(stereo, axis=1) if stereo.shape[0] else np.zeros(0, dtype=np.float64)
+    return target_sr, np.clip(mono, -1.0, 1.0), 2, "FFmpeg Decoded 16-bit PCM"
+
+
 def read_wav_any_depth(input_path, return_stereo=False):
-    """Read 8-bit, 16-bit, 24-bit, or 32-bit PCM/Float WAV into mono (or stereo) float64 [-1, 1] (zero scipy.io)."""
+    """Read 8/16/24/32-bit PCM/Float WAV or compressed MP3/M4A/OGG/FLAC into float64 [-1, 1]."""
+    ext = os.path.splitext(str(input_path))[1].lower()
+    if ext in (".mp3", ".m4a", ".aac", ".ogg", ".opus", ".flac", ".wma", ".webm"):
+        return _decode_audio_with_ffmpeg(input_path, return_stereo=return_stereo)
+
     with open(input_path, "rb") as handle:
         header = handle.read(12)
         if len(header) < 12 or header[:4] != b"RIFF" or header[8:12] != b"WAVE":
@@ -3937,15 +4123,120 @@ def read_wav_any_depth(input_path, return_stereo=False):
     return int(sample_rate), np.clip(mono, -1.0, 1.0), int(channels), bit_depth
 
 
+_MAQAM_24EDO_TEMPLATES = {
+    "bayati": {0: 1.8, 3: 1.7, 5: 1.2, 10: 1.6, 14: 1.2, 16: 0.9, 20: 0.9},
+    "saba": {0: 1.8, 3: 1.7, 5: 1.3, 8: 2.0, 14: 1.0, 16: 0.9, 20: 0.8},
+    "saba_zamzam": {0: 1.7, 2: 1.5, 5: 1.3, 8: 2.0, 14: 1.0, 16: 0.9, 20: 0.8},
+    "hijaz": {0: 1.8, 2: 1.6, 8: 1.8, 10: 1.4, 14: 1.2, 16: 0.9, 20: 0.8},
+    "lami": {0: 1.8, 2: 1.4, 6: 1.3, 10: 1.4, 12: 1.7, 16: 0.9, 20: 0.8},
+    "kurd": {0: 1.8, 2: 1.3, 6: 1.2, 10: 1.3, 14: 1.2, 16: 0.9, 20: 0.8},
+    "rast": {0: 1.8, 4: 1.2, 7: 1.7, 10: 1.3, 14: 1.2, 18: 1.0, 21: 1.3},
+    "nahawand": {0: 1.8, 4: 1.2, 6: 1.3, 10: 1.3, 14: 1.2, 16: 0.9, 22: 1.0},
+    "sikah": {0: 1.8, 3: 1.4, 7: 1.6, 10: 1.3, 13: 1.3, 17: 1.0, 20: 0.9},
+}
+
+
+def _extract_24edo_maqam_profile(mono, sample_rate):
+    """Module 69 (V54.0): Singer-relative 12-cent anchor 24-EDO chroma & Saba/Bayati Maqam classifier."""
+    if len(mono) < 512:
+        return "bayati", 146.83, 0.0, [("bayati", 1.0)]
+    voc = butter_filter(mono, [90.0, min(3200.0, 0.45 * sample_rate)], sample_rate, btype="band", order=3)
+    win = max(256, int(0.12 * sample_rate))
+    hop = max(128, int(0.06 * sample_rate))
+    nfft = 16384
+    if len(voc) < win:
+        return "bayati", 146.83, 0.0, [("bayati", 1.0)]
+
+    freqs = np.fft.rfftfreq(nfft, d=1.0 / sample_rate)
+    lo = int(np.searchsorted(freqs, 90.0))
+    hi = int(np.searchsorted(freqs, min(420.0, 0.42 * sample_rate)))
+    hann = np.hanning(win)
+    nf = (len(voc) - win) // hop + 1
+    rms = np.array([float(np.sqrt(np.mean(voc[i * hop : i * hop + win] ** 2))) for i in range(nf)])
+    gate = max(1e-4, 0.25 * float(np.percentile(rms, 90))) if nf > 0 else 1e-4
+
+    obs = []
+    for i in range(nf):
+        if rms[i] < gate:
+            continue
+        spec = np.abs(np.fft.rfft(voc[i * hop : i * hop + win] * hann, n=nfft))
+        lim = max(1, len(spec) // 3)
+        s1 = spec[:lim]
+        mx = float(np.max(s1)) + 1e-12
+        s2 = spec[::2][:lim] / mx
+        s3 = spec[::3][:lim] / mx
+        hscore = s1 * (0.35 + 0.45 * s2) * (0.45 + 0.35 * s3)
+        hi_lim = min(hi, len(hscore) - 1)
+        if hi_lim <= lo:
+            continue
+        k = lo + int(np.argmax(hscore[lo:hi_lim]))
+        if 0 < k < len(hscore) - 1:
+            den = hscore[k - 1] - 2.0 * hscore[k] + hscore[k + 1]
+            dk = 0.5 * (hscore[k - 1] - hscore[k + 1]) / den if abs(den) > 1e-12 else 0.0
+            dk = float(np.clip(dk, -0.5, 0.5))
+            f0 = max(60.0, (k + dk) * (sample_rate / float(nfft)))
+        else:
+            f0 = max(60.0, float(freqs[k]))
+        cad = 2.0 if (i + 2 < nf and rms[i + 2] < 0.65 * rms[i]) else 1.0
+        obs.append((24.0 * math.log2(f0 / 440.0), f0, rms[i], cad))
+
+    if not obs:
+        return "bayati", 146.83, 0.0, [("bayati", 1.0)]
+
+    med_f0 = float(np.median([item[1] for item in obs]))
+    h120 = np.zeros(120, dtype=np.float64)
+    for qt_val, _, r_val, cad_val in obs:
+        h120[int(round(qt_val * 5.0)) % 120] += r_val * cad_val
+
+    seen = {}
+    for a120 in np.argsort(h120)[::-1][:10]:
+        if h120[a120] <= 0.0:
+            continue
+        ch24 = np.zeros(24, dtype=np.float64)
+        a_qt = a120 / 5.0
+        for qt_val, _, r_val, _ in obs:
+            ch24[int(round(qt_val - a_qt)) % 24] += r_val
+        ch24 /= float(ch24.sum()) + 1e-9
+        if ch24[0] < 0.07:
+            continue
+        odd_qt = float(ch24[1::2].sum())
+        for mn, prof in _MAQAM_24EDO_TEMPLATES.items():
+            pos = sum(ch24[d] * w for d, w in prof.items())
+            non_sc = sum(ch24[d] for d in range(24) if d not in prof)
+            has_qt = any(d % 2 == 1 for d in prof)
+            qt_bonus = 0.25 * odd_qt if has_qt else -0.25 * max(0.0, odd_qt - 0.12)
+            razor = 0.0
+            if mn == "saba":
+                razor = 0.45 * (ch24[8] - 0.5 * ch24[10])
+            elif mn == "bayati":
+                razor = 0.30 * (ch24[10] - ch24[8])
+            sc = pos - 0.6 * non_sc + qt_bonus + razor
+            if mn not in seen or sc > seen[mn][0]:
+                seen[mn] = (sc, odd_qt)
+
+    if not seen:
+        return _classify_maqam_from_pitches(med_f0), round(med_f0, 2), 0.0, [("bayati", 1.0)]
+    ranked = sorted([(val[0], name, val[1]) for name, val in seen.items()], reverse=True)
+    best_sc, best_name, best_qt = ranked[0]
+    _ = best_sc
+    top3 = [(name, round(float(sc), 3)) for sc, name, _ in ranked[:3]]
+    return best_name, round(med_f0, 2), round(float(best_qt), 3), top3
+
+
 def _classify_maqam_from_pitches(detected_hz):
     """Find the closest 24-EDO Maqam in MAQAM_FREQS using minimum cents distance."""
+    if isinstance(detected_hz, (list, tuple, np.ndarray)):
+        vals = [float(v) for v in detected_hz if float(v) > 0.0]
+        if not vals:
+            return "saba"
+        detected_hz = float(np.median(vals))
     if detected_hz <= 0.0:
         return "saba"
     best_maqam = "saba"
     best_cents = 1e9
     for maqam_name, freqs in MAQAM_FREQS.items():
         for target_hz in freqs:
-            folded = detected_hz
+            folded = float(detected_hz)
             while folded > target_hz * 1.45:
                 folded *= 0.5
             while folded < target_hz * 0.70:
@@ -3957,8 +4248,62 @@ def _classify_maqam_from_pitches(detected_hz):
     return best_maqam
 
 
+def _compute_dual_band_bpm(mono, sample_rate):
+    """Detect BPM via adaptive local-peak Sub-Chest (45-135Hz) + Fullband autocorrelation & Rubato detection."""
+    hop = max(1, int(0.02 * sample_rate))
+    n_frames = len(mono) // hop
+    if n_frames < 50:
+        return 60, "short_default", False, 0.0
+
+    def _band_acorr(sig):
+        frames = sig[: n_frames * hop].reshape(n_frames, hop)
+        env = np.sqrt(np.mean(frames**2, axis=1) + 1e-12)
+        on_raw = np.maximum(0.0, np.diff(env, prepend=env[0]))
+        loc = _fast_boxcar_mean(on_raw, max(5, int(0.45 / 0.02)))
+        onset = np.maximum(0.0, on_raw - loc)
+        onset -= np.mean(onset)
+        if float(np.std(onset)) <= 1e-7:
+            return 60, 0.0, 0.0
+        ac = np.correlate(onset, onset, mode="full")[len(onset) - 1 :]
+        ac = ac / np.maximum(1, len(onset) - np.arange(len(ac)))
+        ac0 = max(float(ac[0]), 1e-12)
+        min_l = max(2, int((60.0 / 145.0) / 0.02))
+        max_l = min(len(ac) - 2, int((60.0 / 48.0) / 0.02))
+        if max_l <= min_l:
+            return 60, 0.0, 0.0
+        pks = [k for k in range(min_l, max_l + 1) if ac[k] >= ac[k - 1] and ac[k] >= ac[k + 1] and ac[k] > 0.0]
+        if not pks:
+            return 0, 0.0, 0.0, 0.0
+        best_l = max(pks, key=lambda k: ac[k])
+        if best_l * 2 <= max_l and ac[best_l * 2] >= 0.72 * ac[best_l]:
+            best_l *= 2
+        strength = float(ac[best_l]) / ac0
+        seg_ac = ac[min_l : max_l + 1]
+        prom = float(ac[best_l]) / max(float(np.median(np.abs(seg_ac))), 1e-9)
+        lag3 = int(round(best_l / 3.0))
+        lag2 = int(round(best_l / 2.0))
+        e3 = max(0.0, float(ac[lag3])) if 0 < lag3 < len(ac) else 0.0
+        e2 = max(0.0, float(ac[lag2])) if 0 < lag2 < len(ac) else 0.0
+        trip = e3 / max(e2 + e3, 1e-9)
+        return int(round(60.0 / (best_l * 0.02))), strength, prom, trip
+
+    low_sig = butter_filter(mono, [45.0, min(135.0, 0.45 * sample_rate)], sample_rate, btype="band", order=3)
+    b_low, st_low, pr_low, tr_low = _band_acorr(low_sig)
+    b_full, st_full, pr_full, tr_full = _band_acorr(mono)
+
+    if st_low >= 0.16 and b_low > 0:
+        return b_low, "sub_chest_45_135hz", False, round(tr_low, 3)
+    if len(mono) >= 12.0 * sample_rate and (
+        max(st_low, st_full) < 0.032 or (max(st_low, st_full) < 0.045 and max(pr_low, pr_full) < 4.5)
+    ):
+        return 0, "rubato_free_tempo", True, 0.0
+    if b_full > 0:
+        return b_full, "fullband_onset", False, round(tr_full, 3)
+    return 0 if len(mono) >= 12.0 * sample_rate else 60, "fallback", False, 0.0
+
+
 def extract_reference_audio_profile(input_path):
-    """Module 45 & 68: Reverse-engineer chest-beat BPM, Baritone f0 median, Maqam & ITU-R LUFS."""
+    """Module 45, 68 & 69: Reverse-engineer Dual-Band BPM, 24-EDO Maqam, EQ/Stereo & School."""
     sample_rate, stereo, channels, bit_depth = read_wav_any_depth(input_path, return_stereo=True)
     mono = np.mean(stereo, axis=1) if stereo.shape[0] > 0 else np.zeros(0, dtype=np.float64)
     duration_sec = round(len(mono) / max(1.0, float(sample_rate)), 3)
@@ -3966,66 +4311,65 @@ def extract_reference_audio_profile(input_path):
     loud_stats = measure_ebu_r128_loudness(stereo if channels > 1 else mono, sample_rate)
     lufs_approx = loud_stats["integrated_lufs"]
 
-    # Zero-padded windowed Baritone fundamental median (100-235 Hz, ~3 Hz precision)
-    frame_len = max(256, int(0.12 * sample_rate))
-    nfft = 16384
-    f0_estimates = []
-    if len(mono) >= frame_len:
-        hop_f = max(frame_len, int(0.40 * sample_rate))
-        n_frames_f = max(1, (len(mono) - frame_len) // hop_f + 1)
-        rms_vals = [
-            float(np.sqrt(np.mean(mono[i * hop_f : i * hop_f + frame_len] ** 2)))
-            for i in range(n_frames_f)
-        ]
-        rms_gate = max(1e-4, 0.25 * max(rms_vals, default=0.0))
-        hann = np.hanning(frame_len)
-        freqs_w = np.fft.rfftfreq(nfft, d=1.0 / sample_rate)
-        v_mask = (freqs_w >= 100.0) & (freqs_w <= min(235.0, 0.45 * sample_rate))
-        if np.any(v_mask):
-            f_sub = freqs_w[v_mask]
-            for i, r_val in enumerate(rms_vals):
-                if r_val < rms_gate:
-                    continue
-                seg = mono[i * hop_f : i * hop_f + frame_len] * hann
-                mag = np.abs(np.fft.rfft(seg, n=nfft))[v_mask]
-                if mag.size:
-                    f0_estimates.append(float(f_sub[int(np.argmax(mag))]))
-    dom_hz = float(np.median(f0_estimates)) if f0_estimates else 146.83
+    # Stereo width & dynamic crest factor
+    mid = 0.5 * (stereo[:, 0] + stereo[:, 1]) if stereo.shape[0] > 0 else mono
+    side = 0.5 * (stereo[:, 0] - stereo[:, 1]) if stereo.shape[0] > 0 else np.zeros(0, dtype=np.float64)
+    mid_rms = float(np.sqrt(np.mean(mid * mid) + 1e-12)) if len(mid) else 1e-9
+    side_rms = float(np.sqrt(np.mean(side * side) + 1e-12)) if len(side) else 1e-9
+    side_mid_db = round(20.0 * math.log10(max(side_rms, 1e-9) / max(mid_rms, 1e-9)), 2)
 
-    closest_maqam = _classify_maqam_from_pitches(dom_hz)
+    full_rms = float(np.sqrt(np.mean(mono * mono) + 1e-12)) if len(mono) else 1e-9
+    peak_lin = float(np.max(np.abs(mono)) + 1e-12) if len(mono) else 1e-9
+    crest_db = round(20.0 * math.log10(peak_lin / full_rms), 2)
+    full_db = 20.0 * math.log10(max(full_rms, 1e-9))
 
-    # Fullband onset envelope autocorrelation (unbiased by overlap length)
-    hop = max(1, int(0.02 * sample_rate))
-    n_frames = len(mono) // hop
-    estimated_bpm = 60
-    if n_frames >= 20:
-        frames = mono[: n_frames * hop].reshape(n_frames, hop)
-        env = np.sqrt(np.mean(frames**2, axis=1) + 1e-12)
-        onset = np.maximum(0.0, np.diff(env, prepend=env[0]))
-        onset -= np.mean(onset)
-        if float(np.std(onset)) > 1e-6:
-            acorr = np.correlate(onset, onset, mode="full")[len(onset) - 1 :]
-            acorr = acorr / np.maximum(1, len(onset) - np.arange(len(acorr)))
-            min_lag = max(1, int((60.0 / 138.0) / 0.02))
-            max_lag = min(len(acorr) - 1, int((60.0 / 48.0) / 0.02))
-            if max_lag > min_lag:
-                best_lag = min_lag + int(np.argmax(acorr[min_lag : max_lag + 1]))
-                if best_lag * 2 <= max_lag and acorr[best_lag * 2] >= 0.72 * acorr[best_lag]:
-                    best_lag *= 2
-                estimated_bpm = int(round(60.0 / (best_lag * 0.02)))
+    def _rel_band_db(lo_hz, hi_hz):
+        if hi_hz >= 0.46 * sample_rate or lo_hz >= hi_hz or len(mono) < 256:
+            return None
+        filt = butter_filter(mono, [lo_hz, hi_hz], sample_rate, btype="band", order=3)
+        b_rms = float(np.sqrt(np.mean(filt * filt) + 1e-12))
+        return round(20.0 * math.log10(max(b_rms, 1e-9)) - full_db, 2)
 
-    if estimated_bpm >= 115:
+    spectral_bands = {
+        "sub_45_95_rel_db": _rel_band_db(45.0, 95.0),
+        "bass_95_220_rel_db": _rel_band_db(95.0, 220.0),
+        "mud_250_550_rel_db": _rel_band_db(250.0, 550.0),
+        "core_600_1800_rel_db": _rel_band_db(600.0, 1800.0),
+        "pres_1800_4500_rel_db": _rel_band_db(1800.0, 4500.0),
+        "sib_5500_8500_rel_db": _rel_band_db(5500.0, 8500.0),
+    }
+
+    closest_maqam, dom_hz, qt_ratio, maqam_top3 = _extract_24edo_maqam_profile(mono, sample_rate)
+    estimated_bpm, bpm_src, is_rubato, triplet_ratio = _compute_dual_band_bpm(mono, sample_rate)
+
+    if is_rubato or estimated_bpm == 0:
+        rec_mode = "nai"
+        school_guess = "School 04/01 (نعي منبري وموال حر — 0 BPM)"
+    elif estimated_bpm >= 115:
         rec_mode = "shoor"
+        school_guess = "School 05/09 (شور كربلائي أو إيراني متسارع)"
     elif estimated_bpm >= 92:
         rec_mode = "bahrani_haidari"
+        school_guess = "School 02/03 (الحيدري الموكبي المتسارع)"
     elif estimated_bpm >= 80:
         rec_mode = "fazzaiya"
+        school_guess = "School 05/08 (فزاعية ووقفة عاشورائية)"
+    elif estimated_bpm >= 70 and triplet_ratio >= 0.26:
+        rec_mode = "bahrani_thulathi"
+        school_guess = "School 03/07 (اللطم الثلاثي البحراني — الأكرف)"
     elif estimated_bpm >= 70:
         rec_mode = "bandari"
+        school_guess = "School 05/01 (درج موكبي ومشاية)"
     elif estimated_bpm >= 63:
         rec_mode = "studio_arranged"
+        school_guess = "School 06/01 (نزلة كربلائية أو حوارية استوديوية)"
     else:
         rec_mode = "thaqeel_muwazza"
+        school_guess = (
+            "School 04 (شجن ثقيل جنائزي — السيد سلام)"
+            if estimated_bpm <= 57
+            else "School 01/02 (ثقيل موزع — باسم وبوجبارة)"
+        )
 
     profile_prompt = build_vocal_genre_profile(
         genre="latmiya", dialect="iraqi", maqam=closest_maqam, bpm=estimated_bpm
@@ -4039,10 +4383,20 @@ def extract_reference_audio_profile(input_path):
         "bit_depth": bit_depth,
         "duration_sec": duration_sec,
         "estimated_bpm": estimated_bpm,
+        "bpm_source": bpm_src,
+        "is_rubato_free_tempo": is_rubato,
+        "triplet_swing_ratio": triplet_ratio,
         "estimated_fundamental_hz": round(dom_hz, 2),
         "closest_maqam": closest_maqam,
+        "maqam_top3_candidates": maqam_top3,
+        "quarter_tone_energy_ratio": qt_ratio,
         "integrated_lufs": loud_stats["integrated_lufs"],
         "integrated_lufs_approx": lufs_approx,
+        "lra_lu": loud_stats["lra_lu"],
+        "crest_factor_db": crest_db,
+        "side_mid_stereo_db": side_mid_db,
+        "spectral_bands_rel_db": spectral_bands,
+        "closest_master_school": school_guess,
         "recommended_dsp_mode": rec_mode,
         "recommended_sound_prompt": profile_prompt,
     }
@@ -4103,17 +4457,57 @@ def apply_noise_print_restoration(signal, sample_rate):
 
 
 def apply_vocal_eq(signal, sample_rate, preserve_chest_thud=False):
-    """Apply Jawhari Baritone EQ: 42Hz/85Hz HPF, mud cleanup, harshness tame & clarity shelf."""
-    hpf_hz = 42.0 if preserve_chest_thud else 85.0
+    """Module 63 & 69 (V54.0): Apply 175-track calibrated EQ (mud notch @ 450Hz, pharyngeal 1.2kHz, presence)."""
+    hpf_hz = 42.0 if preserve_chest_thud else 84.0
     out = butter_filter(signal, hpf_hz, sample_rate, btype="high", order=2 if preserve_chest_thud else 4)
-    if 300.0 < 0.46 * sample_rate:
-        b_mud, a_mud = iirnotch(300.0, 2.5, sample_rate)
-        out = 0.78 * out + 0.22 * lfilter(b_mud, a_mud, out)
-    if 2500.0 < 0.46 * sample_rate:
-        b_harsh, a_harsh = iirnotch(2500.0, 3.5, sample_rate)
-        out = 0.84 * out + 0.16 * lfilter(b_harsh, a_harsh, out)
-    presence = butter_filter(out, [1800.0, min(4600.0, 0.44 * sample_rate)], sample_rate, btype="band", order=2)
-    return out + (0.12 if preserve_chest_thud else 0.18) * presence
+    if 450.0 < 0.45 * sample_rate:
+        b_mud, a_mud = iirnotch(450.0, 2.2, sample_rate)
+        out = 0.72 * out + 0.28 * lfilter(b_mud, a_mud, out)
+    if 2500.0 < 0.45 * sample_rate:
+        b_harsh, a_harsh = iirnotch(2500.0, 3.8, sample_rate)
+        out = 0.88 * out + 0.12 * lfilter(b_harsh, a_harsh, out)
+    core = butter_filter(out, [900.0, min(1750.0, 0.43 * sample_rate)], sample_rate, btype="band", order=2)
+    presence = butter_filter(out, [1850.0, min(4300.0, 0.44 * sample_rate)], sample_rate, btype="band", order=2)
+    warm = (
+        butter_filter(out, [95.0, min(190.0, 0.42 * sample_rate)], sample_rate, btype="band", order=2)
+        if preserve_chest_thud
+        else 0.0
+    )
+    return out + 0.14 * core + (0.14 if preserve_chest_thud else 0.18) * presence + (0.08 * warm if preserve_chest_thud else 0.0)
+
+
+def apply_arabic_deesser(signal, sample_rate, threshold_ratio=0.35, max_atten_db=4.5):
+    """Module 69 (V54.0): Dynamically tame 5.5-8.5kHz Arabic sibilance (ص/س/ش) per Basim/Akraf curves."""
+    if len(signal) < 64 or sample_rate <= 18500:
+        return signal
+    hi_cut = min(8500.0, 0.45 * sample_rate)
+    if hi_cut <= 5600.0:
+        return signal
+    sib_band = butter_filter(signal, [5500.0, hi_cut], sample_rate, btype="band", order=3)
+    fast_win = max(1, int(0.008 * sample_rate))
+    slow_win = max(fast_win + 2, int(0.080 * sample_rate))
+    sib_rms = np.sqrt(np.maximum(_fast_boxcar_mean(sib_band**2, fast_win), 1e-12))
+    full_rms = np.sqrt(np.maximum(_fast_boxcar_mean(signal**2, slow_win), 1e-12))
+    thresh = np.maximum(1e-4, threshold_ratio * full_rms)
+    excess = np.maximum(0.0, sib_rms / np.maximum(thresh, 1e-6) - 1.0)
+    min_gain = 10.0 ** (-abs(max_atten_db) / 20.0)
+    gain = np.clip(1.0 / (1.0 + 0.85 * excess), min_gain, 1.0)
+    return (signal - sib_band) + sib_band * gain
+
+
+def apply_optical_vocal_compressor(signal, sample_rate, threshold_db=-20.0, ratio=2.2):
+    """Module 69 (V54.0): Gentle RMS optical vocal leveler tightening LRA toward 6-9 LU studio sweet spot."""
+    if len(signal) < 64:
+        return signal
+    win = max(1, int(0.080 * sample_rate))
+    rms = np.sqrt(np.maximum(_fast_boxcar_mean(signal**2, win), 1e-12))
+    rms_db = 20.0 * np.log10(np.maximum(rms, 1e-6))
+    over_db = np.maximum(0.0, rms_db - threshold_db)
+    reduced_db = over_db * (1.0 - 1.0 / max(ratio, 1.0))
+    gain = 10.0 ** (-reduced_db / 20.0)
+    smooth_win = max(1, int(0.040 * sample_rate))
+    gain_smooth = _fast_boxcar_mean(gain, smooth_win)
+    return signal * gain_smooth
 
 
 def apply_track01_dammam_eq(signal, sample_rate):
@@ -4353,14 +4747,15 @@ def build_rhythm_bed(
     while cursor < num_samples:
         rr = beat_idx % rr_count
         if mode == "bahrani_thulathi":
-            step_in_bar = beat_idx % 4
+            step_in_bar = beat_idx % 3
             if step_in_bar == 0:
-                _add_hit_at(bed, main_bank[rr], cursor, gain=0.95)
-                _add_hit_at(bed, main_bank[(rr + 1) % rr_count], cursor + int(0.42 * beat_samples), gain=0.88)
+                _add_hit_at(bed, main_bank[rr], cursor, gain=1.08)
+                _add_hit_at(bed, main_bank[(rr + 1) % rr_count], cursor + int(0.36 * beat_samples), gain=0.82)
             elif step_in_bar == 1:
-                _add_hit_at(bed, main_bank[rr], cursor, gain=1.12)
-            elif step_in_bar == 3:
-                _add_hit_at(bed, breath_bank[rr], cursor, gain=0.80)
+                _add_hit_at(bed, main_bank[rr], cursor, gain=0.92)
+                _add_hit_at(bed, main_bank[(rr + 2) % rr_count], cursor + int(0.66 * beat_samples), gain=0.68)
+            else:
+                _add_hit_at(bed, breath_bank[rr], cursor, gain=0.84)
         elif mode == "bahrani_rubai":
             accent = 1.18 if (beat_idx % 4 == 3) else 0.92
             _add_hit_at(bed, main_bank[rr], cursor, gain=accent)
@@ -4381,12 +4776,13 @@ def build_rhythm_bed(
             sub_pos = cursor + int((0.66 + 0.12 * swing_clamped) * beat_samples)
             _add_hit_at(bed, main_bank[rr], sub_pos, gain=0.72)
         elif mode == "shoor":
-            _add_hit_at(bed, main_bank[rr], cursor, gain=0.95)
-            _add_hit_at(bed, main_bank[(rr + 1) % rr_count], cursor + beat_samples // 2, gain=0.78)
-            _add_hit_at(bed, breath_bank[rr], cursor + beat_samples // 2, gain=0.90)
+            jitter = int(((rr - 1.5) * 0.0025) * sample_rate)
+            _add_hit_at(bed, main_bank[rr], max(0, cursor + jitter), gain=0.96)
+            _add_hit_at(bed, main_bank[(rr + 1) % rr_count], cursor + beat_samples // 2, gain=0.80)
+            _add_hit_at(bed, breath_bank[rr], cursor + beat_samples // 2, gain=0.92)
         elif mode == "fazzaiya":
-            _add_hit_at(bed, main_bank[rr], cursor, gain=0.95)
-            _add_hit_at(bed, main_bank[(rr + 1) % rr_count], cursor + int(0.5 * beat_samples), gain=0.58)
+            _add_hit_at(bed, main_bank[rr], cursor, gain=0.98)
+            _add_hit_at(bed, main_bank[(rr + 1) % rr_count], cursor + int(0.5 * beat_samples), gain=0.62)
         elif mode == "studio_arranged":
             _add_hit_at(bed, main_bank[rr], cursor, gain=0.95)
             _add_hit_at(bed, main_bank[(rr + 1) % rr_count], cursor + beat_samples // 2, gain=0.35)
@@ -4431,23 +4827,26 @@ def _apply_ahaat_formant_resonators(source, sample_rate):
 
 
 def synthesize_ahaat_drone(num_samples, sample_rate, maqam="saba"):
-    """Module 44: Synthesize 24-EDO human pharyngeal Ahaat pad ([-4, 0, +4] cents ensemble)."""
+    """Module 44 & 69: Synthesize 24-EDO human pharyngeal Ahaat pad with Jins modal suspension."""
     if num_samples <= 0:
         return np.zeros(0, dtype=np.float64)
     freqs = MAQAM_FREQS.get(maqam.lower(), MAQAM_FREQS["saba"])
     tonic_hz = freqs[0]
+    modal_2nd_hz = freqs[1]
     fourth_hz = freqs[2]
     detune_cents = (-4.0, 0.0, 4.0)
+    t_vec = np.arange(num_samples, dtype=np.float64) / float(sample_rate)
+    modal_sway = 0.5 * (1.0 - np.cos(2.0 * np.pi * 0.11 * t_vec))
 
     ensemble = np.zeros(num_samples, dtype=np.float64)
     for cents in detune_cents:
         ratio = 2.0 ** (cents / 1200.0)
         v_tonic = _generate_rosenberg_glottal_source(num_samples, sample_rate, tonic_hz * ratio)
+        v_second = _generate_rosenberg_glottal_source(num_samples, sample_rate, modal_2nd_hz * ratio)
         v_fourth = _generate_rosenberg_glottal_source(num_samples, sample_rate, fourth_hz * ratio)
-        ensemble += 0.68 * v_tonic + 0.32 * v_fourth
+        ensemble += 0.62 * v_tonic + 0.24 * (1.0 - 0.35 * modal_sway) * v_fourth + 0.14 * modal_sway * v_second
 
     shaped = _apply_ahaat_formant_resonators(ensemble / float(len(detune_cents)), sample_rate)
-    t_vec = np.arange(num_samples, dtype=np.float64) / float(sample_rate)
     breath_lfo = 0.78 + 0.22 * np.sin(2.0 * np.pi * 0.22 * t_vec)
     peak = float(np.max(np.abs(shaped)) + 1e-9)
     return 0.18 * (shaped / peak) * breath_lfo
@@ -4741,13 +5140,6 @@ def process_audio_file(
         max_samples = min(len(mono), int(float(trim_end_sec) * sample_rate))
         mono = mono[:max_samples]
 
-    if fade_out_sec and float(fade_out_sec) > 0.0 and len(mono) > 8:
-        fade_len = min(len(mono) // 2, int(float(fade_out_sec) * sample_rate))
-        if fade_len > 2:
-            curve = 0.5 * (1.0 + np.cos(np.pi * np.linspace(0.0, 1.0, fade_len)))
-            mono = mono.copy()
-            mono[-fade_len:] *= curve
-
     pure_mode = mode == "vocal_pure_master" or bool(no_synth_rhythm)
     vocal_in = (
         strip_ai_percussion_from_vocal(mono, sample_rate)
@@ -4756,23 +5148,28 @@ def process_audio_file(
     )
     restored = apply_noise_print_restoration(vocal_in, sample_rate)
     eq_vocal = apply_vocal_eq(restored, sample_rate, preserve_chest_thud=pure_mode)
+    deessed_vocal = apply_arabic_deesser(eq_vocal, sample_rate)
+    leveled_vocal = apply_optical_vocal_compressor(deessed_vocal, sample_rate)
 
     delay_ms = compute_tempo_synced_delay_ms(bpm, mode=mode)
     if pure_mode:
-        echo_vocal = apply_dynacord_echo(eq_vocal, sample_rate, delay_ms=delay_ms, feedback=0.20, wet=0.10)
-        wet_l = apply_husseiniya_reverb(echo_vocal, sample_rate, rt60_sec=2.1, pre_delay_ms=20.0, wet=0.14, seed=4850)
-        wet_r = apply_husseiniya_reverb(echo_vocal, sample_rate, rt60_sec=2.1, pre_delay_ms=26.0, wet=0.14, seed=4899)
+        echo_l = apply_dynacord_echo(leveled_vocal, sample_rate, delay_ms=delay_ms, feedback=0.20, wet=0.10)
+        echo_r = apply_dynacord_echo(leveled_vocal, sample_rate, delay_ms=delay_ms * 1.07, feedback=0.18, wet=0.10)
+        wet_l = apply_husseiniya_reverb(echo_l, sample_rate, rt60_sec=2.2, pre_delay_ms=19.0, wet=0.15, seed=4850)
+        wet_r = apply_husseiniya_reverb(echo_r, sample_rate, rt60_sec=2.2, pre_delay_ms=27.0, wet=0.15, seed=4899)
         foley_bed = synthesize_contextual_foley(len(mono), sample_rate, foley_type=foley)
         left_chan = wet_l + 0.5 * foley_bed
         right_chan = wet_r + 0.5 * foley_bed
         stereo_sat = np.column_stack((tape_saturate(left_chan, drive=1.10), tape_saturate(right_chan, drive=1.10)))
         stereo_glued = apply_master_glue_compressor(stereo_sat, ratio=1.35, threshold=0.68)
     else:
-        echo_vocal = apply_dynacord_echo(eq_vocal, sample_rate, delay_ms=delay_ms)
+        echo_l = apply_dynacord_echo(leveled_vocal, sample_rate, delay_ms=delay_ms)
+        echo_r = apply_dynacord_echo(leveled_vocal, sample_rate, delay_ms=delay_ms * 1.07)
         rt60 = 3.4 if mode in ("mawal", "nai", "thaqeel_muwazza", "bahrani_muthakkal") else 2.4
-        wet_vocal = apply_husseiniya_reverb(echo_vocal, sample_rate, rt60_sec=rt60)
+        wet_l = apply_husseiniya_reverb(echo_l, sample_rate, rt60_sec=rt60, pre_delay_ms=18.0, wet=0.22, seed=4850)
+        wet_r = apply_husseiniya_reverb(echo_r, sample_rate, rt60_sec=rt60, pre_delay_ms=27.0, wet=0.22, seed=4899)
 
-        onset_offset = detect_vocal_onset_offset_samples(eq_vocal, sample_rate)
+        onset_offset = detect_vocal_onset_offset_samples(leveled_vocal, sample_rate)
         rhythm_bed = build_rhythm_bed(
             len(mono),
             sample_rate,
@@ -4781,7 +5178,7 @@ def process_audio_file(
             offset_samples=onset_offset,
             swing=swing,
             samples_dir=samples_dir,
-            vocal_signal=eq_vocal,
+            vocal_signal=leveled_vocal,
         )
         ahaat_pad = (
             synthesize_vocal_synth_strings_pad(len(mono), sample_rate, maqam=maqam_drone)
@@ -4794,17 +5191,24 @@ def process_audio_file(
             rhythm_bed = apply_dramatic_audio_drop(rhythm_bed, sample_rate, drop_start_sec=audio_drop_sec)
             ahaat_pad = apply_dramatic_audio_drop(ahaat_pad, sample_rate, drop_start_sec=audio_drop_sec)
 
-        ducking = compute_smart_sidechain_ducking(eq_vocal, sample_rate, duck_db=-3.0, threshold_dbfs=-28.0)
+        ducking = compute_smart_sidechain_ducking(leveled_vocal, sample_rate, duck_db=-3.0, threshold_dbfs=-28.0)
 
         haas_shift = max(1, int(0.009 * sample_rate))
         ahaat_right = np.roll(ahaat_pad, haas_shift)
         ahaat_right[:haas_shift] = ahaat_pad[:haas_shift]
 
-        left_chan = wet_vocal + 0.78 * (rhythm_bed * ducking) + 0.65 * (ahaat_pad * ducking) + foley_bed
-        right_chan = wet_vocal + 0.78 * (rhythm_bed * ducking) + 0.65 * (ahaat_right * ducking) + foley_bed
+        left_chan = wet_l + 0.78 * (rhythm_bed * ducking) + 0.65 * (ahaat_pad * ducking) + foley_bed
+        right_chan = wet_r + 0.78 * (rhythm_bed * ducking) + 0.65 * (ahaat_right * ducking) + foley_bed
 
         stereo_sat = np.column_stack((tape_saturate(left_chan), tape_saturate(right_chan)))
         stereo_glued = apply_master_glue_compressor(stereo_sat)
+
+    if fade_out_sec and float(fade_out_sec) > 0.0 and stereo_glued.shape[0] > 8:
+        fade_len = min(stereo_glued.shape[0] // 2, int(float(fade_out_sec) * sample_rate))
+        if fade_len > 2:
+            curve = 0.5 * (1.0 + np.cos(np.pi * np.linspace(0.0, 1.0, fade_len)))
+            stereo_glued = stereo_glued.copy()
+            stereo_glued[-fade_len:] *= curve[:, np.newaxis]
 
     master = normalize_lufs_and_true_peak(
         stereo_glued, sample_rate, target_lufs=-14.0, ceiling_dbtp=-1.0

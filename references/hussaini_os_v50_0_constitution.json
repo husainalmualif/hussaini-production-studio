@@ -1,7 +1,7 @@
 {
   "protocol_metadata": {
     "protocol_name": "Hussaini_Production_Studio_OS_V50_0_OMNI_ARCHITECT",
-    "skill_version": "V53.0 OMNI-ARCHITECT",
+    "skill_version": "V54.0 OMNI-ARCHITECT",
     "previous_baseline_version": "V50.0 OMNI-ARCHITECT & V48.5 OMNI-ARCHITECT (Rev 2)",
     "previous_baseline_commit_sha": "497a5cbb4672e8c6f27136fde5c5aabd0f492d29",
     "canonical_repository": "https://github.com/husainalmualif/hussaini-production-studio",
@@ -2016,6 +2016,40 @@
       "tawshih_false_positive_fix": "Sanitize & strip diacritics before matching Tor/Wazn keywords; stop matching banner 'صل على' as Tawashih; add recommended_maqam_progression and detected_poetic_wazn_ar.",
       "historical_verifier_expansion": "11 Muqatila/Aqida rules adding 1900 wounds, Ghuluw ('كن فيكون'), Abbas water chronology, Ruqayyah Sham vs. Karbala, and Sajjad combat checks.",
       "audio_profiler_upgrade": "nfft=16384 windowed Baritone f0 median, unbiased onset tempo tracker, and dynamic BPM prompt matching."
+    }
+  },
+  "v54_0_module_69_upgrades": {
+    "version": "V54.0 OMNI-ARCHITECT",
+    "module_reference": "references/modules/module_69_v54_175_mp3_acoustic_lab_24edo_and_studio_dsp.md",
+    "mp3_175_track_acoustic_lab": {
+      "tracks_analyzed": 175,
+      "total_size_mb": 1493.3,
+      "global_medians": {
+        "integrated_lufs": -11.16,
+        "lra_lu": 5.99,
+        "crest_factor_db": 14.15,
+        "side_mid_stereo_db": -7.03,
+        "mud_250_550_rel_db": -6.14,
+        "core_600_1800_rel_db": -4.46,
+        "sibilance_5500_8500_rel_db": -21.06
+      }
+    },
+    "dsp_studio_chain_upgrades": [
+      "apply_vocal_eq 175-track curve (-2.8dB notch @ 450Hz, 1.2kHz core, 2.6kHz presence)",
+      "apply_arabic_deesser (5.5-8.5kHz dynamic sibilance control matching Basim/Akraf)",
+      "apply_optical_vocal_compressor (RMS leveler at -20 dBFS, 2.2:1 tightening LRA to studio range)",
+      "True L/R decorrelated early reflections & Husseiniya dome reverb + stereo echo spread across all 18 modes",
+      "Post-reverb raised-cosine fade_out_sec elimination of tail cutoff",
+      "Jins-modulating Rosenberg Ahaat drone & triple-pulse bahrani_thulathi / shoor micro-timing"
+    ],
+    "profiler_and_phonetics_upgrades": {
+      "continuous_24edo_anchor": "Singer-relative 12-cent fine tuning alignment + Saba diminished-4th razor + FFmpeg MP3/M4A direct decoding",
+      "dual_band_bpm_and_rubato": "Adaptive local-mean peak tracker separating Sub-Chest 45-135Hz, Fullband, Triplet Thulathi (>=0.26), and 0 BPM Rubato Na'i",
+      "dual_corpus_vocalization_v54": "NEW 13,892/13,908 (99.88% strict / 99.91% w/ Madda) and OLD 13,893/13,909 (99.88% strict / 99.90% w/ Madda), idem_fails=0 across 263 sanitized sections",
+      "flow_music_v54_live_tests": {
+        "v54_test1_iraqi_shoor": "155.765s Lyria 3.5 raw -> 120 BPM detected, mastered -14.0 LUFS / -2.24 dBTP",
+        "v54_test2_bahrani_thulathi": "164.309s Lyria 3.5 raw -> 75 BPM triplet 0.291 detected, mastered -14.0 LUFS / -1.90 dBTP, LRA 7.64"
+      }
     }
   }
 }

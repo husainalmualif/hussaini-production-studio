@@ -18,8 +18,8 @@ import hussaini_dsp_montage as hds  # noqa: E402
 
 
 def test_single_source_version_and_v50_architecture():
-    """Verify V51.2 OMNI-ARCHITECT version lock, SKILL.md router budget, JSON constitution, and Module 66."""
-    assert hds.SKILL_VERSION == "V53.0 OMNI-ARCHITECT"
+    """Verify V54.0 OMNI-ARCHITECT version lock, SKILL.md router budget, JSON constitution, and Module 69."""
+    assert hds.SKILL_VERSION == "V54.0 OMNI-ARCHITECT"
     skill_md = os.path.join(ROOT_DIR, "SKILL.md")
     assert os.path.isfile(skill_md)
     assert os.path.getsize(skill_md) <= 10500
@@ -59,24 +59,31 @@ def test_single_source_version_and_v50_architecture():
         "modules",
         "module_68_v53_dual_corpus_flow_bahrani_iraqi_mastery.md",
     )
+    v54_module_doc = os.path.join(
+        ROOT_DIR,
+        "references",
+        "modules",
+        "module_69_v54_175_mp3_acoustic_lab_24edo_and_studio_dsp.md",
+    )
     assert os.path.isfile(v50_module_doc)
     assert os.path.isfile(v51_module_doc)
     assert os.path.isfile(v52_module_doc)
     assert os.path.isfile(v53_module_doc)
+    assert os.path.isfile(v54_module_doc)
 
     constitution = hds.load_v50_0_constitution()
     assert (
         constitution["protocol_metadata"]["protocol_name"]
         == "Hussaini_Production_Studio_OS_V50_0_OMNI_ARCHITECT"
     )
-    assert constitution["protocol_metadata"]["skill_version"] == "V53.0 OMNI-ARCHITECT"
+    assert constitution["protocol_metadata"]["skill_version"] == "V54.0 OMNI-ARCHITECT"
     assert len(constitution["5_master_sound_prompts_library_modules_36_44_46_48_52"]) == 25
     assert len(hds.MASTER_SOUND_PROMPTS_V50) == 25
     assert len(constitution["8_v50_empirical_175_corpus_and_9_schools_modules_54_65"]["unified_9_schools_architecture"]) == 9
     assert len(hds.SUPPORTED_DSP_MODES) == 18
     assert "vocal_pure_master" in hds.SUPPORTED_DSP_MODES
     assert "fazzaiya" in hds.SUPPORTED_DSP_MODES
-    assert len(hds.EXTENDED_ATWAR_PROMPTS_V52) == 2
+    assert len(hds.EXTENDED_ATWAR_PROMPTS_V52) == 4
     v51_block = constitution["v51_0_protocol_negative_constraints_and_style_taxonomy"]
     assert v51_block["version"] == "V51.2 OMNI-ARCHITECT"
     assert len(v51_block["permanent_negative_constraints_nc1_to_nc17"]) >= 17
@@ -86,6 +93,9 @@ def test_single_source_version_and_v50_architecture():
     v53_block = constitution["v53_0_module_68_upgrades"]
     assert v53_block["version"] == "V53.0 OMNI-ARCHITECT"
     assert v53_block["dual_corpus_benchmark"]["idempotency_failures"] == 0
+    v54_block = constitution["v54_0_module_69_upgrades"]
+    assert v54_block["version"] == "V54.0 OMNI-ARCHITECT"
+    assert v54_block["mp3_175_track_acoustic_lab"]["tracks_analyzed"] == 175
 
 
 def test_module_41_49_57_58_64_iraqi_prosthetic_clusters_and_v50_g2p_locks():
@@ -620,3 +630,81 @@ def test_v53_dual_corpus_bahrani_iraqi_ear_locks_and_audio_profiler(tmp_path):
     assert 140.0 <= prof["estimated_fundamental_hz"] <= 155.0
     assert prof["recommended_dsp_mode"] == "fazzaiya"
     assert prof["integrated_lufs"] == prof["integrated_lufs_approx"]
+
+
+def test_v54_175track_dsp_deesser_optical_stereo_24edo_and_multi_tor(tmp_path):
+    """Verify V54 De-Esser, Optical Compressor, Stereo Reverb, 24-EDO Saba/Bayati, active participles & 9-School Router."""
+    # 1. Active participle فَاعِلْ Kasra, 'آهْ' Sukun preservation, 'وَلَوْ' prefix guard & idempotency
+    poem = "إحسين آه .. يَا سِرّ عَطَاء خالق وصادق .. ولو هل دمع"
+    p1 = hds.detect_and_shape_dialect(poem)["shaped_lyrics"]
+    p2 = hds.detect_and_shape_dialect(p1)["shaped_lyrics"]
+    assert p1 == p2
+    assert "آهْ" in p1
+    assert "خَالِقْ" in p1 and "صَادِقْ" in p1
+    assert "وَ لَوْ" in p1 and "وَ لِ وَ" not in p1
+
+    # 2. Substring 'شور' inside 'عاشور' never triggers Shoor; Bahrani service retains Bahrani dialect
+    bahr_thul = hds.recommend_tor_and_rhythm_for_poem(
+        "عاشور ظل جمرة بألم\nوالراية ترفرف بالعزم\nعيونش يزينب تنادي\nگلبش صبر"
+    )
+    assert bahr_thul["detected_dialect"] == "bahrani"
+    assert bahr_thul["recommended_dsp_mode"] == "bahrani_thulathi"
+    assert bahr_thul["recommended_bpm"] == 76
+    assert "Bahrani" in bahr_thul["master_sound_prompt"]
+
+    # Abudhiyah Jinas & Hosa & Short ecstatic Shoor routing
+    abud = hds.recommend_tor_and_rhythm_for_poem(
+        "دمع عيني على الخدين جاري\nوطيفك بالليل ما فارگ جاري\nأنا المذبوح والمگطوع جاري\nعلى التربان مرمي بالغاضريه"
+    )
+    assert abud["recommended_dsp_mode"] == "nai" and abud["recommended_bpm"] == 0
+    shoor_ec = hds.recommend_tor_and_rhythm_for_poem("عشگ مجنون\nحبيب حسين\nلأجلك ذوب\nياسر النور")
+    assert shoor_ec["recommended_dsp_mode"] == "shoor" and shoor_ec["recommended_bpm"] == 132
+    hosa = hds.recommend_tor_and_rhythm_for_poem("[هوسة]\nنضل للماي المشرعة نردها")
+    assert hosa["recommended_bpm"] == 88 and "Hosa" in hosa["master_sound_prompt"]
+
+    # 3. Arabic De-Esser (5.5-8.5kHz attenuation) & Optical Vocal Compressor
+    sr = 44100
+    t_s = np.linspace(0.0, 1.0, sr, endpoint=False)
+    sib_test = 0.15 * np.sin(2.0 * np.pi * 180.0 * t_s) + 0.35 * np.sin(2.0 * np.pi * 6800.0 * t_s)
+    deessed = hds.apply_arabic_deesser(sib_test, sr)
+    hi_before = float(np.sqrt(np.mean(hds.butter_filter(sib_test, [5500.0, 8500.0], sr, btype="band") ** 2)))
+    hi_after = float(np.sqrt(np.mean(hds.butter_filter(deessed, [5500.0, 8500.0], sr, btype="band") ** 2)))
+    assert hi_after < 0.72 * hi_before
+
+    dyn_sig = np.concatenate([0.08 * np.sin(2.0 * np.pi * 180.0 * t_s[: sr // 2]), 0.65 * np.sin(2.0 * np.pi * 180.0 * t_s[: sr // 2])])
+    leveled = hds.apply_optical_vocal_compressor(dyn_sig, sr)
+    ratio_before = float(np.max(np.abs(dyn_sig[sr // 2 :]))) / max(float(np.max(np.abs(dyn_sig[: sr // 2]))), 1e-6)
+    ratio_after = float(np.max(np.abs(leveled[sr // 2 :]))) / max(float(np.max(np.abs(leveled[: sr // 2]))), 1e-6)
+    assert ratio_after < ratio_before
+
+    # 4. 24-EDO Maqam Saba (bin 8) vs Bayati (bin 10) harmonic discrimination & Stereo Decorrelated Tail Fade
+    dur_m = 2.4
+    tm = np.linspace(0.0, dur_m, int(sr * dur_m), endpoint=False)
+    tonic = 146.83
+    notes = [
+        tonic,
+        tonic * (2.0 ** (3.0 / 24.0)),   # E-half-flat (neutral 2nd)
+        tonic * (2.0 ** (5.0 / 24.0)),   # F
+        tonic * (2.0 ** (8.0 / 24.0)),   # G-flat (Saba diminished 4th!)
+        tonic * (2.0 ** (8.0 / 24.0)),
+        tonic,
+    ]
+    seg_len = len(tm) // len(notes)
+    saba_sig = np.zeros_like(tm)
+    for idx_n, f_note in enumerate(notes):
+        sl = slice(idx_n * seg_len, (idx_n + 1) * seg_len)
+        tv = tm[sl]
+        saba_sig[sl] = 0.28 * (np.sin(2 * np.pi * f_note * tv) + 0.5 * np.sin(2 * np.pi * 2 * f_note * tv) + 0.25 * np.sin(2 * np.pi * 3 * f_note * tv))
+    saba_wav = tmp_path / "saba_24edo.wav"
+    wavfile.write(str(saba_wav), sr, (saba_sig * 32767).astype(np.int16))
+    prof_saba = hds.extract_reference_audio_profile(str(saba_wav))
+    assert prof_saba["closest_maqam"] == "saba"
+    assert "maqam_top3_candidates" in prof_saba and "crest_factor_db" in prof_saba
+
+    out_stereo = tmp_path / "saba_v54_master.wav"
+    hds.process_audio_file(str(saba_wav), str(out_stereo), mode="thaqeel_muwazza", bpm=58, maqam_drone="saba", fade_out_sec=0.5)
+    _, st_arr, _, _ = hds.read_wav_any_depth(str(out_stereo), return_stereo=True)
+    assert not np.allclose(st_arr[:, 0], st_arr[:, 1])  # True stereo decorrelation!
+    au_saba = hds.audit_rendered_audio(str(out_stereo))
+    assert au_saba["broadcast_compliant"] is True
+    assert au_saba["abrupt_tail_cutoff_risk"] is False and au_saba["tail_last_150ms_dbfs"] < -35.0
