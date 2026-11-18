@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
 # pylint: disable=too-many-lines,too-many-return-statements,too-many-branches,too-many-locals,too-many-statements,too-many-arguments,too-many-positional-arguments,no-member,chained-comparison
-"""Hussaini Audio Omni-Architect DSP, 5-Track DAW & Phonetics Compiler (V55.0 OMNI-ARCHITECT).
+"""Hussaini Audio Omni-Architect DSP, 5-Track DAW & Phonetics Compiler (V56.0 OMNI-ARCHITECT).
 
 Standalone empirical production engine implementing Hussaini_Production_Studio_OS_V50_0_OMNI_ARCHITECT
-and V52.0–V55.0 field & 175-track empirical upgrades:
+and V52.0–V56.0 field & 175-track empirical upgrades:
 - Single-Source Version Management via root VERSION file & JSON constitution
 - Pure-Python WAV I/O (with transparent FFmpeg MP3/M4A/OGG decoding) + ITU-R BS.1770-4 / EBU R128
   K-Weighted Gated Loudness + 4x True-Peak Limiter
-- Module 67–70 (V52.0–V55.0): 175-Track Calibrated Vocal EQ + Arabic Sibilance De-Esser (5.5–8.5kHz) +
-  Optical RMS Vocal Leveler + True Stereo Decorrelated Husseiniya Reverb, Singer-Relative 24-EDO Maqam &
-  Dual-Band BPM/Rubato Profiler, 9-School 5-Stage Prosodic Tor Router, NC18–NC22 Flow Music Laws &
-  3-Poem Benchmark Verifier
+- Module 67–71 (V52.0–V56.0): 4-Axis Modern & Traditional Husseiniya Latmiya Architecture, Singer-Tonic-Locked
+  f0 Ahaat & Cello Pad, Vocal-Pulse-Locked (<460Hz) Bare-Chest Latm, Dual-Band Whip-Snap Transient Suppressor,
+  175-Track Calibrated Vocal EQ + Arabic Sibilance De-Esser + Optical Leveler + Stereo Reverb, 24-EDO Maqam &
+  Rubato Profiler, 9-School 5-Stage Prosodic Tor Router, NC18–NC25 Flow Music Laws & 3-Poem Benchmark Verifier
 """
 
 import argparse
@@ -148,6 +148,8 @@ SUPPORTED_DSP_MODES = (
     "heavy_clip",
     "thaqeel_muwazza",
     "studio_arranged",
+    "modern_studio_ney_strings",
+    "cinematic_foley_latmiya",
     "fazzaiya",
     "bahrani_fast",
     "bahrani_thulathi",
@@ -387,6 +389,96 @@ EXTENDED_ATWAR_PROMPTS_V52 = {
         "answered by grieving unison male congregation voices in natural mosque hall acoustics. "
         "Pure vocal acapella only, strictly no musical instruments."
     ),
+    "golden_iraqi_studio_latmiya_60bpm_saba_bayati_v56": (
+        "Solemn Iraqi Husseini Latmiya lament, Maqam Saba and Bayati, 60 BPM steady slow processional "
+        "rhythm, warm deep emotional Arabic male baritone lead vocal, controlled dignified "
+        "middle-register mournful delivery, clear crisp Iraqi Arabic pronunciation, smooth microtonal "
+        "melisma, deep warm low-frequency muffled bare chest thumping, synchronized male congregation "
+        "chorus on refrain only, clean dry studio vocal mix"
+    ),
+    "golden_bahrani_studio_latmiya_60bpm_saba_bayati_v56": (
+        "Solemn Bahrani Husseini Latmiya lament, Maqam Saba and Bayati, 60 BPM steady slow processional "
+        "rhythm, warm deep emotional Arabic male baritone lead vocal, controlled dignified "
+        "middle-register mournful delivery, clear crisp Bahrani Arabic pronunciation, smooth microtonal "
+        "Faizi melisma, deep warm low-frequency muffled bare chest thumping, synchronized male "
+        "congregation chorus on refrain only, clean dry studio vocal mix"
+    ),
+    "mawkib_dammam_cymbals_brass_procession_78bpm_hijaz_v56": (
+        "Majestic Traditional Husseini Ashura Mawkib procession chant, Maqam Hijaz and Bayati, "
+        "78 BPM steady march, commanding resonant Baritone Radood vocal answered by booming unison "
+        "male Mawkib chorus, deep traditional Dammam procession drums, metallic brass Tasa cymbals, "
+        "and mournful solemn procession brass horn fanfare, strictly no upbeat pop rhythm"
+    ),
+    "modern_studio_ney_cello_violin_lament_60bpm_saba_lami_v56": (
+        "Modern Studio Husseini Latmiya elegy, Maqam Saba and Lami, 60 BPM slow mournful pulse, "
+        "warm deep emotional Arabic male baritone Radood vocal in controlled dignified middle-register "
+        "delivery, weeping Arabic Ney flute in intro and interludes, warm low-register dramatic Cello "
+        "drone and sorrowful legato Violin counter-melody, multi-layered male choral humming harmonies, "
+        "deep muffled studio chest thumping, strictly no upbeat or dance rhythm"
+    ),
+    "cinematic_electronic_sub_pads_and_foley_latmiya_60bpm_lami_v56": (
+        "Cinematic Modern Husseini Studio Latmiya, Maqam Lami and Kurd, 60 BPM solemn dramatic pulse, "
+        "warm deep resonant Arabic male baritone Radood vocal, multi-layered male choir harmonies and "
+        "background humming pads, deep cinematic Sub-Bass and dark atmospheric Pads, precision "
+        "electronic studio chest-thump percussion, and subtle historical Karbala atmospheric wind and "
+        "distant battlefield textures, strictly no dance or pop beats"
+    ),
+}
+
+# Module 71 (V56.0): The 4 Axes of Modern & Traditional Husseiniya Latmiya Sound Engineering
+MODERN_LATMIYA_FOUR_AXES_V56 = {
+    "axis_1_human_voice_choral_and_body_latm": {
+        "arabic_title": "المحور الأول: الصوت البشري، الكورال، وإيقاع الجسد (الركيزة الأساس)",
+        "core_elements": [
+            "radood_baritone_maqam_mastery_saba_bayati_hijaz_lami",
+            "multi_layer_choral_harmony_and_humming_pads",
+            "live_and_sampled_bare_chest_body_latm_percussion",
+        ],
+        "recommended_dsp_modes": ["thaqeel_muwazza", "bahrani_muthakkal", "vocal_pure_master"],
+        "prompt_keys": [
+            "golden_iraqi_studio_latmiya_60bpm_saba_bayati_v56",
+            "golden_bahrani_studio_latmiya_60bpm_saba_bayati_v56",
+            "ashura_majlis_noha_58bpm_saba_lami_v55",
+        ],
+    },
+    "axis_2_traditional_mawkib_procession_instruments": {
+        "arabic_title": "المحور الثاني: الآلات التقليدية في المواكب",
+        "core_elements": [
+            "dammam_and_procession_drums",
+            "brass_cymbals_tasa_sunoog",
+            "mournful_heroic_procession_brass_trumpet",
+        ],
+        "recommended_dsp_modes": ["zanjeel_iraqi", "zanjeel_bahrani", "bandari"],
+        "prompt_keys": [
+            "mawkib_dammam_cymbals_brass_procession_78bpm_hijaz_v56",
+            "zanjeel_procession_80bpm_hijaz",
+        ],
+    },
+    "axis_3_modern_studio_strings_and_wind": {
+        "arabic_title": "المحور الثالث: الآلات الوترية والنفخية في التسجيلات الحديثة",
+        "core_elements": [
+            "weeping_ney_flute_intros_and_interludes",
+            "warm_low_register_dramatic_cello",
+            "sorrowful_legato_violin_phrases_strictly_non_dance",
+        ],
+        "recommended_dsp_modes": ["modern_studio_ney_strings", "studio_arranged"],
+        "prompt_keys": [
+            "modern_studio_ney_cello_violin_lament_60bpm_saba_lami_v56",
+            "golden_iraqi_studio_latmiya_60bpm_saba_bayati_v56",
+        ],
+    },
+    "axis_4_electronic_engineering_and_dramatic_foley": {
+        "arabic_title": "المحور الرابع: الهندسة الإلكترونية والمؤثرات الصوتية",
+        "core_elements": [
+            "deep_cinematic_sub_bass_and_ambient_pads",
+            "historical_karbala_foley_swords_horses_wind_fire",
+            "precision_electronic_studio_chest_latm_percussion",
+        ],
+        "recommended_dsp_modes": ["cinematic_foley_latmiya", "heavy_clip"],
+        "prompt_keys": [
+            "cinematic_electronic_sub_pads_and_foley_latmiya_60bpm_lami_v56",
+        ],
+    },
 }
 
 # Module 53 & 61 (QC19 & QC29): Mandatory 7-Key Per-Stage & 10-Key Per-Section JSON Orchestration Keys
@@ -3279,6 +3371,12 @@ def detect_and_shape_dialect(text, enforce_iraqi_dhaa=None, use_tatweel=False):
         shaped, dialect=detected, use_tatweel=use_tatweel
     )
     shaped = repair_word_initial_sukun_and_diphthongs(shaped)
+    if detected != "fusha":
+        shaped = (
+            shaped.replace("أُمُّ البَنِينْ", "أُمّ البَنِينْ")
+            .replace("أُمُّ الأَرْبَعَه", "أُمّ الأَرْبَعَه")
+            .replace("عَلَه التَّرَايِبْ", "عَلَى التَّرَايِبْ")
+        )
     return {
         "detected_dialect": detected,
         "sound_prompt_dialect_declaration": sound_dialect,
@@ -5318,9 +5416,29 @@ def _fast_boxcar_mean(signal, win):
     return out
 
 
+def suppress_whip_snap_transients(signal, sample_rate):
+    """Module 71 (V56.0): Crossover (>1.85 kHz) fast/slow transient ratio suppressor for AI rim/whip-snaps."""
+    if len(signal) < 64 or sample_rate <= 8000:
+        return signal
+    low_mid = butter_filter(signal, 1850.0, sample_rate, btype="low", order=2)
+    snap_band = butter_filter(signal, 1850.0, sample_rate, btype="high", order=2)
+    env = np.abs(snap_band)
+    fast_win = max(1, int(0.003 * sample_rate))
+    slow_win = max(fast_win + 2, int(0.240 * sample_rate))
+    fast_env = _fast_boxcar_mean(env, fast_win)
+    slow_env = _fast_boxcar_mean(env, slow_win) + 1e-7
+    med_hi = float(np.median(env) + 1e-7)
+    ratio = np.maximum(fast_env / slow_env, fast_env / (2.2 * med_hi))
+    thresh = 1.45
+    gain = np.where(ratio > thresh, np.clip((thresh / (ratio + 1e-9)) ** 1.85, 0.10, 1.0), 1.0)
+    smooth_gain = _fast_boxcar_mean(gain, max(1, int(0.004 * sample_rate)))
+    return low_mid + snap_band * smooth_gain
+
+
 def strip_ai_percussion_from_vocal(signal, sample_rate):
-    """Module 44 & 67: Attenuate AI sub-thumps (<105Hz) & click spikes while preserving 11.5kHz air."""
-    cleaned = butter_filter(signal, 105.0, sample_rate, btype="high", order=4)
+    """Module 44, 67 & 71: Attenuate AI sub-thumps (<105Hz) & high-band whip-snap transients while preserving air."""
+    de_snapped = suppress_whip_snap_transients(signal, sample_rate)
+    cleaned = butter_filter(de_snapped, 105.0, sample_rate, btype="high", order=4)
     fast_win = max(1, int(0.005 * sample_rate))
     slow_win = max(fast_win + 2, int(0.060 * sample_rate))
 
@@ -5719,12 +5837,73 @@ def _apply_ahaat_formant_resonators(source, sample_rate):
     return 0.58 * f1 + 0.30 * f2 + 0.12 * f3
 
 
-def synthesize_ahaat_drone(num_samples, sample_rate, maqam="saba"):
-    """Module 44 & 69: Synthesize 24-EDO human pharyngeal Ahaat pad with Jins modal suspension."""
+def estimate_singer_tonic_root_hz(mono, sample_rate, fallback_hz=110.0):
+    """Module 71 (V56.0): Detect singer's actual fundamental tonic and fold into bass register [73, 146] Hz."""
+    if len(mono) < 256:
+        return float(fallback_hz)
+    _, med_f0, _, _ = _extract_24edo_maqam_profile(mono, sample_rate)
+    root_hz = float(med_f0) if med_f0 and med_f0 > 40.0 else float(fallback_hz)
+    while root_hz > 146.0:
+        root_hz *= 0.5
+    while root_hz < 73.0:
+        root_hz *= 2.0
+    return round(root_hz, 2)
+
+
+def build_vocal_pulse_locked_chest_latm(mono, sample_rate, mode="thaqeel_muwazza", target_bpm=60.0):
+    """Module 71 (V56.0): Derive < 460 Hz bare-palm chest impacts directly from vocal/Raddada pulse peaks."""
+    num_samples = len(mono)
+    if num_samples == 0:
+        return np.zeros(0, dtype=np.float64), 0
+    low_vocal = butter_filter(mono, [105.0, 420.0], sample_rate, btype="band", order=2)
+    win = max(1, int(0.065 * sample_rate))
+    env = np.sqrt(np.maximum(0.0, _fast_boxcar_mean(low_vocal**2, win)))
+    beat_sec = 60.0 / max(30.0, min(145.0, float(target_bpm)))
+    min_gap = max(1, int(0.76 * beat_sec * sample_rate))
+    max_gap = max(min_gap + 1, int(1.42 * beat_sec * sample_rate))
+    step_samples = max(1, int(beat_sec * sample_rate))
+    med_env = float(np.median(env) + 1e-8)
+    start_idx = detect_vocal_onset_offset_samples(mono, sample_rate)
+    hit_positions = []
+    pos = start_idx
+    while pos < num_samples - int(0.45 * sample_rate):
+        win_s = max(start_idx, pos - int(0.28 * step_samples))
+        win_e = min(num_samples - 1, pos + int(0.32 * step_samples))
+        if win_e <= win_s:
+            break
+        local_peak = win_s + int(np.argmax(env[win_s:win_e]))
+        if env[local_peak] >= 0.45 * med_env:
+            if not hit_positions or (local_peak - hit_positions[-1]) >= min_gap:
+                hit_positions.append(local_peak)
+                pos = local_peak + step_samples
+            else:
+                pos += step_samples
+        else:
+            if hit_positions and (pos - hit_positions[-1]) <= max_gap:
+                hit_positions.append(pos)
+            pos += step_samples
+
+    hit_kind = "latm" if mode == "wahda" else "thaqeel_muwazza"
+    chest_hit = synthesize_percussion_hit(sample_rate, kind=hit_kind)
+    chest_hit = butter_filter(chest_hit, 460.0, sample_rate, btype="low", order=2)
+    bed = np.zeros(num_samples, dtype=np.float64)
+    for idx, hit_pos in enumerate(hit_positions):
+        vel = 0.88 if (idx % 2 == 0) else 0.72
+        _add_hit_at(bed, chest_hit, hit_pos, gain=vel)
+        if mode in ("shoor", "fazzaiya") and idx % 2 == 1:
+            _add_hit_at(bed, chest_hit, hit_pos + int(0.26 * step_samples), gain=0.45)
+    return bed, len(hit_positions)
+
+
+def synthesize_ahaat_drone(num_samples, sample_rate, maqam="saba", tonic_hz=None):
+    """Module 44, 69 & 71: Synthesize 24-EDO human pharyngeal Ahaat pad locked to singer tonic f0."""
     if num_samples <= 0:
         return np.zeros(0, dtype=np.float64)
-    freqs = MAQAM_FREQS.get(maqam.lower(), MAQAM_FREQS["saba"])
-    tonic_hz = freqs[0]
+    freqs = list(MAQAM_FREQS.get(maqam.lower(), MAQAM_FREQS["saba"]))
+    if tonic_hz is not None and float(tonic_hz) > 40.0:
+        scale_ratio = float(tonic_hz) / float(freqs[0])
+        freqs = [f * scale_ratio for f in freqs]
+    root_tonic_hz = freqs[0]
     modal_2nd_hz = freqs[1]
     fourth_hz = freqs[2]
     detune_cents = (-4.0, 0.0, 4.0)
@@ -5734,7 +5913,7 @@ def synthesize_ahaat_drone(num_samples, sample_rate, maqam="saba"):
     ensemble = np.zeros(num_samples, dtype=np.float64)
     for cents in detune_cents:
         ratio = 2.0 ** (cents / 1200.0)
-        v_tonic = _generate_rosenberg_glottal_source(num_samples, sample_rate, tonic_hz * ratio)
+        v_tonic = _generate_rosenberg_glottal_source(num_samples, sample_rate, root_tonic_hz * ratio)
         v_second = _generate_rosenberg_glottal_source(num_samples, sample_rate, modal_2nd_hz * ratio)
         v_fourth = _generate_rosenberg_glottal_source(num_samples, sample_rate, fourth_hz * ratio)
         ensemble += 0.62 * v_tonic + 0.24 * (1.0 - 0.35 * modal_sway) * v_fourth + 0.14 * modal_sway * v_second
@@ -5745,10 +5924,13 @@ def synthesize_ahaat_drone(num_samples, sample_rate, maqam="saba"):
     return 0.18 * (shaped / peak) * breath_lfo
 
 
-def synthesize_vocal_synth_strings_pad(num_samples, sample_rate, maqam="saba"):
-    """Module 44 (Tier 2): Synthesize conservative human vocal-synth pad (zero musical strings)."""
-    base = synthesize_ahaat_drone(num_samples, sample_rate, maqam=maqam)
-    freqs = MAQAM_FREQS.get(maqam.lower(), MAQAM_FREQS["saba"])
+def synthesize_vocal_synth_strings_pad(num_samples, sample_rate, maqam="saba", tonic_hz=None):
+    """Module 44 & 71 (Axis 3/4): Synthesize warm low cello/human vocal-synth pad locked to singer tonic f0."""
+    base = synthesize_ahaat_drone(num_samples, sample_rate, maqam=maqam, tonic_hz=tonic_hz)
+    freqs = list(MAQAM_FREQS.get(maqam.lower(), MAQAM_FREQS["saba"]))
+    if tonic_hz is not None and float(tonic_hz) > 40.0:
+        scale_ratio = float(tonic_hz) / float(freqs[0])
+        freqs = [f * scale_ratio for f in freqs]
     upper = _generate_rosenberg_glottal_source(num_samples, sample_rate, freqs[3])
     upper_shaped = _apply_ahaat_formant_resonators(upper, sample_rate)
     peak = float(np.max(np.abs(upper_shaped)) + 1e-9)
@@ -5756,7 +5938,7 @@ def synthesize_vocal_synth_strings_pad(num_samples, sample_rate, maqam="saba"):
 
 
 def synthesize_contextual_foley(num_samples, sample_rate, foley_type="none"):
-    """Synthesize subtle Karbala atmospheric Foley (desert wind, Euphrates water, distant horses)."""
+    """Module 71 (Axis 4): Synthesize subtle Karbala atmospheric Foley (wind, water, horses, swords, fire, battlefield)."""
     if not foley_type or foley_type == "none" or num_samples <= 0:
         return np.zeros(num_samples, dtype=np.float64)
 
@@ -5790,6 +5972,35 @@ def synthesize_contextual_foley(num_samples, sample_rate, foley_type="none"):
             _add_hit_at(bed, hoof, pos + int(0.14 * sample_rate), gain=0.04)
             pos += step
         return bed
+
+    if foley_type == "swords":
+        bed = np.zeros(num_samples, dtype=np.float64)
+        step = max(1, int(1.85 * sample_rate))
+        clash_len = max(8, int(0.22 * sample_rate))
+        t_c = np.arange(clash_len, dtype=np.float64) / float(sample_rate)
+        ring = (
+            0.55 * np.sin(2.0 * np.pi * 1940.0 * t_c)
+            + 0.30 * np.sin(2.0 * np.pi * 2870.0 * t_c)
+            + 0.15 * butter_filter(rng.normal(0.0, 1.0, clash_len), [1400.0, 5200.0], sample_rate, btype="band", order=2)
+        ) * np.exp(-16.0 * t_c)
+        pos = min(int(0.10 * sample_rate), max(0, num_samples // 4))
+        while pos < num_samples:
+            _add_hit_at(bed, ring, pos, gain=0.035)
+            pos += step
+        return bed
+
+    if foley_type == "fire":
+        rumble = butter_filter(noise, [120.0, 580.0], sample_rate, btype="band", order=2)
+        crackle_src = np.where(np.abs(noise) > 2.35, noise, 0.0)
+        crackle = butter_filter(crackle_src, [1800.0, 5800.0], sample_rate, btype="band", order=2)
+        flicker = 0.65 + 0.35 * np.sin(2.0 * np.pi * 0.45 * t_vec)
+        return 0.035 * rumble * flicker + 0.025 * crackle
+
+    if foley_type == "battlefield":
+        wind_layer = synthesize_contextual_foley(num_samples, sample_rate, foley_type="wind")
+        fire_layer = synthesize_contextual_foley(num_samples, sample_rate, foley_type="fire")
+        swords_layer = synthesize_contextual_foley(num_samples, sample_rate, foley_type="swords")
+        return 0.55 * wind_layer + 0.45 * fire_layer + 0.40 * swords_layer
 
     return np.zeros(num_samples, dtype=np.float64)
 
@@ -6063,22 +6274,31 @@ def process_audio_file(
         wet_r = apply_husseiniya_reverb(echo_r, sample_rate, rt60_sec=rt60, pre_delay_ms=27.0, wet=0.22, seed=4899)
 
         onset_offset = detect_vocal_onset_offset_samples(leveled_vocal, sample_rate)
-        rhythm_bed = build_rhythm_bed(
-            len(mono),
-            sample_rate,
-            mode=mode,
-            bpm=bpm,
-            offset_samples=onset_offset,
-            swing=swing,
-            samples_dir=samples_dir,
-            vocal_signal=leveled_vocal,
-        )
+        singer_tonic_hz = estimate_singer_tonic_root_hz(leveled_vocal, sample_rate)
+        if mode in ("modern_studio_ney_strings", "cinematic_foley_latmiya"):
+            rhythm_bed, _ = build_vocal_pulse_locked_chest_latm(
+                leveled_vocal, sample_rate, mode="thaqeel_muwazza", target_bpm=bpm
+            )
+        else:
+            rhythm_bed = build_rhythm_bed(
+                len(mono),
+                sample_rate,
+                mode=mode,
+                bpm=bpm,
+                offset_samples=onset_offset,
+                swing=swing,
+                samples_dir=samples_dir,
+                vocal_signal=leveled_vocal,
+            )
         ahaat_pad = (
-            synthesize_vocal_synth_strings_pad(len(mono), sample_rate, maqam=maqam_drone)
-            if mode in ("studio_arranged", "heavy_clip")
-            else synthesize_ahaat_drone(len(mono), sample_rate, maqam=maqam_drone)
+            synthesize_vocal_synth_strings_pad(
+                len(mono), sample_rate, maqam=maqam_drone, tonic_hz=singer_tonic_hz
+            )
+            if mode in ("studio_arranged", "heavy_clip", "modern_studio_ney_strings", "cinematic_foley_latmiya")
+            else synthesize_ahaat_drone(len(mono), sample_rate, maqam=maqam_drone, tonic_hz=singer_tonic_hz)
         )
-        foley_bed = synthesize_contextual_foley(len(mono), sample_rate, foley_type=foley)
+        effective_foley = "battlefield" if (mode == "cinematic_foley_latmiya" and foley == "none") else foley
+        foley_bed = synthesize_contextual_foley(len(mono), sample_rate, foley_type=effective_foley)
 
         if audio_drop_sec is not None:
             rhythm_bed = apply_dramatic_audio_drop(rhythm_bed, sample_rate, drop_start_sec=audio_drop_sec)
@@ -6138,7 +6358,7 @@ def parse_args(argv=None):
         "--mode",
         default="latm",
         choices=list(SUPPORTED_DSP_MODES),
-        help="Husseiniya rhythm & production mode (18 modes incl. vocal_pure_master & fazzaiya)",
+        help="Husseiniya rhythm & production mode (20 modes incl. modern_studio_ney_strings & cinematic_foley_latmiya)",
     )
     parser.add_argument("--bpm", type=float, default=60.0, help="Target tempo in BPM (default: 60)")
     parser.add_argument(
@@ -6151,8 +6371,8 @@ def parse_args(argv=None):
     parser.add_argument(
         "--foley",
         default="none",
-        choices=["none", "wind", "water", "horses"],
-        help="Contextual atmospheric Foley",
+        choices=["none", "wind", "water", "horses", "swords", "fire", "battlefield"],
+        help="Contextual atmospheric Foley (Axis 4: wind, water, horses, swords, fire, battlefield)",
     )
     parser.add_argument(
         "--audio-drop-sec",

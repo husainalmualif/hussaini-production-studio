@@ -1,4 +1,4 @@
-name: Hussaini Production Studio CI (V55.0 OMNI-ARCHITECT Validation)
+name: Hussaini Production Studio CI (V56.0 OMNI-ARCHITECT Validation)
 
 on:
   push:
@@ -9,7 +9,7 @@ on:
 
 jobs:
   validate-skill-and-dsp:
-    name: Validate V55.0 Docs, Pylint, Unit Tests & 18-Mode DSP (Py ${{ matrix.python-version }})
+    name: Validate V56.0 Docs, Pylint, Unit Tests & 20-Mode DSP (Py ${{ matrix.python-version }})
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -30,7 +30,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Validate V55.0 Canonical Tree, Router Budget (<=10.5KB) & Constitution
+      - name: Validate V56.0 Canonical Tree, Router Budget (<=10.5KB) & Constitution
         run: |
           test -f VERSION
           test -f SKILL.md
@@ -59,6 +59,7 @@ jobs:
           test -f references/modules/module_68_v53_dual_corpus_flow_bahrani_iraqi_mastery.md
           test -f references/modules/module_69_v54_175_mp3_acoustic_lab_24edo_and_studio_dsp.md
           test -f references/modules/module_70_v55_tabaa_al_bashar_7exp_lab_5stage_router_and_3poem_benchmark.md
+          test -f references/modules/module_71_v56_four_axes_modern_latmiya_pulse_locked_dsp_and_multi_method_lab.md
           test -f scripts/hussaini_dsp_montage.py
           test -f tests/test_hussaini_modules.py
           ! test -f references/hussaini_os_v48_5_constitution.json
@@ -67,7 +68,7 @@ jobs:
           ! test -f references/modules/module_50_melody_composition_and_24edo_guide_synth.md
           ! test -f references/modules/module_51_6dialects_g2p_and_25_atwar_encyclopedia.md
           ! test -f references/modules/module_52_pro_dsp_dynamic_ahaat_and_multi_ai_router.md
-          python -c "import json, pathlib; assert pathlib.Path('VERSION').read_text(encoding='utf-8').strip() == 'V55.0 OMNI-ARCHITECT'; assert pathlib.Path('SKILL.md').stat().st_size <= 10500; data = json.loads(pathlib.Path('references/hussaini_os_v50_0_constitution.json').read_text(encoding='utf-8')); assert data['protocol_metadata']['protocol_name'] == 'Hussaini_Production_Studio_OS_V50_0_OMNI_ARCHITECT'; assert data['protocol_metadata']['skill_version'] == 'V55.0 OMNI-ARCHITECT'"
+          python -c "import json, pathlib; assert pathlib.Path('VERSION').read_text(encoding='utf-8').strip() == 'V56.0 OMNI-ARCHITECT'; assert pathlib.Path('SKILL.md').stat().st_size <= 10500; data = json.loads(pathlib.Path('references/hussaini_os_v50_0_constitution.json').read_text(encoding='utf-8')); assert data['protocol_metadata']['protocol_name'] == 'Hussaini_Production_Studio_OS_V50_0_OMNI_ARCHITECT'; assert data['protocol_metadata']['skill_version'] == 'V56.0 OMNI-ARCHITECT'"
 
       - name: Run Pylint Static Analysis
         run: |
@@ -77,7 +78,7 @@ jobs:
         run: |
           pytest -v --cov=scripts --cov-fail-under=75 tests/test_hussaini_modules.py
 
-      - name: Run CLI Phonetics, History, Stage Plan & 18-Mode DSP Smoke Tests
+      - name: Run CLI Phonetics, History, Stage Plan & 20-Mode DSP Smoke Tests
         run: |
           python scripts/hussaini_dsp_montage.py --version
           python scripts/hussaini_dsp_montage.py --compile-lyrics "ياحسين يا بويه بچفك عيوني بمجلسك بگلبي عالباب العافية وسادة ريش"
@@ -100,7 +101,7 @@ jobs:
           python scripts/hussaini_dsp_montage.py --input /tmp/in_stereo.wav --output /tmp/out_pure_trim.wav --mode vocal_pure_master --bpm 60 --trim-end-sec 0.8 --fade-out-sec 0.2 --no-synth-rhythm
           test -s /tmp/out_pure_trim.wav
           python scripts/hussaini_dsp_montage.py --audit-audio /tmp/out_pure_trim.wav
-          for mode in vocal_pure_master latm heavy_clip thaqeel_muwazza studio_arranged fazzaiya bahrani_fast bahrani_thulathi bahrani_rubai bahrani_haidari bahrani_waqfa bahrani_muthakkal zanjeel_iraqi zanjeel_bahrani shoor bandari mawal nai; do
-            python scripts/hussaini_dsp_montage.py --input /tmp/in_16000.wav --output "/tmp/test_out_${mode}.wav" --mode "$mode" --bpm 60 --maqam-drone saba_zamzam --foley wind --audio-drop-sec 0.2 --replace-ai-percussion
+          for mode in vocal_pure_master latm heavy_clip thaqeel_muwazza studio_arranged modern_studio_ney_strings cinematic_foley_latmiya fazzaiya bahrani_fast bahrani_thulathi bahrani_rubai bahrani_haidari bahrani_waqfa bahrani_muthakkal zanjeel_iraqi zanjeel_bahrani shoor bandari mawal nai; do
+            python scripts/hussaini_dsp_montage.py --input /tmp/in_16000.wav --output "/tmp/test_out_${mode}.wav" --mode "$mode" --bpm 60 --maqam-drone saba_zamzam --foley battlefield --audio-drop-sec 0.2 --replace-ai-percussion
             test -s "/tmp/test_out_${mode}.wav"
           done

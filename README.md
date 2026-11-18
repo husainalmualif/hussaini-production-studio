@@ -1,35 +1,25 @@
-# استوديو الإنتاج الحسيني الشامل — Hussaini Production Studio (V55.0 OMNI-ARCHITECT)
+# استوديو الإنتاج الحسيني الشامل — Hussaini Production Studio (V56.0 OMNI-ARCHITECT)
 
-منظومة هندسية متكاملة ومثبتة تجريبياً للتأليف الشعري الحسيني، وهندسة المقامات الميكروتونالية (`24-EDO`) والأطوار المنبرية والموكبية، وتوليد اللطميات والنواعي بالذكاء الاصطناعي (**Google Flow Music / Lyria 3.5, Suno, Udio**) بدقة نطق وأداء عالية عبر **الدستور التجريبي الموحّد (`references/hussaini_os_v50_0_constitution.json`)**، و**مختبر تجارب «طبع البشر» السبع على `flowmusic.app` وموجّه المراحل الخمس ومعيار القصائد الثلاث (`Module 70 — V55.0`، القواعد `NC18–NC22`)**، و**مختبر الـ 175 لطمية الصوتي العميق و`Module 69` (`V54.0` — De-Esser `5.5–8.5kHz`، ضاغط Optical RMS، صدى حسينية استيريو حقيقي، ومحلل `24-EDO` النسبي وكاشف النعي الحر `Rubato`)**، و**بروتوكول الاستكشاف والتشاور قبل التوليد (`Module 66`)**، و**القواعد السلبية الدائمة (`NC1–NC22` و`23.5s` 3-Line Kasra Law)**، و**حزم `Stage JSON` (`Modules 53 & 59`)**، ومع **محرك التشكيل وتصريف اللهجات (`100%` في القصائد المرجعية الثلاث و`99.9%+` / `0` أخطاء تكرار عبر `263` مقطعاً)**، و**المحقق التاريخي ذي الـ 11 قاعدة (`--verify-history`)**، و**محرك المونتاج ذي الـ 18 وضعاً (`scripts/hussaini_dsp_montage.py` — `--mode vocal_pure_master`, `--audit-audio`, `-14.0 LUFS / -1.0 dBTP` EBU R128)** (مع حظر ماسترنغ Flow Step 4 السحابي الذي يسبب Clipping).
+منظومة هندسية متكاملة ومثبتة تجريبياً للتأليف الشعري الحسيني، وهندسة المقامات الميكروتونالية (`24-EDO`) والأطوار المنبرية والموكبية والاستوديوية الحديثة، وتوليد اللطميات والنواعي بالذكاء الاصطناعي (**Google Flow Music / Lyria 3.5, Suno, Udio**) بدقة نطق وأداء عالية عبر **الدستور التجريبي الموحّد (`references/hussaini_os_v50_0_constitution.json`)**، و**معمارية المحاور الأربعة لهندسة الصوت والآلة في اللطمية الحسينية الحديثة ومختبر التجارب متعددة الأساليب (بحراني وعراقي) (`Module 71 — V56.0`، القواعد `NC23–NC25`، ومعادلة `Golden Studio 60 BPM`)**، و**مختبر تجارب «طبع البشر» السبع وموجّه المراحل الخمس ومعيار القصائد الثلاث (`Module 70 — V55.0`، القواعد `NC18–NC22`)**، و**مختبر الـ 175 لطمية الصوتي العميق و`Module 69` (`V54.0` — De-Esser `5.5–8.5kHz`، ضاغط Optical RMS، صدى حسينية استيريو حقيقي، ومحلل `24-EDO` النسبي وكاشف النعي الحر `Rubato`)**، و**بروتوكول الاستكشاف والتشاور قبل التوليد (`Module 66`)**، و**القواعد السلبية الدائمة (`NC1–NC25` و`23.5s` 3-Line Kasra Law)**، و**حزم `Stage JSON` (`Modules 53 & 59`)**، ومع **محرك التشكيل وتصريف اللهجات (`100%` في القصائد المرجعية الثلاث و`99.9%+` / `0` أخطاء تكرار عبر `263` مقطعاً)**، و**المحقق التاريخي ذي الـ 11 قاعدة (`--verify-history`)**، و**محرك المونتاج ذي الـ 20 وضعاً (`scripts/hussaini_dsp_montage.py` — `--mode modern_studio_ney_strings`, `--mode cinematic_foley_latmiya`, `--mode vocal_pure_master`, قفل طبقة الآهات والتشيلو على `f0` للرادود، لطم صدري `< 460 Hz` مقفل على نبض الرادود، كابح اللسعات الحادة `1.85–9.8 kHz`، و6 مؤثرات تاريخية `Foley`، `-14.0 LUFS / -1.0 dBTP` EBU R128)**.
 
 ---
 
-## أبرز ركائز الإصدار `V55.0 OMNI-ARCHITECT` (`Module 70` + `Module 66–69` + `NC1–NC22` + تحليل 175 MP3)
+## أبرز ركائز الإصدار `V56.0 OMNI-ARCHITECT` (`Module 71` + المحاور الأربعة + `NC1–NC25` + 20 وضع DSP)
 
-1. **بروتوكول الاستكشاف والتشاور قبل التوليد وبوابة الجودة قبل التمديد (`Module 66 & 70`):**
-   - يُمنع البدء بتوليد أي مقطع صوتي مباشرة قبل إجراء جلسة استيضاح سريعة مع المستخدم عبر التحليل الخماسي (`five_stage_analysis`: البحر العروضي، المحور الدرامي، المقام والطور، الإيقاع والـ BPM، والضبط الفونيمي)، **إلا** إذا فوض المستخدمُ الوكيلَ صراحةً بعبارة مثل *«اختر كل شيء بنفسك»* (`Auto-Pilot Mode`).
-   - يُمنع الانتقال إلى مراحل التمديد (`EXTEND`) قبل اجتياز **بوابة الجودة للمرحلة التأسيسية الأولى (`Stage-1 Quality Gate`)**.
-2. **القواعد السلبية الدائمة (`NC1–NC22`) وقانون الأسطر العمودية الثلاثة في الكسرة (`23.5s Extend Law — NC16 & NC17`):**
-   - **`NC1` (حظر ذكر أسماء الآلات الموسيقية):** منع كتابة (`Ney, Flute, Oud, Guitar, Violin, Cello, Piano, Drum Kit`) في أي برومبت أو كائن JSON لمنع تفعيل عزف منفرد طربي (`Solo`).
-   - **`NC16` (قانون الأسطر العمودية الثلاثة في الكسرة):** لما كانت كل نافذة تمديد (`Extend`) مدتها **`23.5` ثانية** ويغني الرادود كل سطر عمودي في `7.5` ثانية على سرعة `60 BPM`، تُصاغ كل **`[الكَسْرَة]` (`2B, 3B, 4B, 5B, 6B`) في `3 أسطر عمودية حصراً` (`~21.5s`)** لضمان غناء `بيت القفلة` كاملاً بنسبة `100%` دون بتر.
-   - **`NC17` (التطهير الإجباري لحقل `Lyrics` قبل كل تمديد):** مسح صندوق `Compose > Lyrics` بالكامل (`Ctrl+A -> Delete`) قبل كل خطوة تمديد لمنع دمج أو تكرار الأبيات السابقة.
-   - **`NC3–NC15` (أقفال النطق العراقي الموثقة سمعياً):** كتابة `انْگِسَمْ نُصَّينْ`، `رِدَتْ نَشْدَه`، `صُوتْ أُمِّ البَنِينْ يِصِيحْ`، `لَمَّنْ رَدْ إِبِنْ حَذْلَمْ`، `بِشِرْ گَطَّعِتْ إِفَّادِي`، و`مَا أَنْشِدَكْ إِعْلَه أَولَادِي`.
-   - **`NC18–NC22` (قوانين مختبر التجارب السبع لقصيدة «طبع البشر» على `Lyria 3.5`):**
-     - **`NC18`:** حظر كتابة الأرقام الفيزيائية (`53Hz`, `55Hz`, `320ms`) أو مفردات الضرب والإيقاع (`chest slaps`, `percussion`, `drums`, `no drums`) في خانة `Sound`؛ واستخدام البرومبت الموثق `ashura_majlis_noha_58bpm_saba_lami_v55` (`soft muffled bare chest thumping only`) أو `pure_acapella_weeping_noha_auto_bpm_saba_lami_v55` (`BPM = Auto`).
-     - **`NC19`:** قفل المحرك دائماً على `Lyria 3.5` (وحظر `Lyria 3 Pro` الذي ينهار إلى تصفيق أفراح)، وحظر الصفات الغنائية الناعمة (`warm, sincere`)، ومنع إرسال JSON التهيئة منفرداً في `Producer Chat` بدون المرحلة الأولى.
-     - **`NC20`:** ضبط قوة `Remix > Cover` عند **`Strength <= 0.40–0.45`** (`More Similar`) واستخدام `Split stems` لعزل `Vocals` بنقاء `100%` قبل المونتاج المحلي.
-     - **`NC21`:** منع وضع السكتة `..` بين المتلازمين في أشطر الكسرة الثلاثية القصيرة قبل كلمة مفردة (`الخِدْمَه إِنْكِسَارِي وَ دَمْعِتِي` بدلاً من `.. وَدَمْعِتِي`).
-     - **`NC22`:** فتح الألف الممدودة/المقصورة قبل `الـ` (`طَبْعِ البَشَرْ يِنْسَى الوَفَا`) وكسر الساكن لالتقاء الساكنين (`مُو مِثِلِ البَشَرْ`).
-3. **المدارس الصوتية التسع ومكتبة الـ 31 برومبت القياسية (`25 Master + 6 Extended V52–V55`):**
-   - تحليل صوتي ومقامي وإيقاعي وهيكلي شامل لـ **`175` لطمية** عبر 9 مدارس كبرى (`School 01–09`) مع دعم 3 قصائد مرجعية معيارية بنسبة تشكيل وعزل لهجي `100%` (`طبع البشر`، `صورة جسد عالغبرة`، و`فلسفة الانتظار`).
-4. **قانون الـ 80 ثانية والمقطع الواحد لكل `Extend` (`Module 60 — QC30`):**
-   - تقييد كل عملية تمديد (`Remix > Extend`) بـ **مقطع شعري واحد فقط** بحد أقصى **`7` أبيات (`14` شطراً عمودياً)**.
-5. **هندسة المستهل المزدوج ومنع استنساخ الجوقة على النزلة (`Module 61 — QC31`):**
-   - تقييد أي بلوك `[المُسْتَهَلّ]` بحد أقصى **`4` أشطر متتالية بين قوسين `(...)`** وعدم تكرار نفس شطر المستهل مكشوفاً ثم بين قوسين في الافتتاح (`NC22`).
-6. **حظر السطر اليتيم ذي الكلمة الواحدة والألف الوقائية الانتقائية (`Modules 62 & 63 — QC32, QC33, QC34`):**
-   - منع وضع كلمة مفردة في سطر عمودي منفصل، وقصر الألف الوقائية المكسورة `إِ` على العناقيد العراقية الساكنة الحقيقية مع منع `إِبْأ` قبل الهمزة (`QC34`: `بِأَرْضِ`).
-7. **حزمة `Stage JSON` ذات الـ 7 مفاتيح وترقيم الكسرات (`Modules 53, 57 & 59 — QC19, QC27, QC29`):**
-   - إلزامية المفتاح السابع **`lyrics_register_verbatim`** في كل مرحلة لتمريره حرفياً إلى `lyrics__register`، وترقيم وسوم الكسرة تصاعدياً.
+1. **المحاور الهندسية الأربعة للطمية الحسينية الحديثة والتقليدية (`MODERN_LATMIYA_FOUR_AXES_V56 — Module 71`):**
+   - **المحور الأول (`Axis 1` — الصوت البشري، الكورال الهارموني، وإيقاع الجسد — الركيزة الأساس):** صوت الرادود في المقامات الحزينة (`الصبا، البيات، الحجاز، اللامي`) + الكورال البشري (`طبقات صوتية متناغمة هارموني وهمهمات خلفية تملأ الفراغ الصوتي وتمنح القصيدة عمقاً درامياً`) + إيقاع اللطم الجسدي (`ضربات الأكف على الصدور كعينات إيقاعية أساسية < 460 Hz`).
+   - **المحور الثاني (`Axis 2` — الآلات التقليدية في المواكب):** الطبول والدمامات لتنظيم مسير المعزين وتوحيد حركة اللطم أو الزنجيل + الصنوج النحاسية (`Tasa/Cymbals`) + الأبواق النحاسية (`الترامبيت`) لإصدار نغمات حزينة أو حماسية مهيبة (`karbalai_mawkib_dammam_tasa_brass_76bpm_hijaz_v56`).
+   - **المحور الثالث (`Axis 3` — الآلات الوترية والنفخية في التسجيلات الحديثة):** الناي (`Ney`) في المقدمات والفواصل لمحاكاة النحيب والشجن + التشيلو (`Cello`) بطبقاته المنخفضة الدافئة للثقل الدرامي + الكمانات (`Violins`) لرسم جمل لحنية تزيد التأثير العاطفي، **مع الحرص التام على الابتعاد عن الإيقاعات الراقصة أو الطربية** (`modern_studio_ney_cello_strings_60bpm_saba_bayati_v56` / `golden_studio_*_60bpm_saba_bayati_v56` + وضع `--mode modern_studio_ney_strings`).
+   - **المحور الرابع (`Axis 4` — الهندسة الإلكترونية والمؤثرات الصوتية السينمائية):** التوزيع الرقمي لتوليد أصوات عميقة (`Sub-Bass` و`Pads`) مقفلة تلقائياً على طبقة الرادود (`estimate_singer_tonic_root_hz`) + المؤثرات الصوتية التاريخية في الخلفية (`--foley wind|water|horses|swords|fire|battlefield`: صليل السيوف، صهيل الخيول، هبوب الرياح، أصوات النيران، ماء الفرات، وأجواء المعركة) + إيقاعات إلكترونية تحاكي ضرب الصدور بدقة مشتقة من نبض الرادود والكورال (`build_vocal_pulse_locked_chest_latm` + وضع `--mode cinematic_foley_latmiya`).
+2. **القواعد السلبية الدائمة (`NC1–NC25`) وقانون الأسطر العمودية الثلاثة في الكسرة (`23.5s Extend Law — NC16 & NC17`):**
+   - **`NC1` (العزل بين الأسلوب البشري الخالص `Axis 1` والأسلوب الاستوديوي الحديث `Axis 3`):** منع أسماء الآلات في برومبتات `Axis 1` البشرية الخالصة، وتفعيل التمهيد المقامي الرصين (`60 BPM Maqam Saba & Bayati`) في برومبتات `Axis 3` مع الحظر الصارم لأي إيقاع راقص أو طربي.
+   - **`NC16 & NC17` (`23.5s` Extend Law):** صياغة كل `[الكَسْرَة]` في التمديد في **`3 أسطر عمودية حصراً` (`~21.5s`)** وتطهير حقل `Compose > Lyrics` قبل كل تمديد.
+   - **`NC18–NC22` (قوانين مختبر «طبع البشر»):** حظر أرقام الـ Hz في `Sound` (`NC18`)، قفل المحرك على `Lyria 3.5` (`NC19`)، سقف `Remix > Cover <= 0.45` (`NC20`)، حظر السكتة `..` قبل الكلمة المفردة في أشطر الكسرة الثلاثية (`NC21`)، وفتح الألف قبل `الـ` مع كسر التقاء الساكنين (`NC22`).
+   - **`NC23` (قانون الدخول المباشر للمستهل ومنع الشهقات المسرحية):** عدم بدء `[المُسْتَهَلّ]` بسطر `آااه ..` منفرد مع أوصاف `"weeping vocal grief breaks"` (التي سببت `78` ثانية من الشهقات المسرحية في `Exp-2`)؛ والبدء مباشرة بشطري المستهل بين قوسين مع معادلة الباريتون الرصين `"warm deep emotional Arabic male baritone lead vocal, controlled dignified middle-register mournful delivery"`.
+   - **`NC24` (تسكين ميم `أُمّ` اللهجية وحذف `آهْ` الزائدة في الكسرة):** كتابة `أُمّ البَنِينْ` و`أُمّ الأَرْبَعَه` بتشديد الميم دون ضمة إعرابية (`أُمُّ` سببت مطّ الضمة في `Exp-5`)، وتوحيد `عَلَه التَّرَايِبْ -> عَلَى التَّرَايِبْ` قبل `الـ`، وحذف `آهْ` الزائدة قبل `هَذَا الحُسَينْ / هَذَا الشَّمِرْ` في الكسرة (مما عالج كسرة الإطلاق الزائدة `التَّرَايِبِي / لَوَاهِبِي` بنسبة `100%` في `Exp-6`).
+   - **`NC25` (حظر لفظ `"chest-beat"` المركب وجدار فلتر `Remix > Cover`):** استبدال `"chest-beat"` بـ `"bare chest thumping"` لمنع نقرة الـ Rimshot الحادة، وتوليد قصائد المصرع الصريحة عبر `Compose > Lyrics` مباشرة لأن `Remix > Cover` (`Edit Lyrics`) يرفض مفردات الذبح الصريحة (`مَذْبُوحْ`).
+3. **المدارس الصوتية التسع ومكتبة الـ 36 برومبت القياسية (`25 Master + 11 Extended V52–V56`):**
+   - تحليل صوتي ومقامي وإيقاعي وهيكلي شامل لـ **`175` لطمية** عبر 9 مدارس كبرى (`School 01–09`) و13 تجربة حية على `Flow Music` مع دعم القصائد المرجعية باللهجتين البحرانية والعراقية بنسبة تشكيل وعزل لهجي `100%`.
 
 ---
 
@@ -44,64 +34,52 @@ npx skills add husainalmualif/hussaini-production-studio
 
 ---
 
-## ثانياً: سير العمل التطبيقي في `Flow Music` والمحرك المحلي (`V55.0 OMNI-ARCHITECT`)
+## ثانياً: سير العمل التطبيقي في `Flow Music` والمحرك المحلي (`V56.0 OMNI-ARCHITECT`)
 
-### 1. التوليد المتقن في `https://www.flowmusic.app/` عبر `Lyria 3.5` (`Modules 39, 49–70`)
-1. **افتح جلسة جديدة مستقلة (`New session` — `a[href="/session"]`)** لكل قصيدة جديدة وتأكد في `Compose > Advanced` أن الموديل هو **`Lyria 3.5`** (`NC19`).
-2. **الطريقة الأولى الموصى بها (`Method 1 — Compose > Lyrics` مباشرة):**
-   - انتقل إلى لوحة **`Compose > Lyrics`**، والصق وصف `Sound` الموثق (`ashura_majlis_noha_58bpm_saba_lami_v55` أو `pure_acapella_weeping_noha_auto_bpm_saba_lami_v55`) في خانة `Sound`، والصق النص العربي المشكول الصافي في خانة `Lyrics`.
-3. **الطريقة الثانية (`Method 2 — Stage & Section JSON` في `Producer Chat`):**
-   - أرسل كائن التهيئة المسبقة متبوعاً مباشرة بحزمة `Stage 1 JSON` (يُحظر إرسال كائن التهيئة منفرداً دون القصيدة منعاً لتوليد أغنية عشوائية — `NC19`).
-4. **التمديد أو التغطية وفصل المسارات (`Remix > Extend / Cover <= 0.45` + `Split stems`):**
-   - عند استخدام `Remix > Cover` اضبط `Strength <= 0.45` (`NC20`)، واستخدم `Split stems` لعزل `Vocals` قبل المونتاج المحلي ذي الـ 5 مسارات.
-
-### 2. الأوامر البرمجية والطرفية (`CLI & Python API — V55.0 OMNI-ARCHITECT`)
+### الأوامر البرمجية والطرفية (`CLI & Python API — V56.0 OMNI-ARCHITECT`)
 
 ```bash
 # تثبيت المتطلبات
 pip install -r requirements.txt
 
-# 1) ترجمة وتشكيل النص الشعري وبناء حزمة Stage JSON ذات الـ 7 مفاتيح (Modules 53, 59–70 — QC19, QC29–QC35, NC18–NC22)
-python3 scripts/hussaini_dsp_montage.py --compile-lyrics "طبع البشر ينسه الوفه بس انته مو مثل البشر"
-python3 scripts/hussaini_dsp_montage.py --build-stage-json "[المُسْتَهَلّ]\n(طَبْعِ البَشَرْ يِنْسَى الوَفَا .. بَسْ إِنْتَ مُو مِثِلِ البَشَرْ) .."
+# 1) ترجمة وتشكيل النص الشعري وبناء حزمة Stage JSON ذات الـ 7 مفاتيح (Modules 53, 59–71 — QC19, QC29–QC35, NC18–NC25)
+python3 scripts/hussaini_dsp_montage.py --compile-lyrics "صورة جسد عالغبرة وعليها يبچي الماي"
+python3 scripts/hussaini_dsp_montage.py --compile-lyrics "فلسفة الانتظار للغايب باختصار اترجمها ام البنين"
 
-# 2) فحص القصيدة الشامل عبر بوابات الجودة الـ 35 (QC1–QC35)
-python3 scripts/hussaini_dsp_montage.py --lint-poem "[المُسْتَهَلّ]\n(طَبْعِ البَشَرْ يِنْسَى الوَفَا .. بَسْ إِنْتَ مُو مِثِلِ البَشَرْ) .."
-
-# 3) استعراض خطة المراحل والتحليل الخماسي وتصدير دستور V55.0 OMNI-ARCHITECT
-python3 scripts/hussaini_dsp_montage.py --recommend-tor "طبع البشر ينسه الوفه بس انته مو مثل البشر"
-python3 scripts/hussaini_dsp_montage.py --stage-plan iraqi
-python3 scripts/hussaini_dsp_montage.py --verify-history "صوت أم البنين يصيح يبن حذلم"
-python3 scripts/hussaini_dsp_montage.py --plan-stages "[المُسْتَهَلّ]\nصوت أم البنين يصيح يبن حذلم\n[الكوبليه الأول]\nيا ناشد على الطف وعندك علم"
+# 2) استعراض خطة المراحل والتحليل الخماسي وتصدير دستور V56.0 OMNI-ARCHITECT
+python3 scripts/hussaini_dsp_montage.py --recommend-tor "صورة جسد عالغبرة وعليها يبچي الماي"
+python3 scripts/hussaini_dsp_montage.py --verify-history "صورة جسد عالغبرة وعليها يبچي الماي"
+python3 scripts/hussaini_dsp_montage.py --plan-stages "[المُسْتَهَلّ]\nصورة جسد عالغبرة .. صورة جرح ما يبره" --bpm 60
 python3 scripts/hussaini_dsp_montage.py --export-constitution
 
-# 4) المونتاج الصوتي ذو الـ 18 وضعاً وماسترنغ EBU R128 (-14.0 LUFS / -1.0 dBTP) + فحص --audit-audio
+# 3) المونتاج الصوتي ذو الـ 20 وضعاً وماسترنغ EBU R128 (-14.0 LUFS / -1.0 dBTP) + فحص --audit-audio
 python3 scripts/hussaini_dsp_montage.py \
-  --input "split_vocals.wav" \
-  --output "mastered_heavy_clip.wav" \
-  --mode "thaqeel_muwazza" \
-  --bpm 58 \
-  --maqam-drone "saba_zamzam" \
+  --input "raw_flowmusic.wav" \
+  --output "mastered_v56_studio.wav" \
+  --mode "modern_studio_ney_strings" \
+  --bpm 60 \
+  --maqam-drone "saba" \
+  --foley "battlefield" \
   --replace-ai-percussion \
   --fade-out-sec 3.0
 
-# 5) فحص جودة الكود (Pylint 10/10) وتشغيل اختبارات الوحدات الشاملة (Pytest >= 75% Coverage)
+# 4) فحص جودة الكود (Pylint 10/10) وتشغيل اختبارات الوحدات الشاملة (Pytest >= 75% Coverage)
 pylint --disable=C0301,R0912,R0913,R0914,R0915,R0917 scripts/hussaini_dsp_montage.py tests/test_hussaini_modules.py
 pytest -v --cov=scripts --cov-fail-under=75 tests/test_hussaini_modules.py
 ```
 
 ---
 
-## ثالثاً: هيكل ملفات المهارة وبيئة الفحص الآلي (`Repository Structure — 30 Canonical Files`)
+## ثالثاً: هيكل ملفات المهارة وبيئة الفحص الآلي (`Repository Structure — 31 Canonical Files`)
 
 ```text
 hussaini-production-studio/
-├── VERSION                                                                  # مصدر الحقيقة الموحد للإصدار (V55.0 OMNI-ARCHITECT)
+├── VERSION                                                                  # مصدر الحقيقة الموحد للإصدار (V56.0 OMNI-ARCHITECT)
 ├── SKILL.md                                                                 # الموجّه المهيكل الرشيق (<= 10.5KB Router)
 ├── README.md                                                                # الدليل الشامل للاستخدام والمرجع السريع
 ├── requirements.txt                                                         # المتطلبات البرمجية الخفيفة (numpy, scipy, pylint, pytest, pytest-cov)
 ├── references/
-│   ├── hussaini_os_v50_0_constitution.json                                  # الدستور التجريبي الموحّد لـ V55.0 OMNI-ARCHITECT (9 Schools, 31 Prompts, QC1–QC35, NC1–NC22)
+│   ├── hussaini_os_v50_0_constitution.json                                  # الدستور التجريبي الموحّد لـ V56.0 OMNI-ARCHITECT (9 Schools, 4 Axes, 36 Prompts, QC1–QC35, NC1–NC25)
 │   ├── atwar_maqamat_and_poetry_guide.md                                    # الموسوعة المرجعية الشاملة للأطوار والمقامات والعروض (Sections 1–19)
 │   ├── radoods_and_khutaba_encyclopedia.md                                  # موسوعة 20+ رادوداً (14 مدرسة) و8 من خطباء المنبر
 │   └── modules/
@@ -124,11 +102,12 @@ hussaini-production-studio/
 │       ├── module_67_v52_pure_vocal_dsp_corpus_phonetics_and_history.md      # بروتوكول V52.0: vocal_pure_master، EBU R128، --verify-history، --plan-stages، ومصرف الـ 127 مقطعاً
 │       ├── module_68_v53_dual_corpus_flow_bahrani_iraqi_mastery.md           # بروتوكول V53.0: تدقيق الكوربوسين، تجارب Flow البحرانية والعراقية، QC34، و 11 قاعدة مقاتل
 │       ├── module_69_v54_175_mp3_acoustic_lab_24edo_and_studio_dsp.md        # بروتوكول V54.0: مختبر 175 MP3، De-Esser، Optical RMS، Stereo Dome، و 24-EDO النسبي/Rubato
-│       └── module_70_v55_tabaa_al_bashar_7exp_lab_5stage_router_and_3poem_benchmark.md # بروتوكول V55.0: تجارب طبع البشر الـ 7 (NC18–NC22)، الموجه الخماسي، ومعيار القصائد الثلاث
+│       ├── module_70_v55_tabaa_al_bashar_7exp_lab_5stage_router_and_3poem_benchmark.md # بروتوكول V55.0: تجارب طبع البشر الـ 7 (NC18–NC22)، الموجه الخماسي، ومعيار القصائد الثلاث
+│       └── module_71_v56_four_axes_modern_latmiya_pulse_locked_dsp_and_multi_method_lab.md # بروتوكول V56.0: المحاور الأربعة، تجارب البحراني والعراقي (NC23–NC25)، ومعادلة Golden Studio 60 BPM
 ├── scripts/
-│   └── hussaini_dsp_montage.py                                              # المحرك المستقل للنطق الصوتي والـ 18-Mode Pure-Vocal / 5-Track DSP (EBU R128)
+│   └── hussaini_dsp_montage.py                                              # المحرك المستقل للنطق الصوتي والـ 20-Mode Pure-Vocal / 5-Track DSP (EBU R128)
 ├── tests/
-│   └── test_hussaini_modules.py                                             # اختبارات الوحدات الشاملة لـ Modules 34–70 وQC1–QC35 وNC1–NC22 والـ DSP
+│   └── test_hussaini_modules.py                                             # اختبارات الوحدات الشاملة لـ Modules 34–71 وQC1–QC35 وNC1–NC25 والـ DSP
 └── .github/
     └── workflows/
         └── ci.yml                                                           # فحص GitHub Actions CI عبر Python 3.10, 3.11, 3.12

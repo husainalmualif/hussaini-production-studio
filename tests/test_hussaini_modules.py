@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # pylint: disable=wrong-import-position,too-many-lines,no-member,too-few-public-methods
-"""Comprehensive Unit & Integration Test Suite for Hussaini Production Studio (V55.0 OMNI-ARCHITECT)."""
+"""Comprehensive Unit & Integration Test Suite for Hussaini Production Studio (V56.0 OMNI-ARCHITECT)."""
 
 import os
 import re
@@ -56,8 +56,8 @@ import hussaini_dsp_montage as hds  # noqa: E402
 
 
 def test_single_source_version_and_v50_architecture():
-    """Verify V55.0 OMNI-ARCHITECT version lock, SKILL.md router budget, JSON constitution, and Module 70."""
-    assert hds.SKILL_VERSION == "V55.0 OMNI-ARCHITECT"
+    """Verify V56.0 OMNI-ARCHITECT version lock, SKILL.md router budget, JSON constitution, and Module 71."""
+    assert hds.SKILL_VERSION == "V56.0 OMNI-ARCHITECT"
     skill_md = os.path.join(ROOT_DIR, "SKILL.md")
     assert os.path.isfile(skill_md)
     assert os.path.getsize(skill_md) <= 10500
@@ -109,26 +109,35 @@ def test_single_source_version_and_v50_architecture():
         "modules",
         "module_70_v55_tabaa_al_bashar_7exp_lab_5stage_router_and_3poem_benchmark.md",
     )
+    v56_module_doc = os.path.join(
+        ROOT_DIR,
+        "references",
+        "modules",
+        "module_71_v56_four_axes_modern_latmiya_pulse_locked_dsp_and_multi_method_lab.md",
+    )
     assert os.path.isfile(v50_module_doc)
     assert os.path.isfile(v51_module_doc)
     assert os.path.isfile(v52_module_doc)
     assert os.path.isfile(v53_module_doc)
     assert os.path.isfile(v54_module_doc)
     assert os.path.isfile(v55_module_doc)
+    assert os.path.isfile(v56_module_doc)
 
     constitution = hds.load_v50_0_constitution()
     assert (
         constitution["protocol_metadata"]["protocol_name"]
         == "Hussaini_Production_Studio_OS_V50_0_OMNI_ARCHITECT"
     )
-    assert constitution["protocol_metadata"]["skill_version"] == "V55.0 OMNI-ARCHITECT"
+    assert constitution["protocol_metadata"]["skill_version"] == "V56.0 OMNI-ARCHITECT"
     assert len(constitution["5_master_sound_prompts_library_modules_36_44_46_48_52"]) == 25
     assert len(hds.MASTER_SOUND_PROMPTS_V50) == 25
     assert len(constitution["8_v50_empirical_175_corpus_and_9_schools_modules_54_65"]["unified_9_schools_architecture"]) == 9
-    assert len(hds.SUPPORTED_DSP_MODES) == 18
+    assert len(hds.SUPPORTED_DSP_MODES) == 20
     assert "vocal_pure_master" in hds.SUPPORTED_DSP_MODES
     assert "fazzaiya" in hds.SUPPORTED_DSP_MODES
-    assert len(hds.EXTENDED_ATWAR_PROMPTS_V52) == 6
+    assert "modern_studio_ney_strings" in hds.SUPPORTED_DSP_MODES
+    assert "cinematic_foley_latmiya" in hds.SUPPORTED_DSP_MODES
+    assert len(hds.EXTENDED_ATWAR_PROMPTS_V52) == 11
     v51_block = constitution["v51_0_protocol_negative_constraints_and_style_taxonomy"]
     assert v51_block["version"] == "V51.2 OMNI-ARCHITECT"
     assert len(v51_block["permanent_negative_constraints_nc1_to_nc17"]) >= 17
@@ -145,6 +154,10 @@ def test_single_source_version_and_v50_architecture():
     assert v55_block["version"] == "V55.0 OMNI-ARCHITECT"
     assert v55_block["tabaa_al_bashar_7_experiments_lab"]["experiments_executed"] == 7
     assert v55_block["three_benchmark_poems_verification"]["unvocalized_tokens"] == 0
+    v56_block = constitution["v56_0_module_71_upgrades"]
+    assert v56_block["version"] == "V56.0 OMNI-ARCHITECT"
+    assert v56_block["supported_dsp_modes_count"] == 20
+    assert v56_block["golden_studio_60bpm_breakthrough_lab"]["total_cumulative_flow_experiments"] == 13
 
 
 def test_module_41_49_57_58_64_iraqi_prosthetic_clusters_and_v50_g2p_locks():
@@ -876,3 +889,95 @@ def test_v55_three_benchmark_poems_g2p_5stage_router_and_nc18_nc22():
             letters = re.findall(r"[\u0621-\u064A\u067E\u0686\u06AF]", core)
             if len(letters) >= 2:
                 assert re.search(r"[\u064B-\u0652\u0670]", core), f"Unvocalized token: {tok}"
+
+
+def test_v56_four_axes_pulse_locked_latm_auto_tonic_and_nc23_nc25(tmp_path):
+    """Verify V56.0 Module 71: 4-Axis architecture, Golden Studio 60BPM prompts, NC23-NC25, auto-tonic f0, pulse-locked latm & 6 Foley types."""
+    # 1. Verify 4-Axis Architecture & 5 New V56 Prompts (NC25: zero 'chest-beat' token)
+    axes = hds.MODERN_LATMIYA_FOUR_AXES_V56
+    assert len(axes) == 4
+    for axis_key in (
+        "axis_1_human_voice_choral_and_body_latm",
+        "axis_2_traditional_mawkib_procession_instruments",
+        "axis_3_modern_studio_strings_and_wind",
+        "axis_4_electronic_engineering_and_dramatic_foley",
+    ):
+        assert axis_key in axes
+        assert axes[axis_key]["prompt_keys"]
+
+    for v56_key in (
+        "golden_iraqi_studio_latmiya_60bpm_saba_bayati_v56",
+        "golden_bahrani_studio_latmiya_60bpm_saba_bayati_v56",
+        "modern_studio_ney_cello_violin_lament_60bpm_saba_lami_v56",
+        "mawkib_dammam_cymbals_brass_procession_78bpm_hijaz_v56",
+        "cinematic_electronic_sub_pads_and_foley_latmiya_60bpm_lami_v56",
+    ):
+        p_text = hds.EXTENDED_ATWAR_PROMPTS_V52[v56_key]
+        assert "chest-beat" not in p_text.lower()
+        assert "thump" in p_text.lower() or "dammam" in p_text.lower()
+
+    # 2. Verify NC24 Colloquial Un-Damma'd 'أُمّ' Lock & Pre-'الـ' Bahrani 'عَلَى التَّرَايِبْ' Liaison Lock
+    nc24_text = "إِتْرَجِمْهَا أُمُّ البَنِينْ وَ أُمُّ الأَرْبَعَه .. عَلَه التَّرَايِبْ عَالْغَبْرَه"
+    shaped_nc24 = hds.detect_and_shape_dialect(nc24_text)["shaped_lyrics"]
+    assert "أُمّ البَنِينْ" in shaped_nc24 and "أُمُّ البَنِينْ" not in shaped_nc24
+    assert "أُمّ الأَرْبَعَه" in shaped_nc24 and "أُمُّ الأَرْبَعَه" not in shaped_nc24
+    assert "عَلَى التَّرَايِبْ" in shaped_nc24 and "عَلَه التَّرَايِبْ" not in shaped_nc24
+
+    # 3. Verify Singer-Tonic-Locked Root f0 Detector, Pulse-Locked <460Hz Chest Latm & Whip-Snap Suppressor
+    sr = 16000
+    dur = 3.2
+    t_arr = np.linspace(0.0, dur, int(sr * dur), endpoint=False)
+    # Simulate 180.5 Hz Bahrani baritone vocal pulsed at 60 BPM (1.0 Hz)
+    pulse_env = 0.25 + 0.75 * (0.5 * (1.0 + np.cos(2.0 * np.pi * 1.0 * t_arr))) ** 4
+    baritone_sig = 0.35 * pulse_env * (
+        np.sin(2.0 * np.pi * 180.5 * t_arr) + 0.45 * np.sin(2.0 * np.pi * 361.0 * t_arr)
+    )
+    tonic_root = hds.estimate_singer_tonic_root_hz(baritone_sig, sr)
+    assert 86.0 <= tonic_root <= 95.0
+
+    latm_bed, hit_count = hds.build_vocal_pulse_locked_chest_latm(
+        baritone_sig, sr, mode="thaqeel_muwazza", target_bpm=60.0
+    )
+    assert len(latm_bed) == len(baritone_sig)
+    assert hit_count >= 2
+    hi_latm_rms = float(np.sqrt(np.mean(hds.butter_filter(latm_bed, [1200.0, 5000.0], sr, btype="band") ** 2)))
+    lo_latm_rms = float(np.sqrt(np.mean(hds.butter_filter(latm_bed, [45.0, 350.0], sr, btype="band") ** 2)))
+    assert lo_latm_rms > 8.0 * hi_latm_rms
+
+    # Add a sharp 3.2 kHz whip-snap burst and verify suppress_whip_snap_transients attenuates it
+    whip_sig = baritone_sig.copy()
+    burst_idx = slice(int(0.50 * sr), int(0.512 * sr))
+    whip_sig[burst_idx] += 0.85 * np.sin(2.0 * np.pi * 3200.0 * t_arr[burst_idx])
+    cleaned_whip = hds.suppress_whip_snap_transients(whip_sig, sr)
+    burst_hi_before = float(
+        np.sqrt(np.mean(hds.butter_filter(whip_sig, [1850.0, 6500.0], sr, btype="band")[burst_idx] ** 2))
+    )
+    burst_hi_after = float(
+        np.sqrt(np.mean(hds.butter_filter(cleaned_whip, [1850.0, 6500.0], sr, btype="band")[burst_idx] ** 2))
+    )
+    assert burst_hi_after < 0.75 * burst_hi_before
+
+    # 4. Verify 6 Historical Karbala Foley types & 2 new DSP modes (modern_studio_ney_strings, cinematic_foley_latmiya)
+    for f_type in ("wind", "water", "horses", "swords", "fire", "battlefield"):
+        foley_arr = hds.synthesize_contextual_foley(4000, sr, foley_type=f_type)
+        assert len(foley_arr) == 4000
+        assert float(np.max(np.abs(foley_arr))) > 1e-4
+
+    in_v56 = tmp_path / "in_v56.wav"
+    wavfile.write(str(in_v56), sr, (baritone_sig * 32767).astype(np.int16))
+    for new_mode in ("modern_studio_ney_strings", "cinematic_foley_latmiya"):
+        out_v56 = tmp_path / f"out_{new_mode}.wav"
+        res_v56 = hds.process_audio_file(
+            str(in_v56),
+            str(out_v56),
+            mode=new_mode,
+            bpm=60.0,
+            maqam_drone="saba",
+            foley="swords" if new_mode == "modern_studio_ney_strings" else "none",
+            replace_ai_percussion=True,
+            fade_out_sec=0.3,
+        )
+        assert out_v56.is_file()
+        assert res_v56["mode"] == new_mode
+        assert -15.5 <= res_v56["integrated_lufs"] <= -12.5
+        assert res_v56["true_peak_dbtp"] <= -0.9
