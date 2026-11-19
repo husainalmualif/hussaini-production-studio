@@ -1,6 +1,8 @@
-# بروتوكول التهيئة المسبقة بصيغة `JSON` والاحتراف الكامل لواجهة `Flow Music Studio` (`Modules 39, 51, 53 & 72`) — V57.0 OMNI-ARCHITECT
+# بروتوكول التهيئة المسبقة بصيغة `JSON` والاحتراف الكامل لواجهة `Flow Music Studio` (`Modules 39, 51, 53, 72 & 73`) — V58.0 OMNI-ARCHITECT
 
-يوثق هذا الملف بروتوكول التهيئة المسبقة للجلسة (`JSON Session Pre-Conditioning` عبر الدستور المرجعي `references/hussaini_os_v50_0_constitution.json` بوضع `"Pre_Conditioning_Lock_Wait_For_Stage_JSON"`)، وحزم المراحل الإلزامية (`Module 53` — `--build-stage-json`)، والقواعد الهندسية الصارمة للتعامل الاحترافي ثنائي القناة مع واجهة وأدوات `https://www.flowmusic.app/` (`New session`، لوحة `Compose` المباشرة مع قفل `Lyria 3.5`، وقائمة `Remix > Extend / Trim / Replace / Cover <= 0.45 / Split stems`).
+يوثق هذا الملف بروتوكول التهيئة المسبقة المدمجة بصيغة `JSON` (**`NC30` — Combined Pre-Conditioning + Multi-Section Muwashah JSON** عبر `--build-muwashah-json`) الذي أثبت تفوقاً ساحقاً في `V58.0` (`9.4/10` لمرشح `M2-B` على «بكاء الورق» مقابل `4.2/10` لـ `Compose > Lyrics`)، إضافةً إلى حزم المراحل (`Module 53` — `--build-stage-json`)، والتمديد الديناميكي بالمرحلة الثانية (`NC31` — `OVERWRITE_WITH_STAGE_2_ONLY`)، والقواعد الهندسية الصارمة لواجهة `https://www.flowmusic.app/` (`New session`، قفل `Lyria 3.5`، وقائمة `Remix > Extend / Trim / Replace / Cover <= 0.45 / Split stems`).
+
+> **قاعدة `NC30` الذهبية (`V58.0`):** لا تُرسل `JSON` التهيئة المسبقة **منفرداً** في `Producer Chat` دون كلمات القصيدة (لأن ذلك يسبب هلوسة وتأليف أغنية من خيال النموذج كما ثبت في `V55`)؛ بل ادمج قواعد التهيئة + مصفوفة `arrangement_sections[]` بالإنجليزية + `lyrics_register_verbatim` المصرّف بنظافة (`--compile-clean-lyria`) في **حزمة `JSON` واحدة مدمجة** عبر `build_v58_combined_muwashah_json()`.
 
 ---
 

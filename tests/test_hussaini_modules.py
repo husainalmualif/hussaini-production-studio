@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # pylint: disable=wrong-import-position,too-many-lines,no-member,too-few-public-methods
-"""Comprehensive Unit & Integration Test Suite for Hussaini Production Studio (V57.0 OMNI-ARCHITECT)."""
+"""Comprehensive Unit & Integration Test Suite for Hussaini Production Studio (V58.0 OMNI-ARCHITECT)."""
 
 import os
 import re
@@ -56,8 +56,8 @@ import hussaini_dsp_montage as hds  # noqa: E402
 
 
 def test_single_source_version_and_v50_architecture():
-    """Verify V57.0 OMNI-ARCHITECT version lock, SKILL.md router budget, JSON constitution, and Module 72."""
-    assert hds.SKILL_VERSION == "V57.0 OMNI-ARCHITECT"
+    """Verify V58.0 OMNI-ARCHITECT version lock, SKILL.md router budget, JSON constitution, and Module 73."""
+    assert hds.SKILL_VERSION == "V58.0 OMNI-ARCHITECT"
     skill_md = os.path.join(ROOT_DIR, "SKILL.md")
     assert os.path.isfile(skill_md)
     assert os.path.getsize(skill_md) <= 10500
@@ -121,6 +121,12 @@ def test_single_source_version_and_v50_architecture():
         "modules",
         "module_72_v57_clean_lyria35_orthography_ch_digraph_and_20s_chunk_audit.md",
     )
+    v58_module_doc = os.path.join(
+        ROOT_DIR,
+        "references",
+        "modules",
+        "module_73_v58_muwashah_multi_meter_combined_json_and_masterwork_direction.md",
+    )
     assert os.path.isfile(v50_module_doc)
     assert os.path.isfile(v51_module_doc)
     assert os.path.isfile(v52_module_doc)
@@ -129,13 +135,14 @@ def test_single_source_version_and_v50_architecture():
     assert os.path.isfile(v55_module_doc)
     assert os.path.isfile(v56_module_doc)
     assert os.path.isfile(v57_module_doc)
+    assert os.path.isfile(v58_module_doc)
 
     constitution = hds.load_v50_0_constitution()
     assert (
         constitution["protocol_metadata"]["protocol_name"]
         == "Hussaini_Production_Studio_OS_V50_0_OMNI_ARCHITECT"
     )
-    assert constitution["protocol_metadata"]["skill_version"] == "V57.0 OMNI-ARCHITECT"
+    assert constitution["protocol_metadata"]["skill_version"] == "V58.0 OMNI-ARCHITECT"
     assert len(constitution["5_master_sound_prompts_library_modules_36_44_46_48_52"]) == 25
     assert len(hds.MASTER_SOUND_PROMPTS_V50) == 25
     assert len(constitution["8_v50_empirical_175_corpus_and_9_schools_modules_54_65"]["unified_9_schools_architecture"]) == 9
@@ -144,7 +151,7 @@ def test_single_source_version_and_v50_architecture():
     assert "fazzaiya" in hds.SUPPORTED_DSP_MODES
     assert "modern_studio_ney_strings" in hds.SUPPORTED_DSP_MODES
     assert "cinematic_foley_latmiya" in hds.SUPPORTED_DSP_MODES
-    assert len(hds.EXTENDED_ATWAR_PROMPTS_V52) == 13
+    assert len(hds.EXTENDED_ATWAR_PROMPTS_V52) == 14
     v51_block = constitution["v51_0_protocol_negative_constraints_and_style_taxonomy"]
     assert v51_block["version"] == "V51.2 OMNI-ARCHITECT"
     assert len(v51_block["permanent_negative_constraints_nc1_to_nc17"]) >= 17
@@ -168,6 +175,9 @@ def test_single_source_version_and_v50_architecture():
     v57_block = constitution["v57_0_module_72_upgrades"]
     assert v57_block["version"] == "V57.0 OMNI-ARCHITECT"
     assert v57_block["phonetic_and_makharij_stress_test_lab"]["total_cumulative_flow_experiments"] == 17
+    v58_block = constitution["v58_0_module_73_upgrades"]
+    assert v58_block["version"] == "V58.0 OMNI-ARCHITECT"
+    assert v58_block["bukaa_alwaraq_3method_head_to_head_lab"]["total_cumulative_flow_experiments"] == 20
 
 
 def test_module_41_49_57_58_64_iraqi_prosthetic_clusters_and_v50_g2p_locks():
@@ -1045,3 +1055,90 @@ def test_v57_clean_lyria35_orthography_ch_digraph_and_nc26_nc29():
     assert hds.recommend_tor_and_rhythm_for_poem("فاضوا هياما .. طاروا غراما .. أنصار الإبا")["recommended_dsp_mode"] == "zanjeel_bahrani"
 
     assert hds.main(["--compile-clean-lyria", "على غايبها من تبچي .. يسولف حقه ما ملچوم"]) == 0
+
+
+def test_v58_muwashah_analyzer_combined_json_and_telephone_intro_fx():
+    """Verify V58.0 Module 73: Multi-meter Muwashah analyzer, NC30-NC31 Combined JSON, NC27-B تْش, & Al-Akraf 300-2800Hz Intro FX."""
+    # 1. Verify 5 Masterwork Direction Blueprints & V58 Muwashah anti-piano/anti-pop prompt
+    assert len(hds.MASTERWORK_DIRECTION_BLUEPRINTS_V58) == 5
+    p_v58 = hds.EXTENDED_ATWAR_PROMPTS_V52["v58_bahrani_muwashah_hybrid_72bpm_bayati_hijaz_saba"].lower()
+    assert "no piano" in p_v58 and "no pop drums" in p_v58 and "no snare backbeat" in p_v58
+
+    # 2. Verify NC27-B surgical affricate Sukun (الحچي -> الحَتْشِي, البچي -> البَتْشِي) + idempotency
+    nc27b = hds.format_clean_lyrics_for_lyria35("قبل الحچي صرت أموت من البچي .. گابل حبيبك واحچيله")
+    cl_27b = nc27b["clean_lyria35_lyrics"]
+    assert "الحَتْشِي" in cl_27b and "البَتْشِي" in cl_27b and "واحتشيله" in cl_27b
+    assert hds.format_clean_lyrics_for_lyria35(cl_27b)["clean_lyria35_lyrics"] == cl_27b
+
+    # 3. Multi-meter Muwashah analyzer (tagged Bukaa Al-Waraq & untagged auto-grouping)
+    bukaa_stage1 = (
+        "[المستهل السردي]\n"
+        "لو أعطي كل واحد قلم هالليلة .. يوصف شعوره واللي يمر عالخاطر\n"
+        "گابل حبيبك يالمحب واحچيله .. لو منت شاعر فجأة تصبح شاعر\n"
+        "[الموشح الأول]\n"
+        "هذا بدمع كاتب .. أبياته ويعاتب .. ليش الفجر قاسي .. بلهيبه\n"
+        "وهذا على أوراقه .. تتموّج أشواقه .. وعنوانه بس كلمة .. مصيبة\n"
+        "[اللازمة الجماعية]\n"
+        "(راحت أيام .. جتنا أيام .. واحنا نحيي ليلة الضربة)\n"
+        "(علي .. علي .. علي .. هذا عزّنا)\n"
+        "[نزلة الحسين]\n"
+        "قبل الحچي صرت أموت من البچي .. أسمع حسين إشكتب تدمع العين\n"
+        "يا علي فدوة لا تكسره .. يكفي من نحره يجري دمه"
+    )
+    bukaa_stage2 = (
+        "[نزلة زينب والختام]\n"
+        "بعد زينب .. قصاصة من الورق كتبتها بحنين\n"
+        "(لا تنسوها ياللي تواسوها .. زينب زينب تفداها البشر)"
+    )
+    ana = hds.analyze_multi_meter_muwashah_structure(bukaa_stage1)
+    assert ana["is_multi_meter_muwashah"] is True
+    assert ana["section_count"] == 4
+    assert ana["meter_diversity_count"] >= 3
+    assert "Bayati" in ana["recommended_maqam_arc"]
+    assert "Hijaz" in ana["recommended_maqam_arc"]
+
+    untagged = (
+        "لو أعطي كل واحد قلم هالليلة .. يوصف شعوره واللي يمر عالخاطر\n"
+        "گابل حبيبك يالمحب واحچيله .. لو منت شاعر فجأة تصبح شاعر\n\n"
+        "هذا بدمع كاتب .. أبياته ويعاتب\n"
+        "(راحت أيام .. جتنا أيام)"
+    )
+    ana_un = hds.analyze_multi_meter_muwashah_structure(untagged)
+    assert ana_un["is_multi_meter_muwashah"] is True
+    assert ana_un["section_count"] >= 2
+
+    # 4. Combined Pre-Conditioning + Multi-Section Muwashah JSON (NC30 & NC31)
+    comb = hds.build_v58_combined_muwashah_json(
+        bukaa_stage1, title="بكاء الورق", axis_mode="hybrid_axis1_3", stage_2_text=bukaa_stage2
+    )
+    assert comb["execution_mode"] == "V58_COMBINED_PRECONDITIONING_AND_MUWASHAH_GENERATION"
+    assert comb["session_preconditioning_lock"]["model_lock"] == "Lyria 3.5"
+    assert "no piano" in comb["session_preconditioning_lock"]["anti_pop_firewall"]
+    assert len(comb["arrangement_sections"]) == 4
+    assert all(not re.search(r"[A-Za-z]", ln) for ln in comb["lyrics_register_verbatim"])
+    assert any("الحَتْشِي" in ln for ln in comb["lyrics_register_verbatim"])
+    assert "stage_2_extend_json" in comb
+    assert comb["stage_2_extend_json"]["lyrics_panel_action"] == "OVERWRITE_WITH_STAGE_2_ONLY"
+
+    pure_iq = hds.build_v58_combined_muwashah_json(
+        "[المستهل]\n(طبع البشر ينسى الوفا .. يبويه شلون دلالي)", axis_mode="axis1_pure"
+    )
+    assert "zero musical instruments" in pure_iq["sound_description"].lower()
+
+    # 5. Al-Akraf 300-2800Hz Vintage Telephone Intro FX -> full-bandwidth studio drop
+    sr = 16000
+    t_v = np.linspace(0.0, 2.0, 2 * sr, endpoint=False)
+    full_sig = (
+        0.30 * np.sin(2.0 * np.pi * 80.0 * t_v)
+        + 0.30 * np.sin(2.0 * np.pi * 1000.0 * t_v)
+        + 0.30 * np.sin(2.0 * np.pi * 5500.0 * t_v)
+    )
+    fx_sig = hds.apply_vintage_telephone_intro_fx(full_sig, sr, intro_end_sec=1.0, crossfade_sec=0.1)
+    assert len(fx_sig) == len(full_sig)
+    # Intro (<0.8s) suppresses 80Hz sub-bass & 5500Hz highs; post-drop (>1.1s) restores full spectrum
+    intro_lo = float(np.sqrt(np.mean(hds.butter_filter(fx_sig[: int(0.8 * sr)], 150.0, sr, btype="low") ** 2)))
+    post_lo = float(np.sqrt(np.mean(hds.butter_filter(fx_sig[int(1.1 * sr) :], 150.0, sr, btype="low") ** 2)))
+    assert intro_lo < 0.30 * post_lo
+    assert np.allclose(fx_sig[int(1.1 * sr) :], full_sig[int(1.1 * sr) :])
+
+    assert hds.main(["--build-muwashah-json", bukaa_stage1]) == 0

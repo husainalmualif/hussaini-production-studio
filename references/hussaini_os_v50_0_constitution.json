@@ -1,9 +1,9 @@
 {
   "protocol_metadata": {
     "protocol_name": "Hussaini_Production_Studio_OS_V50_0_OMNI_ARCHITECT",
-    "skill_version": "V57.0 OMNI-ARCHITECT",
-    "previous_baseline_version": "V56.0 OMNI-ARCHITECT & V50.0 OMNI-ARCHITECT",
-    "previous_baseline_commit_sha": "68c868f46c3cf9ec9a936b8c6cf8d516342e2183",
+    "skill_version": "V58.0 OMNI-ARCHITECT",
+    "previous_baseline_version": "V57.0 OMNI-ARCHITECT & V50.0 OMNI-ARCHITECT",
+    "previous_baseline_commit_sha": "b339f4ae69773326a6049c1fbf04792fb024db1d",
     "canonical_repository": "https://github.com/husainalmualif/hussaini-production-studio",
     "primary_studio_url": "https://www.flowmusic.app/",
     "target_engines": [
@@ -2110,6 +2110,38 @@
       "NC27_ch_to_tsh_digraph_and_clean_gaf_law": "Convert Iraqi/Bahrani چ (U+0686) to phonetic digraph تش (تبچي->تبتشي, حچي->حَتشِي, ملچوم->مَلتشوم) for Lyria 3.5 /tʃ/ articulation and enforce clean un-cluttered گ (وگَلبه, گبلك, حگّه, أوگف) for /g/.",
       "NC28_anti_pop_regional_dialect_vocal_lock": "Ban generic 'warm deep emotional Arabic male baritone' in pure Latmiyas (causes Levantine pop + piano); use v57_iraqi_karbalaei_pure_majlis_60bpm_saba_lami or v57_bahrani_matam_pure_58bpm_saba_bayati.",
       "NC29_mandatory_20s_blind_chunk_phonetic_audit": "Slice every generated track into 20-second FFmpeg chunks and audit dialect, lexical integrity, and Arabic Makharij (ح، ع، ص، ظ، ض، گ، تش/چ) chunk-by-chunk before approval."
+    }
+  },
+  "v58_0_module_73_upgrades": {
+    "version": "V58.0 OMNI-ARCHITECT",
+    "module_reference": "references/modules/module_73_v58_muwashah_multi_meter_combined_json_and_masterwork_direction.md",
+    "masterwork_177_mp3_direction_blueprints": {
+      "tracks_in_library": 177,
+      "deep_anatomy_sample": 10,
+      "pitch_arc_range_semitones": [6.8, 11.9],
+      "stereo_expansion_range_db": [3.1, 6.2],
+      "blueprints": [
+        "vintage_telephone_intro_to_full_drop (300-2800Hz Al-Akraf intro)",
+        "cadential_qada_rhythm_mute_shift (الكعدة الحسينية)",
+        "half_double_time_and_progressive_bpm_gears (65<->130, 111->55, 88->48->81, 70->86->103)",
+        "qarar_to_jawab_vocal_pitch_arc",
+        "stereo_width_breathing_and_vocal_stacking"
+      ]
+    },
+    "bukaa_alwaraq_3method_head_to_head_lab": {
+      "experiments_executed": 3,
+      "total_cumulative_flow_experiments": 20,
+      "method_1_compose_baseline_score": 4.2,
+      "method_2a_combined_json_take1_score": 7.6,
+      "method_2b_combined_json_champion_score": 9.4,
+      "method_3_stage2_dynamic_json_extend_score": 8.1,
+      "champion_clip": "19afceef-e747-480f-ae7e-6e0955472c89 (2:41, zero piano, zero pop drums, mastered -14.0 LUFS / -1.0 dBTP)",
+      "stage2_extend_clip": "49fd9e26-e592-47a1-a590-5285c13a0e4a (seamless 2:58 seam, trimmed at 3:49.5, mastered -14.0 LUFS / -1.79 dBTP)"
+    },
+    "permanent_negative_constraints_nc30_to_nc31": {
+      "NC27B_surgical_tsh_affricate_sukun": "Apply surgical Sukun on medial affricate تْش (الحَتْشِي, البَتْشِي) inside format_clean_lyrics_for_lyria35() so Lyria 3.5 never splits them into 3 syllables (ḥa-ta-shī / ba-ta-shī).",
+      "NC30_combined_preconditioning_muwashah_json": "Never send standalone Pre-Conditioning JSON without Stage-1 lyrics; use --build-muwashah-json (build_v58_combined_muwashah_json) combining anti-piano/anti-pop pre-conditioning + English-only arrangement_sections[] + NC26/NC27 Clean Natural Arabic lyrics_register_verbatim.",
+      "NC31_stage2_json_extend_and_tail_loop_trim": "Extend Stage 2 ONLY from a verified piano-free Stage-1 take via OVERWRITE_WITH_STAGE_2_ONLY, audit 20s blind chunks, and trim any accidental restart loop at the tail before EBU R128 mastering."
     }
   }
 }

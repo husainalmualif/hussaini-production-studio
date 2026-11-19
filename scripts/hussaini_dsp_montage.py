@@ -1,18 +1,18 @@
 #!/usr/bin/env python3
 # pylint: disable=too-many-lines,too-many-return-statements,too-many-branches,too-many-locals,too-many-statements,too-many-arguments,too-many-positional-arguments,no-member,chained-comparison
-"""Hussaini Audio Omni-Architect DSP, 5-Track DAW & Phonetics Compiler (V57.0 OMNI-ARCHITECT).
+"""Hussaini Audio Omni-Architect DSP, 5-Track DAW & Phonetics Compiler (V58.0 OMNI-ARCHITECT).
 
 Standalone empirical production engine implementing Hussaini_Production_Studio_OS_V50_0_OMNI_ARCHITECT
-and V52.0–V57.0 field & 175-track empirical upgrades:
+and V52.0–V58.0 field & 177-track empirical upgrades:
 - Single-Source Version Management via root VERSION file & JSON constitution
 - Pure-Python WAV I/O (with transparent FFmpeg MP3/M4A/OGG decoding) + ITU-R BS.1770-4 / EBU R128
   K-Weighted Gated Loudness + 4x True-Peak Limiter
-- Module 67–72 (V52.0–V57.0): Clean Natural Arabic Lyria 3.5 Orthography Compiler (--compile-clean-lyria,
-  NC26 Anti-Token-Shattering, NC27 چ->تش Digraph & Clean گ Lock, NC28 Anti-Pop Regional Vocal Prompts,
-  NC29 20s Blind Chunk Phonetic Audit), 4-Axis Modern & Traditional Latmiya Architecture, Singer-Tonic-Locked
-  f0 Ahaat & Cello Pad, Vocal-Pulse-Locked (<460Hz) Bare-Chest Latm, Crossover Whip-Snap Suppressor,
-  175-Track Calibrated Vocal EQ + Arabic Sibilance De-Esser + Optical Leveler + Stereo Reverb, 24-EDO Maqam &
-  Rubato Profiler, 9-School 5-Stage Prosodic Tor Router, NC18–NC29 Flow Music Laws & 3-Poem Benchmark Verifier
+- Module 67–73 (V52.0–V58.0): Multi-Meter Muwashah Composition Engine & Combined Pre-Conditioning JSON
+  Orchestration (--build-muwashah-json, NC30–NC31, 177-MP3 Masterwork Direction Blueprints, Al-Akraf
+  300–2800Hz Vintage Telephone Intro FX), Clean Natural Arabic Lyria 3.5 Orthography Compiler
+  (--compile-clean-lyria, NC26–NC29, چ->تش/تْش & clean گ), 4-Axis Modern Latmiya Architecture,
+  Singer-Tonic-Locked f0 Pad, Vocal-Pulse-Locked (<460Hz) Latm, 24-EDO Maqam/Rubato Profiler,
+  9-School 5-Stage Prosodic Tor Router, and 20-Mode Studio EBU R128 DSP
 """
 
 import argparse
@@ -442,6 +442,15 @@ EXTENDED_ATWAR_PROMPTS_V52 = {
         "Matam hall reverb, strictly pure human vocal acapella, zero musical instruments, no piano, no drums, "
         "no pop singing"
     ),
+    "v58_bahrani_muwashah_hybrid_72bpm_bayati_hijaz_saba": (
+        "Authentic Bahraini Shia Husseini Multi-Meter Muwashah Studio Latmiya, 72 BPM shifting dynamically "
+        "across poetic meters via cadential Qa'da rhythm drops, Maqam Bayati modulating via Common Jins to "
+        "Hijaz and Saba, authentic Gulf Bahrani male Radood vocal with sharp crisp Arabic pharyngeal "
+        "pronunciation and Qarar-to-Jawab emotional arc, powerful wide unison Bahrani male Matam choir "
+        "call-and-response, deep muffled bare chest thumping, mournful low solo cello and breathy sad Ney "
+        "flute only, sacred Bahraini Matam reverb, strictly no piano, no pop drums, no snare backbeat, "
+        "no dance beat, no Arabic pop singing"
+    ),
 }
 
 # Module 71 & 72 (V56.0–V57.0): The 4 Axes of Modern & Traditional Husseiniya Latmiya Sound Engineering
@@ -499,6 +508,35 @@ MODERN_LATMIYA_FOUR_AXES_V56 = {
         "prompt_keys": [
             "cinematic_electronic_sub_pads_and_foley_latmiya_60bpm_lami_v56",
         ],
+    },
+}
+
+# Module 73 (V58.0): 5 Empirical Sound Direction & Multi-Meter Muwashah Blueprints (177-MP3 Masterwork Study)
+MASTERWORK_DIRECTION_BLUEPRINTS_V58 = {
+    "vintage_telephone_intro_to_full_drop": {
+        "reference_masterwork": "جابر يا جابر (الشيخ حسين الأكرف)",
+        "technique": "Bandpass 300-2800 Hz archive/nostalgia EQ during opening intro -> explosive full-bandwidth studio drop",
+        "dsp_function": "apply_vintage_telephone_intro_fx",
+    },
+    "cadential_qada_rhythm_mute_shift": {
+        "reference_masterwork": "جابر يا جابر (1:45) و أصحاب الحسين (2:30)",
+        "technique": "Mute percussion completely on soaring solo melisma ('الكعدة الحسينية') over dark humming/cello bed, then slam into new poetic meter",
+        "dsp_function": "apply_dramatic_audio_drop",
+    },
+    "half_double_time_and_progressive_bpm_gears": {
+        "reference_masterwork": "حج الدموع (65<->130), باب الساعات (111->55), أصحاب الحسين (88->48->81), مات الماي (70->86->103)",
+        "technique": "Shift between long narrative lines and short staccato Muwashah meters using 0.5x / 2.0x gears or structured +15-20 BPM step-ups",
+        "verified_gear_ratios": [0.5, 1.0, 1.25, 2.0],
+    },
+    "qarar_to_jawab_vocal_pitch_arc": {
+        "reference_masterwork": "أذان العشق (+11.9 st), إعصار (+7.9 st), جابر يا جابر (+7.5 st), حج الدموع (+7.2 st)",
+        "technique": "Climb 6 to 12 semitones from solemn chest-voice Qarar intro to soaring emotional Jawab chorus/climax",
+        "empirical_range_semitones": [6.8, 11.9],
+    },
+    "stereo_width_breathing_and_vocal_stacking": {
+        "reference_masterwork": "باب الساعات (+6.22 dB), مات الماي (+5.12 dB), أذان العشق (+5.06 dB), جابر يا جابر (+3.84 dB)",
+        "technique": "Contrast intimate center-mono solo Radood with wide stereo Bass/Baritone/Tenor unison & harmonic choir walls (+3.1 to +6.2 dB side expansion)",
+        "empirical_range_db": [3.1, 6.2],
     },
 }
 
@@ -3530,8 +3568,10 @@ def format_clean_lyrics_for_lyria35(raw_poem, dialect=None):
         "أحچي": "أحتشي",
         "احچي": "أحتشي",
         "واحچيله": "واحتشيله",
-        "البچي": "البتشي",
-        "الحچي": "الحتشي",
+        "البچي": "البَتْشِي",
+        "الحچي": "الحَتْشِي",
+        "البتشي": "البَتْشِي",
+        "الحتشي": "الحَتْشِي",
         "باچر": "باتشر",
         "وچني": "وتشني",
         "چتف": "تشتف",
@@ -5188,6 +5228,276 @@ def validate_stage_orchestration_json(payload):
     }
 
 
+def _estimate_muwashah_segment_syllables(line_text):
+    """Estimate prosodic word/segment syllable length for Muwashah multi-meter detection."""
+    parts = [p.strip() for p in re.split(r"\.\.|/|—", line_text) if p.strip()]
+    if not parts:
+        return 0.0, 0
+    seg_lens = []
+    for part in parts:
+        clean_p = re.sub(r"[^\u0621-\u064A\u067E\u0686\u06AF\s]", "", part).strip()
+        words = [w for w in clean_p.split() if w]
+        syls = sum(max(1, int(round(len(w) * 0.55))) for w in words)
+        seg_lens.append(syls)
+    avg_seg = float(sum(seg_lens)) / max(1, len(seg_lens))
+    return avg_seg, len(parts)
+
+
+def analyze_multi_meter_muwashah_structure(poem_text):
+    """Module 73 (V58.0): Detect Multi-Meter Muwashah sections and map Common Jins Maqam & BPM gears."""
+    normalized = poem_text.replace("\\n", "\n").strip()
+    raw_blocks = re.split(r"(\[[^\]]+\])", normalized)
+    parsed_blocks = []
+    if len(raw_blocks) > 1:
+        cur_tag = "[المستهل]"
+        for chunk in raw_blocks:
+            if chunk.startswith("[") and chunk.endswith("]"):
+                cur_tag = chunk.strip()
+            elif chunk.strip():
+                lns = [ln.strip() for ln in chunk.splitlines() if ln.strip()]
+                if lns:
+                    parsed_blocks.append((cur_tag, lns))
+    else:
+        # Auto-group untagged multi-meter poems by blank lines or clear line-length/structure shifts
+        cur_lines = []
+        cur_bucket = None
+        sec_idx = 1
+        for raw_ln in normalized.splitlines():
+            ln = raw_ln.strip()
+            if not ln:
+                if cur_lines:
+                    parsed_blocks.append((f"[المقطع {sec_idx}]", cur_lines))
+                    sec_idx += 1
+                    cur_lines = []
+                    cur_bucket = None
+                continue
+            avg_seg, n_parts = _estimate_muwashah_segment_syllables(ln)
+            is_choir = ln.startswith("(") and ln.endswith(")")
+            bucket = (
+                "choir"
+                if is_choir
+                else ("short_staccato" if (avg_seg <= 5.8 and n_parts >= 2) else ("long_narrative" if avg_seg >= 9.0 else "medium_flow"))
+            )
+            if cur_bucket is not None and bucket != cur_bucket and len(cur_lines) >= 2:
+                parsed_blocks.append((f"[المقطع {sec_idx}]", cur_lines))
+                sec_idx += 1
+                cur_lines = [ln]
+                cur_bucket = bucket
+            else:
+                cur_lines.append(ln)
+                cur_bucket = bucket
+        if cur_lines:
+            parsed_blocks.append((f"[المقطع {sec_idx}]", cur_lines))
+
+    if not parsed_blocks:
+        parsed_blocks = [("[المستهل]", [normalized])] if normalized else []
+
+    rec_base = recommend_tor_and_rhythm_for_poem(normalized)
+    base_bpm = max(56, min(96, int(rec_base.get("recommended_bpm", 72)) or 72))
+    dialect = rec_base.get("detected_dialect", "bahrani")
+
+    archetypes = set()
+    section_blueprints = []
+    maqam_arc = []
+    bpm_gears = []
+    for idx, (tag, lines) in enumerate(parsed_blocks):
+        seg_vals = [_estimate_muwashah_segment_syllables(ln) for ln in lines]
+        avg_syl = round(float(sum(v[0] for v in seg_vals)) / max(1, len(seg_vals)), 2)
+        max_parts = max((v[1] for v in seg_vals), default=1)
+        joined = " ".join(lines)
+        has_choir_parens = any("(" in ln and ")" in ln for ln in lines)
+        is_narrative_opening = "سردي" in tag or (idx == 0 and avg_syl >= 8.5 and not has_choir_parens)
+        is_choir_tag = any(k in tag for k in ("لازمة", "كورال", "جماعي", "مستهل", "مُسْتَهَلّ", "موشح جماعي"))
+        is_elegy_tag = any(k in tag for k in ("زينب", "الختام", "نعي", "مصرع", "كسرة", "فجيعة")) or any(
+            k in joined for k in ("زينب", "نحره", "ذبح", "مرمي", "اموت", "أموت")
+        )
+
+        if has_choir_parens or (is_choir_tag and not is_narrative_opening):
+            archetype = "collective_choir_anthem"
+            maqam_name = "Hijaz"
+            gear_mult = 1.0
+            bpm_sec = base_bpm
+            register = "Jawab (+6 to +9 semitones soaring chest unison)"
+            transition = "1-beat full silence explosion into wide stereo male Majlis choir (+5 dB side expansion)"
+            performer = "Full wide unison Bahrani/Iraqi male Matam congregation choir"
+        elif avg_syl <= 6.2 and max_parts >= 2:
+            archetype = "short_staccato_muwashah"
+            maqam_name = "Bayati Shuri / Hijaz"
+            gear_mult = 1.25
+            bpm_sec = min(130, int(round(base_bpm * 1.15)))
+            register = "Wasat (middle energetic narrative register)"
+            transition = "Cadential Qa'da rhythm mute drop before locking brisk staccato chest-latm pulse"
+            performer = "Solo Radood brisk rhythmic delivery with short choral response echoes"
+        elif is_elegy_tag and idx >= max(1, len(parsed_blocks) - 2):
+            archetype = "solemn_weeping_elegy"
+            maqam_name = "Saba / Lami"
+            gear_mult = 0.75 if base_bpm >= 80 else 1.0
+            bpm_sec = max(56, int(round(base_bpm * gear_mult)))
+            register = "Jawab emotional peak descending into heartbroken Qarar resolution"
+            transition = "Al-Akraf Qa'da full percussion mute over solo mournful Cello/Ney breath -> slow heavy grief drop"
+            performer = "Solo Radood tear-laced authentic dialect delivery answered by deep unison choir"
+        else:
+            archetype = "long_narrative_opening"
+            maqam_name = "Bayati"
+            gear_mult = 1.0
+            bpm_sec = base_bpm
+            register = "Qarar (deep warm intimate Baritone chest voice)"
+            transition = "Solemn opening Cello/Ney or vintage archive EQ drop into steady bare-chest Matam pulse"
+            performer = "Solo authentic dialect Radood centered dry-forward"
+
+        archetypes.add(archetype)
+        if not maqam_arc or maqam_arc[-1] != maqam_name:
+            maqam_arc.append(maqam_name)
+        bpm_gears.append(bpm_sec)
+        section_blueprints.append(
+            {
+                "section_index": idx + 1,
+                "section_tag": tag,
+                "prosodic_archetype": archetype,
+                "avg_segment_syllables": avg_syl,
+                "max_hemistichs_per_line": max_parts,
+                "line_count": len(lines),
+                "maqam": maqam_name,
+                "target_bpm": bpm_sec,
+                "bpm_gear_ratio": gear_mult,
+                "vocal_register_arc": register,
+                "transition_technique": transition,
+                "performer_role": performer,
+                "raw_lines": lines,
+            }
+        )
+
+    return {
+        "detected_dialect": dialect,
+        "base_bpm": base_bpm,
+        "section_count": len(section_blueprints),
+        "meter_diversity_count": len(archetypes),
+        "is_multi_meter_muwashah": len(archetypes) >= 2 or len(section_blueprints) >= 3,
+        "recommended_maqam_arc": maqam_arc,
+        "recommended_bpm_gears": bpm_gears,
+        "masterwork_blueprints_applied": list(MASTERWORK_DIRECTION_BLUEPRINTS_V58.keys()),
+        "section_blueprints": section_blueprints,
+    }
+
+
+def build_v58_combined_muwashah_json(
+    poem_text,
+    title="موشّح حسيني متعدد الأوزان",
+    axis_mode="hybrid_axis1_3",
+    stage_2_text=None,
+):
+    """Module 73 (V58.0, NC30–NC31): Build Combined Pre-Conditioning + Clean-Orthography Multi-Section Muwashah JSON."""
+    clean_stage1 = format_clean_lyrics_for_lyria35(poem_text)
+    analysis = analyze_multi_meter_muwashah_structure(clean_stage1["clean_lyria35_lyrics"])
+    dialect = clean_stage1["detected_dialect"]
+    base_bpm = analysis["base_bpm"]
+
+    if axis_mode == "axis1_pure":
+        sound_prompt = EXTENDED_ATWAR_PROMPTS_V52[
+            "v57_bahrani_matam_pure_58bpm_saba_bayati"
+            if dialect == "bahrani"
+            else "v57_iraqi_karbalaei_pure_majlis_60bpm_saba_lami"
+        ]
+        inst_rule = "Strictly pure human vocal acapella and muffled bare chest thumping only; zero musical instruments"
+    else:
+        sound_prompt = EXTENDED_ATWAR_PROMPTS_V52["v58_bahrani_muwashah_hybrid_72bpm_bayati_hijaz_saba"]
+        if dialect == "iraqi":
+            sound_prompt = sound_prompt.replace("Bahraini", "Iraqi Karbalaei").replace("Gulf Bahrani", "Iraqi Karbalaei")
+        inst_rule = "Muffled bare chest thumping, mournful solo low cello and breathy Ney only; strictly no piano, no pop drums, no snare backbeat, no dance beat"
+
+    arrangement_sections = []
+    verbatim_lines = []
+    for bp in analysis["section_blueprints"]:
+        arrangement_sections.append(
+            {
+                "section_index": bp["section_index"],
+                "section_tag_arabic": bp["section_tag"],
+                "prosodic_archetype": bp["prosodic_archetype"],
+                "maqam_and_jins": bp["maqam"],
+                "target_bpm_feel": bp["target_bpm"],
+                "vocal_register_and_pitch_arc": bp["vocal_register_arc"],
+                "performer_and_choir_layering": bp["performer_role"],
+                "transition_and_drop_direction": bp["transition_technique"],
+                "instrumentation_rule": inst_rule,
+            }
+        )
+        verbatim_lines.append(bp["section_tag"])
+        verbatim_lines.extend(bp["raw_lines"])
+
+    payload = {
+        "protocol_name": "Hussaini_Production_Studio_OS_V50_0_OMNI_ARCHITECT",
+        "skill_version": SKILL_VERSION,
+        "execution_mode": "V58_COMBINED_PRECONDITIONING_AND_MUWASHAH_GENERATION",
+        "nc30_combined_json_lock": (
+            "Lock all pre-conditioning acoustic and dialect rules AND immediately generate Stage 1 "
+            "from 'lyrics_register_verbatim' in this same turn (never invent placeholder lyrics)."
+        ),
+        "session_preconditioning_lock": {
+            "model_lock": "Lyria 3.5",
+            "instrumental_mode": "OFF",
+            "dialect_lock": (
+                "authentic Bahrani colloquial dialect"
+                if dialect == "bahrani"
+                else "authentic Iraqi colloquial dialect"
+            ),
+            "anti_pop_firewall": [
+                "no piano",
+                "no pop drums",
+                "no rock snare backbeat",
+                "no dance or darbuka interlude",
+                "no Arabic romantic pop singing",
+            ],
+            "lyrics_orthography_rule": "NC26/NC27 Clean Natural Arabic with surgical affricate تْش & clean گ — register 100% verbatim with zero English words in Lyrics",
+            "metadata_language_rule": "Parse all English arrangement_sections[] silently; never copy English words into lyrics__register",
+        },
+        "title": title,
+        "global_bpm": base_bpm,
+        "axis_mode": axis_mode,
+        "sound_description": sound_prompt,
+        "muwashah_structure_summary": {
+            "is_multi_meter_muwashah": analysis["is_multi_meter_muwashah"],
+            "meter_diversity_count": analysis["meter_diversity_count"],
+            "recommended_maqam_arc": analysis["recommended_maqam_arc"],
+            "recommended_bpm_gears": analysis["recommended_bpm_gears"],
+        },
+        "arrangement_sections": arrangement_sections,
+        "lyrics_register_verbatim": verbatim_lines,
+    }
+
+    if stage_2_text and str(stage_2_text).strip():
+        clean_s2 = format_clean_lyrics_for_lyria35(stage_2_text, dialect=dialect)
+        s2_analysis = analyze_multi_meter_muwashah_structure(clean_s2["clean_lyria35_lyrics"])
+        s2_verbatim = []
+        s2_sections = []
+        for bp2 in s2_analysis["section_blueprints"]:
+            s2_sections.append(
+                {
+                    "section_index": bp2["section_index"],
+                    "section_tag_arabic": bp2["section_tag"],
+                    "prosodic_archetype": bp2["prosodic_archetype"],
+                    "maqam_and_jins": bp2["maqam"],
+                    "target_bpm_feel": bp2["target_bpm"],
+                    "transition_and_drop_direction": bp2["transition_technique"],
+                }
+            )
+            s2_verbatim.append(bp2["section_tag"])
+            s2_verbatim.extend(bp2["raw_lines"])
+        payload["stage_2_extend_json"] = {
+            "execution_mode": "V58_STAGE_2_DYNAMIC_JSON_EXTEND",
+            "lyrics_panel_action": "OVERWRITE_WITH_STAGE_2_ONLY",
+            "nc31_extend_seam_and_tail_law": (
+                "Continue seamlessly in exact Stage-1 singer voice, key, and instruments; "
+                "overwrite Lyrics with Stage-2 lines ONLY; after generation, run 20s blind chunk audit "
+                "and trim any trailing restart loop cleanly before mastering."
+            ),
+            "sound_description_continuation": sound_prompt,
+            "arrangement_sections": s2_sections,
+            "lyrics_register_verbatim": s2_verbatim,
+        }
+
+    return payload
+
+
 def log_generation_session(
     log_path,
     poem_title,
@@ -6276,6 +6586,34 @@ def apply_dramatic_audio_drop(bed_signal, sample_rate, drop_start_sec=0.0, drop_
     return out
 
 
+def apply_vintage_telephone_intro_fx(signal, sample_rate, intro_end_sec=10.0, crossfade_sec=0.35):
+    """Module 73 (V58.0): Apply Al-Akraf 300-2800Hz archive/telephone EQ intro -> full-bandwidth studio drop."""
+    arr = np.asarray(signal, dtype=np.float64)
+    if arr.size == 0 or float(intro_end_sec) <= 0.0:
+        return arr.copy()
+    cut_idx = min(len(arr), int(float(intro_end_sec) * sample_rate))
+    if cut_idx <= 8:
+        return arr.copy()
+
+    nyq = 0.5 * float(sample_rate)
+    lo_hz = min(300.0, 0.20 * nyq)
+    hi_hz = min(2800.0, 0.85 * nyq)
+    if hi_hz <= lo_hz + 50.0:
+        return arr.copy()
+
+    band = butter_filter(arr, [lo_hz, hi_hz], sample_rate, btype="band", order=3)
+    vintage = np.tanh(band * 1.45) / np.tanh(1.45)
+
+    out = arr.copy()
+    xfade = min(cut_idx // 2, max(1, int(float(crossfade_sec) * sample_rate)))
+    solid_end = max(0, cut_idx - xfade)
+    out[:solid_end] = vintage[:solid_end]
+    if xfade > 1 and solid_end < cut_idx:
+        ramp = np.linspace(0.0, 1.0, cut_idx - solid_end)
+        out[solid_end:cut_idx] = (1.0 - ramp) * vintage[solid_end:cut_idx] + ramp * arr[solid_end:cut_idx]
+    return out
+
+
 def tape_saturate(signal, drive=1.25):
     """Apply gentle analog harmonic warmth via normalized hyperbolic tangent."""
     return np.tanh(signal * drive) / np.tanh(drive)
@@ -6663,6 +7001,11 @@ def parse_args(argv=None):
         default=None,
         help="Build Module 53 Per-Stage & Per-Section JSON orchestration payload (QC19)",
     )
+    parser.add_argument(
+        "--build-muwashah-json",
+        default=None,
+        help="V58.0 Module 73 (NC30): Analyze multi-meter Muwashah & build Combined Pre-Conditioning JSON",
+    )
     parser.add_argument("--validate-abudhiyah", default=None, help="Validate 4-line Abudhiyah Jinas")
     parser.add_argument("--validate-zuhayri", default=None, help="Validate 7-line Zuhayri Mawal")
     parser.add_argument("--recommend-tor", default=None, help="Recommend Tor, BPM & Sound prompt")
@@ -6709,6 +7052,11 @@ def main(argv=None):
             args.build_stage_json, global_bpm=int(round(args.bpm))
         )
         print(json.dumps(stage_payload, ensure_ascii=False, indent=2))
+        return 0
+
+    if args.build_muwashah_json is not None:
+        muwashah_payload = build_v58_combined_muwashah_json(args.build_muwashah_json)
+        print(json.dumps(muwashah_payload, ensure_ascii=False, indent=2))
         return 0
 
     if args.compile_lyrics is not None:
