@@ -1,9 +1,9 @@
 {
   "protocol_metadata": {
     "protocol_name": "Hussaini_Production_Studio_OS_V50_0_OMNI_ARCHITECT",
-    "skill_version": "V56.0 OMNI-ARCHITECT",
-    "previous_baseline_version": "V55.0 OMNI-ARCHITECT & V50.0 OMNI-ARCHITECT",
-    "previous_baseline_commit_sha": "1b05158cfd253d0ec9f89ac4b29e2635163b758e",
+    "skill_version": "V57.0 OMNI-ARCHITECT",
+    "previous_baseline_version": "V56.0 OMNI-ARCHITECT & V50.0 OMNI-ARCHITECT",
+    "previous_baseline_commit_sha": "68c868f46c3cf9ec9a936b8c6cf8d516342e2183",
     "canonical_repository": "https://github.com/husainalmualif/hussaini-production-studio",
     "primary_studio_url": "https://www.flowmusic.app/",
     "target_engines": [
@@ -2094,5 +2094,22 @@
       "suppress_whip_snap_transients (dual-band 1.85-9.8kHz fast-attack whip/rimshot suppressor)",
       "6-type historical Karbala Foley (wind, water, horses, swords, fire, battlefield) & 2 new DSP modes (modern_studio_ney_strings, cinematic_foley_latmiya)"
     ]
+  },
+  "v57_0_module_72_upgrades": {
+    "version": "V57.0 OMNI-ARCHITECT",
+    "module_reference": "references/modules/module_72_v57_clean_lyria35_orthography_ch_digraph_and_20s_chunk_audit.md",
+    "phonetic_and_makharij_stress_test_lab": {
+      "experiments_executed": 4,
+      "total_cumulative_flow_experiments": 17,
+      "iraqi_champion_v57a2": "Clip d8a6ce81 (164.28s, mastered vocal_pure_master -14.0 LUFS / -2.45 dBTP, immediate 0:00 chorus entry, crisp Iraqi ح/ع/گ & تبتشي/حَتشِي/مَلتشوم)",
+      "bahrani_champion_v57b": "Clip 54e0c7c7 (162.11s, mastered vocal_pure_master -14.0 LUFS / -1.54 dBTP, pure Bahrani Matam latm, crisp ص/ظ/ح/ع & أوگف/الصُوَر/على الترايب)",
+      "rejected_candidate_by_chunk_audit": "V57-B2 (Clip 80b582f3) rejected because 20s blind chunk 04 garbled line 5-6"
+    },
+    "permanent_negative_constraints_nc26_to_nc29": {
+      "NC26_clean_natural_arabic_lyria35_orthography": "Never feed 100%-over-diacritized text, terminal Sukun spam (ْ), or synthetic prosthetic إِمْنِ/إِعْلَه/إِتْرَجِمْهَا/عَلَه into Lyria 3.5; compile via --compile-clean-lyria (format_clean_lyrics_for_lyria35) with 1-2 surgical vowels only.",
+      "NC27_ch_to_tsh_digraph_and_clean_gaf_law": "Convert Iraqi/Bahrani چ (U+0686) to phonetic digraph تش (تبچي->تبتشي, حچي->حَتشِي, ملچوم->مَلتشوم) for Lyria 3.5 /tʃ/ articulation and enforce clean un-cluttered گ (وگَلبه, گبلك, حگّه, أوگف) for /g/.",
+      "NC28_anti_pop_regional_dialect_vocal_lock": "Ban generic 'warm deep emotional Arabic male baritone' in pure Latmiyas (causes Levantine pop + piano); use v57_iraqi_karbalaei_pure_majlis_60bpm_saba_lami or v57_bahrani_matam_pure_58bpm_saba_bayati.",
+      "NC29_mandatory_20s_blind_chunk_phonetic_audit": "Slice every generated track into 20-second FFmpeg chunks and audit dialect, lexical integrity, and Arabic Makharij (ح، ع، ص، ظ، ض، گ، تش/چ) chunk-by-chunk before approval."
+    }
   }
 }

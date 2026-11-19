@@ -1,16 +1,18 @@
 #!/usr/bin/env python3
 # pylint: disable=too-many-lines,too-many-return-statements,too-many-branches,too-many-locals,too-many-statements,too-many-arguments,too-many-positional-arguments,no-member,chained-comparison
-"""Hussaini Audio Omni-Architect DSP, 5-Track DAW & Phonetics Compiler (V56.0 OMNI-ARCHITECT).
+"""Hussaini Audio Omni-Architect DSP, 5-Track DAW & Phonetics Compiler (V57.0 OMNI-ARCHITECT).
 
 Standalone empirical production engine implementing Hussaini_Production_Studio_OS_V50_0_OMNI_ARCHITECT
-and V52.0–V56.0 field & 175-track empirical upgrades:
+and V52.0–V57.0 field & 175-track empirical upgrades:
 - Single-Source Version Management via root VERSION file & JSON constitution
 - Pure-Python WAV I/O (with transparent FFmpeg MP3/M4A/OGG decoding) + ITU-R BS.1770-4 / EBU R128
   K-Weighted Gated Loudness + 4x True-Peak Limiter
-- Module 67–71 (V52.0–V56.0): 4-Axis Modern & Traditional Husseiniya Latmiya Architecture, Singer-Tonic-Locked
-  f0 Ahaat & Cello Pad, Vocal-Pulse-Locked (<460Hz) Bare-Chest Latm, Dual-Band Whip-Snap Transient Suppressor,
+- Module 67–72 (V52.0–V57.0): Clean Natural Arabic Lyria 3.5 Orthography Compiler (--compile-clean-lyria,
+  NC26 Anti-Token-Shattering, NC27 چ->تش Digraph & Clean گ Lock, NC28 Anti-Pop Regional Vocal Prompts,
+  NC29 20s Blind Chunk Phonetic Audit), 4-Axis Modern & Traditional Latmiya Architecture, Singer-Tonic-Locked
+  f0 Ahaat & Cello Pad, Vocal-Pulse-Locked (<460Hz) Bare-Chest Latm, Crossover Whip-Snap Suppressor,
   175-Track Calibrated Vocal EQ + Arabic Sibilance De-Esser + Optical Leveler + Stereo Reverb, 24-EDO Maqam &
-  Rubato Profiler, 9-School 5-Stage Prosodic Tor Router, NC18–NC25 Flow Music Laws & 3-Poem Benchmark Verifier
+  Rubato Profiler, 9-School 5-Stage Prosodic Tor Router, NC18–NC29 Flow Music Laws & 3-Poem Benchmark Verifier
 """
 
 import argparse
@@ -423,9 +425,26 @@ EXTENDED_ATWAR_PROMPTS_V52 = {
         "electronic studio chest-thump percussion, and subtle historical Karbala atmospheric wind and "
         "distant battlefield textures, strictly no dance or pop beats"
     ),
+    # Module 72 (V57.0): Anti-Pop Regional Dialect Vocal Prompts (NC28 — Zero Piano, Zero Levantine Pop)
+    "v57_iraqi_karbalaei_pure_majlis_60bpm_saba_lami": (
+        "Traditional Iraqi Karbalaei Ashura Majlis Latmiya elegy, authentic Iraqi Baghdad and Karbala dialect, "
+        "Maqam Saba and Lami microtonal chanting, slow 60 BPM dignified mourning cadence, immediate rhythmic "
+        "chorus entry from the first second with no solo ad-lib intro, powerful deep resonant Iraqi male Radood "
+        "chanting with sharp crisp Arabic pharyngeal pronunciation, responsive unison Iraqi male congregation "
+        "Raddada chorus on refrain lines, soft muffled bare chest thumping only, cavernous Karbala shrine hall "
+        "acoustics, strictly pure human vocal acapella, zero musical instruments, no piano, no pop singing"
+    ),
+    "v57_bahrani_matam_pure_58bpm_saba_bayati": (
+        "Traditional Bahrani Ashura Matam Latmiya elegy from Bahrain, authentic Gulf Bahrani Arabic dialect, "
+        "Maqam Saba and Bayati microtonal mourning chant, slow 58 BPM solemn dignified tempo, deep commanding "
+        "Gulf Bahrani male Radood vocal with sharp authentic Arabic throat articulation, powerful unison "
+        "Bahrani male Matam choir on refrain lines, soft muffled bare chest thumping only, solemn Bahraini "
+        "Matam hall reverb, strictly pure human vocal acapella, zero musical instruments, no piano, no drums, "
+        "no pop singing"
+    ),
 }
 
-# Module 71 (V56.0): The 4 Axes of Modern & Traditional Husseiniya Latmiya Sound Engineering
+# Module 71 & 72 (V56.0–V57.0): The 4 Axes of Modern & Traditional Husseiniya Latmiya Sound Engineering
 MODERN_LATMIYA_FOUR_AXES_V56 = {
     "axis_1_human_voice_choral_and_body_latm": {
         "arabic_title": "المحور الأول: الصوت البشري، الكورال، وإيقاع الجسد (الركيزة الأساس)",
@@ -436,6 +455,8 @@ MODERN_LATMIYA_FOUR_AXES_V56 = {
         ],
         "recommended_dsp_modes": ["thaqeel_muwazza", "bahrani_muthakkal", "vocal_pure_master"],
         "prompt_keys": [
+            "v57_iraqi_karbalaei_pure_majlis_60bpm_saba_lami",
+            "v57_bahrani_matam_pure_58bpm_saba_bayati",
             "golden_iraqi_studio_latmiya_60bpm_saba_bayati_v56",
             "golden_bahrani_studio_latmiya_60bpm_saba_bayati_v56",
             "ashura_majlis_noha_58bpm_saba_lami_v55",
@@ -3385,6 +3406,122 @@ def detect_and_shape_dialect(text, enforce_iraqi_dhaa=None, use_tatweel=False):
         "dhad_articulation": dhad_mode,
         "maqam_articulation_rule": maqam_rule,
         "shaped_lyrics": shaped,
+    }
+
+
+def format_clean_lyrics_for_lyria35(raw_poem, dialect=None):
+    """Module 72 (V57.0): Compile Clean Natural Arabic + Surgical Vowels + NC27 (چ->تش & گ) for Lyria 3.5."""
+    sanitized = sanitize_poem_decorations(raw_poem.replace("\\n", "\n"))
+    bahrani_hits, iraqi_hits = _count_dialect_markers(sanitized)
+    if dialect in ("iraqi", "bahrani", "iraqi_bahrani", "fusha"):
+        detected = dialect
+    elif bahrani_hits > iraqi_hits:
+        detected = "bahrani"
+    elif iraqi_hits > bahrani_hits:
+        detected = "iraqi"
+    else:
+        detected = "iraqi_bahrani"
+
+    # NC26: Strip heavy diacritic clutter & terminal Sukun spam to prevent BPE token shattering in Lyria 3.5
+    stripped = re.sub(r"[\u064B-\u0652\u0670]", "", sanitized)
+    ch_converted = stripped.count("چ")
+
+    phrase_fixes = (
+        ("اترجمها ام البنين", "تْرَجِّمها .. أُمّ البنين"),
+        ("إترجمها ام البنين", "تْرَجِّمها .. أُمّ البنين"),
+        ("اترجمها أم البنين", "تْرَجِّمها .. أُمّ البنين"),
+        ("إترجمها أم البنين", "تْرَجِّمها .. أُمّ البنين"),
+        ("ترجمها .. ام البنين", "تْرَجِّمها .. أُمّ البنين"),
+        ("ترجمها .. أم البنين", "تْرَجِّمها .. أُمّ البنين"),
+        ("عله الترايب", "على الترايب"),
+        ("اعله غايبها", "على غايبها"),
+        ("إعله غايبها", "على غايبها"),
+        ("ام البنين", "أُمّ البنين"),
+        ("أم البنين", "أُمّ البنين"),
+    )
+    cleaned = stripped
+    for src_p, dst_p in phrase_fixes:
+        cleaned = cleaned.replace(src_p, dst_p)
+
+    # Restore synthetic prosthetic إمن / إعله tokens that Lyria 3.5 misread as إبني / أعلى
+    cleaned = re.sub(r"(?<!\w)[إا]من(?!\w)", "من", cleaned)
+    cleaned = re.sub(r"(?<!\w)[إا]عله(?!\w)", "على", cleaned)
+
+    # NC27: Convert Iraqi/Bahrani چ -> تش digraph & colloquial ق -> گ on proven stems
+    token_map = {
+        "تبچي": "تبتشي",
+        "يبچي": "يبتشي",
+        "حچي": "حَتشِي",
+        "وحچي": "وحَتشِي",
+        "حتشي": "حَتشِي",
+        "وحتشي": "وحَتشِي",
+        "ملچوم": "مَلتشوم",
+        "ملتشوم": "مَلتشوم",
+        "وگلبه": "وگَلبه",
+        "وقلبه": "وگَلبه",
+        "گلبه": "گَلبه",
+        "قلبه": "گَلبه",
+        "قبلك": "گبلك",
+        "گبلك": "گبلك",
+        "حقه": "حگّه",
+        "حگه": "حگّه",
+        "أوقف": "أوگف",
+        "اوقف": "أوگف",
+        "اوگف": "أوگف",
+        "أوگف": "أوگف",
+        "الصور": "الصُوَر",
+        "فلسفة": "فَلْسَفة",
+        "وفلسفة": "وفَلْسَفة",
+        "الوكت": "الوَكْت",
+        "لواهب": "لَواهب",
+        "الحب": "الحُب",
+        "يتعلم": "يتعلّم",
+        "خلي": "خلّي",
+        "حبه": "حبّه",
+        "وحبه": "وحبّه",
+        "اترجمها": "تْرَجِّمها",
+        "ترجمها": "تْرَجِّمها",
+    }
+
+    out_lines = []
+    for line in cleaned.splitlines():
+        if line.strip().startswith("[") and line.strip().endswith("]"):
+            out_lines.append(line.strip())
+            continue
+        words = line.split(" ")
+        new_words = []
+        for w in words:
+            prefix = ""
+            suffix = ""
+            core = w
+            while core and core[0] in "([\"'":
+                prefix += core[0]
+                core = core[1:]
+            while core and core[-1] in ")]\"'.،؟!":
+                suffix = core[-1] + suffix
+                core = core[:-1]
+            bare_core = re.sub(r"[\u064B-\u0652\u0670]", "", core)
+            if bare_core in token_map:
+                core = token_map[bare_core]
+            elif "چ" in core:
+                core = core.replace("چ", "تش")
+            new_words.append(f"{prefix}{core}{suffix}")
+        out_lines.append(" ".join(new_words))
+
+    final_lyrics = "\n".join(out_lines)
+    prompt_key = (
+        "v57_bahrani_matam_pure_58bpm_saba_bayati"
+        if detected == "bahrani"
+        else "v57_iraqi_karbalaei_pure_majlis_60bpm_saba_lami"
+    )
+    return {
+        "detected_dialect": detected,
+        "clean_lyria35_lyrics": final_lyrics,
+        "recommended_v57_prompt_key": prompt_key,
+        "recommended_v57_sound_prompt": EXTENDED_ATWAR_PROMPTS_V52[prompt_key],
+        "nc26_anti_token_shattering_applied": True,
+        "nc27_ch_to_tsh_digraph_count": ch_converted,
+        "nc29_mandatory_chunk_audit_sec": 20,
     }
 
 
@@ -6390,6 +6527,11 @@ def parse_args(argv=None):
     parser.add_argument("--fade-out-sec", type=float, default=0.0, help="Apply raised-cosine fade-out duration (sec)")
     parser.add_argument("--samples-dir", default=None, help="Optional directory of real WAV one-shots")
     parser.add_argument("--compile-lyrics", default=None, help="Shape & vocalize Arabic poem text")
+    parser.add_argument(
+        "--compile-clean-lyria",
+        default=None,
+        help="V57.0 NC26/NC27: Compile clean natural Arabic + surgical vowels & چ->تش digraph for Lyria 3.5",
+    )
     parser.add_argument("--lint-poem", default=None, help="Run QC1-QC35 linter on poem text")
     parser.add_argument("--verify-history", default=None, help="Verify poem against Ahl al-Bayt historical narratives")
     parser.add_argument("--plan-stages", default=None, help="Partition full poem into V52 NC16 3-line Extend stages")
@@ -6454,6 +6596,11 @@ def main(argv=None):
     if args.compile_lyrics is not None:
         report = detect_and_shape_dialect(args.compile_lyrics.replace("\\n", "\n"))
         report["shaped_lyrics"] = enforce_collective_estehlal_parentheses(report["shaped_lyrics"])
+        print(json.dumps(report, ensure_ascii=False, indent=2))
+        return 0
+
+    if args.compile_clean_lyria is not None:
+        report = format_clean_lyrics_for_lyria35(args.compile_clean_lyria)
         print(json.dumps(report, ensure_ascii=False, indent=2))
         return 0
 

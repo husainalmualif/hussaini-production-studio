@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # pylint: disable=wrong-import-position,too-many-lines,no-member,too-few-public-methods
-"""Comprehensive Unit & Integration Test Suite for Hussaini Production Studio (V56.0 OMNI-ARCHITECT)."""
+"""Comprehensive Unit & Integration Test Suite for Hussaini Production Studio (V57.0 OMNI-ARCHITECT)."""
 
 import os
 import re
@@ -56,8 +56,8 @@ import hussaini_dsp_montage as hds  # noqa: E402
 
 
 def test_single_source_version_and_v50_architecture():
-    """Verify V56.0 OMNI-ARCHITECT version lock, SKILL.md router budget, JSON constitution, and Module 71."""
-    assert hds.SKILL_VERSION == "V56.0 OMNI-ARCHITECT"
+    """Verify V57.0 OMNI-ARCHITECT version lock, SKILL.md router budget, JSON constitution, and Module 72."""
+    assert hds.SKILL_VERSION == "V57.0 OMNI-ARCHITECT"
     skill_md = os.path.join(ROOT_DIR, "SKILL.md")
     assert os.path.isfile(skill_md)
     assert os.path.getsize(skill_md) <= 10500
@@ -115,6 +115,12 @@ def test_single_source_version_and_v50_architecture():
         "modules",
         "module_71_v56_four_axes_modern_latmiya_pulse_locked_dsp_and_multi_method_lab.md",
     )
+    v57_module_doc = os.path.join(
+        ROOT_DIR,
+        "references",
+        "modules",
+        "module_72_v57_clean_lyria35_orthography_ch_digraph_and_20s_chunk_audit.md",
+    )
     assert os.path.isfile(v50_module_doc)
     assert os.path.isfile(v51_module_doc)
     assert os.path.isfile(v52_module_doc)
@@ -122,13 +128,14 @@ def test_single_source_version_and_v50_architecture():
     assert os.path.isfile(v54_module_doc)
     assert os.path.isfile(v55_module_doc)
     assert os.path.isfile(v56_module_doc)
+    assert os.path.isfile(v57_module_doc)
 
     constitution = hds.load_v50_0_constitution()
     assert (
         constitution["protocol_metadata"]["protocol_name"]
         == "Hussaini_Production_Studio_OS_V50_0_OMNI_ARCHITECT"
     )
-    assert constitution["protocol_metadata"]["skill_version"] == "V56.0 OMNI-ARCHITECT"
+    assert constitution["protocol_metadata"]["skill_version"] == "V57.0 OMNI-ARCHITECT"
     assert len(constitution["5_master_sound_prompts_library_modules_36_44_46_48_52"]) == 25
     assert len(hds.MASTER_SOUND_PROMPTS_V50) == 25
     assert len(constitution["8_v50_empirical_175_corpus_and_9_schools_modules_54_65"]["unified_9_schools_architecture"]) == 9
@@ -137,7 +144,7 @@ def test_single_source_version_and_v50_architecture():
     assert "fazzaiya" in hds.SUPPORTED_DSP_MODES
     assert "modern_studio_ney_strings" in hds.SUPPORTED_DSP_MODES
     assert "cinematic_foley_latmiya" in hds.SUPPORTED_DSP_MODES
-    assert len(hds.EXTENDED_ATWAR_PROMPTS_V52) == 11
+    assert len(hds.EXTENDED_ATWAR_PROMPTS_V52) == 13
     v51_block = constitution["v51_0_protocol_negative_constraints_and_style_taxonomy"]
     assert v51_block["version"] == "V51.2 OMNI-ARCHITECT"
     assert len(v51_block["permanent_negative_constraints_nc1_to_nc17"]) >= 17
@@ -158,6 +165,9 @@ def test_single_source_version_and_v50_architecture():
     assert v56_block["version"] == "V56.0 OMNI-ARCHITECT"
     assert v56_block["supported_dsp_modes_count"] == 20
     assert v56_block["golden_studio_60bpm_breakthrough_lab"]["total_cumulative_flow_experiments"] == 13
+    v57_block = constitution["v57_0_module_72_upgrades"]
+    assert v57_block["version"] == "V57.0 OMNI-ARCHITECT"
+    assert v57_block["phonetic_and_makharij_stress_test_lab"]["total_cumulative_flow_experiments"] == 17
 
 
 def test_module_41_49_57_58_64_iraqi_prosthetic_clusters_and_v50_g2p_locks():
@@ -981,3 +991,49 @@ def test_v56_four_axes_pulse_locked_latm_auto_tonic_and_nc23_nc25(tmp_path):
         assert res_v56["mode"] == new_mode
         assert -15.5 <= res_v56["integrated_lufs"] <= -12.5
         assert res_v56["true_peak_dbtp"] <= -0.9
+
+
+def test_v57_clean_lyria35_orthography_ch_digraph_and_nc26_nc29():
+    """Verify V57.0 Module 72: NC26 Clean Lyria 3.5 Orthography, NC27 چ->تش & clean گ, NC28 Anti-Pop prompts & NC29."""
+    iraqi_in = (
+        "[المُسْتَهَلّ]\n"
+        "(فَلْسَفَةِ الِانْتِظَارْ .. لِلْغَايِبْ بِاخْتِصَارْ)\n"
+        "(إِتْرَجِمْهَا أُمُّ البَنِينْ)\n"
+        "وَقَلْبَه إِمْنِ الوَلَه جَمْرَه .. إِمْنِ أُمّ عَبَّاسْ يِتْعَلَّمْ\n"
+        "إِعْلَه غَايِبْهَا مِنْ تِبْچِي .. وَحَچِي يِسَمْعُونَكْ بِكِلْ يَومْ\n"
+        "تَرَى أُمّ الأَرْبَعَه قَبْلَكْ .. يِسُولِفْ حَقَّه مَا مَلْچُومْ"
+    )
+    res_iq = hds.format_clean_lyrics_for_lyria35(iraqi_in)
+    assert res_iq["nc26_anti_token_shattering_applied"] is True
+    assert res_iq["nc27_ch_to_tsh_digraph_count"] == 3
+    assert res_iq["nc29_mandatory_chunk_audit_sec"] == 20
+    cl_iq = res_iq["clean_lyria35_lyrics"]
+    assert "فَلْسَفة الانتظار" in cl_iq
+    assert "تْرَجِّمها .. أُمّ البنين" in cl_iq
+    assert "وگَلبه من الوله" in cl_iq and "إمن" not in cl_iq
+    assert "على غايبها من تبتشي" in cl_iq and "چ" not in cl_iq
+    assert "وحَتشِي يسمعونك" in cl_iq
+    assert "گبلك" in cl_iq and "حگّه" in cl_iq and "مَلتشوم" in cl_iq
+    assert hds.format_clean_lyrics_for_lyria35(cl_iq)["clean_lyria35_lyrics"] == cl_iq
+
+    bahr_in = (
+        "[الكَسْرَة]\n"
+        "كِلْ الصُّوَرْ أَطْوِيهَا .. خَلِّي الزَّمَنْ يِرْوِيهَا\n"
+        "أُوقَفْ عَلَيهَا بِحَسْرَه .. مَرْمِي عَلَه التَّرَايِبْ\n"
+        "مَاتْ حَتَّى الوَكِتْ .. بِيهْ الحِقِدْ لَوَاهِبْ .. يَا بُويِي عِيُونِشْ"
+    )
+    res_bh = hds.format_clean_lyrics_for_lyria35(bahr_in)
+    assert res_bh["detected_dialect"] == "bahrani"
+    assert res_bh["recommended_v57_prompt_key"] == "v57_bahrani_matam_pure_58bpm_saba_bayati"
+    cl_bh = res_bh["clean_lyria35_lyrics"]
+    assert "الصُوَر" in cl_bh and "أوگف" in cl_bh and "على الترايب" in cl_bh
+    assert "الوَكْت" in cl_bh and "لَواهب" in cl_bh
+    assert hds.format_clean_lyrics_for_lyria35(cl_bh)["clean_lyria35_lyrics"] == cl_bh
+
+    for key in ("v57_iraqi_karbalaei_pure_majlis_60bpm_saba_lami", "v57_bahrani_matam_pure_58bpm_saba_bayati"):
+        p_lower = hds.EXTENDED_ATWAR_PROMPTS_V52[key].lower()
+        assert "no piano" in p_lower and "no pop singing" in p_lower
+        assert "zero musical instruments" in p_lower
+        assert "warm deep emotional" not in p_lower
+
+    assert hds.main(["--compile-clean-lyria", "على غايبها من تبچي .. يسولف حقه ما ملچوم"]) == 0

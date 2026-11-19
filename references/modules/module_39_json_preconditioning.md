@@ -1,4 +1,4 @@
-# بروتوكول التهيئة المسبقة بصيغة `JSON` والاحتراف الكامل لواجهة `Flow Music Studio` (`Modules 39, 51 & 53`) — V56.0 OMNI-ARCHITECT
+# بروتوكول التهيئة المسبقة بصيغة `JSON` والاحتراف الكامل لواجهة `Flow Music Studio` (`Modules 39, 51, 53 & 72`) — V57.0 OMNI-ARCHITECT
 
 يوثق هذا الملف بروتوكول التهيئة المسبقة للجلسة (`JSON Session Pre-Conditioning` عبر الدستور المرجعي `references/hussaini_os_v50_0_constitution.json` بوضع `"Pre_Conditioning_Lock_Wait_For_Stage_JSON"`)، وحزم المراحل الإلزامية (`Module 53` — `--build-stage-json`)، والقواعد الهندسية الصارمة للتعامل الاحترافي ثنائي القناة مع واجهة وأدوات `https://www.flowmusic.app/` (`New session`، لوحة `Compose` المباشرة مع قفل `Lyria 3.5`، وقائمة `Remix > Extend / Trim / Replace / Cover <= 0.45 / Split stems`).
 
