@@ -1036,4 +1036,12 @@ def test_v57_clean_lyria35_orthography_ch_digraph_and_nc26_nc29():
         assert "zero musical instruments" in p_lower
         assert "warm deep emotional" not in p_lower
 
+    # Verify Nader Al-Tattan 11-poem Bahrani markers, ch->tsh expansion, and non-Shoor routing
+    nt_clean = hds.format_clean_lyrics_for_lyria35("لمن أحچي .. چنت اظنك .. باچر .. قلبي .. اوي زوارك .. اعلى بالي")
+    assert "أحتشي" in nt_clean["clean_lyria35_lyrics"] and "تشنت" in nt_clean["clean_lyria35_lyrics"]
+    assert "باتشر" in nt_clean["clean_lyria35_lyrics"] and "گلبي" in nt_clean["clean_lyria35_lyrics"]
+    assert "ويّ زوارك" in nt_clean["clean_lyria35_lyrics"] and "على بالي" in nt_clean["clean_lyria35_lyrics"]
+    assert hds.recommend_tor_and_rhythm_for_poem("عرفنا خلقك الأجمل .. شهدنا أنك الأول .. صلى الله عليك نبي مرسل .. بالحب صدر المعجم")["recommended_dsp_mode"] == "vocal_pure_master"
+    assert hds.recommend_tor_and_rhythm_for_poem("فاضوا هياما .. طاروا غراما .. أنصار الإبا")["recommended_dsp_mode"] == "zanjeel_bahrani"
+
     assert hds.main(["--compile-clean-lyria", "على غايبها من تبچي .. يسولف حقه ما ملچوم"]) == 0

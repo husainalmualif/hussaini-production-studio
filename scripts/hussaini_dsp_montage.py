@@ -984,6 +984,72 @@ BAHRANI_MARKERS = (
     "في حيرة",
     "في وجهه",
     "صوب النحر",
+    # Authentic Nader Al-Tattan / Gulf Bahrani lexicon markers (V57.1)
+    "آنا",
+    "شنهو",
+    "منهو",
+    "منته",
+    "اوي ",
+    "اوياي",
+    "اوياك",
+    "اوياهم",
+    "وي زوارك",
+    "ابلا ",
+    "اعلى بالي",
+    "اعلى نحرك",
+    "اعلى گبرك",
+    "اعليك",
+    "اعليها",
+    "اعليه",
+    "الماتم",
+    "بماتمك",
+    "اورّي اشموع",
+    "يوري اشموع",
+    "اشكثر",
+    "اشكبرها",
+    "اشعجب",
+    "شاللي",
+    "شتسوي",
+    "شقول",
+    "شقصدي",
+    "شيداويها",
+    "شيقدرها",
+    "أشوه",
+    "مهو",
+    "ماحد",
+    "عدكم",
+    "عدها",
+    "اثنعش",
+    "أجدامه",
+    "أجدامي",
+    "باچر",
+    "بالورگ",
+    "احترگ",
+    "أوراگ",
+    "وچني",
+    "چتف",
+    "ايبدي",
+    "ايقول",
+    "ايجدد",
+    "ايهندس",
+    "ايزور",
+    "اتضمها",
+    "اتواسوها",
+    "ل تنسيني",
+    "لزورك",
+    "لفيت",
+    "يوليدي",
+    "شالأهزه",
+    "وش دراني",
+    "وش هالقلب",
+    "وش معنى",
+    "وش نابت",
+    "للحين",
+    "عقب هذا",
+    "أناظر ليك",
+    "الضعينة",
+    "سولف لي",
+    "ابلياك",
 )
 
 IRAQI_MARKERS = (
@@ -3443,14 +3509,36 @@ def format_clean_lyrics_for_lyria35(raw_poem, dialect=None):
     for src_p, dst_p in phrase_fixes:
         cleaned = cleaned.replace(src_p, dst_p)
 
-    # Restore synthetic prosthetic إمن / إعله tokens that Lyria 3.5 misread as إبني / أعلى
+    # Restore synthetic prosthetic إمن / إعله / اوي / ابلا tokens that Lyria 3.5 misreads
     cleaned = re.sub(r"(?<!\w)[إا]من(?!\w)", "من", cleaned)
     cleaned = re.sub(r"(?<!\w)[إا]عله(?!\w)", "على", cleaned)
+    cleaned = re.sub(r"(?<!\w)اعلى(?!\w)", "على", cleaned)
+    cleaned = re.sub(r"(?<!\w)اعليك(?!\w)", "عليك", cleaned)
+    cleaned = re.sub(r"(?<!\w)اعليه(?!\w)", "عليه", cleaned)
+    cleaned = re.sub(r"(?<!\w)اعليها(?!\w)", "عليها", cleaned)
+    cleaned = re.sub(r"(?<!\w)ابلا(?!\w)", "بلا", cleaned)
+    cleaned = re.sub(r"(?<!\w)ابلياك(?!\w)", "بليّاك", cleaned)
+    cleaned = re.sub(r"(?<!\w)اوي(?!\w)", "ويّ", cleaned)
+    cleaned = re.sub(r"(?<!\w)اوياي(?!\w)", "ويّاي", cleaned)
+    cleaned = re.sub(r"(?<!\w)اوياك(?!\w)", "ويّاك", cleaned)
+    cleaned = re.sub(r"(?<!\w)اوياهم(?!\w)", "ويّاهم", cleaned)
 
     # NC27: Convert Iraqi/Bahrani چ -> تش digraph & colloquial ق -> گ on proven stems
     token_map = {
         "تبچي": "تبتشي",
         "يبچي": "يبتشي",
+        "أحچي": "أحتشي",
+        "احچي": "أحتشي",
+        "واحچيله": "واحتشيله",
+        "البچي": "البتشي",
+        "الحچي": "الحتشي",
+        "باچر": "باتشر",
+        "وچني": "وتشني",
+        "چتف": "تشتف",
+        "چم": "تشم",
+        "چنت": "تشنت",
+        "چنه": "تشنه",
+        "چنها": "تشنها",
         "حچي": "حَتشِي",
         "وحچي": "وحَتشِي",
         "حتشي": "حَتشِي",
@@ -3461,6 +3549,15 @@ def format_clean_lyrics_for_lyria35(raw_poem, dialect=None):
         "وقلبه": "وگَلبه",
         "گلبه": "گَلبه",
         "قلبه": "گَلبه",
+        "قلبي": "گلبي",
+        "وبقلبي": "وبگلبي",
+        "يقول": "يگول",
+        "أقول": "أگول",
+        "اقول": "أگول",
+        "أقدر": "أگدر",
+        "اقدر": "أگدر",
+        "تقدر": "تگدر",
+        "قدامي": "گدامي",
         "قبلك": "گبلك",
         "گبلك": "گبلك",
         "حقه": "حگّه",
@@ -4456,12 +4553,21 @@ def recommend_tor_and_rhythm_for_poem(text):
     service_kw = ("خادم", "خدمنك", "أخدمنك", "هنيالي", "موكب", "مشايه", "مشاية", "راية")
     heroic_kw = ("عباس", "كفيل", "حيدر", "كرار", "صوله", "سيف", "زنجيل")
     shoor_exact = bool(re.search(r"(?<!\S)(?:ال)?ش[و]+ر(?!\S)|\[(?:ال)?شور\]", bare_text))
-    shoor_kw = ("حسين حسين", "لبيك", "مامدفون والينه")
+    shoor_kw = ("حسين حسين", "مامدفون والينه")
+    shoor_block_kw = (
+        "شمر", "مذبوح", "حوافر", "الزهرا", "فاطمه", "فاطمة", "ضلع",
+        "الأربعين", "زوارك", "نبي مرسل", "صلى الله عليك", "المهدي",
+        "المرتضى", "ليلة الضربه", "ليلة الضربة", "عبدالله", "فاضوا هياما",
+    )
     ecstatic_shoor_kw = ("مجنون", "جنون", "اهواك", "عشگ", "عشق", "شيعي", "حبيب")
     fazzaiya_kw = ("فزاعيه", "فزاعية", "رباطات فزاعية", "تبرالي")
     hosa_kw = ("[هوسة]", "هوسه", "هوسة", "رباطات")
-    tawshih_kw = ("[تواشيح]", "[ابتهالات]", "تواشيح", "أهل الكساء", "المباهلة", "أنشودة", "نشيد")
-    tragedy_kw = ("كربلا", "عاشور", "سبي", "سبايا", "مذبوح", "حوافر", "شمر", "مشرعة", "علگمي", "علقمي", "خرابة", "خرابه", "نحر", "صدر")
+    tawshih_kw = (
+        "[تواشيح]", "[ابتهالات]", "تواشيح", "أهل الكساء", "المباهلة",
+        "أنشودة", "نشيد", "صلى الله عليك", "نبي مرسل", "قاب قوسين",
+    )
+    epic_fusha_kw = ("فاضوا هياما", "أنصار الإبا", "ساعة الصفر", "قبضة الكف الخيبرية")
+    tragedy_kw = ("كربلا", "عاشور", "سبي", "سبايا", "مذبوح", "حوافر", "شمر", "مشرعة", "علگمي", "علقمي", "خرابة", "خرابه", "نحر", "على صدره", "عالصدر")
     lami_grief_kw = ("سبي", "خرابة", "خرابه", "غربة", "غربه", "عليل", "سياط", "يمه", "تراب", "عطشان")
     munajat_khidma_kw = (
         "طبع البشر",
@@ -4478,6 +4584,12 @@ def recommend_tor_and_rhythm_for_poem(text):
     thulathi_kw = ("[ثلاثي]", "ثلاثي", "وقفة", "وقفه", "زحف", "صمود")
     nai_explicit_kw = ("[نعي]", "[موال]", "[أبوذية]")
 
+    is_ecstatic_shoor = (
+        avg_words <= 4.3
+        and len(hemistichs) <= 14
+        and any(k in bare_text for k in ecstatic_shoor_kw)
+        and not any(k in bare_text for k in shoor_block_kw)
+    )
     if any(k in bare_text for k in nai_explicit_kw) or is_abudhiyah or is_zuhayri:
         mode = "nai"
         bpm = 0
@@ -4486,9 +4598,23 @@ def recommend_tor_and_rhythm_for_poem(text):
         tor = "tor_nai_kashi"
         school = "School 04 (النعي المنبري والشجن العراقي)"
         prompt = MASTER_SOUND_PROMPTS_V48_5["minbar_nai_0bpm_rubato_saba_exclusive_weeping"]
-    elif shoor_exact or any(k in bare_text for k in shoor_kw) or (
-        avg_words <= 4.3 and any(k in bare_text for k in ecstatic_shoor_kw) and not any(k in bare_text for k in ("شمر", "مذبوح", "حوافر"))
-    ):
+    elif any(k in bare_text for k in epic_fusha_kw):
+        mode = "zanjeel_bahrani"
+        bpm = 82
+        maqam = "hijaz"
+        meter = "muwashah"
+        tor = "tor_bahrani_waqfa"
+        school = "School 03 (القصيدة الفصحى الملحمية البحرانية — الأكرف/التتان)"
+        prompt = EXTENDED_ATWAR_PROMPTS_V52["mawkib_dammam_cymbals_brass_procession_78bpm_hijaz_v56"]
+    elif any(k in bare_text for k in tawshih_kw) and not any(k in bare_text for k in tragedy_kw):
+        mode = "vocal_pure_master"
+        bpm = 86
+        maqam = "rast"
+        meter = "muwashah"
+        tor = "tor_tawshih_shia"
+        school = "School 03 (التوشيح والقصيدة الإنشادية — الأكرف)"
+        prompt = EXTENDED_ATWAR_PROMPTS_V52["shia_tawshih_nasheed_86bpm_rast_hijaz_v52"]
+    elif shoor_exact or any(k in bare_text for k in shoor_kw) or is_ecstatic_shoor:
         mode = "shoor"
         bpm = 132
         maqam = "kurd"
@@ -4513,14 +4639,6 @@ def recommend_tor_and_rhythm_for_poem(text):
             tor = "tor_hosa_iraqi"
             school = "School 05 (الأهزوجة والهوسة الموكبية)"
             prompt = EXTENDED_ATWAR_PROMPTS_V52["hosa_iraqi_mawkib_88bpm_hijaz_v54"]
-    elif any(k in bare_text for k in tawshih_kw) and not any(k in bare_text for k in tragedy_kw):
-        mode = "vocal_pure_master"
-        bpm = 86
-        maqam = "rast"
-        meter = "muwashah"
-        tor = "tor_tawshih_shia"
-        school = "School 03 (التوشيح والقصيدة الإنشادية — الأكرف)"
-        prompt = EXTENDED_ATWAR_PROMPTS_V52["shia_tawshih_nasheed_86bpm_rast_hijaz_v52"]
     elif any(k in bare_text for k in fazzaiya_kw) or ("گوم" in bare_text and not any(k in bare_text for k in heroic_kw)):
         if dialect == "bahrani":
             mode = "bahrani_waqfa"
