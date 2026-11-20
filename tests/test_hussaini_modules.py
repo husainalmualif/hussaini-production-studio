@@ -1497,6 +1497,11 @@ def test_v62_nc37_fusha_shadda_wasl_orthoepy_linter_and_strict_score_ceiling():
     assert len(res31["comma_after_sukun_traps"]) == 1
     assert len(res31["inline_echo_swallow_traps"]) == 1
 
+    res_tatweel = hds.audit_fusha_shadda_wasl_and_makharij_v62("أَهِـيْ يَا وِيلْ گَلْبِي")
+    assert res_tatweel["nc37_preflight_passed"] is False
+    assert len(res_tatweel["tatweel_hallucination_traps"]) == 1
+    assert res_tatweel["tatweel_hallucination_traps"][0]["fix"] == "أَهِيْ"
+
     clean_exp32 = (
         "[التمهيد]\n"
         "مَتَى يَا إِمَامَ الهُدَى الإِنْبِعَاثْ\n"

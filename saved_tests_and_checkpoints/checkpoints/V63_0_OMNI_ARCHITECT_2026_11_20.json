@@ -17,7 +17,18 @@
     "five_minute_word_budget_planner": "plan_v63_five_minute_word_budget() / --plan-v63-workflow (280-350 net words, 12-16s/bayt, 4 Extend passes)",
     "maqam_audio_reference_matrix": "MAQAM_LYRIA35_ADHERENCE_AND_AUDIO_REF_MATRIX_V63 / --check-maqam-ref",
     "lyria_harshness_tamer_dsp": "apply_lyria_harshness_tamer_2_4khz() / --tame-lyria-harshness (mono-safe dynamic 2.4-3.8 kHz EQ)",
-    "cumulative_live_flow_experiments": 35,
+    "cumulative_live_flow_experiments": 36,
+    "exp33_stage0_track_a_live_audit": {
+      "clip_uuid": "1e09a84e-29b6-4b35-9d85-1ff8e5bac5ad",
+      "session_url": "https://www.flowmusic.app/session/84261b1f-b31a-4094-8c2c-83d2cd00b613?t=true",
+      "stage0_do_not_generate_obeyed": true,
+      "nc33_zero_artifact_passed": true,
+      "nc39_pure_acapella_verified": true,
+      "strict_overall_score_10": 7.9,
+      "orthoepy_score_10": 6.8,
+      "verdict": "NEEDS_FIX_NOT_RELEASE_READY",
+      "new_law_discovered": "Unicode Tatweel U+0640 (ـ) inside Arabic words causes Lyria 3.5 consonant hallucination (أَهِـيْ -> أَهِبِي); now blocked in --audit-orthoepy (tatweel_hallucination_traps)."
+    },
     "new_module_doc": "references/modules/module_77_v63_flow_music_two_layer_json_5band_spectrum_and_hybrid_stem_mastering.md"
   }
 }

@@ -8237,6 +8237,7 @@ def audit_fusha_shadda_wasl_and_makharij_v62(lyrics_text: str) -> dict:
     wasl_alif_traps = []
     half_vocalized_words = []
     rhyme_carryover_traps = []
+    tatweel_hallucination_traps = []
 
     diac_chars = set("\u064B\u064C\u064D\u064E\u064F\u0650\u0651\u0652\u0670")
     skip_medial = set("اويىآأإؤئة\u0640")
@@ -8275,8 +8276,14 @@ def audit_fusha_shadda_wasl_and_makharij_v62(lyrics_text: str) -> dict:
                 "fix": f"Remove '..' after '{ell_m.group(1)}' -> '{ell_m.group(1)} {ell_m.group(2)}' so Lyria 3.5 does not omit it (NC37-B).",
             })
 
-        # NC37-D1: Graphic 'الِا' / 'الْا' Wasl-Alif misread as 'الأَ'
+        # NC37-D1: Graphic 'الِا' / 'الْا' Wasl-Alif misread as 'الأَ' & Tatweel U+0640 consonant hallucination (Exp 33: أَهِـيْ->أَهِبِي)
         for w in re.findall(r"[\u0600-\u06FF]+", ln):
+            if "\u0640" in w:
+                tatweel_hallucination_traps.append({
+                    "word": w,
+                    "fix": w.replace("\u0640", ""),
+                    "reason": "Unicode Tatweel (ـ U+0640) causes Lyria 3.5 to hallucinate an extra consonant (Exp 33: أَهِـيْ -> أَهِبِي).",
+                })
             if re.search(r"ال[\u0650\u0652]ا", w):
                 wasl_alif_traps.append({
                     "word": w,
@@ -8345,6 +8352,7 @@ def audit_fusha_shadda_wasl_and_makharij_v62(lyrics_text: str) -> dict:
         + len(wasl_alif_traps)
         + len(half_vocalized_words)
         + len(rhyme_carryover_traps)
+        + len(tatweel_hallucination_traps)
     )
     return {
         "nc37_preflight_passed": total_issues == 0,
@@ -8356,6 +8364,7 @@ def audit_fusha_shadda_wasl_and_makharij_v62(lyrics_text: str) -> dict:
         "wasl_alif_traps": wasl_alif_traps,
         "half_vocalized_words": half_vocalized_words,
         "rhyme_carryover_traps": rhyme_carryover_traps,
+        "tatweel_hallucination_traps": tatweel_hallucination_traps,
     }
 
 

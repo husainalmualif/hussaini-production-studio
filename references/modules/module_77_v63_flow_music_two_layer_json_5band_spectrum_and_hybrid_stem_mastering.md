@@ -70,3 +70,19 @@ Neural vocoder artifacts in `Lyria 3.5` manifest as upper-midrange digital harsh
 5. **Serial Compression (`2:1–4:1`) + De-Esser (`5–8 kHz`)** on `س، ص، ش، ز`.
 6. **Mid-Side Reverb Clarity EQ + Sidechain Ducking (`4:1–6:1`, `2–4 dB`)**.
 7. **Multi-Platform EBU R128 (`-14 / -16 / -18 / -23 LUFS`, `-1.0 dBTP`) + Mono Check** (SynthID persists transparently across processing; commercial release rights apply to paid `Starter / Plus / Member` plans).
+
+---
+
+## 7. Live Empirical Proof: `Exp 33` (36th Cumulative Flow Music Lab Experiment — Strict Zero-Flattery Audit)
+
+- **Protocol Tested:** Two-turn **`V63.0` Stage-0 `MASTER_STATE` Bootstrap (`DO_NOT_GENERATE`) -> Stage-1 `Track A` Pure Acapella Qatifi-Bahrani Latmiya JSON (`5-Band Positive Spectral Occupancy`)** on **`Lyria 3.5`**.
+- **Session URL:** `https://www.flowmusic.app/session/84261b1f-b31a-4094-8c2c-83d2cd00b613?t=true`
+- **Track & Clip UUID:** `لطمية بحرانية — 01` (`2:53`, `173.323s`) — `1e09a84e-29b6-4b35-9d85-1ff8e5bac5ad`
+- **Verified `V63.0` Breakthroughs:**
+  1. **`NC38` Stage-0 Compliance (`100%`):** `Gemini Producer` obeyed `INITIALIZE_AND_LOCK_STATE_ONLY_DO_NOT_GENERATE` with zero premature generation, confirmed all 3 locked rule groups, and inherited `MASTER_STATE` into Stage 1.
+  2. **`NC39` 5-Band Anti-Inversion (`100%`):** `passed_nc33_zero_artifact_gate: true` (`0` opening piano notes, `0` pop snare flags, `0` flagged chunks) — pure human vocal symphony (`Zannah`, `Ahaat`, bare-chest Latm, subtle Dammam, Matam hall reverb) with genuine `0 BPM` Rubato Na'i (`0:00–0:26`) -> `74 BPM` Mustahal (`0:27`) and `Mono Safe` (`0.741`).
+  3. **Maqam Reference Matrix Confirmed:** Without a `30s` audio guide for quarter-tone Saba/Bayati, Lyria drifted toward 12-TET (`closest_maqam: ajam 0.944`), empirically validating why `saba` requires `mandatory_30s_make_tracks_for_my_vocal`.
+- **Ruthless Vocal-Isolated `10s` Forensic Findings (`22` micro-slices — Zero Flattery):**
+  - **New Permanent Discovery (`Tatweel U+0640` Ban in `--audit-orthoepy`):** At `0:01`, `أَهِـيْ` (containing Unicode Tatweel `ـ`) caused `Lyria 3.5` to hallucinate a fake `ب` (`أَهِبِي`)! Now automatically blocked by `tatweel_hallucination_traps` in `audit_fusha_shadda_wasl_and_makharij_v62()`.
+  - **Other Critical Findings (`0:34–1:06`):** `هَالْبِيتْ مُظْلِمْ وَينْكُمْ` garbled to `مِتْوَيْنْكُمْ` on Chorus 1 & 2 (before singing 100% cleanly on Chorus 3 at `2:15`); on Chorus 2, `غَنَاتِي` became `عَنَاتِي` (`0:53`) and `هَدَاوِيشْ` dropped `ش` (`1:05`). Meanwhile `1:15–2:53` (`وَگَفْتِ إِهْنِي`, `عَفَرْ طَاحْ العَلَمْ`, and full Chorus 3/Outro `غَنَاتِي / مُظْلِمْ / لَاوِيَّه / هَدَاوِيشْ`) were crystal-clear Qatifi-Bahrani.
+  - **Strict Zero-Flattery Score:** Architecture/Mix `9.3/10`, Orthoepy `6.8/10` (`3` critical defects) -> **`7.90 / 10` (`NEEDS_FIX_NOT_RELEASE_READY` — fixable via Tatweel removal + `Remix > Replace` on `0:30–1:08`)**.
