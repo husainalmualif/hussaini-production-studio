@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # pylint: disable=wrong-import-position,too-many-lines,no-member,too-few-public-methods
-"""Comprehensive Unit & Integration Test Suite for Hussaini Production Studio (V61.0 OMNI-ARCHITECT)."""
+"""Comprehensive Unit & Integration Test Suite for Hussaini Production Studio (V62.0 OMNI-ARCHITECT)."""
 
 import os
 import re
@@ -56,8 +56,8 @@ import hussaini_dsp_montage as hds  # noqa: E402
 
 
 def test_single_source_version_and_v50_architecture():
-    """Verify V61.0 OMNI-ARCHITECT version lock, SKILL.md router budget, JSON constitution, and Module 75."""
-    assert hds.SKILL_VERSION == "V61.0 OMNI-ARCHITECT"
+    """Verify V62.0 OMNI-ARCHITECT version lock, SKILL.md router budget, JSON constitution, and Module 76."""
+    assert hds.SKILL_VERSION == "V62.0 OMNI-ARCHITECT"
     skill_md = os.path.join(ROOT_DIR, "SKILL.md")
     assert os.path.isfile(skill_md)
     assert os.path.getsize(skill_md) <= 10500
@@ -139,6 +139,12 @@ def test_single_source_version_and_v50_architecture():
         "modules",
         "module_75_v61_architecture_qatifi_dialect_jalwat_and_classical_muwashah.md",
     )
+    v62_module_doc = os.path.join(
+        ROOT_DIR,
+        "references",
+        "modules",
+        "module_76_v62_waqar_fiqh_orchestral_six_families_qarid_atwar_and_multi_platform_lufs.md",
+    )
     assert os.path.isfile(v50_module_doc)
     assert os.path.isfile(v51_module_doc)
     assert os.path.isfile(v52_module_doc)
@@ -150,13 +156,14 @@ def test_single_source_version_and_v50_architecture():
     assert os.path.isfile(v58_module_doc)
     assert os.path.isfile(v60_module_doc)
     assert os.path.isfile(v61_module_doc)
+    assert os.path.isfile(v62_module_doc)
 
     constitution = hds.load_v50_0_constitution()
     assert (
         constitution["protocol_metadata"]["protocol_name"]
         == "Hussaini_Production_Studio_OS_V50_0_OMNI_ARCHITECT"
     )
-    assert constitution["protocol_metadata"]["skill_version"] == "V61.0 OMNI-ARCHITECT"
+    assert constitution["protocol_metadata"]["skill_version"] == "V62.0 OMNI-ARCHITECT"
     assert len(constitution["5_master_sound_prompts_library_modules_36_44_46_48_52"]) == 25
     assert len(hds.MASTER_SOUND_PROMPTS_V50) == 25
     assert len(constitution["8_v50_empirical_175_corpus_and_9_schools_modules_54_65"]["unified_9_schools_architecture"]) == 9
@@ -166,7 +173,7 @@ def test_single_source_version_and_v50_architecture():
     assert "modern_studio_ney_strings" in hds.SUPPORTED_DSP_MODES
     assert "cinematic_foley_latmiya" in hds.SUPPORTED_DSP_MODES
     assert len(hds.EXTENDED_ATWAR_PROMPTS_V52) == 14
-    assert len(hds.MULTI_MAQAM_MELODIC_FINGERPRINT_LIBRARY_V60) == 16
+    assert len(hds.MULTI_MAQAM_MELODIC_FINGERPRINT_LIBRARY_V60) == 19
     assert len(hds.MAQAM_FREQS) == 15
     v51_block = constitution["v51_0_protocol_negative_constraints_and_style_taxonomy"]
     assert v51_block["version"] == "V51.2 OMNI-ARCHITECT"
@@ -203,6 +210,10 @@ def test_single_source_version_and_v50_architecture():
     assert v61_block["version"] == "V61.0 OMNI-ARCHITECT"
     assert v61_block["multi_maqam_melodic_fingerprint_count"] == 16
     assert v61_block["v61_live_experiments_lab"]["total_cumulative_flow_experiments"] == 32
+    v62_block = constitution["v62_0_module_76_upgrades"]
+    assert v62_block["version"] == "V62.0 OMNI-ARCHITECT"
+    assert v62_block["multi_maqam_melodic_fingerprint_count"] == 19
+    assert v62_block["orchestral_six_families_count"] == 6
 
 
 def test_module_41_49_57_58_64_iraqi_prosthetic_clusters_and_v50_g2p_locks():
@@ -1170,9 +1181,9 @@ def test_v58_muwashah_analyzer_combined_json_and_telephone_intro_fx():
 
 
 def test_v60_multi_maqam_diversity_nc27c_replace_forensics_and_vocal_stacking(tmp_path):
-    """Verify V60.0 Module 74: 16 Fingerprints, 15 Maqams, NC27-C, NC32 Replace, NC33 Forensics & NC34 Auto-Trim/Stacking."""
-    # 1. Verify 16 Multi-Maqam Melodic Fingerprints, 15 Maqams & auto-selection breaking melodic monotony
-    assert len(hds.MULTI_MAQAM_MELODIC_FINGERPRINT_LIBRARY_V60) == 16
+    """Verify V60.0 Module 74: 19 Fingerprints, 15 Maqams, NC27-C, NC32 Replace, NC33 Forensics & NC34 Auto-Trim/Stacking."""
+    # 1. Verify 19 Multi-Maqam Melodic Fingerprints, 15 Maqams & auto-selection breaking melodic monotony
+    assert len(hds.MULTI_MAQAM_MELODIC_FINGERPRINT_LIBRARY_V60) == 19
     for fp_key, fp_val in hds.MULTI_MAQAM_MELODIC_FINGERPRINT_LIBRARY_V60.items():
         assert "zero piano" in fp_val["sound_prompt"].lower()
         assert all(m in hds.MAQAM_FREQS for m in fp_val["maqam_arc"]), fp_key
@@ -1385,3 +1396,60 @@ def test_v61_architecture_qatifi_jalwat_muwashah_reverb_clarity_and_mono_check(t
     assert hds.main(["--genre", "jalwat", "--dialect", "qatifi", "--bpm", "98"]) == 0
     assert hds.main(["--genre", "muwashah", "--maqam-drone", "suznak", "--bpm", "74"]) == 0
     assert hds.main(["--genre", "nai", "--dialect", "qatifi", "--bpm", "0"]) == 0
+
+
+def test_v62_waqar_nc36_orchestral_six_families_qarid_and_multi_platform_lufs(tmp_path):
+    """Verify V62.0 Module 76: NC36 Quarter-Tone vs. 12-TET lock, Axis-5 6 families, Qarid Atwar, Operetta & Multi-Platform LUFS."""
+    # 1. Verify Axis-5 6 Orchestral Families, Qarid Atwar catalog & 15-Maqam partition completeness
+    assert len(hds.ORCHESTRAL_SIX_FAMILIES_WAQAR_V62) == 6
+    assert len(hds.QARID_AND_POPULAR_ATWAR_V62["qarid_classical_fusha"]) == 3
+    assert set(hds.QUARTER_TONE_EASTERN_MAQAMS) | set(hds.ORCHESTRAL_12TET_SAFE_MAQAMS) == set(hds.MAQAM_FREQS.keys())
+    assert hds.QUARTER_TONE_EASTERN_MAQAMS.isdisjoint(hds.ORCHESTRAL_12TET_SAFE_MAQAMS)
+
+    # 2. Verify NC36 Quarter-Tone vs. 12-TET Orchestration Compatibility Firewall
+    clash_saba = hds.validate_maqam_orchestration_compatibility("saba", uses_western_12tet_chords=True)
+    assert clash_saba["contains_quarter_tone"] is True
+    assert clash_saba["quarter_tone_clash_risk"] is True
+    assert clash_saba["nc36_passed"] is False
+
+    safe_saba_24 = hds.validate_maqam_orchestration_compatibility("saba", uses_western_12tet_chords=False)
+    assert safe_saba_24["nc36_passed"] is True
+
+    safe_nah = hds.validate_maqam_orchestration_compatibility("nahawand", uses_western_12tet_chords=True)
+    assert safe_nah["orchestral_12tet_compatible"] is True
+    assert safe_nah["nc36_passed"] is True
+
+    # 3. Verify V62 Fingerprints & Operetta genre routing
+    assert hds.select_melodic_fingerprint_v60(poem_text="يا صاحب العصر .. فجر الوعود")["fingerprint_key"] == "v62_orchestral_mahdawi_anthem_nahawand_kurd_78bpm"
+    assert hds.select_melodic_fingerprint_v60(poem_text="طور الحدي والقزويني في مسير القوافل")["fingerprint_key"] == "v62_qarid_hadi_qazwini_caravan_sikah_bayati_68bpm"
+    op_prof = hds.build_vocal_genre_profile(genre="operetta", dialect="fusha", maqam="nahawand", bpm=78)
+    assert op_prof["uses_chest_latm"] is False
+    assert op_prof["nc36_orchestration_check"]["nc36_passed"] is True
+
+    # 4. Verify Multi-Platform EBU R128 Mastering Targets (-14, -16, -18, -23 LUFS)
+    sr = 16000
+    t_arr = np.linspace(0.0, 2.0, 2 * sr, endpoint=False)
+    sig = 0.30 * np.sin(2.0 * np.pi * 200.0 * t_arr)
+    in_wav = tmp_path / "in_v62_lufs.wav"
+    wavfile.write(str(in_wav), sr, (sig * 32767).astype(np.int16))
+
+    for pt_key, expected_lufs in (("streaming", -14.0), ("apple_music", -16.0), ("hires_qobuz", -18.0), ("broadcast_tv", -23.0)):
+        out_wav = tmp_path / f"out_v62_{pt_key}.wav"
+        res_pt = hds.process_audio_file(
+            str(in_wav),
+            str(out_wav),
+            mode="vocal_pure_master",
+            bpm=78.0,
+            no_synth_rhythm=True,
+            platform_target=pt_key,
+        )
+        assert res_pt["platform_target"] == pt_key
+        assert res_pt["target_lufs"] == expected_lufs
+        assert abs(res_pt["integrated_lufs"] - expected_lufs) <= 1.2
+        aud_pt = hds.audit_rendered_audio(str(out_wav), platform_target=pt_key)
+        assert aud_pt["broadcast_compliant"] is True
+        assert aud_pt["platform_target"] == pt_key
+
+    assert hds.main(["--check-orchestration", "saba:12tet"]) == 0
+    assert hds.main(["--check-orchestration", "nahawand:12tet"]) == 0
+    assert hds.main(["--genre", "operetta", "--maqam-drone", "hijaz", "--bpm", "84"]) == 0

@@ -1,0 +1,20 @@
+{
+  "checkpoint_id": "V57_0_OMNI_ARCHITECT_2026_11_19",
+  "version": "V57.0 OMNI-ARCHITECT",
+  "commit_sha": "04e5ef84a4da6749da86b7f1a599a2cbf21d8d9f",
+  "parent_commit_sha": "68c868f46c3cf9ec9a936b8c6cf8d516342e2183",
+  "github_actions_ci_run_id": 44557626835,
+  "github_actions_ci_status": "3/3 success (Py 3.10, 3.11, 3.12)",
+  "canonical_files_count": 32,
+  "skill_md_bytes": 9030,
+  "pylint_score": "10.00/10",
+  "pytest_passed": "17/17",
+  "coverage_percent": 87.04,
+  "module_added": "references/modules/module_72_v57_clean_lyria35_orthography_ch_digraph_and_20s_chunk_audit.md",
+  "highlights": [
+    "Proved via 4 controlled Lyria 3.5 experiments (V57-A, V57-A2, V57-B, V57-B2) audited in 20s blind chunks that heavy over-tashkeel and synthetic prosthetic spelling shatter Arabic BPE tokens (NC26)",
+    "Added format_clean_lyrics_for_lyria35() and --compile-clean-lyria preserving natural Arabic spelling + 1-2 surgical vowels + چ->تش phonetic digraph + clean گ lock (NC27)",
+    "Added 2 empirically verified anti-pop regional dialect prompts: v57_iraqi_karbalaei_pure_majlis_60bpm_saba_lami (V57-A2 Iraqi Champion, Clip d8a6ce81) and v57_bahrani_matam_pure_58bpm_saba_bayati (V57-B Bahrani Champion, Clip 54e0c7c7) (NC28)",
+    "Mandated 20-second FFmpeg blind chunk phonetic & Makharij audit gate before approving any generated track (NC29)"
+  ]
+}

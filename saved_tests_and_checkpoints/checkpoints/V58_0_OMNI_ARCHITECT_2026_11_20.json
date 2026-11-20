@@ -1,0 +1,61 @@
+{
+  "checkpoint_version": "V58.0 OMNI-ARCHITECT",
+  "date": "2026-11-20",
+  "module_added": "references/modules/module_73_v58_muwashah_multi_meter_combined_json_and_masterwork_direction.md",
+  "canonical_files_count": 33,
+  "sha256_mirror_mismatch": 0,
+  "skill_md_bytes": 8502,
+  "pylint_score": "10.00/10",
+  "pytest_result": "18/18 PASSED",
+  "pytest_coverage_pct": 88.31,
+  "masterwork_library_studied": {
+    "path": "C:\\Users\\husai\\Desktop\\New folder\\لطميات",
+    "total_mp3_files": 177,
+    "deep_anatomy_tracks": 10,
+    "human_slices_audited": 6,
+    "five_direction_blueprints": [
+      "vintage_telephone_intro_to_full_drop (300-2800Hz, جابر يا جابر)",
+      "cadential_qada_rhythm_mute_shift (الكعدة الحسينية, جابر يا جابر 1:45 & أصحاب الحسين 2:30)",
+      "half_double_time_and_progressive_bpm_gears (65<->130, 111->55, 88->48->81, 70->86->103)",
+      "qarar_to_jawab_vocal_pitch_arc (6.8 to 11.9 semitones)",
+      "stereo_width_breathing_and_vocal_stacking (+3.1 to +6.2 dB side expansion)"
+    ]
+  },
+  "flow_music_3method_head_to_head_bukaa_alwaraq": {
+    "poem": "بكاء الورق (نادر التتان — موشّح بحراني متعدد الأوزان)",
+    "total_cumulative_flow_experiments": 20,
+    "method_1_compose_lyrics": {
+      "clip_id": "ceb3706d-1834-4d22-bfbb-d668f90dbe0e",
+      "duration": "3:02",
+      "score": 4.2,
+      "verdict": "REJECTED (piano intro, Levantine pop accent, rock snare, dance darbuka interlude at 1:45)"
+    },
+    "method_2a_combined_json_take1": {
+      "clip_id": "906d0e5d-25ba-4008-a9de-3920f3b84da5",
+      "duration": "3:00",
+      "score": 7.6,
+      "verdict": "100% verbatim Arabic lyrics & 4 multi-meter movements, but leaked piano in intro & 3-syllable split on الحتشي/البتشي"
+    },
+    "method_2b_combined_json_take2_champion": {
+      "clip_id": "19afceef-e747-480f-ae7e-6e0955472c89",
+      "duration": "2:41",
+      "score": 9.4,
+      "mastered_file": "v58_bukaa_alwaraq_m2b_champion_master.mp3",
+      "ebu_r128": "-14.0 LUFS / -1.0 dBTP (LRA 11.73 LU)",
+      "verdict": "CHAMPION (zero piano, zero pop drums, authentic Bahrani vocal/choir, Al-Akraf Qa'da drop at c05, crisp گ/حَتْشِي/بَتْشِي)"
+    },
+    "method_3_stage2_dynamic_json_extend": {
+      "clip_id": "49fd9e26-e592-47a1-a590-5285c13a0e4a",
+      "duration": "3:58 (trimmed cleanly to 3:49.5)",
+      "score": 8.1,
+      "mastered_file": "v58_bukaa_alwaraq_m3_extend_3m49_master.mp3",
+      "ebu_r128": "-14.0 LUFS / -1.79 dBTP (LRA 8.23 LU)",
+      "verdict": "ARCHITECTURAL BREAKTHROUGH (seamless 2:58 seam & OVERWRITE_WITH_STAGE_2_ONLY obeyed; inherited M2-A piano & tail loop at 3:52 trimmed cleanly)"
+    }
+  },
+  "new_permanent_rules": [
+    "NC27-B: Surgical Sukun on medial affricate تْش (الحَتْشِي / البَتْشِي)",
+    "NC30: Combined Pre-Conditioning + Multi-Section Muwashah JSON via --build-muwashah-json",
+    "NC31: Stage-2 Dynamic JSON Extend from piano-free Stage-1 take + OVERWRITE_WITH_STAGE_2_ONLY + Tail-Loop Trim"
+  ]
+}

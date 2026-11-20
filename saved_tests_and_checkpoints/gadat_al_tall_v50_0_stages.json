@@ -1,0 +1,548 @@
+{
+  "package_metadata": {
+    "poem_title": "گَعْدَتْ إِعْلَه التَّلْ تِنَاشِدْ",
+    "protocol_name": "Hussaini_Production_Studio_OS_V50_0_OMNI_ARCHITECT",
+    "skill_version": "V50.0 OMNI-ARCHITECT",
+    "school_id": "school_1_karbalai_heavy_nazla",
+    "target_duration": "5:00 - 5:35 minutes across 5 independent stages (1 stanza per Extend per 80-Second Law QC30)",
+    "agreed_generation_workflow": {
+      "common_step_1": "Send Pre-Conditioning JSON in Producer Chat first and wait for rule lock confirmation.",
+      "method_1": "After sending Pre-Conditioning JSON in Producer Chat, use Compose > Lyrics (paste Title, Sound, and pure Arabic Lyrics for each stage).",
+      "method_2": "After sending Pre-Conditioning JSON in Producer Chat, use the Stage & Section JSON blocks (JSON directives wrapping the verses inside 'sections[]' + 'lyrics_register_verbatim') for each stage."
+    },
+    "qc_gates_passed": "QC1-QC35 (35/35 Passed)"
+  },
+  "step_1_pre_conditioning_json": {
+    "protocol_name": "Hussaini_Production_Studio_OS_V50_0_OMNI_ARCHITECT",
+    "skill_version": "V50.0 OMNI-ARCHITECT",
+    "session_mode": "Pre_Conditioning_Lock_Wait_For_Stage_JSON",
+    "system_context_directive": "Read and lock this V50.0 OMNI-ARCHITECT JSON constitution in active session memory as the strict operating protocol for all tracks in this session. Enforce 24-EDO Eastern Maqam microtonality, 100% pure single-dialect vocal tract isolation (authentic Iraqi colloquial dialect), collective unison Raddada choir on all (...) Estehlal lines (max 4 consecutive lines), 1 single stanza per Extend stage (<= 7 couplets / 14 lines), distinct numbered [الكَسْرَة ...] and [المُسْتَهَلّ] section headers, zero 1-word orphan lines, and zero background crying clutter in rhythmic Latmiyas. Parse all English JSON orchestration keys silently in Producer Chat and pass ONLY pure vocalized Arabic lines and Arabic section headers from 'lyrics_register_verbatim' to lyrics__register. Acknowledge rule lock first and wait for Stage 1.",
+    "channel_routing": {
+      "common_step_1_producer_chat": "Send this Pre-Conditioning JSON in Producer Chat first",
+      "method_1_compose_lyrics": "Use Compose > Lyrics with pure Sound and pure vocalized Arabic Lyrics",
+      "method_2_json_inside_verses": "Send Stage JSON with per-section JSON directives wrapping the verses inside 'sections[]' and 'lyrics_register_verbatim'"
+    },
+    "reference_clip_id": null,
+    "acoustic_lock": {
+      "genre": "Pure Acapella Hussaini Latmiya",
+      "tuning_system": "24-EDO Arabic Microtonal Maqam",
+      "primary_maqam": "saba_zamzam",
+      "bpm": 58,
+      "tor_style": "heavy Karbalai Muthakkal and Nazla style",
+      "dialect_isolation": "authentic Iraqi colloquial dialect",
+      "lead_vocal": "Commanding deep resonant Jawhari Baritone",
+      "collective_estehlal_choir": "100% Unison Male Raddada Choir on all (...) Estehlal lines (max 4 consecutive lines per block)",
+      "crying_isolation": "Zero background weeping in rhythmic 54-132 BPM Latmiyas (0 BPM Rubato only)",
+      "sound_prompt": "Mournful Traditional Iraqi Hussaini Latmiya, heavy Karbalai Muthakkal and Nazla style, Maqam Saba Zamzam and Bayati, 58 BPM, authentic Iraqi colloquial dialect, commanding deep resonant Baritone lead vocal, powerful high chest-voice climbs, natural vocal rasp, passionate microtonal melisma, heavy 55Hz bare-palm chest thud, 310ms tape echo, 3.5s Husseiniya reverb, wide unison male Raddada response, Pure Acapella No Instruments"
+    }
+  },
+  "stage_1_root_track": {
+    "stage_id": "stage_1_root",
+    "execution_command": "Execute Stage 1 Root generation with Instrumental mode strictly OFF. Register ONLY the exact Arabic headers and lines from 'lyrics_register_verbatim' into lyrics__register, set 'title' in Details, and set 'sound_description' in Sound.",
+    "title": "گَعْدَتْ إِعْلَه التَّلْ تِنَاشِدْ",
+    "global_bpm": 58,
+    "sound_description": "Mournful Traditional Iraqi Hussaini Latmiya, heavy Karbalai Muthakkal and Nazla style, Maqam Saba Zamzam and Bayati, 58 BPM, authentic Iraqi colloquial dialect, commanding deep resonant Baritone lead vocal, powerful high chest-voice climbs, natural vocal rasp, passionate microtonal melisma, heavy 55Hz bare-palm chest thud, 310ms tape echo, 3.5s Husseiniya reverb, wide unison male Raddada response, Pure Acapella No Instruments",
+    "lyrics_register_verbatim": [
+      "[المُسْتَهَلّ الأَوَّلْ]",
+      "گَعْدَتْ إِعْلَه التَّلْ تِنَاشِدْ .. وَينَكْ يَا خُويَه إِحْسَينْ ..",
+      "مَا ظَلَّتْ خِيَمْ لِينَا .. تِحْمِي بَنَاتِ الدِّينْ ..",
+      "بَينِ الرِّمَاحْ وِحْدِي .. وَ الدَّمْعَه مَلَتِ العَينْ ..",
+      "(وَينَكْ يَا خُويَه إِحْسَينْ .. وَينَكْ يَا خُويَه إِحْسَينْ) ..",
+      "",
+      "[المُسْتَهَلّ]",
+      "(گَعْدَتْ إِعْلَه التَّلْ تِنَاشِدْ .. وَينَكْ يَا خُويَه إِحْسَينْ) ..",
+      "(مَا ظَلَّتْ خِيَمْ لِينَا .. تِحْمِي بَنَاتِ الدِّينْ) ..",
+      "(بَينِ الرِّمَاحْ وِحْدِي .. وَ الدَّمْعَه مَلَتِ العَينْ) ..",
+      "(وَينَكْ يَا خُويَه إِحْسَينْ .. وَينَكْ يَا خُويَه إِحْسَينْ) ..",
+      "(مممم .. مممم .. آااه ..) ..",
+      "",
+      "[النَّزْلَة الأُولَى]",
+      "مِشَتْ زَينَبْ إِعْلَه الرَّمْضَه ..",
+      "إِبْچِدَمْ حَافِي ..",
+      "تِدَوِّرْ بِالمَذَابِحْ ..",
+      "چَفَّكْ الدَّافِي ..",
+      "تِصِيحْ الحَيلْ خَانْ ..",
+      "وَ عُمْرِي مَا كَافِي ..",
+      "شِفِتْ جِسْمَكْ طَرِيحْ ..",
+      "إِبْلَايَه لَفَّافِي ..",
+      "",
+      "[الكَسْرَة الأُولَى]",
+      "لَا غُسُلْ وَ لَا چِفَنْ ..",
+      "يِسْتُرْ هَلْ أَوصَالْ ..",
+      "وَ الخَيلْ إِعْلَه صَدْرَكْ ..",
+      "رِكْضَتْ أَشْكَالْ ..",
+      "إِشْ أَگُولْ لِفَاطِمَه ..",
+      "لَوْ نِشْدَتِ الحَالْ ..",
+      "وَينَكْ يَا خُويَه إِحْسَينْ .. وَينَكْ يَا خُويَه إِحْسَينْ ..",
+      "",
+      "[المُسْتَهَلّ]",
+      "(گَعْدَتْ إِعْلَه التَّلْ تِنَاشِدْ .. وَينَكْ يَا خُويَه إِحْسَينْ) ..",
+      "(مَا ظَلَّتْ خِيَمْ لِينَا .. تِحْمِي بَنَاتِ الدِّينْ) ..",
+      "(بَينِ الرِّمَاحْ وِحْدِي .. وَ الدَّمْعَه مَلَتِ العَينْ) ..",
+      "(وَينَكْ يَا خُويَه إِحْسَينْ .. وَينَكْ يَا خُويَه إِحْسَينْ) .."
+    ],
+    "sections": [
+      {
+        "section_tag": "[المُسْتَهَلّ الأَوَّلْ]",
+        "performer": "Solo Commanding Jawhari Baritone Radood on first 3 lines + Unison Male Raddada Choir on 4th (...) line (QC31 Doubled Opening Estehlal Law)",
+        "meter_and_syllables": "Iso-syllabic lock (4 balanced couplet lines)",
+        "tempo_feel": "58 BPM heavy grounded Husseiniya chest-strike pulse",
+        "tor_and_maqam": "Tor Muthakkal Karbalai — 24-EDO Maqam Saba Zamzam & Bayati (Qarar statement)",
+        "throat_and_maddat_dynamics": "Deep resonant Baritone Qarar establishing the melodic hook with open Maddat on 'إِحْسَينْ / الدِّينْ / العَينْ' before '..'",
+        "rhythm_chants_and_sfx": "Organic 55Hz bare-palm chest thud + 2.4kHz palm slap + Matam breath",
+        "audio_engineering_3d": "Center lead vocal (0 deg), 310ms analog tape echo, 3.5s Husseiniya dome reverb",
+        "dialect_phonetic_locks": "Pure Iraqi colloquial isolation: گَعْدَتْ إِعْلَه التَّلْ، خِيَمْ (no prosthetic Alif per QC33)، إِحْسَينْ",
+        "lyrics_arabic": [
+          "گَعْدَتْ إِعْلَه التَّلْ تِنَاشِدْ .. وَينَكْ يَا خُويَه إِحْسَينْ ..",
+          "مَا ظَلَّتْ خِيَمْ لِينَا .. تِحْمِي بَنَاتِ الدِّينْ ..",
+          "بَينِ الرِّمَاحْ وِحْدِي .. وَ الدَّمْعَه مَلَتِ العَينْ ..",
+          "(وَينَكْ يَا خُويَه إِحْسَينْ .. وَينَكْ يَا خُويَه إِحْسَينْ) .."
+        ]
+      },
+      {
+        "section_tag": "[المُسْتَهَلّ]",
+        "performer": "100% Wide Unison Male Raddada Congregation Choir on all 4 (...) lines + 4s Humming Bridge (QC18 & QC31)",
+        "meter_and_syllables": "4 collective chorus lines + 1 humming separator line",
+        "tempo_feel": "58 BPM steady heavy Husseiniya chest-strike pulse",
+        "tor_and_maqam": "Tor Muthakkal Karbalai — 24-EDO Maqam Saba Zamzam & Bayati (Qarar & Jawab octave unison)",
+        "throat_and_maddat_dynamics": "Full Husseiniya congregation unison power followed by 4s closed-lip humming separator to reset solo voice for Nazla 1",
+        "rhythm_chants_and_sfx": "Synchronized 55Hz bare-palm chest thud + 2.4kHz palm slap + Matam breath",
+        "audio_engineering_3d": "85% wide L/R Husseiniya hall stereo field, 3.5s dome reverb",
+        "dialect_phonetic_locks": "Pure Iraqi colloquial isolation: گَعْدَتْ، إِعْلَه التَّلْ، خِيَمْ، إِحْسَينْ، الدَّمْعَه، العَينْ",
+        "lyrics_arabic": [
+          "(گَعْدَتْ إِعْلَه التَّلْ تِنَاشِدْ .. وَينَكْ يَا خُويَه إِحْسَينْ) ..",
+          "(مَا ظَلَّتْ خِيَمْ لِينَا .. تِحْمِي بَنَاتِ الدِّينْ) ..",
+          "(بَينِ الرِّمَاحْ وِحْدِي .. وَ الدَّمْعَه مَلَتِ العَينْ) ..",
+          "(وَينَكْ يَا خُويَه إِحْسَينْ .. وَينَكْ يَا خُويَه إِحْسَينْ) ..",
+          "(مممم .. مممم .. آااه ..) .."
+        ]
+      },
+      {
+        "section_tag": "[النَّزْلَة الأُولَى]",
+        "performer": "Solo Commanding Jawhari Baritone Radood (100% Unwrapped Solo Lines)",
+        "meter_and_syllables": "Iso-syllabic lock (8 vertical hemistich lines, rhyme: -افي)",
+        "tempo_feel": "58 BPM steady heavy Husseiniya chest-strike pulse",
+        "tor_and_maqam": "Tor Karbalai Nazla — 24-EDO Maqam Saba Zamzam & Bayati (Lines 1-4 Qarar/Mayan -> Lines 5-8 Jawab climb)",
+        "throat_and_maddat_dynamics": "Natural laryngeal rasp, passionate 24-EDO microtonal melisma, prolonged vowel Maddat on 'حَافِي / الدَّافِي / كَافِي / لَفَّافِي' before '..'",
+        "rhythm_chants_and_sfx": "Organic 55Hz bare-palm chest thud + 2.4kHz palm slap + Matam breath",
+        "audio_engineering_3d": "100% center dry-forward vocal presence with 310ms analog tape echo",
+        "dialect_phonetic_locks": "Pure Iraqi locks: مِشَتْ زَينَبْ، إِعْلَه الرَّمْضَه، إِبْچِدَمْ حَافِي، بِالمَذَابِحْ (explicit preposition per QC33)، چَفَّكْ الدَّافِي، إِبْلَايَه لَفَّافِي",
+        "lyrics_arabic": [
+          "مِشَتْ زَينَبْ إِعْلَه الرَّمْضَه ..",
+          "إِبْچِدَمْ حَافِي ..",
+          "تِدَوِّرْ بِالمَذَابِحْ ..",
+          "چَفَّكْ الدَّافِي ..",
+          "تِصِيحْ الحَيلْ خَانْ ..",
+          "وَ عُمْرِي مَا كَافِي ..",
+          "شِفِتْ جِسْمَكْ طَرِيحْ ..",
+          "إِبْلَايَه لَفَّافِي .."
+        ]
+      },
+      {
+        "section_tag": "[الكَسْرَة الأُولَى]",
+        "performer": "Solo Commanding Jawhari Baritone Radood (Unique Numbered Kaser Header per QC27)",
+        "meter_and_syllables": "Iso-syllabic lock (7 solo Kaser lines, rhyme: -ال)",
+        "tempo_feel": "58 BPM emotional Kaser pivot",
+        "tor_and_maqam": "Tor Lami & Saba Zamzam Kasra — 24-EDO Maqam Lami descending to Qarar tonic",
+        "throat_and_maddat_dynamics": "Mournful Euphrates Lami vowel elongations on 'أَوصَالْ / أَشْكَالْ / الحَالْ' and passionate plea on 'إِشْ أَگُولْ لِفَاطِمَه'",
+        "rhythm_chants_and_sfx": "Organic 55Hz bare-palm chest thud + 2.4kHz palm slap + Matam breath",
+        "audio_engineering_3d": "100% center dry-forward Radood vocal presence",
+        "dialect_phonetic_locks": "Pure Iraqi locks: غُسُلْ، چِفَنْ، هَلْ أَوصَالْ، رِكْضَتْ أَشْكَالْ (explicit Kaf per QC34)، إِشْ أَگُولْ لِفَاطِمَه",
+        "lyrics_arabic": [
+          "لَا غُسُلْ وَ لَا چِفَنْ ..",
+          "يِسْتُرْ هَلْ أَوصَالْ ..",
+          "وَ الخَيلْ إِعْلَه صَدْرَكْ ..",
+          "رِكْضَتْ أَشْكَالْ ..",
+          "إِشْ أَگُولْ لِفَاطِمَه ..",
+          "لَوْ نِشْدَتِ الحَالْ ..",
+          "وَينَكْ يَا خُويَه إِحْسَينْ .. وَينَكْ يَا خُويَه إِحْسَينْ .."
+        ]
+      },
+      {
+        "section_tag": "[المُسْتَهَلّ]",
+        "performer": "100% Wide Unison Male Raddada Congregation Choir (4 Parenthesized Lines — QC18 & QC31)",
+        "meter_and_syllables": "4 balanced collective refrain couplets",
+        "tempo_feel": "58 BPM heavy collective Husseiniya Matam",
+        "tor_and_maqam": "Tor Muthakkal Karbalai — 24-EDO Maqam Saba Zamzam & Bayati unison return",
+        "throat_and_maddat_dynamics": "Unified congregation chest resonance with prolonged open vowel Maddat before '..'",
+        "rhythm_chants_and_sfx": "Synchronized 55Hz bare-palm chest thud + Matam congregation breath",
+        "audio_engineering_3d": "85% wide L/R Husseiniya hall stereo field, 3.5s dome reverb",
+        "dialect_phonetic_locks": "Pure Iraqi unison locks: گَعْدَتْ إِعْلَه التَّلْ، خِيَمْ لِينَا، إِحْسَينْ",
+        "lyrics_arabic": [
+          "(گَعْدَتْ إِعْلَه التَّلْ تِنَاشِدْ .. وَينَكْ يَا خُويَه إِحْسَينْ) ..",
+          "(مَا ظَلَّتْ خِيَمْ لِينَا .. تِحْمِي بَنَاتِ الدِّينْ) ..",
+          "(بَينِ الرِّمَاحْ وِحْدِي .. وَ الدَّمْعَه مَلَتِ العَينْ) ..",
+          "(وَينَكْ يَا خُويَه إِحْسَينْ .. وَينَكْ يَا خُويَه إِحْسَينْ) .."
+        ]
+      }
+    ]
+  },
+  "stage_2_extend_1_stanza_2": {
+    "stage_id": "stage_2_extend_1",
+    "execution_command": "Execute Stage 2 via Remix > Extend from the end of Stage 1 with Instrumental mode strictly OFF. Single-Stanza Extend Law (QC30): Contains ONLY Stanza 2. Update Sound to stage_2 sound_description and register ONLY the exact Arabic headers and lines from 'lyrics_register_verbatim' into lyrics__register.",
+    "title": "گَعْدَتْ إِعْلَه التَّلْ تِنَاشِدْ — المَقْطَعُ الثَّانِي",
+    "global_bpm": 58,
+    "sound_description": "Mournful Traditional Iraqi Karbalaei Hussaini Rukbani and Nassari Latmiya, Maqam Lami and Saba, 58 BPM, authentic Iraqi colloquial dialect, commanding deep resonant Baritone lead vocal, powerful high chest-voice climbs, natural vocal rasp, prolonged mournful vowel elongations, heavy 55Hz bare-palm chest thud, 320ms tape echo, 3.5s Husseiniya hall reverb, wide unison male Raddada response, Pure Acapella No Instruments",
+    "lyrics_register_verbatim": [
+      "[النَّزْلَة الثَّانِيَة]",
+      "يَا خُويَه النَّارْ شَبَّتْ ..",
+      "وَ الخِيَمْ طَاحَتْ ..",
+      "وَ الأَيتَامْ تِرْكُظْ ..",
+      "إِبْهَلْ بَرْ صَاحَتْ ..",
+      "عَبَايَتْنَا إِنْخِذَتْ ..",
+      "وَ الهَيبَه رَاحَتْ ..",
+      "وَ رُوحِي مِنِ الأَلَمْ ..",
+      "وَ القَهَرْ سَاحَتْ ..",
+      "",
+      "[الكَسْرَة الثَّانِيَة]",
+      "يَا خُويَه مِنِ الصُّبُحْ ..",
+      "لِلْعَصُرْ ذَبْحُونَا ..",
+      "بِسْيَاطِ الحِقِدْ ..",
+      "وَ الظُّلُمْ ظَرْبُونَا ..",
+      "إِعْلَه النُّوگِ الهَزِيلَه ..",
+      "اليَومْ شَالُونَا ..",
+      "وَينَكْ يَا خُويَه إِحْسَينْ .. وَينَكْ يَا خُويَه إِحْسَينْ ..",
+      "",
+      "[المُسْتَهَلّ]",
+      "(گَعْدَتْ إِعْلَه التَّلْ تِنَاشِدْ .. وَينَكْ يَا خُويَه إِحْسَينْ) ..",
+      "(مَا ظَلَّتْ خِيَمْ لِينَا .. تِحْمِي بَنَاتِ الدِّينْ) ..",
+      "(بَينِ الرِّمَاحْ وِحْدِي .. وَ الدَّمْعَه مَلَتِ العَينْ) ..",
+      "(وَينَكْ يَا خُويَه إِحْسَينْ .. وَينَكْ يَا خُويَه إِحْسَينْ) .."
+    ],
+    "sections": [
+      {
+        "section_tag": "[النَّزْلَة الثَّانِيَة]",
+        "performer": "Solo Commanding Jawhari Baritone Radood (Unwrapped Lines)",
+        "meter_and_syllables": "Iso-syllabic lock (8 vertical hemistich lines, rhyme: -احت)",
+        "tempo_feel": "58 BPM steady heavy Husseiniya chest-strike pulse",
+        "tor_and_maqam": "Tor Rukbani & Nassari Karbalai — Common Jins modulation into 24-EDO Maqam Lami & Saba",
+        "throat_and_maddat_dynamics": "Prolonged mournful vowel elongations on 'طَاحَتْ / صَاحَتْ / رَاحَتْ / سَاحَتْ' with natural laryngeal rasp",
+        "rhythm_chants_and_sfx": "Organic 55Hz bare-palm chest thud + 2.4kHz palm slap + Matam breath",
+        "audio_engineering_3d": "100% center dry-forward vocal presence with 320ms analog tape echo",
+        "dialect_phonetic_locks": "Pure Iraqi colloquial locks: يَا خُويَه، وَ الخِيَمْ طَاحَتْ، الأَيتَامْ تِرْكُظْ، إِبْهَلْ بَرْ، عَبَايَتْنَا إِنْخِذَتْ، الهَيبَه",
+        "lyrics_arabic": [
+          "يَا خُويَه النَّارْ شَبَّتْ ..",
+          "وَ الخِيَمْ طَاحَتْ ..",
+          "وَ الأَيتَامْ تِرْكُظْ ..",
+          "إِبْهَلْ بَرْ صَاحَتْ ..",
+          "عَبَايَتْنَا إِنْخِذَتْ ..",
+          "وَ الهَيبَه رَاحَتْ ..",
+          "وَ رُوحِي مِنِ الأَلَمْ ..",
+          "وَ القَهَرْ سَاحَتْ .."
+        ]
+      },
+      {
+        "section_tag": "[الكَسْرَة الثَّانِيَة]",
+        "performer": "Solo Commanding Jawhari Baritone Radood (Unique Numbered Kaser Header per QC27)",
+        "meter_and_syllables": "Iso-syllabic lock (7 solo Kaser lines, rhyme: -ونا)",
+        "tempo_feel": "58 BPM steady heavy Husseiniya chest-strike pulse",
+        "tor_and_maqam": "Tor Lami Kasra — 24-EDO Maqam Lami descending to Qarar tonic",
+        "throat_and_maddat_dynamics": "Prolonged open Maddat on 'ذَبْحُونَا / ظَرْبُونَا / شَالُونَا'",
+        "rhythm_chants_and_sfx": "Organic 55Hz bare-palm chest thud + 2.4kHz palm slap + Matam breath",
+        "audio_engineering_3d": "100% center dry-forward Radood vocal presence",
+        "dialect_phonetic_locks": "Pure Iraqi colloquial locks: مِنِ الصُّبُحْ، لِلْعَصُرْ، بِسْيَاطِ الحِقِدْ (explicit preposition per QC33)، ظَرْبُونَا، إِعْلَه النُّوگِ الهَزِيلَه",
+        "lyrics_arabic": [
+          "يَا خُويَه مِنِ الصُّبُحْ ..",
+          "لِلْعَصُرْ ذَبْحُونَا ..",
+          "بِسْيَاطِ الحِقِدْ ..",
+          "وَ الظُّلُمْ ظَرْبُونَا ..",
+          "إِعْلَه النُّوگِ الهَزِيلَه ..",
+          "اليَومْ شَالُونَا ..",
+          "وَينَكْ يَا خُويَه إِحْسَينْ .. وَينَكْ يَا خُويَه إِحْسَينْ .."
+        ]
+      },
+      {
+        "section_tag": "[المُسْتَهَلّ]",
+        "performer": "100% Wide Unison Male Raddada Congregation Choir (4 Parenthesized Lines — QC18 & QC31)",
+        "meter_and_syllables": "4 balanced collective refrain couplets",
+        "tempo_feel": "58 BPM heavy collective Husseiniya Matam",
+        "tor_and_maqam": "Tor Muthakkal Karbalai — 24-EDO Maqam Lami & Saba unison return",
+        "throat_and_maddat_dynamics": "Unified congregation chest resonance with prolonged open vowel Maddat before '..'",
+        "rhythm_chants_and_sfx": "Synchronized 55Hz bare-palm chest thud + Matam congregation breath",
+        "audio_engineering_3d": "85% wide L/R Husseiniya hall stereo field, 3.5s dome reverb",
+        "dialect_phonetic_locks": "Pure Iraqi unison locks: گَعْدَتْ إِعْلَه التَّلْ، خِيَمْ لِينَا، إِحْسَينْ",
+        "lyrics_arabic": [
+          "(گَعْدَتْ إِعْلَه التَّلْ تِنَاشِدْ .. وَينَكْ يَا خُويَه إِحْسَينْ) ..",
+          "(مَا ظَلَّتْ خِيَمْ لِينَا .. تِحْمِي بَنَاتِ الدِّينْ) ..",
+          "(بَينِ الرِّمَاحْ وِحْدِي .. وَ الدَّمْعَه مَلَتِ العَينْ) ..",
+          "(وَينَكْ يَا خُويَه إِحْسَينْ .. وَينَكْ يَا خُويَه إِحْسَينْ) .."
+        ]
+      }
+    ]
+  },
+  "stage_3_extend_2_stanza_3_climax": {
+    "stage_id": "stage_3_extend_2_climax",
+    "execution_command": "Execute Stage 3 via Remix > Extend from the end of Stage 2 with Instrumental mode strictly OFF. Single-Stanza Extend Law (QC30) & Zero Orphan Lines Law (QC32): Contains ONLY Stanza 3 with balanced hemistichs. Update Sound to stage_3 sound_description and register ONLY the exact Arabic headers and lines from 'lyrics_register_verbatim' into lyrics__register.",
+    "title": "گَعْدَتْ إِعْلَه التَّلْ تِنَاشِدْ — المَقْطَعُ الثَّالِثُ (العَلْقَمِي)",
+    "global_bpm": 58,
+    "sound_description": "Mournful Traditional Iraqi Hussaini Latmiya, dramatic Karbalai Ashouri Nazla climax, Maqam Saba Zamzam and Hijaz, 58 BPM, authentic Iraqi colloquial dialect, commanding deep resonant Baritone lead vocal, soaring high chest-voice climbs, natural vocal rasp, passionate microtonal melisma, heavy 55Hz bare-palm chest thud, 310ms tape echo, 3.5s Husseiniya hall reverb, wide unison male Raddada response, Pure Acapella No Instruments",
+    "lyrics_register_verbatim": [
+      "[النَّزْلَة الثَّالِثَة]",
+      "مَرَّيتْ بِـ نَهَرْ عَلْقَمِي .. وَ نَادَيتَه ..",
+      "يَا عَبَّاسِ الكَفِيلْ ..",
+      "البِيكْ وَصَّيتَه ..",
+      "گُمِتْ أَنْشِدْ إِعْلَه إِچْفُوفَكْ .. وَ لَاگَيتَه ..",
+      "گَطِيعِ الكَفْ وَ السَّهَمْ ..",
+      "إِبْوَسَطْ عَينَه ..",
+      "",
+      "[الكَسْرَة الثَّالِثَة]",
+      "يَا بُو فَاظِلْ گَعَدِتْ ..",
+      "إِبْيَا كِتِرْ نَايِمْ ..",
+      "عِفِتْ زَينَبْ وَحِيدَه ..",
+      "إِبْوَسَطْ هَلْ ظَالِمْ ..",
+      "مِنْ بَعْدَكْ تَرَانِي ..",
+      "إِبْحَالَتِ الهَايِمْ ..",
+      "وَينَكْ يَا خُويَه إِحْسَينْ .. وَينَكْ يَا خُويَه إِحْسَينْ ..",
+      "",
+      "[المُسْتَهَلّ]",
+      "(گَعْدَتْ إِعْلَه التَّلْ تِنَاشِدْ .. وَينَكْ يَا خُويَه إِحْسَينْ) ..",
+      "(مَا ظَلَّتْ خِيَمْ لِينَا .. تِحْمِي بَنَاتِ الدِّينْ) ..",
+      "(بَينِ الرِّمَاحْ وِحْدِي .. وَ الدَّمْعَه مَلَتِ العَينْ) ..",
+      "(وَينَكْ يَا خُويَه إِحْسَينْ .. وَينَكْ يَا خُويَه إِحْسَينْ) .."
+    ],
+    "sections": [
+      {
+        "section_tag": "[النَّزْلَة الثَّالِثَة]",
+        "performer": "Solo Commanding Jawhari Baritone Radood (Unwrapped Lines — High Jawab Climb, Zero Orphan Lines per QC32)",
+        "meter_and_syllables": "Iso-syllabic lock (6 balanced vertical lines with merged hemistichs on lines 1 and 4)",
+        "tempo_feel": "58 BPM steady heavy Husseiniya chest-strike pulse",
+        "tor_and_maqam": "Tor Ashouri Jawab Climax — 24-EDO Maqam Saba Zamzam & High Hijaz Jawab",
+        "throat_and_maddat_dynamics": "Soaring high chest-voice climbs calling out to Al-Abbas at Al-Alqami, unmarked diphthong glides on 'مَرَّيتْ / نَادَيتَه / وَصَّيتَه / لَاگَيتَه / عَينَه'",
+        "rhythm_chants_and_sfx": "Organic 55Hz bare-palm chest thud + 2.4kHz palm slap + Matam breath",
+        "audio_engineering_3d": "100% center dry-forward vocal presence with 310ms analog tape echo",
+        "dialect_phonetic_locks": "Pure Iraqi locks: مَرَّيتْ بِـ نَهَرْ عَلْقَمِي .. وَ نَادَيتَه .. (merged per QC32)، إِعْلَه إِچْفُوفَكْ .. وَ لَاگَيتَه .. (merged per QC32)، گَطِيعِ الكَفْ، إِبْوَسَطْ عَينَه",
+        "lyrics_arabic": [
+          "مَرَّيتْ بِـ نَهَرْ عَلْقَمِي .. وَ نَادَيتَه ..",
+          "يَا عَبَّاسِ الكَفِيلْ ..",
+          "البِيكْ وَصَّيتَه ..",
+          "گُمِتْ أَنْشِدْ إِعْلَه إِچْفُوفَكْ .. وَ لَاگَيتَه ..",
+          "گَطِيعِ الكَفْ وَ السَّهَمْ ..",
+          "إِبْوَسَطْ عَينَه .."
+        ]
+      },
+      {
+        "section_tag": "[الكَسْرَة الثَّالِثَة]",
+        "performer": "Solo Commanding Jawhari Baritone Radood (Unique Numbered Kaser Header per QC27)",
+        "meter_and_syllables": "Iso-syllabic lock (7 solo Kaser lines, rhyme: -ايم)",
+        "tempo_feel": "58 BPM steady heavy Husseiniya chest-strike pulse",
+        "tor_and_maqam": "Tor Lami & Saba Zamzam Kasra — Descending from Hijaz Jawab to Qarar tonic",
+        "throat_and_maddat_dynamics": "Soulful microtonal melisma on 'نَايِمْ / هَلْ ظَالِمْ / الهَايِمْ'",
+        "rhythm_chants_and_sfx": "Organic 55Hz bare-palm chest thud + 2.4kHz palm slap + Matam breath",
+        "audio_engineering_3d": "100% center dry-forward Radood vocal presence",
+        "dialect_phonetic_locks": "Pure Iraqi colloquial locks: يَا بُو فَاظِلْ گَعَدِتْ، إِبْيَا كِتِرْ نَايِمْ، زَينَبْ وَحِيدَه، إِبْوَسَطْ هَلْ ظَالِمْ، إِبْحَالَتِ الهَايِمْ",
+        "lyrics_arabic": [
+          "يَا بُو فَاظِلْ گَعَدِتْ ..",
+          "إِبْيَا كِتِرْ نَايِمْ ..",
+          "عِفِتْ زَينَبْ وَحِيدَه ..",
+          "إِبْوَسَطْ هَلْ ظَالِمْ ..",
+          "مِنْ بَعْدَكْ تَرَانِي ..",
+          "إِبْحَالَتِ الهَايِمْ ..",
+          "وَينَكْ يَا خُويَه إِحْسَينْ .. وَينَكْ يَا خُويَه إِحْسَينْ .."
+        ]
+      },
+      {
+        "section_tag": "[المُسْتَهَلّ]",
+        "performer": "100% Wide Unison Male Raddada Congregation Choir (4 Parenthesized Lines — QC18 & QC31)",
+        "meter_and_syllables": "4 balanced collective refrain couplets",
+        "tempo_feel": "58 BPM heavy collective Husseiniya Matam",
+        "tor_and_maqam": "Tor Muthakkal Karbalai — 24-EDO Maqam Saba Zamzam unison return",
+        "throat_and_maddat_dynamics": "Unified congregation chest resonance with prolonged open vowel Maddat before '..'",
+        "rhythm_chants_and_sfx": "Synchronized 55Hz bare-palm chest thud + Matam congregation breath",
+        "audio_engineering_3d": "85% wide L/R Husseiniya hall stereo field, 3.5s dome reverb",
+        "dialect_phonetic_locks": "Pure Iraqi unison locks: گَعْدَتْ إِعْلَه التَّلْ، خِيَمْ لِينَا، إِحْسَينْ",
+        "lyrics_arabic": [
+          "(گَعْدَتْ إِعْلَه التَّلْ تِنَاشِدْ .. وَينَكْ يَا خُويَه إِحْسَينْ) ..",
+          "(مَا ظَلَّتْ خِيَمْ لِينَا .. تِحْمِي بَنَاتِ الدِّينْ) ..",
+          "(بَينِ الرِّمَاحْ وِحْدِي .. وَ الدَّمْعَه مَلَتِ العَينْ) ..",
+          "(وَينَكْ يَا خُويَه إِحْسَينْ .. وَينَكْ يَا خُويَه إِحْسَينْ) .."
+        ]
+      }
+    ]
+  },
+  "stage_4_extend_3_stanza_4": {
+    "stage_id": "stage_4_extend_3_martyrs",
+    "execution_command": "Execute Stage 4 via Remix > Extend from the end of Stage 3 with Instrumental mode strictly OFF. Single-Stanza Extend Law (QC30) & Zero Orphan Lines Law (QC32): Contains ONLY Stanza 4. Update Sound to stage_4 sound_description and register ONLY the exact Arabic headers and lines from 'lyrics_register_verbatim' into lyrics__register.",
+    "title": "گَعْدَتْ إِعْلَه التَّلْ تِنَاشِدْ — المَقْطَعُ الرَّابِعُ (الشُّهَدَاء)",
+    "global_bpm": 60,
+    "sound_description": "Traditional Iraqi Hussaini Latmiya, heavy Karbalai Nazla style, Maqam Bayati and Saba, 60 BPM, authentic Iraqi colloquial dialect, commanding deep resonant Baritone lead vocal, powerful high chest-voice climbs, natural vocal rasp, passionate microtonal melisma, heavy 55Hz bare-palm chest thud, 285ms tape echo, 3.2s Husseiniya hall reverb, wide unison male Raddada response, Pure Acapella No Instruments",
+    "lyrics_register_verbatim": [
+      "[النَّزْلَة الرَّابِعَة]",
+      "يَا جَاسِمْ يَا عَرِيسْ ..",
+      "إِلْ مَا تِهَنَّه إِبْيَومْ ..",
+      "وَ يَا عَبْدَ اللهِ الرَّضِيعْ ..",
+      "إِلْ ظَلْ مَنْحُورْ ..",
+      "وَ يَا الأَكْبَرْ شَبِيهْ ..",
+      "المُصْطَفَى المَظْلُومْ ..",
+      "گَلْبِي مِنِ الهَظُمْ ..",
+      "وَ الفَاجِعَه مَثْلُومْ ..",
+      "",
+      "[الكَسْرَة الرَّابِعَة]",
+      "شِفِتْ كِلِ الأَهِلْ ..",
+      "گِدَّامِي مَذْبُوحَه ..",
+      "وَ رُوحِي إِبْكَرْبَلَا ..",
+      "مَكْسُورَه مَجْرُوحَه ..",
+      "يَا رَبِّي تِقْبَلِ القُرْبَانْ .. وَ جُرُوحَه ..",
+      "وَينَكْ يَا خُويَه إِحْسَينْ .. وَينَكْ يَا خُويَه إِحْسَينْ ..",
+      "",
+      "[المُسْتَهَلّ]",
+      "(گَعْدَتْ إِعْلَه التَّلْ تِنَاشِدْ .. وَينَكْ يَا خُويَه إِحْسَينْ) ..",
+      "(مَا ظَلَّتْ خِيَمْ لِينَا .. تِحْمِي بَنَاتِ الدِّينْ) ..",
+      "(بَينِ الرِّمَاحْ وِحْدِي .. وَ الدَّمْعَه مَلَتِ العَينْ) ..",
+      "(وَينَكْ يَا خُويَه إِحْسَينْ .. وَينَكْ يَا خُويَه إِحْسَينْ) .."
+    ],
+    "sections": [
+      {
+        "section_tag": "[النَّزْلَة الرَّابِعَة]",
+        "performer": "Solo Commanding Jawhari Baritone Radood (Unwrapped Lines)",
+        "meter_and_syllables": "Iso-syllabic lock (8 vertical hemistich lines, rhyme: -وم / -ور)",
+        "tempo_feel": "60 BPM steady heavy Husseiniya chest-strike pulse",
+        "tor_and_maqam": "Tor Heavy Karbalai Nazla — Common Jins modulation into 24-EDO Maqam Bayati & Saba",
+        "throat_and_maddat_dynamics": "Deep chest resonance and microtonal Maddat on 'إِبْيَومْ / مَنْحُورْ / المَظْلُومْ / مَثْلُومْ'",
+        "rhythm_chants_and_sfx": "Organic 55Hz bare-palm chest thud + 2.4kHz palm slap + Matam breath",
+        "audio_engineering_3d": "100% center dry-forward vocal presence with 285ms analog tape echo",
+        "dialect_phonetic_locks": "Pure Iraqi colloquial locks: يَا جَاسِمْ، إِلْ مَا تِهَنَّه إِبْيَومْ، إِلْ ظَلْ مَنْحُورْ، گَلْبِي مِنِ الهَظُمْ، وَ الفَاجِعَه مَثْلُومْ",
+        "lyrics_arabic": [
+          "يَا جَاسِمْ يَا عَرِيسْ ..",
+          "إِلْ مَا تِهَنَّه إِبْيَومْ ..",
+          "وَ يَا عَبْدَ اللهِ الرَّضِيعْ ..",
+          "إِلْ ظَلْ مَنْحُورْ ..",
+          "وَ يَا الأَكْبَرْ شَبِيهْ ..",
+          "المُصْطَفَى المَظْلُومْ ..",
+          "گَلْبِي مِنِ الهَظُمْ ..",
+          "وَ الفَاجِعَه مَثْلُومْ .."
+        ]
+      },
+      {
+        "section_tag": "[الكَسْرَة الرَّابِعَة]",
+        "performer": "Solo Commanding Jawhari Baritone Radood (Unique Numbered Kaser Header per QC27 & Merged Orphan Line per QC32)",
+        "meter_and_syllables": "Iso-syllabic lock (6 balanced solo Kaser lines, rhyme: -وحه)",
+        "tempo_feel": "60 BPM steady heavy Husseiniya chest-strike pulse",
+        "tor_and_maqam": "Tor Bayati & Saba Kasra — 24-EDO Maqam Saba descending to Qarar tonic",
+        "throat_and_maddat_dynamics": "Supplicatory climax on 'يَا رَبِّي تِقْبَلِ القُرْبَانْ .. وَ جُرُوحَه ..'",
+        "rhythm_chants_and_sfx": "Organic 55Hz bare-palm chest thud + 2.4kHz palm slap + Matam breath",
+        "audio_engineering_3d": "100% center dry-forward Radood vocal presence",
+        "dialect_phonetic_locks": "Pure Iraqi colloquial locks: شِفِتْ كِلِ الأَهِلْ، گِدَّامِي مَذْبُوحَه، وَ رُوحِي إِبْكَرْبَلَا، يَا رَبِّي تِقْبَلِ القُرْبَانْ .. وَ جُرُوحَه .. (merged per QC32)",
+        "lyrics_arabic": [
+          "شِفِتْ كِلِ الأَهِلْ ..",
+          "گِدَّامِي مَذْبُوحَه ..",
+          "وَ رُوحِي إِبْكَرْبَلَا ..",
+          "مَكْسُورَه مَجْرُوحَه ..",
+          "يَا رَبِّي تِقْبَلِ القُرْبَانْ .. وَ جُرُوحَه ..",
+          "وَينَكْ يَا خُويَه إِحْسَينْ .. وَينَكْ يَا خُويَه إِحْسَينْ .."
+        ]
+      },
+      {
+        "section_tag": "[المُسْتَهَلّ]",
+        "performer": "100% Wide Unison Male Raddada Congregation Choir (4 Parenthesized Lines — QC18 & QC31)",
+        "meter_and_syllables": "4 balanced collective refrain couplets",
+        "tempo_feel": "60 BPM heavy collective Husseiniya Matam",
+        "tor_and_maqam": "Tor Muthakkal Karbalai — 24-EDO Maqam Bayati & Saba unison return",
+        "throat_and_maddat_dynamics": "Unified congregation chest resonance with prolonged open vowel Maddat before '..'",
+        "rhythm_chants_and_sfx": "Synchronized 55Hz bare-palm chest thud + Matam congregation breath",
+        "audio_engineering_3d": "85% wide L/R Husseiniya hall stereo field, 3.2s hall reverb",
+        "dialect_phonetic_locks": "Pure Iraqi unison locks: گَعْدَتْ إِعْلَه التَّلْ، خِيَمْ لِينَا، إِحْسَينْ",
+        "lyrics_arabic": [
+          "(گَعْدَتْ إِعْلَه التَّلْ تِنَاشِدْ .. وَينَكْ يَا خُويَه إِحْسَينْ) ..",
+          "(مَا ظَلَّتْ خِيَمْ لِينَا .. تِحْمِي بَنَاتِ الدِّينْ) ..",
+          "(بَينِ الرِّمَاحْ وِحْدِي .. وَ الدَّمْعَه مَلَتِ العَينْ) ..",
+          "(وَينَكْ يَا خُويَه إِحْسَينْ .. وَينَكْ يَا خُويَه إِحْسَينْ) .."
+        ]
+      }
+    ]
+  },
+  "stage_5_extend_4_stanza_5_finale": {
+    "stage_id": "stage_5_extend_4_finale",
+    "execution_command": "Execute Stage 5 Finale via Remix > Extend from the end of Stage 4 with Instrumental mode strictly OFF. Single-Stanza Extend Law (QC30), Max 4 Choir Lines Law (QC31), & Zero Orphan Lines Law (QC32): Contains ONLY Stanza 5. Update Sound to stage_5 sound_description and register ONLY the exact Arabic headers and lines from 'lyrics_register_verbatim' into lyrics__register.",
+    "title": "گَعْدَتْ إِعْلَه التَّلْ تِنَاشِدْ — المَقْطَعُ الخَامِسُ وَالخِتَامْ",
+    "global_bpm": 56,
+    "sound_description": "Solemn Traditional Iraqi Hussaini Latmiya, mournful Karbalai Lami Kasra style, Maqam Lami and Saba, 56 BPM, authentic Iraqi colloquial dialect, commanding deep resonant Baritone lead vocal, soulful microtonal melisma, natural vocal rasp, prolonged vowel elongations, slow heavy 55Hz bare-palm chest thud, 360ms tape echo, 3.8s Husseiniya dome reverb, wide unison male Raddada response, Pure Acapella No Instruments",
+    "lyrics_register_verbatim": [
+      "[النَّزْلَة الخَامِسَة]",
+      "طَلَعْنَا مِنِ المَدِينَه ..",
+      "إِبْهَيبَه وَ عِزَّه ..",
+      "وَ رِجَعْنَا إِبْسَبِي ..",
+      "وَ الگَلُبْ بِيهْ غُزَّه ..",
+      "يَا إِحْسَينِ الغَرِيبْ ..",
+      "إِلْ مَا لِگَه مَعَزَّه ..",
+      "تِظَلْ رَايْتَكْ فُوگِ الرُّوسْ .. مِعْتَزَّه ..",
+      "",
+      "[الكَسْرَة الخَامِسَه]",
+      "عَهَدْ نِبْقَى إِعْلَه دَرْبَكْ ..",
+      "يَا بُو الأَحْرَارْ ..",
+      "نِجَدِّدْ حِزْنَكْ وَ نِبْچِي ..",
+      "إِبْدَمِعْ مِدْرَارْ ..",
+      "وَ تِظَلْ كَرْبَلَا ..",
+      "لِلثَّايْرِينْ مَنَارْ ..",
+      "وَينَكْ يَا خُويَه إِحْسَينْ .. وَينَكْ يَا خُويَه إِحْسَينْ ..",
+      "",
+      "[المُسْتَهَلّ]",
+      "(گَعْدَتْ إِعْلَه التَّلْ تِنَاشِدْ .. وَينَكْ يَا خُويَه إِحْسَينْ) ..",
+      "(مَا ظَلَّتْ خِيَمْ لِينَا .. تِحْمِي بَنَاتِ الدِّينْ) ..",
+      "(بَينِ الرِّمَاحْ وِحْدِي .. وَ الدَّمْعَه مَلَتِ العَينْ) ..",
+      "(وَينَكْ يَا خُويَه إِحْسَينْ .. وَينَكْ يَا خُويَه إِحْسَينْ) .."
+    ],
+    "sections": [
+      {
+        "section_tag": "[النَّزْلَة الخَامِسَة]",
+        "performer": "Solo Commanding Jawhari Baritone Radood (Unwrapped Lines — Merged Line 7 per QC32)",
+        "meter_and_syllables": "Iso-syllabic lock (7 balanced vertical lines, rhyme: -زه)",
+        "tempo_feel": "56 BPM solemn heavy Lami Kasra deceleration",
+        "tor_and_maqam": "Tor Karbalai Wahsha Lami Kasra — 24-EDO Maqam Lami & Saba",
+        "throat_and_maddat_dynamics": "Deep reflective Qarar rising to proud steadfastness on 'تِظَلْ رَايْتَكْ فُوگِ الرُّوسْ .. مِعْتَزَّه ..'",
+        "rhythm_chants_and_sfx": "Slow heavy 55Hz bare-palm chest thud + Matam breath",
+        "audio_engineering_3d": "100% center dry-forward vocal presence with 360ms tape echo, 3.8s Husseiniya dome reverb",
+        "dialect_phonetic_locks": "Pure Iraqi colloquial locks: إِبْهَيبَه وَ عِزَّه، وَ الگَلُبْ بِيهْ غُزَّه، إِلْ مَا لِگَه مَعَزَّه، تِظَلْ رَايْتَكْ فُوگِ الرُّوسْ .. مِعْتَزَّه .. (QC34 Zay Gemination Lock)",
+        "lyrics_arabic": [
+          "طَلَعْنَا مِنِ المَدِينَه ..",
+          "إِبْهَيبَه وَ عِزَّه ..",
+          "وَ رِجَعْنَا إِبْسَبِي ..",
+          "وَ الگَلُبْ بِيهْ غُزَّه ..",
+          "يَا إِحْسَينِ الغَرِيبْ ..",
+          "إِلْ مَا لِگَه مَعَزَّه ..",
+          "تِظَلْ رَايْتَكْ فُوگِ الرُّوسْ .. مِعْتَزَّه .."
+        ]
+      },
+      {
+        "section_tag": "[الكَسْرَة الخَامِسَه]",
+        "performer": "Solo Commanding Jawhari Baritone Radood (Unique Numbered Kaser Header per QC27 + 3.0s Audio Drop)",
+        "meter_and_syllables": "Iso-syllabic lock (7 solo Kaser lines, rhyme: -ار)",
+        "tempo_feel": "56 BPM solemn Qafla finale",
+        "tor_and_maqam": "Tor Lami & Saba Qafla — Descending to final Qarar resolution",
+        "throat_and_maddat_dynamics": "3.0s percussion drop on 'وَينَكْ يَا خُويَه إِحْسَينْ' before final collective refrain",
+        "rhythm_chants_and_sfx": "3.0s Audio Drop then final heavy 55Hz bare-palm chest thud",
+        "audio_engineering_3d": "100% center dry-forward Radood vocal presence",
+        "dialect_phonetic_locks": "Pure Iraqi colloquial locks: عَهَدْ نِبْقَى إِعْلَه دَرْبَكْ، يَا بُو الأَحْرَارْ، نِبْچِي إِبْدَمِعْ مِدْرَارْ، لِلثَّايْرِينْ مَنَارْ",
+        "lyrics_arabic": [
+          "عَهَدْ نِبْقَى إِعْلَه دَرْبَكْ ..",
+          "يَا بُو الأَحْرَارْ ..",
+          "نِجَدِّدْ حِزْنَكْ وَ نِبْچِي ..",
+          "إِبْدَمِعْ مِدْرَارْ ..",
+          "وَ تِظَلْ كَرْبَلَا ..",
+          "لِلثَّايْرِينْ مَنَارْ ..",
+          "وَينَكْ يَا خُويَه إِحْسَينْ .. وَينَكْ يَا خُويَه إِحْسَينْ .."
+        ]
+      },
+      {
+        "section_tag": "[المُسْتَهَلّ]",
+        "performer": "100% Wide Unison Male Raddada Congregation Choir (4 Parenthesized Lines — QC18 & QC31)",
+        "meter_and_syllables": "4 balanced collective refrain couplets",
+        "tempo_feel": "56 BPM solemn collective Husseiniya Qafla",
+        "tor_and_maqam": "Tor Muthakkal Karbalai — 24-EDO Maqam Lami & Saba final unison resolution",
+        "throat_and_maddat_dynamics": "Full congregation chest resonance fading into 3.8s Husseiniya dome reverb tail",
+        "rhythm_chants_and_sfx": "Slow heavy 55Hz bare-palm chest thud + Matam congregation breath",
+        "audio_engineering_3d": "85% wide L/R Husseiniya hall stereo field, 3.8s dome reverb",
+        "dialect_phonetic_locks": "Pure Iraqi unison locks: گَعْدَتْ إِعْلَه التَّلْ، خِيَمْ لِينَا، إِحْسَينْ",
+        "lyrics_arabic": [
+          "(گَعْدَتْ إِعْلَه التَّلْ تِنَاشِدْ .. وَينَكْ يَا خُويَه إِحْسَينْ) ..",
+          "(مَا ظَلَّتْ خِيَمْ لِينَا .. تِحْمِي بَنَاتِ الدِّينْ) ..",
+          "(بَينِ الرِّمَاحْ وِحْدِي .. وَ الدَّمْعَه مَلَتِ العَينْ) ..",
+          "(وَينَكْ يَا خُويَه إِحْسَينْ .. وَينَكْ يَا خُويَه إِحْسَينْ) .."
+        ]
+      }
+    ]
+  },
+  "step_4_master_dsp_orchestration": {
+    "flow_music_producer_chat_command": "Apply audio__apply_effect on the generated clip: HighPass filter at 80Hz, AdvancedEqualizer (boost low-chest warmth 110Hz by +1.5dB, cut boxy mud 450Hz by -2.8dB, boost mid 1200Hz by +1.8dB, boost high-mid presence 2500Hz by +4.5dB), Compressor (ratio 3:1, threshold -12dB), Reverb (room_size 0.58, wet mix 0.18), and Limiter at -1.0dB.",
+    "local_5_track_dsp_cli_command": "python3 scripts/hussaini_dsp_montage.py --input \"gadat_al_tall_raw_vocals.wav\" --output \"gadat_al_tall_v50_0_master_14lufs.wav\" --mode \"thaqeel_muwazza\" --bpm 58 --maqam-drone \"saba_zamzam\" --replace-ai-percussion --audio-drop-sec 260.0"
+  }
+}

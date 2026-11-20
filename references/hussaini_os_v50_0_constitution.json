@@ -1,9 +1,9 @@
 {
   "protocol_metadata": {
     "protocol_name": "Hussaini_Production_Studio_OS_V50_0_OMNI_ARCHITECT",
-    "skill_version": "V61.0 OMNI-ARCHITECT",
-    "previous_baseline_version": "V60.0 OMNI-ARCHITECT & V50.0 OMNI-ARCHITECT",
-    "previous_baseline_commit_sha": "219e663ec570ba452fcc0103a45f078534934cf1",
+    "skill_version": "V62.0 OMNI-ARCHITECT",
+    "previous_baseline_version": "V61.0 OMNI-ARCHITECT & V50.0 OMNI-ARCHITECT",
+    "previous_baseline_commit_sha": "522614834b7b5e616b906fee275614c77152568c",
     "canonical_repository": "https://github.com/husainalmualif/hussaini-production-studio",
     "primary_studio_url": "https://www.flowmusic.app/",
     "target_engines": [
@@ -2222,6 +2222,23 @@
     ],
     "permanent_negative_constraint_nc35": {
       "NC35_qatifi_bahrani_orthoepy_locks": "In Qatifi-Bahrani clean Lyria 3.5 lyrics (verified Exp 27 & Exp 29), avoid Arabic prefix-ت verb homographs on چبدي/چدي (keep چَبْدي / چِذي instead of تشَبدي/تشِدِي which collide with تَشَدّي/تِشِدّي), place Sukun on هـ in إهْني (blocks أهنّي), write غَنَاتِي with explicit long Alif and بالرَّمْضى with open ى, alongside crisp لاويّه، هَداويش، عَفَر، أمبى، هالحَزّة، واجِد، إشحوالِش."
+    }
+  },
+  "v62_0_module_76_upgrades": {
+    "version": "V62.0 OMNI-ARCHITECT",
+    "module_reference": "references/modules/module_76_v62_waqar_fiqh_orchestral_six_families_qarid_atwar_and_multi_platform_lufs.md",
+    "source_research_absorbed": "موسيقى الوقار والشجن (code_artifact (1).html) — Fiqh Waqar criterion, Axis-5 6 orchestral families, Qarid Atwar, Dialect-Hybrid Operettas & Multi-Platform EBU R128",
+    "multi_maqam_melodic_fingerprint_count": 19,
+    "supported_sacred_genres": ["latmiya", "nai", "nasheed", "jalwat", "ibtihalat", "tawashih", "muwashah", "operetta"],
+    "orchestral_six_families_count": 6,
+    "multi_platform_lufs_targets": {
+      "streaming": -14.0,
+      "apple_music": -16.0,
+      "hires_qobuz": -18.0,
+      "broadcast_tv": -23.0
+    },
+    "permanent_negative_constraint_nc36": {
+      "NC36_quarter_tone_vs_12tet_orchestral_firewall": "NEVER pair Quarter-Tone Eastern Maqams (saba, bayati, bayati_shuri, husseini, sikah, rast, suznak) with Western 12-TET piano/guitar chord progressions (50-cent clash); reserve 12-TET chordal orchestration for 12-TET-safe Maqams (nahawand, kurd, hijaz, hijaz_kar, nawa_athar, lami, saba_zamzam, ajam) and enforce via validate_maqam_orchestration_compatibility (--check-orchestration)."
     }
   }
 }

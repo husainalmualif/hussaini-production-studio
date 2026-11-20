@@ -825,6 +825,149 @@ MULTI_MAQAM_MELODIC_FINGERPRINT_LIBRARY_V60 = {
             "cavernous mosque dome reverb, strictly zero chest latm, zero weeping, zero piano, zero pop drums"
         ),
     },
+    "v62_orchestral_mahdawi_anthem_nahawand_kurd_78bpm": {
+        "school": "Axis 5 — Contemporary Dignified Non-Lahwi Orchestral Shia Mahdawi & Social Anthem",
+        "dialect": "fusha",
+        "axis": "axis_5_dignified_orchestral_waqar",
+        "bpm": 78,
+        "maqam_arc": ["nahawand", "kurd", "ajam"],
+        "dsp_mode": "vocal_pure_master",
+        "empirical_exp": "V62 Architecture (موسيقى الوقار والشجن — 12-TET-Safe Orchestral Maqam Lock NC36)",
+        "sound_prompt": (
+            "Dignified Contemporary Orchestral Arabic Shia Islamic Mahdawi Anthem, 78 BPM solemn majestic steady "
+            "march, 12-TET orchestral-safe Maqam Nahawand modulating smoothly to tender Maqam Kurd and uplifting "
+            "heroic Maqam Ajam, commanding resonant Arab male Munshid Baritone lead vocal with crisp Classical "
+            "Arabic pronunciation, rich layered male orchestral choir harmonies, lush sustained legato orchestral "
+            "strings (violins, violas, deep cellos), expressive solo oboe, warm bassoon harmonic foundation, "
+            "gentle contemplative acoustic guitar fingerpicking arpeggios, solemn orchestral timpani swells and "
+            "traditional Bendir frame drum, spacious concert hall reverb, strictly non-dance, zero piano, zero "
+            "pop drums, zero rock snare backbeat, zero jazz, zero chest latm"
+        ),
+    },
+    "v62_qarid_hadi_qazwini_caravan_sikah_bayati_68bpm": {
+        "school": "Classical Qarid & Caravan Atwar — Al-Hadi, Al-Qazwini & Al-Rukbani (Sheikh Baqir Al-Darraji)",
+        "dialect": "fusha",
+        "axis": "axis_3_zero_piano_hybrid",
+        "bpm": 68,
+        "maqam_arc": ["sikah", "bayati", "saba"],
+        "dsp_mode": "vocal_pure_master",
+        "empirical_exp": "V62 Qarid Atwar Canon (Al-Muthakkal, Al-Hadi, Al-Qazwini — 24-EDO Quarter-Tone Pure NC36)",
+        "sound_prompt": (
+            "Classical Arabic Qarid Hussaini Caravan Lament in Tor Al-Hadi and Al-Rukbani transitioning into "
+            "sharp oratorical Al-Qazwini gravity, 68 BPM dignified desert caravan stride, 24-EDO quarter-tone "
+            "Maqam Sikah modulating via Common Jins to Bayati and heartbroken Saba, commanding resonant Baritone "
+            "Munshid vocal with unhurried rhyme elongations and microtonal arabesques, mournful breathy reed Ney, "
+            "dignified solo Oud taqsim phrases, soft solemn Bendir frame drum, warm stone hall acoustics, strictly "
+            "zero piano, zero 12-TET guitar chords, zero pop drums, zero dance rhythm"
+        ),
+    },
+    "v62_dialect_hybrid_epic_operetta_hijaz_nahawand_84bpm": {
+        "school": "Modern Shia Epic Historical Operetta — Fusha Narrative + Colloquial Climax Hybridization",
+        "dialect": "iraqi_bahrani",
+        "axis": "axis_5_dignified_orchestral_waqar",
+        "bpm": 84,
+        "maqam_arc": ["hijaz", "nahawand", "ajam"],
+        "dsp_mode": "vocal_pure_master",
+        "empirical_exp": "V62 Dialect-Hybrid Epic Operetta Architecture (Fusha Epic Opening -> Colloquial Emotional Peak)",
+        "sound_prompt": (
+            "Monumental Contemporary Arabic Shia Historical Epic Operetta blending Classical Fusha narrative "
+            "stanzas with intimate Gulf-Iraqi colloquial emotional refrains, 84 BPM majestic dramatic march, "
+            "12-TET orchestral-safe Maqam Hijaz modulating to cinematic Maqam Nahawand and heroic Maqam Ajam, "
+            "commanding Baritone lead vocal answered by grand unison and harmonic male choir, sweeping sustained "
+            "legato orchestral strings, noble solemn brass fanfare, deep orchestral timpani and traditional "
+            "Dammam strikes, cavernous cinematic hall reverb, strictly non-dance, zero piano, zero pop drums, "
+            "zero snare backbeat, zero club beats"
+        ),
+    },
+}
+
+# Module 76 (V62.0): Multi-Platform Mastering Targets (EBU R128 / ITU-R BS.1770 — موسيقى الوقار والشجن)
+PLATFORM_LUFS_TARGETS_V62 = {
+    "streaming": {
+        "target_lufs": -14.0,
+        "ceiling_dbtp": -1.0,
+        "tolerance_lu": 1.5,
+        "platforms": "YouTube, Spotify, Tidal",
+    },
+    "apple_music": {
+        "target_lufs": -16.0,
+        "ceiling_dbtp": -1.0,
+        "tolerance_lu": 1.5,
+        "platforms": "Apple Music",
+    },
+    "hires_qobuz": {
+        "target_lufs": -18.0,
+        "ceiling_dbtp": -1.0,
+        "tolerance_lu": 1.5,
+        "platforms": "Qobuz & Hi-Res Audiophile",
+    },
+    "broadcast_tv": {
+        "target_lufs": -23.0,
+        "ceiling_dbtp": -1.0,
+        "tolerance_lu": 1.5,
+        "platforms": "EBU R128 Broadcast Television",
+    },
+}
+
+# Module 76 (V62.0 — NC36): Quarter-Tone Eastern Maqams vs. 12-TET Orchestral-Compatible Maqams
+QUARTER_TONE_EASTERN_MAQAMS = frozenset(
+    ("saba", "bayati", "bayati_shuri", "husseini", "sikah", "rast", "suznak")
+)
+ORCHESTRAL_12TET_SAFE_MAQAMS = frozenset(
+    ("nahawand", "kurd", "hijaz", "hijaz_kar", "nawa_athar", "lami", "saba_zamzam", "ajam")
+)
+
+# Module 76 (V62.0): Axis 5 — Six Dignified Non-Lahwi Orchestral Instrument Families (موسيقى الوقار والشجن)
+ORCHESTRAL_SIX_FAMILIES_WAQAR_V62 = {
+    "woodwinds_spiritual": {
+        "arabic_title": "الناي والفلوت والأوبوا والفاجوت (الباصون)",
+        "instruments": ["ney", "flute", "oboe", "bassoon"],
+        "waqar_rule": "Ney leads Saba/Bayati spiritual grief; Flute brings serenity; Oboe carries piercing elegiac sorrow; Bassoon anchors low orchestral gravity.",
+    },
+    "reeds_and_brass_dignified": {
+        "arabic_title": "الكلارينيت والساكسفون المتصل والهارمونيكا والأبواق النحاسية",
+        "instruments": ["clarinet", "legato_saxophone", "quiet_harmonica", "martial_brass"],
+        "waqar_rule": "Clarinet for modal transitions; slow Legato Saxophone strictly zero jazz/dance; quiet solo Harmonica for longing/exile; dignified Brass for martial heroic epics.",
+    },
+    "strings_and_oud_legato": {
+        "arabic_title": "الوتريات الأوركسترالية المتصلة والعود التقسيمي الرصين",
+        "instruments": ["violin_legato", "viola_legato", "cello_legato", "solo_oud_taqsim"],
+        "waqar_rule": "Sustained Legato orchestral string beds for epic grief; dignified unhurried solo Oud taqsim strictly avoiding fast dance strumming.",
+    },
+    "guitars_contemplative": {
+        "arabic_title": "القيتار الأكوستيك والكلاسيك والغيتار الكهربائي النقي",
+        "instruments": ["acoustic_guitar_fingerpicking", "clean_tone_electric_guitar"],
+        "waqar_rule": "Gentle fingerpicking arpeggios and ambient clean-tone reverb swells in 12-TET-safe Maqams only (NC36); zero rock/pop strumming.",
+    },
+    "keys_and_vocal_pads": {
+        "arabic_title": "البيانو التأملي والأورغ الشرقي الميكروتوني والبادات والكورال",
+        "instruments": ["contemplative_piano_12tet_only", "oriental_24edo_keyboard", "ambient_pads", "layered_choir"],
+        "waqar_rule": "Contemplative Piano strictly restricted to non-Latmiya 12-TET-safe Maqams (Nahawand/Kurd/Ajam, NC36); use Oriental 24-EDO keyboard for quarter-tone Maqams.",
+    },
+    "percussion_dignified": {
+        "arabic_title": "البندير والدمامات والطوس والتيمباني والإيقاعات الموزونة",
+        "instruments": ["bendir", "dammam", "tasa", "timpani", "dignified_cinematic_drums"],
+        "waqar_rule": "Bendir for heritage Madih/Tawashih; Dammam, Tasa, Timpani & solemn cinematic drums for Mawkib/operetta gravitas; strictly zero club/dance beats.",
+    },
+}
+
+# Module 76 (V62.0): Classical Qarid & Popular Heritage Atwar Catalog (Sheikh Baqir Al-Darraji & Dalil Al-Qurraa)
+QARID_AND_POPULAR_ATWAR_V62 = {
+    "qarid_classical_fusha": {
+        "al_muthakkal_qarid": "Grave dignified Fusha Qarid with prolonged rhyme Madd (56-64 BPM or Rubato).",
+        "al_hadi": "Caravan travel cadence on Maqam Sikah or Bayati evoking the Karbala journey (64-72 BPM).",
+        "al_qazwini": "Sharp oratorical historical lamentation tone suited for solemn Karbala chronicles.",
+    },
+    "popular_heritage_colloquial": {
+        "al_faezi": "Mulla Ali bin Fayez slow or ascending triple-cadence lament shared across Qatif, Bahrain & Iraq.",
+        "al_rukbani": "Desert caravan elegiac lament on Maqam Sikah/Lami portraying the captives' march.",
+        "al_zurayji": "Southern Iraqi Euphrates plaintive heritage Tor.",
+        "al_janubi": "Deep emotional Southern Iraqi mourning melody.",
+        "al_mullai": "Classic Najafi/Karbalaei Mulla storytelling recitative cadence.",
+        "al_jamarat": "Bahraini heritage poetic elegy form pioneered by Mulla Atiya Al-Jamri.",
+        "al_maymar_and_nayel": "Iraqi colloquial lyrical quatrain/couplet meters for emotional mourning.",
+        "al_jalwat": "Celebratory Qatifi & Bahraini Mawlid/wedding devotional chants on Rast, Sikah & Ajam.",
+    },
 }
 
 # Module 53 & 61 (QC19 & QC29): Mandatory 7-Key Per-Stage & 10-Key Per-Section JSON Orchestration Keys
@@ -5356,6 +5499,41 @@ def recommend_tor_and_rhythm_for_poem(text):
     }
 
 
+def validate_maqam_orchestration_compatibility(maqam, uses_western_12tet_chords=False):
+    """Module 76 (V62.0 — NC36): Guard Quarter-Tone Eastern Maqams against 12-TET Piano/Guitar chord clash."""
+    m_key = str(maqam or "saba").strip().lower()
+    if m_key not in MAQAM_FREQS:
+        raise ValueError(f"Unsupported Maqam for orchestration check: {maqam}")
+    has_qt = m_key in QUARTER_TONE_EASTERN_MAQAMS
+    clash = bool(has_qt and uses_western_12tet_chords)
+    if clash:
+        rec = (
+            f"Maqam '{m_key}' contains 24-EDO quarter-tones: avoid Western 12-TET piano/guitar chords. "
+            "Use Pure Acapella, 24-EDO Ney/Oud/Legato Strings, or Oriental Quarter-Tone Keyboard — or "
+            "modulate to a 12-TET-safe Maqam (nahawand, kurd, hijaz, ajam) for Western orchestral chords."
+        )
+    elif has_qt:
+        rec = (
+            f"Maqam '{m_key}' is a pure 24-EDO quarter-tone Eastern Maqam: disable 12-TET pitch snap "
+            "(manual microtonal Melodyne only) and pair with vocal acapella, Ney, Oud, or fretless strings."
+        )
+    else:
+        rec = (
+            f"Maqam '{m_key}' is 12-TET orchestral-compatible (zero quarter-tones): safely supports "
+            "dignified non-lahwi orchestral strings, oboe, bassoon, brass, acoustic guitar arpeggios, "
+            "and contemplative piano in non-Latmiya Nasheed/Operetta productions (NC36)."
+        )
+    return {
+        "maqam": m_key,
+        "contains_quarter_tone": has_qt,
+        "orchestral_12tet_compatible": not has_qt,
+        "uses_western_12tet_chords": bool(uses_western_12tet_chords),
+        "quarter_tone_clash_risk": clash,
+        "nc36_passed": not clash,
+        "recommendation": rec,
+    }
+
+
 def build_vocal_genre_profile(genre="latmiya", dialect="iraqi", maqam=None, bpm=None):
     """Module 47 & 50: Build strict acoustic firewall & Sound prompt for 4 religious vocal genres."""
     g_key = genre.strip().lower()
@@ -5506,6 +5684,27 @@ def build_vocal_genre_profile(genre="latmiya", dialect="iraqi", maqam=None, bpm=
             "bpm": 0,
             "uses_chest_latm": False,
             "crying_isolated_to_zero_bpm": True,
+            "sound_prompt": MULTI_MAQAM_MELODIC_FINGERPRINT_LIBRARY_V60[fp_key]["sound_prompt"],
+            "song_leakage_terms_detected": [],
+        }
+
+    if g_key == "operetta":
+        chosen_maqam = (maqam or "nahawand").lower()
+        chosen_bpm = 78 if bpm is None else int(bpm)
+        fp_key = (
+            "v62_dialect_hybrid_epic_operetta_hijaz_nahawand_84bpm"
+            if chosen_maqam in ("hijaz", "hijaz_kar") or chosen_bpm >= 82
+            else "v62_orchestral_mahdawi_anthem_nahawand_kurd_78bpm"
+        )
+        return {
+            "genre": "operetta",
+            "dialect": dialect,
+            "maqam": chosen_maqam,
+            "bpm": chosen_bpm,
+            "uses_chest_latm": False,
+            "nc36_orchestration_check": validate_maqam_orchestration_compatibility(
+                chosen_maqam, uses_western_12tet_chords=True
+            ),
             "sound_prompt": MULTI_MAQAM_MELODIC_FINGERPRINT_LIBRARY_V60[fp_key]["sound_prompt"],
             "song_leakage_terms_detected": [],
         }
@@ -5926,7 +6125,11 @@ def select_melodic_fingerprint_v60(fingerprint_key=None, poem_text=None, dialect
     rec = recommend_tor_and_rhythm_for_poem(text_norm) if text_norm else {}
     rec_mode = rec.get("recommended_dsp_mode", "latm")
 
-    if any(k in text_norm for k in ("جلوة", "جلوات", "المولد", "هالمولد", "أفراحنا", "يا هلا بهالمولد")):
+    if any(k in text_norm for k in ("صاحب العصر", "المهدي", "يا مهدي", "أوبريت", "الأوبريت", "فجر الوعود")):
+        chosen = "v62_orchestral_mahdawi_anthem_nahawand_kurd_78bpm"
+    elif any(k in text_norm for k in ("الحدي", "القزويني", "قريض", "مسير القوافل", "الركباني")):
+        chosen = "v62_qarid_hadi_qazwini_caravan_sikah_bayati_68bpm"
+    elif any(k in text_norm for k in ("جلوة", "جلوات", "المولد", "هالمولد", "أفراحنا", "يا هلا بهالمولد")):
         chosen = "v61_qatifi_bahrani_jalwat_mawlid_ajam_rast_98bpm"
     elif any(k in text_norm for k in ("الابتهال", "ابتهال", "البطانة", "الخانة", "التسليم", "يا نور طه", "أتيت بابك خاشعا")):
         chosen = "v61_classical_muwashah_ibtihal_husseini_suznak_74bpm"
@@ -7778,8 +7981,11 @@ def normalize_lufs_and_true_peak(stereo, sample_rate, target_lufs=-14.0, ceiling
     return scaled
 
 
-def audit_rendered_audio(wav_path):
-    """Audit rendered WAV for EBU R128 broadcast compliance, low-vocal Ahaat pads & tail cutoff."""
+def audit_rendered_audio(wav_path, platform_target="streaming"):
+    """Audit rendered WAV for multi-platform EBU R128 loudness, True Peak, Mono Check, gaps & tail cutoff."""
+    if platform_target not in PLATFORM_LUFS_TARGETS_V62:
+        raise ValueError(f"Unsupported platform_target: {platform_target}")
+    pt_cfg = PLATFORM_LUFS_TARGETS_V62[platform_target]
     sample_rate, stereo, channels, bit_depth = read_wav_any_depth(wav_path, return_stereo=True)
     mono = np.mean(stereo, axis=1) if stereo.shape[0] > 0 else np.zeros(0, dtype=np.float64)
     stats = measure_ebu_r128_loudness(stereo if channels > 1 else mono, sample_rate)
@@ -7803,9 +8009,13 @@ def audit_rendered_audio(wav_path):
     abrupt_tail_cutoff = bool(tail_rms_db > -24.0)
     tail_loop = detect_extend_restart_loop(mono, sample_rate=sample_rate)
     mono_check = compute_mono_compatibility(stereo if channels > 1 else mono)
-    broadcast_ok = bool(stats["true_peak_dbtp"] <= -0.9 and -15.5 <= stats["integrated_lufs"] <= -12.5)
+    lo_lufs = pt_cfg["target_lufs"] - pt_cfg["tolerance_lu"]
+    hi_lufs = pt_cfg["target_lufs"] + pt_cfg["tolerance_lu"]
+    broadcast_ok = bool(stats["true_peak_dbtp"] <= -0.9 and lo_lufs <= stats["integrated_lufs"] <= hi_lufs)
     return {
         "wav_path": wav_path,
+        "platform_target": platform_target,
+        "target_lufs": pt_cfg["target_lufs"],
         "sample_rate": sample_rate,
         "channels": channels,
         "bit_depth": bit_depth,
@@ -7840,10 +8050,14 @@ def process_audio_file(
     vintage_intro_sec=0.0,
     vocal_stacking=False,
     auto_trim_tail_loop=False,
+    platform_target="streaming",
 ):
-    """Run complete 5-Track SOS/RMS/LUFS or Pure Vocal Husseiniya DSP montage (V60.0)."""
+    """Run complete 5-Track SOS/RMS/LUFS or Pure Vocal Husseiniya DSP montage (V62.0 multi-platform LUFS)."""
     if mode not in SUPPORTED_DSP_MODES:
         raise ValueError(f"Unsupported DSP mode: {mode}")
+    if platform_target not in PLATFORM_LUFS_TARGETS_V62:
+        raise ValueError(f"Unsupported platform_target: {platform_target}")
+    pt_cfg = PLATFORM_LUFS_TARGETS_V62[platform_target]
 
     sample_rate, mono, _, _ = read_wav_any_depth(input_path)
     auto_trimmed_at = None
@@ -7953,7 +8167,10 @@ def process_audio_file(
             stereo_glued[-fade_len:] *= curve[:, np.newaxis]
 
     master = normalize_lufs_and_true_peak(
-        stereo_glued, sample_rate, target_lufs=-14.0, ceiling_dbtp=-1.0
+        stereo_glued,
+        sample_rate,
+        target_lufs=pt_cfg["target_lufs"],
+        ceiling_dbtp=pt_cfg["ceiling_dbtp"],
     )
 
     out_dir = os.path.dirname(os.path.abspath(output_path))
@@ -7965,6 +8182,8 @@ def process_audio_file(
         "output_path": output_path,
         "sample_rate": sample_rate,
         "mode": mode,
+        "platform_target": platform_target,
+        "target_lufs": pt_cfg["target_lufs"],
         "pure_vocal_master": pure_mode,
         "bpm": bpm,
         "maqam_drone": maqam_drone,
@@ -8105,14 +8324,25 @@ def parse_args(argv=None):
     parser.add_argument(
         "--genre",
         default=None,
-        choices=["latmiya", "nai", "nasheed", "jalwat", "ibtihalat", "tawashih", "muwashah"],
-        help="Generate genre acoustic profile & Sound prompt (Latmiya, Na'i, Nasheed, Jalwat, Ibtihalat, Tawashih, Muwashah)",
+        choices=["latmiya", "nai", "nasheed", "jalwat", "ibtihalat", "tawashih", "muwashah", "operetta"],
+        help="Generate genre acoustic profile & Sound prompt (Latmiya, Na'i, Nasheed, Jalwat, Ibtihalat, Tawashih, Muwashah, Operetta)",
     )
     parser.add_argument(
         "--dialect",
         default="iraqi",
         choices=["iraqi", "bahrani", "qatifi", "iraqi_bahrani", "fusha"],
         help="Target dialect for --genre or lyric shaping (iraqi, bahrani, qatifi, iraqi_bahrani, fusha)",
+    )
+    parser.add_argument(
+        "--platform-target",
+        default="streaming",
+        choices=list(PLATFORM_LUFS_TARGETS_V62.keys()),
+        help="V62.0 multi-platform EBU R128 mastering target: streaming (-14), apple_music (-16), hires_qobuz (-18), broadcast_tv (-23 LUFS)",
+    )
+    parser.add_argument(
+        "--check-orchestration",
+        default=None,
+        help="V62.0 (NC36): Check Quarter-Tone vs. 12-TET orchestral compatibility for a Maqam (append ':12tet' to test Western chord clash)",
     )
     parser.add_argument("--extract-profile", default=None, help="Reverse-engineer reference WAV/MP3 profile")
     parser.add_argument("--audit-audio", default=None, help="Audit WAV loudness, True Peak, gaps & tail cutoff/loops")
@@ -8233,12 +8463,34 @@ def main(argv=None):
         print(json.dumps(profile, ensure_ascii=False, indent=2))
         return 0
 
+    if args.check_orchestration is not None:
+        raw_chk = args.check_orchestration.strip()
+        if ":" in raw_chk:
+            mq_part, flag_part = raw_chk.split(":", 1)
+            use_12 = flag_part.lower() in ("12tet", "chords", "piano", "true", "1")
+        else:
+            mq_part, use_12 = raw_chk, True
+        print(
+            json.dumps(
+                validate_maqam_orchestration_compatibility(mq_part, uses_western_12tet_chords=use_12),
+                ensure_ascii=False,
+                indent=2,
+            )
+        )
+        return 0
+
     if args.extract_profile is not None:
         print(json.dumps(extract_reference_audio_profile(args.extract_profile), ensure_ascii=False, indent=2))
         return 0
 
     if args.audit_audio is not None:
-        print(json.dumps(audit_rendered_audio(args.audit_audio), ensure_ascii=False, indent=2))
+        print(
+            json.dumps(
+                audit_rendered_audio(args.audit_audio, platform_target=args.platform_target),
+                ensure_ascii=False,
+                indent=2,
+            )
+        )
         return 0
 
     if args.input and args.output:
@@ -8259,6 +8511,7 @@ def main(argv=None):
             vintage_intro_sec=args.vintage_intro_sec,
             vocal_stacking=args.vocal_stacking,
             auto_trim_tail_loop=args.auto_trim_tail_loop,
+            platform_target=args.platform_target,
         )
         print(json.dumps(result, ensure_ascii=False, indent=2))
         return 0
