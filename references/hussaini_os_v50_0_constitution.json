@@ -1,9 +1,9 @@
 {
   "protocol_metadata": {
     "protocol_name": "Hussaini_Production_Studio_OS_V50_0_OMNI_ARCHITECT",
-    "skill_version": "V60.0 OMNI-ARCHITECT",
-    "previous_baseline_version": "V58.0 OMNI-ARCHITECT & V50.0 OMNI-ARCHITECT",
-    "previous_baseline_commit_sha": "f80a67f73a6e34999f115bea8833083b8dd27a24",
+    "skill_version": "V61.0 OMNI-ARCHITECT",
+    "previous_baseline_version": "V60.0 OMNI-ARCHITECT & V50.0 OMNI-ARCHITECT",
+    "previous_baseline_commit_sha": "219e663ec570ba452fcc0103a45f078534934cf1",
     "canonical_repository": "https://github.com/husainalmualif/hussaini-production-studio",
     "primary_studio_url": "https://www.flowmusic.app/",
     "target_engines": [
@@ -2182,6 +2182,45 @@
       "NC32_live_remix_replace_surgical_inpainting": "Never regenerate a 9.4+/10 take for 1-2 mispronounced words; use --plan-replace (build_remix_replace_inpainting_plan) with an 8-18s phrase window and 20s splice audit.",
       "NC33_zero_piano_axis3_firewall_and_spectral_forensics": "Replace classical 'solo cello' with 'dark bowed bass cello drone, mournful reed ney, strictly percussive bare chest thuds, subtle acoustic desert wind, strictly zero piano, zero keyboard chords...' and run --detect-artifacts (detect_piano_and_pop_snare_transients).",
       "NC34_extend_90s_headroom_auto_tail_trim_and_vocal_stacking": "Provide 90s headroom on Stage-2 Remix > Extend, auto-detect & trim trailing restart loops via --detect-tail-loop / --auto-trim-tail-loop (detect_extend_restart_loop), and apply mono-safe >180Hz Mid/Side Solo-vs-Choir Vocal Stacking (--vocal-stacking) & Al-Akraf Vintage Intro (--vintage-intro-sec)."
+    }
+  },
+  "v61_0_module_75_upgrades": {
+    "version": "V61.0 OMNI-ARCHITECT",
+    "module_reference": "references/modules/module_75_v61_architecture_qatifi_dialect_jalwat_and_classical_muwashah.md",
+    "expanded_15_maqam_24edo_architecture": [
+      "bayati",
+      "bayati_shuri",
+      "husseini",
+      "saba",
+      "saba_zamzam",
+      "hijaz",
+      "hijaz_kar",
+      "lami",
+      "kurd",
+      "nahawand",
+      "nawa_athar",
+      "sikah",
+      "rast",
+      "suznak",
+      "ajam"
+    ],
+    "multi_maqam_melodic_fingerprint_count": 16,
+    "supported_dialects": ["iraqi", "bahrani", "qatifi", "iraqi_bahrani", "fusha"],
+    "supported_sacred_genres": ["latmiya", "nai", "nasheed", "jalwat", "ibtihalat", "tawashih", "muwashah"],
+    "v61_live_experiments_lab": {
+      "experiments_executed": 2,
+      "total_cumulative_flow_experiments": 31,
+      "exp27_qatifi_bahrani_jalwat_mawlid": "Clip 40f3ef1e (2:34, Maqam Ajam->Rast->Suznak 98 BPM, 9.3/10, 0% chest latm, 0% weeping, 0% piano)",
+      "exp28_classical_muwashah_ibtihal_bitanah": "Clip 6f531049 (3:00, 0 BPM Husseini Rubato Ibtihal -> 74 BPM Suznak Muwashah + Male Bitanah, 9.9/10 ALL-TIME RECORD)"
+    },
+    "architecture_and_dsp_additions": [
+      "5-Stage Dramatic Arc (code_artifact.html) + 4 Regional Schools incl. Qatifi/Hasawi Faezi",
+      "Maqam Husseini + Maqam Suznak + Ajam Trichord flash modulation",
+      "apply_mid_side_reverb_clarity (100-400Hz Side EQ cleaning reverb mud from L-R)",
+      "compute_mono_compatibility (Mono Check L/R correlation & mono-sum retention in --audit-audio)"
+    ],
+    "permanent_negative_constraint_nc35": {
+      "NC35_qatifi_bahrani_orthoepy_locks": "In Qatifi-Bahrani clean Lyria 3.5 lyrics, place an explicit short vowel on ش before closed consonant clusters (چبدي->تشَبدي, چدي->تشِدِي, مچان->متشَان, چبير->تشِبير) to prevent 3-syllable splits (تَشَبْدي), write إهني without final Shadda, and write غَنَاتِي with explicit long Alif alongside لاويّه، هَداويش، عَفَر، أمبى، هالحَزّة، واجِد، إشحوالِش."
     }
   }
 }

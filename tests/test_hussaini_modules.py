@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # pylint: disable=wrong-import-position,too-many-lines,no-member,too-few-public-methods
-"""Comprehensive Unit & Integration Test Suite for Hussaini Production Studio (V60.0 OMNI-ARCHITECT)."""
+"""Comprehensive Unit & Integration Test Suite for Hussaini Production Studio (V61.0 OMNI-ARCHITECT)."""
 
 import os
 import re
@@ -56,8 +56,8 @@ import hussaini_dsp_montage as hds  # noqa: E402
 
 
 def test_single_source_version_and_v50_architecture():
-    """Verify V60.0 OMNI-ARCHITECT version lock, SKILL.md router budget, JSON constitution, and Module 74."""
-    assert hds.SKILL_VERSION == "V60.0 OMNI-ARCHITECT"
+    """Verify V61.0 OMNI-ARCHITECT version lock, SKILL.md router budget, JSON constitution, and Module 75."""
+    assert hds.SKILL_VERSION == "V61.0 OMNI-ARCHITECT"
     skill_md = os.path.join(ROOT_DIR, "SKILL.md")
     assert os.path.isfile(skill_md)
     assert os.path.getsize(skill_md) <= 10500
@@ -133,6 +133,12 @@ def test_single_source_version_and_v50_architecture():
         "modules",
         "module_74_v60_multi_maqam_diversity_nc27c_inpainting_and_spectral_forensics.md",
     )
+    v61_module_doc = os.path.join(
+        ROOT_DIR,
+        "references",
+        "modules",
+        "module_75_v61_architecture_qatifi_dialect_jalwat_and_classical_muwashah.md",
+    )
     assert os.path.isfile(v50_module_doc)
     assert os.path.isfile(v51_module_doc)
     assert os.path.isfile(v52_module_doc)
@@ -143,13 +149,14 @@ def test_single_source_version_and_v50_architecture():
     assert os.path.isfile(v57_module_doc)
     assert os.path.isfile(v58_module_doc)
     assert os.path.isfile(v60_module_doc)
+    assert os.path.isfile(v61_module_doc)
 
     constitution = hds.load_v50_0_constitution()
     assert (
         constitution["protocol_metadata"]["protocol_name"]
         == "Hussaini_Production_Studio_OS_V50_0_OMNI_ARCHITECT"
     )
-    assert constitution["protocol_metadata"]["skill_version"] == "V60.0 OMNI-ARCHITECT"
+    assert constitution["protocol_metadata"]["skill_version"] == "V61.0 OMNI-ARCHITECT"
     assert len(constitution["5_master_sound_prompts_library_modules_36_44_46_48_52"]) == 25
     assert len(hds.MASTER_SOUND_PROMPTS_V50) == 25
     assert len(constitution["8_v50_empirical_175_corpus_and_9_schools_modules_54_65"]["unified_9_schools_architecture"]) == 9
@@ -159,8 +166,8 @@ def test_single_source_version_and_v50_architecture():
     assert "modern_studio_ney_strings" in hds.SUPPORTED_DSP_MODES
     assert "cinematic_foley_latmiya" in hds.SUPPORTED_DSP_MODES
     assert len(hds.EXTENDED_ATWAR_PROMPTS_V52) == 14
-    assert len(hds.MULTI_MAQAM_MELODIC_FINGERPRINT_LIBRARY_V60) == 12
-    assert len(hds.MAQAM_FREQS) == 13
+    assert len(hds.MULTI_MAQAM_MELODIC_FINGERPRINT_LIBRARY_V60) == 16
+    assert len(hds.MAQAM_FREQS) == 15
     v51_block = constitution["v51_0_protocol_negative_constraints_and_style_taxonomy"]
     assert v51_block["version"] == "V51.2 OMNI-ARCHITECT"
     assert len(v51_block["permanent_negative_constraints_nc1_to_nc17"]) >= 17
@@ -192,6 +199,10 @@ def test_single_source_version_and_v50_architecture():
     assert v60_block["readiness_score_percent"] == 100
     assert v60_block["multi_maqam_melodic_fingerprint_count"] == 12
     assert v60_block["multi_school_9_experiment_v60_lab"]["total_cumulative_flow_experiments"] == 29
+    v61_block = constitution["v61_0_module_75_upgrades"]
+    assert v61_block["version"] == "V61.0 OMNI-ARCHITECT"
+    assert v61_block["multi_maqam_melodic_fingerprint_count"] == 16
+    assert v61_block["v61_live_experiments_lab"]["total_cumulative_flow_experiments"] == 31
 
 
 def test_module_41_49_57_58_64_iraqi_prosthetic_clusters_and_v50_g2p_locks():
@@ -1159,9 +1170,9 @@ def test_v58_muwashah_analyzer_combined_json_and_telephone_intro_fx():
 
 
 def test_v60_multi_maqam_diversity_nc27c_replace_forensics_and_vocal_stacking(tmp_path):
-    """Verify V60.0 Module 74: 12 Fingerprints, 13 Maqams, NC27-C, NC32 Replace, NC33 Forensics & NC34 Auto-Trim/Stacking."""
-    # 1. Verify 12 Multi-Maqam Melodic Fingerprints, 13 Maqams & auto-selection breaking melodic monotony
-    assert len(hds.MULTI_MAQAM_MELODIC_FINGERPRINT_LIBRARY_V60) == 12
+    """Verify V60.0 Module 74: 16 Fingerprints, 15 Maqams, NC27-C, NC32 Replace, NC33 Forensics & NC34 Auto-Trim/Stacking."""
+    # 1. Verify 16 Multi-Maqam Melodic Fingerprints, 15 Maqams & auto-selection breaking melodic monotony
+    assert len(hds.MULTI_MAQAM_MELODIC_FINGERPRINT_LIBRARY_V60) == 16
     for fp_key, fp_val in hds.MULTI_MAQAM_MELODIC_FINGERPRINT_LIBRARY_V60.items():
         assert "zero piano" in fp_val["sound_prompt"].lower()
         assert all(m in hds.MAQAM_FREQS for m in fp_val["maqam_arc"]), fp_key
@@ -1307,3 +1318,70 @@ def test_v60_multi_maqam_diversity_nc27c_replace_forensics_and_vocal_stacking(tm
     assert hds.main(["--plan-replace", "19afceef", "56", "67", "بلهيبه", "بِلَهيبه"]) == 0
     assert hds.main(["--detect-artifacts", str(in_loop)]) == 0
     assert hds.main(["--detect-tail-loop", str(in_loop)]) == 0
+
+
+def test_v61_architecture_qatifi_jalwat_muwashah_reverb_clarity_and_mono_check(tmp_path):
+    """Verify V61.0 Module 75: 15 Maqams (+Husseini/Suznak), Qatifi NC35 orthoepy, Jalwat/Muwashah/Na'i genres, Mid-Side Reverb EQ & Mono Check."""
+    # 1. Verify 15 Maqams incl. Husseini & Suznak in MAQAM_FREQS, COMMON_JINS_GRAPH & 24-EDO templates
+    assert "husseini" in hds.MAQAM_FREQS and "suznak" in hds.MAQAM_FREQS
+    assert "husseini" in hds.COMMON_JINS_GRAPH and "suznak" in hds.COMMON_JINS_GRAPH
+    assert "suznak" in hds.COMMON_JINS_GRAPH["rast"]
+
+    # 2. Verify Qatifi dialect detection, shaping & NC35 clean Lyria 3.5 orthoepy locks + idempotency
+    qatifi_raw = "يا غناتي إهنيّ الفرح واجد .. خلف چبدي لاويه هداويش عفر شحوالش هالحزة چدي"
+    q_shaped = hds.detect_and_shape_dialect(qatifi_raw)
+    assert q_shaped["detected_dialect"] == "qatifi"
+    assert q_shaped["qatifi_score"] >= 5
+    assert "Qatifi-Bahrani" in q_shaped["sound_prompt_dialect_declaration"]
+
+    q_clean = hds.format_clean_lyrics_for_lyria35(qatifi_raw, target_bpm=98.0)
+    assert q_clean["detected_dialect"] == "qatifi"
+    cl_q = q_clean["clean_lyria35_lyrics"]
+    assert "غَنَاتِي" in cl_q
+    assert "إهني " in cl_q and "إهنيّ" not in cl_q
+    assert "تشَبدي" in cl_q and "تشِدِي" in cl_q
+    assert "لاويّه" in cl_q and "هَداويش" in cl_q and "عَفَر" in cl_q and "إشحوالِش" in cl_q
+    assert hds.format_clean_lyrics_for_lyria35(cl_q)["clean_lyria35_lyrics"] == cl_q
+
+    # 3. Verify all 4 new V61 Fingerprints & expanded 7-genre profile router (Jalwat, Muwashah, Na'i)
+    assert hds.select_melodic_fingerprint_v60(poem_text="يا هلا بهالمولد .. جلوة أفراحنا العلوية")["fingerprint_key"] == "v61_qatifi_bahrani_jalwat_mawlid_ajam_rast_98bpm"
+    assert hds.select_melodic_fingerprint_v60(poem_text="الابتهال .. يا نور طه .. البطانة والتسليم")["fingerprint_key"] == "v61_classical_muwashah_ibtihal_husseini_suznak_74bpm"
+    assert hds.select_melodic_fingerprint_v60(poem_text="يا غناتي لاويه هداويش عفر إهني")["fingerprint_key"] == "v61_qatifi_faezi_husseini_saba_66bpm"
+    assert hds.select_melodic_fingerprint_v60(poem_text="الطور الدشتي حزين")["fingerprint_key"] == "v61_minbar_dashti_qatifi_nai_0bpm"
+
+    jal = hds.build_vocal_genre_profile(genre="jalwat", dialect="qatifi", maqam="ajam", bpm=98)
+    assert jal["uses_chest_latm"] is False and "zero chest latm" in jal["sound_prompt"].lower()
+    muw = hds.build_vocal_genre_profile(genre="muwashah", dialect="fusha", maqam="suznak", bpm=74)
+    assert muw["uses_chest_latm"] is False and "bitanah" in muw["sound_prompt"].lower()
+    nai_q = hds.build_vocal_genre_profile(genre="nai", dialect="qatifi", maqam="husseini", bpm=0)
+    assert nai_q["bpm"] == 0 and nai_q["uses_chest_latm"] is False
+
+    # 4. Verify Mid-Side Reverb Clarity (100-400Hz Side EQ) & Mono Compatibility Check (code_artifact.html)
+    sr = 16000
+    t_v = np.linspace(0.0, 2.0, 2 * sr, endpoint=False)
+    mid_c = 0.35 * np.sin(2.0 * np.pi * 200.0 * t_v)
+    side_mud = 0.25 * np.sin(2.0 * np.pi * 160.0 * t_v) + 0.15 * np.sin(2.0 * np.pi * 1800.0 * t_v)
+    st_muddy = np.column_stack((mid_c + side_mud, mid_c - side_mud))
+    st_clean = hds.apply_mid_side_reverb_clarity(st_muddy, sr, side_cut_hz=320.0)
+    # Center mid must remain bit-exact; low-frequency side mud (<250Hz) must drop significantly
+    assert np.allclose(0.5 * (st_clean[:, 0] + st_clean[:, 1]), mid_c, atol=1e-6)
+    s_before = 0.5 * (st_muddy[:, 0] - st_muddy[:, 1])
+    s_after = 0.5 * (st_clean[:, 0] - st_clean[:, 1])
+    lo_before = float(np.sqrt(np.mean(hds.butter_filter(s_before, 240.0, sr, btype="low") ** 2)))
+    lo_after = float(np.sqrt(np.mean(hds.butter_filter(s_after, 240.0, sr, btype="low") ** 2)))
+    assert lo_after < 0.50 * lo_before
+
+    # Mono check: correlated stereo passes; out-of-phase stereo fails
+    ok_mono = hds.compute_mono_compatibility(st_clean)
+    assert ok_mono["mono_safe"] is True and ok_mono["lr_phase_correlation"] > 0.3
+    bad_mono = hds.compute_mono_compatibility(np.column_stack((mid_c, -mid_c)))
+    assert bad_mono["mono_safe"] is False and bad_mono["lr_phase_correlation"] < -0.9
+
+    wav_check = tmp_path / "v61_mono_check.wav"
+    wavfile.write(str(wav_check), sr, (st_clean * 32767).astype(np.int16))
+    aud = hds.audit_rendered_audio(str(wav_check))
+    assert aud["mono_compatibility"]["mono_safe"] is True
+
+    assert hds.main(["--genre", "jalwat", "--dialect", "qatifi", "--bpm", "98"]) == 0
+    assert hds.main(["--genre", "muwashah", "--maqam-drone", "suznak", "--bpm", "74"]) == 0
+    assert hds.main(["--genre", "nai", "--dialect", "qatifi", "--bpm", "0"]) == 0

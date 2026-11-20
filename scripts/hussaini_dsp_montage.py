@@ -119,10 +119,11 @@ def get_skill_version():
 
 SKILL_VERSION = get_skill_version()
 
-# 24-EDO Maqam Drone Frequencies (Hz) — Section 4 of V50.0 Constitution + V60.0 13-Maqam Expansion
+# 24-EDO Maqam Drone Frequencies (Hz) — Section 4 of V50.0 Constitution + V60/V61 15-Maqam Expansion
 MAQAM_FREQS = {
     "bayati": [146.83, 160.00, 174.61, 220.00],
     "bayati_shuri": [146.83, 160.00, 174.61, 196.00, 207.65, 246.94],
+    "husseini": [146.83, 160.00, 174.61, 196.00, 220.00, 240.00],
     "saba": [146.83, 160.00, 174.61, 207.65],
     "saba_zamzam": [146.83, 155.56, 174.61, 207.65],
     "hijaz": [146.83, 155.56, 185.00, 220.00],
@@ -133,23 +134,26 @@ MAQAM_FREQS = {
     "nawa_athar": [130.81, 146.83, 155.56, 185.00, 196.00, 207.65, 246.94],
     "sikah": [160.00, 174.61, 196.00, 220.00],
     "rast": [130.81, 146.83, 160.00, 196.00],
+    "suznak": [130.81, 146.83, 160.00, 174.61, 196.00, 207.65, 246.94],
     "ajam": [130.81, 146.83, 164.81, 174.61, 196.00],
 }
 
 COMMON_JINS_GRAPH = {
-    "bayati": ["bayati_shuri", "saba", "saba_zamzam", "kurd", "hijaz", "lami", "sikah", "nahawand"],
-    "bayati_shuri": ["bayati", "hijaz", "hijaz_kar", "saba", "kurd", "nawa_athar"],
-    "saba": ["saba_zamzam", "bayati", "bayati_shuri", "lami", "hijaz", "rast", "nahawand"],
+    "bayati": ["husseini", "bayati_shuri", "saba", "saba_zamzam", "kurd", "hijaz", "lami", "sikah", "nahawand", "ajam"],
+    "bayati_shuri": ["bayati", "husseini", "hijaz", "hijaz_kar", "saba", "kurd", "nawa_athar"],
+    "husseini": ["bayati", "bayati_shuri", "saba", "rast", "suznak", "hijaz", "lami"],
+    "saba": ["saba_zamzam", "bayati", "husseini", "bayati_shuri", "lami", "hijaz", "rast", "nahawand", "ajam"],
     "saba_zamzam": ["saba", "lami", "hijaz", "bayati", "kurd"],
-    "hijaz": ["hijaz_kar", "bayati_shuri", "saba_zamzam", "bayati", "saba", "kurd", "sikah", "nahawand"],
-    "hijaz_kar": ["hijaz", "nawa_athar", "bayati_shuri", "nahawand", "kurd"],
-    "lami": ["saba_zamzam", "saba", "bayati", "kurd"],
-    "kurd": ["bayati", "bayati_shuri", "lami", "saba_zamzam", "hijaz", "nahawand"],
-    "nahawand": ["nawa_athar", "kurd", "bayati", "saba", "hijaz", "hijaz_kar", "rast"],
+    "hijaz": ["hijaz_kar", "suznak", "bayati_shuri", "saba_zamzam", "bayati", "saba", "kurd", "sikah", "nahawand"],
+    "hijaz_kar": ["hijaz", "suznak", "nawa_athar", "bayati_shuri", "nahawand", "kurd"],
+    "lami": ["saba_zamzam", "saba", "bayati", "husseini", "kurd"],
+    "kurd": ["bayati", "bayati_shuri", "lami", "saba_zamzam", "hijaz", "nahawand", "ajam"],
+    "nahawand": ["nawa_athar", "kurd", "bayati", "saba", "hijaz", "hijaz_kar", "rast", "ajam"],
     "nawa_athar": ["nahawand", "hijaz_kar", "hijaz", "kurd", "bayati_shuri"],
-    "sikah": ["bayati", "hijaz", "rast", "saba", "ajam"],
-    "rast": ["ajam", "saba", "bayati", "hijaz", "sikah", "nahawand"],
-    "ajam": ["rast", "nahawand", "sikah", "kurd"],
+    "sikah": ["bayati", "husseini", "hijaz", "rast", "suznak", "saba", "ajam"],
+    "rast": ["suznak", "ajam", "saba", "bayati", "husseini", "hijaz", "sikah", "nahawand"],
+    "suznak": ["rast", "hijaz", "hijaz_kar", "ajam", "husseini", "bayati", "nahawand"],
+    "ajam": ["rast", "suznak", "nahawand", "sikah", "kurd", "bayati"],
 }
 
 SUPPORTED_DSP_MODES = (
@@ -752,6 +756,75 @@ MULTI_MAQAM_MELODIC_FINGERPRINT_LIBRARY_V60 = {
             "strictly zero piano, zero pop drums, zero rock snare backbeat, zero dance beats"
         ),
     },
+    "v61_qatifi_faezi_husseini_saba_66bpm": {
+        "school": "School 02 & 03 — Eastern Arabian Qatifi & Hasawi Heritage Faezi (Mulla Ali bin Fayez)",
+        "dialect": "qatifi",
+        "axis": "axis_1_pure_acapella",
+        "bpm": 66,
+        "maqam_arc": ["husseini", "bayati", "saba"],
+        "dsp_mode": "bahrani_muthakkal",
+        "empirical_exp": "V61 Qatifi-Hasawi School Architecture (code_artifact.html + Sheikh Fawzi Al-Saif Faezi canon)",
+        "sound_prompt": (
+            "Traditional Eastern Arabian Qatifi and Hasawi Faezi Husseini Latmiya elegy, 66 BPM warm calm "
+            "triple-cadence mourning stride, Maqam Husseini emphasizing fifth-degree tension modulating into "
+            "heartbroken Maqam Saba, authentic Eastern Arabian Qatifi-Bahrani Gulf male Baritone Radood with "
+            "dignified storytelling clarity and microtonal vocal arabesques, warm unison male Matam congregation "
+            "responses, soft muffled bare-palm chest thumping only, solemn Qatif Husseiniya dome acoustics, "
+            "strictly 100% pure human vocal acapella, zero musical instruments, zero piano"
+        ),
+    },
+    "v61_minbar_dashti_qatifi_nai_0bpm": {
+        "school": "Minbar Khutaba — Persian-Arabic Tor Dashti & Qatifi Rubato Na'i (0 BPM)",
+        "dialect": "qatifi",
+        "axis": "axis_1_pure_solo_rubato",
+        "bpm": 0,
+        "maqam_arc": ["husseini", "bayati", "saba"],
+        "dsp_mode": "nai",
+        "empirical_exp": "V61 Minbar Dashti/Qatifi Canon + Exp 26-A (bb6ce74e, 9.5/10 true 0 BPM Rubato)",
+        "sound_prompt": (
+            "Traditional Qatifi, Bahrani, and Persian-Arabic Tor Dashti Minbar Na'i vocal lamentation, strict "
+            "0 BPM unmetered free-time Rubato with zero beat grid, Maqam Husseini and Dashti plaintive rising-falling "
+            "cadences resolving into Maqam Saba, intimate velvet solo veteran Khatib Baritone voice with unhurried "
+            "prolonged vowels, natural breaths, and soft dignified weeping cracks on phrase endings only, sacred "
+            "Husseiniya room acoustics, strictly 100% pure solo human voice acapella, zero percussion, zero piano"
+        ),
+    },
+    "v61_qatifi_bahrani_jalwat_mawlid_ajam_rast_98bpm": {
+        "school": "Joyful Shia Mawlid & Wilayah — Eastern Arabian Qatifi/Bahrani Jalwat & Celebratory Nasheed",
+        "dialect": "qatifi",
+        "axis": "axis_joyful_jalwat_nasheed",
+        "bpm": 98,
+        "maqam_arc": ["ajam", "rast", "suznak"],
+        "dsp_mode": "vocal_pure_master",
+        "empirical_exp": "Exp 27 (40f3ef1e, 9.3/10, authentic Qatifi-Bahrani Mawlid Jalwat, 0% latm, 0% piano)",
+        "sound_prompt": (
+            "Joyful Traditional Eastern Arabian Qatifi and Bahrani Shia Islamic Mawlid Jalwat and celebratory "
+            "religious Nasheed, Maqam Ajam modulating to majestic Maqam Rast and Suznak, 98 BPM uplifting festive "
+            "Khaleeji-Gulf devotional swaying rhythm, authentic Eastern Arabian Qatifi-Bahrani Gulf male Munshid "
+            "lead vocal with crisp joyful Arabic articulation, enthusiastic unison male congregation choir "
+            "call-and-response, traditional acoustic frame Daf drums and dignified synchronized celebratory hand "
+            "clapping only, warm stone mosque celebration acoustics, strictly zero chest latm, zero weeping, "
+            "zero piano, zero keyboard chords, zero modern pop synths, zero EDM drums"
+        ),
+    },
+    "v61_classical_muwashah_ibtihal_husseini_suznak_74bpm": {
+        "school": "Classical Heritage Religious Muwashah & Free-Rubato Ibtihal with Male Bitanah Choir",
+        "dialect": "fusha",
+        "axis": "axis_devotional_tawashih",
+        "bpm": 74,
+        "maqam_arc": ["husseini", "suznak", "hijaz", "rast"],
+        "dsp_mode": "vocal_pure_master",
+        "empirical_exp": "Exp 28 (6f531049, 9.9/10 ALL-TIME RECORD, 0 BPM Husseini Ibtihal -> 74 BPM Suznak Muwashah + Bitanah)",
+        "sound_prompt": (
+            "Classical Heritage Arabic Islamic Sacred Ibtihal transitioning into Traditional Religious Muwashah "
+            "with male Bitanah choir, opening in strict 0 BPM unmetered solo Rubato Maqam Husseini spiritual "
+            "supplication then entering 74 BPM dignified measured Maqam Suznak (Rast root with Hijaz upper fifth), "
+            "commanding velvet Arab Munshid and Mubtahil Baritone lead vocal with intricate 24-EDO microtonal "
+            "melisma and crisp Classical Arabic pronunciation, answered antiphonally by rich resonant unison male "
+            "Bitanah choir on Taslim and Qafila refrains, gentle solemn acoustic frame Daf pulse in Muwashah only, "
+            "cavernous mosque dome reverb, strictly zero chest latm, zero weeping, zero piano, zero pop drums"
+        ),
+    },
 }
 
 # Module 53 & 61 (QC19 & QC29): Mandatory 7-Key Per-Stage & 10-Key Per-Section JSON Orchestration Keys
@@ -1303,6 +1376,74 @@ BAHRANI_MARKERS = (
     "سولف لي",
     "ابلياك",
 )
+
+# Module 75 (V61.0): Distinctive Eastern Arabian Qatifi Dialect Markers (shared mother-dialect with Bahrani + local Qatifi lexicon)
+QATIFI_MARKERS = (
+    "غناتي",
+    "غَنَاتِي",
+    "غَناتي",
+    "هداويش",
+    "هَداويش",
+    "لاويه",
+    "لاويّه",
+    "عفر",
+    "عَفَر",
+    "إهني",
+    "اهني",
+    "إهنيّ",
+    "امبى",
+    "أمبى",
+    "چدي",
+    "تشِدِي",
+    "خلف چبدي",
+    "خلف تشبدي",
+    "خلف تشَبدي",
+    "خلفدي",
+    "شحوالش",
+    "إشحوالش",
+    "إشحوالِش",
+    "شحوالك",
+    "إشحوالك",
+    "هالحزة",
+    "هالحَزّة",
+    "هالحزه",
+    "واجد",
+    "واجِد",
+    "مغربل",
+    "دريشة",
+    "القطيف",
+    "قطيفي",
+    "تاروت",
+    "صفوى",
+    "سيهات",
+    "العوامية",
+    "أبغى",
+    "ماني",
+)
+
+QATIFI_WORD_SHAPING_MAP = {
+    "غناتي": "غَنَاتِي",
+    "هداويش": "هَدَاوِيشْ",
+    "لاويه": "لَاوِيَّه",
+    "عفر": "عَفَرْ",
+    "إهني": "إِهْنِي",
+    "اهني": "إِهْنِي",
+    "امبى": "أَمْبَى",
+    "چدي": "چِدِي",
+    "خلفدي": "خَلَفْدِي",
+    "شحوالش": "إِشْحْوَالِشْ",
+    "شحوالك": "إِشْحْوَالَكْ",
+    "هالحزة": "هَلْ حَزَّه",
+    "هالحزه": "هَلْ حَزَّه",
+    "واجد": "وَاجِدْ",
+    "مغربل": "إِمْغَرْبَلْ",
+    "دريشة": "دِرِيشَه",
+    "أبغى": "أَبْغَى",
+    "ماني": "مَانِي",
+    "بقلب": "إِبْگَلِبْ",
+    "بقلبي": "إِبْگَلْبِي",
+    "عالباب": "عَلَه البَابْ",
+}
 
 IRAQI_MARKERS = (
     "بويه",
@@ -3651,11 +3792,28 @@ def _count_dialect_markers(text):
     return bahrani_hits, iraqi_hits
 
 
-def detect_and_shape_dialect(text, enforce_iraqi_dhaa=None, use_tatweel=False):
-    """Modules 43 & 49: Identify Pure Bahrani vs. Pure Iraqi vs. Neutral Fusion and shape tokens."""
-    bahrani_hits, iraqi_hits = _count_dialect_markers(text)
+def _count_qatifi_markers(text):
+    """Module 75 (V61.0): Count distinctive Eastern Arabian Qatifi markers on diacritic-stripped text."""
+    ortho = normalize_daad_dhaa_homographs(normalize_iraqi_orthographic_gaf(text))
+    bare_text = re.sub(r"[\u064B-\u0652]", "", ortho)
+    hits = 0
+    for marker in QATIFI_MARKERS:
+        bare_m = re.sub(r"[\u064B-\u0652]", "", marker)
+        if bare_m and re.search(rf"(?<!\S){re.escape(bare_m)}(?!\S)", bare_text):
+            hits += 1
+    return hits
 
-    if bahrani_hits > iraqi_hits:
+
+def detect_and_shape_dialect(text, enforce_iraqi_dhaa=None, use_tatweel=False, dialect=None):
+    """Modules 43, 49 & 75 (V61.0): Identify Qatifi, Bahrani, Iraqi, or Neutral Fusion and shape tokens."""
+    bahrani_hits, iraqi_hits = _count_dialect_markers(text)
+    qatifi_hits = _count_qatifi_markers(text)
+
+    if dialect in ("qatifi", "bahrani", "iraqi", "iraqi_bahrani", "fusha"):
+        detected = dialect
+    elif qatifi_hits >= 2 and qatifi_hits >= iraqi_hits:
+        detected = "qatifi"
+    elif bahrani_hits > iraqi_hits:
         detected = "bahrani"
     elif iraqi_hits > bahrani_hits:
         detected = "iraqi"
@@ -3667,9 +3825,18 @@ def detect_and_shape_dialect(text, enforce_iraqi_dhaa=None, use_tatweel=False):
 
     shaped = de_cliticize_and_separate_words(text, use_tatweel=use_tatweel)
     shaped = heal_nc21_short_clause_pauses(shaped)
-    shaped = normalize_demonstrative_hal(shaped, dialect=detected)
+    shaped = normalize_demonstrative_hal(shaped, dialect="bahrani" if detected == "qatifi" else detected)
     shaped = repair_word_initial_sukun_and_diphthongs(shaped)
-    if detected == "bahrani":
+    if detected == "qatifi":
+        shaped = shaped.replace("إِعْلَه الجَمُرْ", "عَلَه الجَمِرْ")
+        shaped = shape_words_by_boundary(shaped, BAHRANI_WORD_SHAPING_MAP, use_tatweel=use_tatweel)
+        shaped = shape_words_by_boundary(shaped, QATIFI_WORD_SHAPING_MAP, use_tatweel=use_tatweel)
+        if enforce_iraqi_dhaa:
+            shaped = shaped.replace("فَاضِلْ", "فَاظِلْ").replace("ضْلُوعِي", "ظْلُوعِي")
+        maqam_rule = "Calm Qatifi-Hasawi Faezi Storytelling Cadence & Warm Microtonal Imala in Maqam Husseini/Saba"
+        dhad_mode = "Emphatic Iraqi Dhaa (ظ)" if enforce_iraqi_dhaa else "Standard/Qatifi-Bahrani Dhad (ض)"
+        sound_dialect = "authentic Eastern Arabian Qatifi-Bahrani Gulf dialect"
+    elif detected == "bahrani":
         shaped = shaped.replace("إِعْلَه الجَمُرْ", "عَلَه الجَمِرْ")
         shaped = shape_words_by_boundary(shaped, BAHRANI_WORD_SHAPING_MAP, use_tatweel=use_tatweel)
         if enforce_iraqi_dhaa:
@@ -3720,6 +3887,7 @@ def detect_and_shape_dialect(text, enforce_iraqi_dhaa=None, use_tatweel=False):
         "detected_dialect": detected,
         "sound_prompt_dialect_declaration": sound_dialect,
         "bahrani_score": bahrani_hits,
+        "qatifi_score": qatifi_hits,
         "iraqi_score": iraqi_hits,
         "dhad_articulation": dhad_mode,
         "maqam_articulation_rule": maqam_rule,
@@ -3771,11 +3939,14 @@ def audit_syllable_density_v60(lyrics_text, target_bpm=72.0, max_syl_per_sec=4.2
 
 
 def format_clean_lyrics_for_lyria35(raw_poem, dialect=None, target_bpm=None):
-    """Module 72 & 74 (V57.0–V60.0): Compile Clean Natural Arabic + NC27-C Affricate Sukun Law + Density Governor."""
+    """Module 72, 74 & 75 (V57.0–V61.0): Clean Natural Arabic + NC27-C Affricate Law + NC35 Qatifi Locks + Density Governor."""
     sanitized = sanitize_poem_decorations(raw_poem.replace("\\n", "\n"))
     bahrani_hits, iraqi_hits = _count_dialect_markers(sanitized)
-    if dialect in ("iraqi", "bahrani", "iraqi_bahrani", "fusha"):
+    qatifi_hits = _count_qatifi_markers(sanitized)
+    if dialect in ("iraqi", "bahrani", "qatifi", "iraqi_bahrani", "fusha"):
         detected = dialect
+    elif qatifi_hits >= 2 and qatifi_hits >= iraqi_hits:
+        detected = "qatifi"
     elif bahrani_hits > iraqi_hits:
         detected = "bahrani"
     elif iraqi_hits > bahrani_hits:
@@ -3847,6 +4018,36 @@ def format_clean_lyrics_for_lyria35(raw_poem, dialect=None, target_bpm=None):
         "چفك": "تشفك",
         "يچوي": "يتشوي",
         "مچوي": "متشوي",
+        # NC35 (V61.0): Empirically proven Qatifi-Bahrani clean Lyria 3.5 orthoepy locks (Exp 27)
+        "چبدي": "تشَبدي",
+        "تشبدي": "تشَبدي",
+        "چدي": "تشِدِي",
+        "تشدي": "تشِدِي",
+        "مچان": "متشَان",
+        "متشان": "متشَان",
+        "چبير": "تشِبير",
+        "تشبير": "تشِبير",
+        "غناتي": "غَنَاتِي",
+        "إهني": "إهني",
+        "إهنيّ": "إهني",
+        "اهني": "إهني",
+        "اهنيّ": "إهني",
+        "لاويه": "لاويّه",
+        "لاويّه": "لاويّه",
+        "هداويش": "هَداويش",
+        "عفر": "عَفَر",
+        "امبى": "أمبى",
+        "أمبى": "أمبى",
+        "هالحزة": "هالحَزّة",
+        "هالحزه": "هالحَزّة",
+        "هالحزّة": "هالحَزّة",
+        "واجد": "واجِد",
+        "شحوالش": "إشحوالِش",
+        "اشحوالش": "إشحوالِش",
+        "إشحوالش": "إشحوالِش",
+        "شحوالك": "إشحوالَك",
+        "اشحوالك": "إشحوالَك",
+        "إشحوالك": "إشحوالَك",
         "حچي": "حَتشِي",
         "وحچي": "وحَتشِي",
         "حتشي": "حَتشِي",
@@ -3920,7 +4121,7 @@ def format_clean_lyrics_for_lyria35(raw_poem, dialect=None, target_bpm=None):
     final_lyrics = "\n".join(out_lines)
     prompt_key = (
         "v57_bahrani_matam_pure_58bpm_saba_bayati"
-        if detected == "bahrani"
+        if detected in ("bahrani", "qatifi")
         else "v57_iraqi_karbalaei_pure_majlis_60bpm_saba_lami"
     )
     density_report = audit_syllable_density_v60(
@@ -5258,6 +5459,54 @@ def build_vocal_genre_profile(genre="latmiya", dialect="iraqi", maqam=None, bpm=
             "song_leakage_terms_detected": [],
         }
 
+    if g_key == "jalwat":
+        chosen_maqam = (maqam or "ajam").lower()
+        chosen_bpm = 98 if bpm is None else int(bpm)
+        return {
+            "genre": "jalwat",
+            "dialect": dialect,
+            "maqam": chosen_maqam,
+            "bpm": chosen_bpm,
+            "uses_chest_latm": False,
+            "sound_prompt": MULTI_MAQAM_MELODIC_FINGERPRINT_LIBRARY_V60[
+                "v61_qatifi_bahrani_jalwat_mawlid_ajam_rast_98bpm"
+            ]["sound_prompt"],
+            "song_leakage_terms_detected": [],
+        }
+
+    if g_key == "muwashah":
+        chosen_maqam = (maqam or "suznak").lower()
+        chosen_bpm = 74 if bpm is None else int(bpm)
+        return {
+            "genre": "muwashah",
+            "dialect": "fusha",
+            "maqam": chosen_maqam,
+            "bpm": chosen_bpm,
+            "uses_chest_latm": False,
+            "sound_prompt": MULTI_MAQAM_MELODIC_FINGERPRINT_LIBRARY_V60[
+                "v61_classical_muwashah_ibtihal_husseini_suznak_74bpm"
+            ]["sound_prompt"],
+            "song_leakage_terms_detected": [],
+        }
+
+    if g_key == "nai":
+        chosen_maqam = (maqam or "husseini").lower()
+        fp_key = (
+            "v61_minbar_dashti_qatifi_nai_0bpm"
+            if dialect in ("qatifi", "bahrani")
+            else "v60_minbar_rubato_abudhiyah_nai_sikah_saba_0bpm"
+        )
+        return {
+            "genre": "nai",
+            "dialect": dialect,
+            "maqam": chosen_maqam,
+            "bpm": 0,
+            "uses_chest_latm": False,
+            "crying_isolated_to_zero_bpm": True,
+            "sound_prompt": MULTI_MAQAM_MELODIC_FINGERPRINT_LIBRARY_V60[fp_key]["sound_prompt"],
+            "song_leakage_terms_detected": [],
+        }
+
     raise ValueError(f"Unsupported religious vocal genre: {genre}")
 
 
@@ -5674,8 +5923,18 @@ def select_melodic_fingerprint_v60(fingerprint_key=None, poem_text=None, dialect
     rec = recommend_tor_and_rhythm_for_poem(text_norm) if text_norm else {}
     rec_mode = rec.get("recommended_dsp_mode", "latm")
 
-    if rec_mode == "nai" or (rec.get("recommended_bpm") == 0):
-        chosen = "v60_minbar_rubato_abudhiyah_nai_sikah_saba_0bpm"
+    if any(k in text_norm for k in ("جلوة", "جلوات", "المولد", "هالمولد", "أفراحنا", "يا هلا بهالمولد")):
+        chosen = "v61_qatifi_bahrani_jalwat_mawlid_ajam_rast_98bpm"
+    elif any(k in text_norm for k in ("الابتهال", "ابتهال", "البطانة", "الخانة", "التسليم", "يا نور طه", "أتيت بابك خاشعا")):
+        chosen = "v61_classical_muwashah_ibtihal_husseini_suznak_74bpm"
+    elif any(k in text_norm for k in ("الدشتي", "طور دشتي")):
+        chosen = "v61_minbar_dashti_qatifi_nai_0bpm"
+    elif rec_mode == "nai" or (rec.get("recommended_bpm") == 0):
+        chosen = (
+            "v61_minbar_dashti_qatifi_nai_0bpm"
+            if det_dialect == "qatifi"
+            else "v60_minbar_rubato_abudhiyah_nai_sikah_saba_0bpm"
+        )
     elif rec_mode == "shoor" or (rec.get("recommended_bpm", 60) >= 115):
         chosen = "v60_iraqi_rapid_shoor_kurd_bayati_shuri_124bpm"
     elif any(k in text_norm for k in ("صلى الإله", "عرفنا خلقك", "سيد الرسل", "صلوا عليه", "بدر التمام")):
@@ -5684,6 +5943,8 @@ def select_melodic_fingerprint_v60(fingerprint_key=None, poem_text=None, dialect
         chosen = "v60_epic_fusha_mawkib_hijaz_kar_88_to_96bpm"
     elif axis == "axis_4_cinematic_sub_foley" or rec_mode == "cinematic_foley_latmiya":
         chosen = "v60_farsi_epic_zamineh_hijaz_kar_kurd_68bpm"
+    elif det_dialect == "qatifi":
+        chosen = "v61_qatifi_faezi_husseini_saba_66bpm"
     elif det_dialect == "bahrani":
         if rec_mode == "bahrani_thulathi":
             chosen = "v60_bahrani_thulathi_bayati_shuri_nawa_athar_76bpm"
@@ -6085,6 +6346,7 @@ def read_wav_any_depth(input_path, return_stereo=False):
 _MAQAM_24EDO_TEMPLATES = {
     "bayati": {0: 1.80, 3: 1.70, 5: 1.20, 10: 1.60, 14: 1.20, 16: 0.90, 20: 0.90},
     "bayati_shuri": {0: 1.65, 3: 1.60, 5: 1.15, 10: 1.35, 12: 1.40, 18: 1.45, 20: 0.70},
+    "husseini": {0: 1.65, 3: 1.55, 5: 1.10, 10: 1.35, 14: 1.65, 17: 1.25, 20: 0.75},
     "saba": {0: 1.80, 3: 1.70, 5: 1.30, 8: 2.00, 14: 1.00, 16: 0.90, 20: 0.80},
     "saba_zamzam": {0: 1.70, 2: 1.50, 5: 1.30, 8: 2.00, 14: 1.00, 16: 0.90, 20: 0.80},
     "hijaz": {0: 1.80, 2: 1.60, 8: 1.80, 10: 1.40, 14: 1.20, 16: 0.90, 20: 0.80},
@@ -6095,6 +6357,7 @@ _MAQAM_24EDO_TEMPLATES = {
     "nawa_athar": {0: 1.65, 4: 1.10, 6: 1.20, 12: 1.65, 14: 1.15, 16: 1.20, 22: 1.35},
     "sikah": {0: 1.80, 3: 1.40, 7: 1.60, 10: 1.30, 13: 1.30, 17: 1.00, 20: 0.90},
     "rast": {0: 1.80, 4: 1.20, 7: 1.70, 10: 1.30, 14: 1.20, 18: 1.00, 21: 1.30},
+    "suznak": {0: 1.65, 4: 1.10, 7: 1.50, 10: 1.10, 14: 1.30, 16: 1.30, 22: 1.35},
     "ajam": {0: 1.65, 4: 1.20, 8: 1.50, 10: 1.20, 14: 1.30, 18: 1.15, 22: 1.30},
 }
 
@@ -7067,6 +7330,40 @@ def apply_mid_side_vocal_stacking_enhancer(
     return np.column_stack((mid + side_out, mid - side_out))
 
 
+def apply_mid_side_reverb_clarity(stereo, sample_rate, side_cut_hz=320.0, low_side_atten=0.35):
+    """Module 75 (V61.0): Mid-Side EQ cleaning 100-400Hz reverb mud from Side channel while keeping center pure."""
+    arr = np.asarray(stereo, dtype=np.float64)
+    if arr.ndim == 1 or arr.shape[0] < 32:
+        return arr.copy()
+    mid = 0.5 * (arr[:, 0] + arr[:, 1])
+    side = 0.5 * (arr[:, 0] - arr[:, 1])
+    cut_eff = min(float(side_cut_hz), 0.35 * float(sample_rate))
+    side_hi = butter_filter(side, cut_eff, sample_rate, btype="high", order=2)
+    side_lo = side - side_hi
+    side_clean = side_hi + float(low_side_atten) * side_lo
+    return np.column_stack((mid + side_clean, mid - side_clean))
+
+
+def compute_mono_compatibility(stereo):
+    """Module 75 (V61.0): Verify Mawkib PA Mono Check (L/R correlation & mono-sum energy retention)."""
+    arr = np.asarray(stereo, dtype=np.float64)
+    if arr.ndim == 1 or arr.shape[0] == 0:
+        return {"lr_phase_correlation": 1.0, "mono_energy_retention_db": 0.0, "mono_safe": True}
+    left = arr[:, 0]
+    right = arr[:, 1]
+    denom = math.sqrt(float(np.sum(left**2)) * float(np.sum(right**2))) + 1e-12
+    corr = float(np.clip(float(np.sum(left * right)) / denom, -1.0, 1.0))
+    mono_sum = 0.5 * (left + right)
+    stereo_pow = 0.5 * (float(np.mean(left**2)) + float(np.mean(right**2))) + 1e-12
+    mono_pow = float(np.mean(mono_sum**2)) + 1e-12
+    retention_db = round(10.0 * math.log10(mono_pow / stereo_pow), 2)
+    return {
+        "lr_phase_correlation": round(corr, 3),
+        "mono_energy_retention_db": retention_db,
+        "mono_safe": bool(corr >= 0.20 and retention_db >= -3.0),
+    }
+
+
 def _resolve_audio_input_mono(audio_path_or_mono, sample_rate=None):
     """Load file path via read_wav_any_depth or wrap an in-memory 1D/2D NumPy array cleanly."""
     if isinstance(audio_path_or_mono, (str, os.PathLike)):
@@ -7502,6 +7799,7 @@ def audit_rendered_audio(wav_path):
     tail_rms_db = 20.0 * np.log10(float(np.sqrt(np.mean(mono[-tail_samples:] ** 2)) + 1e-9)) if len(mono) else -90.0
     abrupt_tail_cutoff = bool(tail_rms_db > -24.0)
     tail_loop = detect_extend_restart_loop(mono, sample_rate=sample_rate)
+    mono_check = compute_mono_compatibility(stereo if channels > 1 else mono)
     broadcast_ok = bool(stats["true_peak_dbtp"] <= -0.9 and -15.5 <= stats["integrated_lufs"] <= -12.5)
     return {
         "wav_path": wav_path,
@@ -7517,6 +7815,7 @@ def audit_rendered_audio(wav_path):
         "abrupt_tail_cutoff_risk": abrupt_tail_cutoff,
         "tail_loop_detected": tail_loop["tail_loop_detected"],
         "recommended_trim_sec": tail_loop["recommended_trim_sec"],
+        "mono_compatibility": mono_check,
         "broadcast_compliant": broadcast_ok,
     }
 
@@ -7641,6 +7940,7 @@ def process_audio_file(
 
     if vocal_stacking:
         stereo_glued = apply_mid_side_vocal_stacking_enhancer(stereo_glued, sample_rate)
+    stereo_glued = apply_mid_side_reverb_clarity(stereo_glued, sample_rate, side_cut_hz=320.0)
 
     if effective_fade > 0.0 and stereo_glued.shape[0] > 8:
         fade_len = min(stereo_glued.shape[0] // 2, int(effective_fade * sample_rate))
@@ -7802,8 +8102,14 @@ def parse_args(argv=None):
     parser.add_argument(
         "--genre",
         default=None,
-        choices=["latmiya", "nasheed", "ibtihalat", "tawashih"],
-        help="Generate genre acoustic profile & Sound prompt",
+        choices=["latmiya", "nai", "nasheed", "jalwat", "ibtihalat", "tawashih", "muwashah"],
+        help="Generate genre acoustic profile & Sound prompt (Latmiya, Na'i, Nasheed, Jalwat, Ibtihalat, Tawashih, Muwashah)",
+    )
+    parser.add_argument(
+        "--dialect",
+        default="iraqi",
+        choices=["iraqi", "bahrani", "qatifi", "iraqi_bahrani", "fusha"],
+        help="Target dialect for --genre or lyric shaping (iraqi, bahrani, qatifi, iraqi_bahrani, fusha)",
     )
     parser.add_argument("--extract-profile", default=None, help="Reverse-engineer reference WAV/MP3 profile")
     parser.add_argument("--audit-audio", default=None, help="Audit WAV loudness, True Peak, gaps & tail cutoff/loops")
@@ -7919,7 +8225,7 @@ def main(argv=None):
 
     if args.genre is not None:
         profile = build_vocal_genre_profile(
-            genre=args.genre, dialect="iraqi", maqam=args.maqam_drone, bpm=int(args.bpm)
+            genre=args.genre, dialect=args.dialect, maqam=args.maqam_drone, bpm=int(args.bpm)
         )
         print(json.dumps(profile, ensure_ascii=False, indent=2))
         return 0
