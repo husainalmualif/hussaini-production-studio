@@ -1,9 +1,9 @@
 {
   "protocol_metadata": {
     "protocol_name": "Hussaini_Production_Studio_OS_V50_0_OMNI_ARCHITECT",
-    "skill_version": "V62.0 OMNI-ARCHITECT",
-    "previous_baseline_version": "V61.0 OMNI-ARCHITECT & V50.0 OMNI-ARCHITECT",
-    "previous_baseline_commit_sha": "522614834b7b5e616b906fee275614c77152568c",
+    "skill_version": "V63.0 OMNI-ARCHITECT",
+    "previous_baseline_version": "V62.0 OMNI-ARCHITECT & V50.0 OMNI-ARCHITECT",
+    "previous_baseline_commit_sha": "f8961fe0c450aa7f477abb53d087cf33405221ac",
     "canonical_repository": "https://github.com/husainalmualif/hussaini-production-studio",
     "primary_studio_url": "https://www.flowmusic.app/",
     "target_engines": [

@@ -1,0 +1,23 @@
+{
+  "checkpoint_id": "V63_0_OMNI_ARCHITECT_2026_11_20",
+  "skill_version": "V63.0 OMNI-ARCHITECT",
+  "readiness_score_percent": 100,
+  "previous_version": "V62.0 OMNI-ARCHITECT",
+  "previous_commit_sha": "f8961fe0c450aa7f477abb53d087cf33405221ac",
+  "sources_absorbed": [
+    "C:/Users/husai/Desktop/Flow Music/google_flow_music_lyria_3_5_json.html",
+    "Google DeepMind Lyria 3.5 Model Card & Prompt Guide",
+    "Google Flow Music Help (Customize Producer Instructions/Flows/Memories, Remix, Stem Split, 48kHz WAV)",
+    "Sunofix / Kompozy / Mubert (Lyria 2-4kHz neural harshness mitigation, SynthID watermarking, commercial licensing)"
+  ],
+  "v63_upgrades": {
+    "new_negative_constraints": ["NC38", "NC39", "NC40", "NC41"],
+    "stage_0_master_state_bootstrap": "build_v63_session_bootstrap_json() / --build-v63-bootstrap track_a|track_b|track_c",
+    "five_band_spectral_occupancy_guard": "FIVE_BAND_SPECTRAL_OCCUPANCY_V63 & validate_spectral_occupancy_v63()",
+    "five_minute_word_budget_planner": "plan_v63_five_minute_word_budget() / --plan-v63-workflow (280-350 net words, 12-16s/bayt, 4 Extend passes)",
+    "maqam_audio_reference_matrix": "MAQAM_LYRIA35_ADHERENCE_AND_AUDIO_REF_MATRIX_V63 / --check-maqam-ref",
+    "lyria_harshness_tamer_dsp": "apply_lyria_harshness_tamer_2_4khz() / --tame-lyria-harshness (mono-safe dynamic 2.4-3.8 kHz EQ)",
+    "cumulative_live_flow_experiments": 35,
+    "new_module_doc": "references/modules/module_77_v63_flow_music_two_layer_json_5band_spectrum_and_hybrid_stem_mastering.md"
+  }
+}

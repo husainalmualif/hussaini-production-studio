@@ -1,4 +1,4 @@
-name: Hussaini Production Studio CI (V62.0 OMNI-ARCHITECT Validation)
+name: Hussaini Production Studio CI (V63.0 OMNI-ARCHITECT Validation)
 
 on:
   push:
@@ -9,7 +9,7 @@ on:
 
 jobs:
   validate-skill-and-dsp:
-    name: Validate V62.0 Docs, Pylint, Unit Tests & 20-Mode DSP (Py ${{ matrix.python-version }})
+    name: Validate V63.0 Docs, Pylint, Unit Tests & 20-Mode DSP (Py ${{ matrix.python-version }})
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -65,6 +65,7 @@ jobs:
           test -f references/modules/module_74_v60_multi_maqam_diversity_nc27c_inpainting_and_spectral_forensics.md
           test -f references/modules/module_75_v61_architecture_qatifi_dialect_jalwat_and_classical_muwashah.md
           test -f references/modules/module_76_v62_waqar_fiqh_orchestral_six_families_qarid_atwar_and_multi_platform_lufs.md
+          test -f references/modules/module_77_v63_flow_music_two_layer_json_5band_spectrum_and_hybrid_stem_mastering.md
           test -f scripts/hussaini_dsp_montage.py
           test -f tests/test_hussaini_modules.py
           ! test -f references/hussaini_os_v48_5_constitution.json
@@ -73,7 +74,7 @@ jobs:
           ! test -f references/modules/module_50_melody_composition_and_24edo_guide_synth.md
           ! test -f references/modules/module_51_6dialects_g2p_and_25_atwar_encyclopedia.md
           ! test -f references/modules/module_52_pro_dsp_dynamic_ahaat_and_multi_ai_router.md
-          python -c "import json, pathlib; assert pathlib.Path('VERSION').read_text(encoding='utf-8').strip() == 'V62.0 OMNI-ARCHITECT'; assert pathlib.Path('SKILL.md').stat().st_size <= 10500; data = json.loads(pathlib.Path('references/hussaini_os_v50_0_constitution.json').read_text(encoding='utf-8')); assert data['protocol_metadata']['protocol_name'] == 'Hussaini_Production_Studio_OS_V50_0_OMNI_ARCHITECT'; assert data['protocol_metadata']['skill_version'] == 'V62.0 OMNI-ARCHITECT'"
+          python -c "import json, pathlib; assert pathlib.Path('VERSION').read_text(encoding='utf-8').strip() == 'V63.0 OMNI-ARCHITECT'; assert pathlib.Path('SKILL.md').stat().st_size <= 10500; data = json.loads(pathlib.Path('references/hussaini_os_v50_0_constitution.json').read_text(encoding='utf-8')); assert data['protocol_metadata']['protocol_name'] == 'Hussaini_Production_Studio_OS_V50_0_OMNI_ARCHITECT'; assert data['protocol_metadata']['skill_version'] == 'V63.0 OMNI-ARCHITECT'"
 
       - name: Run Pylint Static Analysis
         run: |
@@ -105,6 +106,9 @@ jobs:
           python scripts/hussaini_dsp_montage.py --check-orchestration saba:12tet
           python scripts/hussaini_dsp_montage.py --check-orchestration nahawand:12tet
           python scripts/hussaini_dsp_montage.py --audit-orthoepy "عَجِّلْ فَدَتْكَ نُفُوسُ المُخْلِصِينْ"
+          python scripts/hussaini_dsp_montage.py --build-v63-bootstrap track_a --dialect qatifi
+          python scripts/hussaini_dsp_montage.py --check-maqam-ref saba
+          python scripts/hussaini_dsp_montage.py --plan-v63-workflow "يَا صَاحِبَ العَصْرِ يَا نُورَ الأَمَلْ\nعَجِّلْ فَدَتْكَ نُفُوسُ المُخْلِصِينْ"
           python scripts/hussaini_dsp_montage.py --verify-history "صوت أم البنين يصيح يبن حذلم"
           python scripts/hussaini_dsp_montage.py --plan-stages "[المستهل]\nصوت أم البنين يصيح يبن حذلم\n[الكوبليه الأول]\nيا ناشد على الطف وعندك علم"
           python -c "import numpy as np; from scipy.io import wavfile; [wavfile.write(f'/tmp/in_{sr}.wav', sr, (0.4*np.sin(2*np.pi*180.0*np.linspace(0, 1.0, sr, endpoint=False))*32767).astype(np.int16)) for sr in (8000, 16000, 44100, 48000)]; sig = (0.4*np.sin(2*np.pi*180.0*np.linspace(0, 1.0, 44100, endpoint=False))*32767).astype(np.int16); wavfile.write('/tmp/in_stereo.wav', 44100, np.column_stack((sig, sig)))"
@@ -117,7 +121,7 @@ jobs:
           done
           python scripts/hussaini_dsp_montage.py --input /tmp/in_stereo.wav --output /tmp/out_stereo.wav --mode bandari --bpm 88 --swing 0.22 --maqam-drone kurd
           test -s /tmp/out_stereo.wav
-          python scripts/hussaini_dsp_montage.py --input /tmp/in_stereo.wav --output /tmp/out_pure_trim.wav --mode vocal_pure_master --bpm 60 --trim-end-sec 0.8 --fade-out-sec 0.2 --vintage-intro-sec 0.3 --vocal-stacking --auto-trim-tail-loop --no-synth-rhythm
+          python scripts/hussaini_dsp_montage.py --input /tmp/in_stereo.wav --output /tmp/out_pure_trim.wav --mode vocal_pure_master --bpm 60 --trim-end-sec 0.8 --fade-out-sec 0.2 --vintage-intro-sec 0.3 --vocal-stacking --tame-lyria-harshness --auto-trim-tail-loop --no-synth-rhythm
           test -s /tmp/out_pure_trim.wav
           python scripts/hussaini_dsp_montage.py --audit-audio /tmp/out_pure_trim.wav
           for mode in vocal_pure_master latm heavy_clip thaqeel_muwazza studio_arranged modern_studio_ney_strings cinematic_foley_latmiya fazzaiya bahrani_fast bahrani_thulathi bahrani_rubai bahrani_haidari bahrani_waqfa bahrani_muthakkal zanjeel_iraqi zanjeel_bahrani shoor bandari mawal nai; do

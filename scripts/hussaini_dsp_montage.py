@@ -8051,8 +8051,9 @@ def process_audio_file(
     vocal_stacking=False,
     auto_trim_tail_loop=False,
     platform_target="streaming",
+    tame_lyria_harshness=False,
 ):
-    """Run complete 5-Track SOS/RMS/LUFS or Pure Vocal Husseiniya DSP montage (V62.0 multi-platform LUFS)."""
+    """Run complete 5-Track SOS/RMS/LUFS or Pure Vocal Husseiniya DSP montage (V63.0 multi-platform + Lyria 2-4kHz tamer)."""
     if mode not in SUPPORTED_DSP_MODES:
         raise ValueError(f"Unsupported DSP mode: {mode}")
     if platform_target not in PLATFORM_LUFS_TARGETS_V62:
@@ -8157,6 +8158,8 @@ def process_audio_file(
 
     if vocal_stacking:
         stereo_glued = apply_mid_side_vocal_stacking_enhancer(stereo_glued, sample_rate)
+    if tame_lyria_harshness:
+        stereo_glued = apply_lyria_harshness_tamer_2_4khz(stereo_glued, sample_rate)
     stereo_glued = apply_mid_side_reverb_clarity(stereo_glued, sample_rate, side_cut_hz=320.0)
 
     if effective_fade > 0.0 and stereo_glued.shape[0] > 8:
@@ -8190,6 +8193,7 @@ def process_audio_file(
         "replace_ai_percussion": bool(replace_ai_percussion and not pure_mode),
         "vintage_intro_sec": round(float(vintage_intro_sec or 0.0), 2),
         "vocal_stacking_applied": bool(vocal_stacking),
+        "lyria_harshness_tamed_2_4khz": bool(tame_lyria_harshness),
         "auto_trimmed_tail_loop_sec": auto_trimmed_at,
         "integrated_lufs": out_stats["integrated_lufs"],
         "true_peak_dbtp": out_stats["true_peak_dbtp"],
@@ -8235,7 +8239,7 @@ def audit_fusha_shadda_wasl_and_makharij_v62(lyrics_text: str) -> dict:
     rhyme_carryover_traps = []
 
     diac_chars = set("\u064B\u064C\u064D\u064E\u064F\u0650\u0651\u0652\u0670")
-    skip_medial = set("اويىآأإؤئة")
+    skip_medial = set("اويىآأإؤئة\u0640")
     lyric_entries = []
     section_idx = 0
 
@@ -8297,7 +8301,7 @@ def audit_fusha_shadda_wasl_and_makharij_v62(lyrics_text: str) -> dict:
             for idx in range(start_i + 1, max(start_i + 1, len(pairs) - 1)):
                 base_ch, has_d = pairs[idx]
                 next_ch = pairs[idx + 1][0] if idx + 1 < len(pairs) else ""
-                if not has_d and base_ch not in skip_medial and next_ch != "ا":
+                if not has_d and base_ch not in skip_medial and next_ch not in ("ا", "ى"):
                     missing_letters.append(base_ch)
             if missing_letters:
                 half_vocalized_words.append({
@@ -8406,6 +8410,502 @@ def compute_strict_production_score_v62(
     }
 
 
+FIVE_BAND_SPECTRAL_OCCUPANCY_V63 = {
+    "TRACK_A_PURE_ACAPELLA_LATMIYA": {
+        "track_alias": "track_a",
+        "title_ar": "المسار الأول: اللطمية الحسينية الخالصة (أكابيلا وموكب بلا معازف)",
+        "commercial_prior_rule": "Never leave any band empty when banning instruments or Lyria 3.5 injects oud/pop drums via Negative-Prompt Inversion (NC39).",
+        "exclude_instruments": ["oud", "violin", "guitar", "piano", "synthesizer", "pop drums", "rock snare"],
+        "allowed_percussion": ["synchronized bare-chest Latm thumping", "heavy Bahraini Dammam drum", "Iraqi Zanjeel"],
+        "allowed_elements": [
+            "human vocal bass drone",
+            "male vocal humming pads (Zannah)",
+            "layered human Ahaat & quarter-tone choir harmonies",
+            "commanding Solo Radood Arabic diction",
+            "large Hussaini hall natural reverb",
+        ],
+        "bands": {
+            "band_1_40_120hz": "Human vocal bass drone + synchronized bare-chest Latm + heavy Bahraini Dammam",
+            "band_2_120_400hz": "Male vocal humming pads (Zannah) + deep Baritone Radood chest resonance",
+            "band_3_400_2000hz": "Layered human Ahaat + unison Al-Raddada congregation choir + quarter-tone vocal harmonies",
+            "band_4_2000_5000hz": "Centered Solo Radood articulate Arabic diction & crisp Makharij presence",
+            "band_5_5000_16000hz": "Large Hussaini hall natural reverb + human breath air + subtle Iraqi Zanjeel shimmer",
+        },
+    },
+    "TRACK_B_DIGNIFIED_ORCHESTRAL_NASHEED": {
+        "track_alias": "track_b",
+        "title_ar": "المسار الثاني: النشيد الشيعي الأوركسترالي الوقور والأوبريت (6 عائلات غير لهوية)",
+        "commercial_prior_rule": "Lock articulation to Legato, Clean Tone, and Stately Marching to prevent pop/tarab drift (NC39).",
+        "exclude_styles": ["belly dance rhythm", "pop groove", "fast tarab ornamentation", "club beats", "trap beat"],
+        "articulation_lock": "Slow legato orchestral strings, expressive solo oboe & reed ney, clean acoustic guitar fingerpicking, stately marching timpani & Bendir",
+        "allowed_percussion": ["stately orchestral timpani swells", "traditional Bendir frame drum", "solemn Tasa cymbals"],
+        "allowed_elements": [
+            "sustained legato orchestral strings & deep cellos",
+            "expressive solo oboe, reed ney & warm bassoon",
+            "dignified Baritone Munshid lead vocal & balanced male choir",
+            "spacious concert hall natural reverb",
+        ],
+        "bands": {
+            "band_1_40_120hz": "Stately orchestral timpani swells + traditional Bendir + warm bassoon & deep cellos",
+            "band_2_120_400hz": "Sustained legato low strings + dignified classical oud / clean acoustic guitar warmth",
+            "band_3_400_2000hz": "Expressive solo oboe + mournful reed ney + legato clarinet + balanced male choir",
+            "band_4_2000_5000hz": "Centered dignified Baritone Munshid Arabic diction + noble brass swells",
+            "band_5_5000_16000hz": "Solemn Tasa shimmer + spacious concert hall stereo reverb",
+        },
+    },
+    "TRACK_C_TAWASHIH_IBTIHAL_MAWLID": {
+        "track_alias": "track_c",
+        "title_ar": "المسار الثالث: التواشيح والابتهالات التراثية والبطانة والمواليد الدفّية",
+        "commercial_prior_rule": "Fill upper & lower spectrum with mosque dome reverb, vocal Bitanah humming pads, and traditional Daf only in celebratory finale (NC39).",
+        "exclude_instruments": ["string instruments", "wind instruments", "piano", "electronic synths", "pop drums", "chest latm"],
+        "allowed_percussion": ["traditional Daf frame drum in final Mawlid/Jalwat stage only"],
+        "allowed_elements": [
+            "Pure Acapella classical Munshid with controlled Arabic melisma",
+            "harmonic male Bitanah humming pads & choral response",
+            "spacious mosque dome natural echo",
+        ],
+        "bands": {
+            "band_1_40_120hz": "Deep Bitanah bass vocal drone + warm traditional Daf skin resonance (Mawlid finale only)",
+            "band_2_120_400hz": "Warm classical Munshid Qarar chest register + male Bitanah humming bed",
+            "band_3_400_2000hz": "Classical Muwashah melody + antiphonal male Bitanah choir responses",
+            "band_4_2000_5000hz": "Crystal-clear Classical Arabic Tajweed articulation & controlled melisma",
+            "band_5_5000_16000hz": "Spacious mosque dome natural echo & delicate vocal breath air",
+        },
+    },
+}
+
+MAQAM_LYRIA35_ADHERENCE_AND_AUDIO_REF_MATRIX_V63 = {
+    "saba": {
+        "quarter_tone": True,
+        "lyria35_text_adherence": "low_to_medium",
+        "audio_reference_policy": "mandatory_30s_make_tracks_for_my_vocal",
+        "atwar": ["النعي الحسيني", "المصرع", "الدشتي الباكي"],
+        "modulation_targets": ["hijaz", "ajam_triad_flash", "bayati"],
+        "guidance": "Saba flattens toward 12-TET on text-only; record a 30s vocal guide via Make tracks for my vocal to inject authentic quarter-tone pitch contour directly into Lyria 3.5 latents.",
+    },
+    "sikah": {
+        "quarter_tone": True,
+        "lyria35_text_adherence": "low_to_medium",
+        "audio_reference_policy": "mandatory_30s_make_tracks_for_my_vocal",
+        "atwar": ["الحدي", "الركباني", "الجلوات", "الأبوذية المنبرية"],
+        "modulation_targets": ["rast", "saba", "bayati"],
+        "guidance": "Sikah neutral third flattens on text-only; upload a 30s Hadi/Jalwat vocal reference or modulate into Sikah from Rast/Bayati.",
+    },
+    "bayati": {
+        "quarter_tone": True,
+        "lyria35_text_adherence": "medium",
+        "audio_reference_policy": "recommended_short_mustahal",
+        "atwar": ["الفائزي", "المثكل", "الطور البحراني والقطيفي", "الموكبي"],
+        "modulation_targets": ["saba", "nahawand", "hijaz"],
+        "guidance": "Moderate adherence via explicit 'Maqam Bayati'; upload short Mustahal reference for locked regional Qatifi/Bahrani/Iraqi quarter-tone Tor.",
+    },
+    "bayati_shuri": {
+        "quarter_tone": True,
+        "lyria35_text_adherence": "medium",
+        "audio_reference_policy": "recommended_short_mustahal",
+        "atwar": ["الشور العراقي", "الثلاثي البحراني", "النزلة الدرامية"],
+        "modulation_targets": ["hijaz", "kurd", "bayati"],
+        "guidance": "Bayati Shuri's upper Hijaz tetrachord anchors Lyria better than plain Bayati, though a short Mustahal vocal guide locks the neutral second.",
+    },
+    "husseini": {
+        "quarter_tone": True,
+        "lyria35_text_adherence": "medium",
+        "audio_reference_policy": "recommended_short_mustahal",
+        "atwar": ["الفائزي القطيفي", "الابتهال الخاشع", "الدشتي"],
+        "modulation_targets": ["saba", "suznak", "bayati"],
+        "guidance": "Emphasize fifth-degree tension ('Maqam Husseini'); proven live in Exp 28 (9.9/10) and Exp 29 (9.4/10).",
+    },
+    "rast": {
+        "quarter_tone": True,
+        "lyria35_text_adherence": "medium",
+        "audio_reference_policy": "recommended_short_mustahal",
+        "atwar": ["التواشيح التراثية", "الحدي", "الجلوات والمواليد"],
+        "modulation_targets": ["suznak", "sikah", "ajam"],
+        "guidance": "Noble dignified cadence ('Maqam Rast, noble dignified cadence'); pairs smoothly with Suznak or Ajam.",
+    },
+    "suznak": {
+        "quarter_tone": True,
+        "lyria35_text_adherence": "medium",
+        "audio_reference_policy": "recommended_short_mustahal",
+        "atwar": ["الموشح الديني التراثي", "الجلوات الفرحة"],
+        "modulation_targets": ["rast", "hijaz", "husseini"],
+        "guidance": "Rast base + Hijaz on fifth degree; empirically proven in Exp 28 (9.9/10) with Male Bitanah Choir.",
+    },
+    "hijaz": {
+        "quarter_tone": False,
+        "lyria35_text_adherence": "high",
+        "audio_reference_policy": "optional",
+        "atwar": ["القزويني", "مطالع الملاحم", "النزلة السريعة"],
+        "modulation_targets": ["nahawand", "rast", "kurd"],
+        "guidance": "High text adherence via JSON ('Maqam Hijaz, solemn eastern resonance'); 12-TET orchestral-safe.",
+    },
+    "hijaz_kar": {
+        "quarter_tone": False,
+        "lyria35_text_adherence": "high",
+        "audio_reference_policy": "optional",
+        "atwar": ["الموكب الملحمي الفصيح", "الزمينة"],
+        "modulation_targets": ["hijaz", "kurd", "nahawand"],
+        "guidance": "High text adherence via JSON (proven in Exp 23); ideal for epic Fusha Mawkib and heroic operettas.",
+    },
+    "nahawand": {
+        "quarter_tone": False,
+        "lyria35_text_adherence": "high",
+        "audio_reference_policy": "optional",
+        "atwar": ["النشيد الأوركسترالي المهدوي", "اللطم الوجداني", "المهد البحراني"],
+        "modulation_targets": ["kurd", "ajam", "hijaz"],
+        "guidance": "Very high text adherence via JSON ('Maqam Nahawand, melancholic minor'); proven in Exp 22 & Exp 32; 12-TET orchestral-safe.",
+    },
+    "kurd": {
+        "quarter_tone": False,
+        "lyria35_text_adherence": "high",
+        "audio_reference_policy": "optional",
+        "atwar": ["اللطمية الوجدانية الحديثة", "الشور", "النشيد الوجداني"],
+        "modulation_targets": ["nahawand", "ajam", "hijaz"],
+        "guidance": "Very high text adherence via JSON; seamless partner to Nahawand and Ajam in Axis-5 orchestral anthems.",
+    },
+    "lami": {
+        "quarter_tone": False,
+        "lyria35_text_adherence": "high",
+        "audio_reference_policy": "optional",
+        "atwar": ["المثكل الجنوبي", "الرثاء الفراتي", "السيد سلام"],
+        "modulation_targets": ["kurd", "saba_zamzam", "nahawand"],
+        "guidance": "High text adherence via JSON (proven in Exp 24-A/B); zero quarter-tones in primary scale.",
+    },
+    "nawa_athar": {
+        "quarter_tone": False,
+        "lyria35_text_adherence": "high",
+        "audio_reference_policy": "optional",
+        "atwar": ["قافلة عاشوراء الأحسائية", "الملحمة الدرامية"],
+        "modulation_targets": ["hijaz", "nahawand", "kurd"],
+        "guidance": "High text adherence via JSON; strong dramatic minor-augmented intervals compatible with 12-TET strings.",
+    },
+    "saba_zamzam": {
+        "quarter_tone": False,
+        "lyria35_text_adherence": "high",
+        "audio_reference_policy": "optional",
+        "atwar": ["النزلة الكربلائية الحزينة", "بديل الصبا الخالي من الربع تون"],
+        "modulation_targets": ["lami", "kurd", "hijaz"],
+        "guidance": "High text adherence via JSON (proven in Exp 24-A/B, 9.7/10); 12-TET-safe lament alternative to quarter-tone Saba.",
+    },
+    "ajam": {
+        "quarter_tone": False,
+        "lyria35_text_adherence": "high",
+        "audio_reference_policy": "optional",
+        "atwar": ["الأناشيد المهدوية الحماسية", "المواليد", "ومضة العجم الثلاثي"],
+        "modulation_targets": ["nahawand", "kurd", "rast"],
+        "guidance": "Very high text adherence via JSON ('Maqam Ajam, solemn marching anthemic choir, strictly non-dance'); proven in Exp 27 & Exp 32.",
+    },
+}
+
+
+def apply_lyria_harshness_tamer_2_4khz(
+    stereo_signal: np.ndarray,
+    sample_rate: int,
+    max_cut_db: float = 2.8,
+) -> np.ndarray:
+    """V63.0 (NC41): Dynamic 2.4-3.8 kHz neural vocoder harshness tamer for Lyria 3.5 exports.
+
+    Isolates the upper-midrange digital harshness / phase-burble zone (2.4-3.8 kHz) reported on
+    dense Lyria 3.5 choral/vocal renders and applies smooth, mono-safe envelope-following dynamic
+    attenuation (up to -max_cut_db) only when harshness spikes exceed core vocal warmth (400-1800 Hz).
+    """
+    arr = np.asarray(stereo_signal, dtype=np.float64)
+    if arr.size < 32 or sample_rate < 6000:
+        return arr.copy()
+    was_mono = arr.ndim == 1
+    st = np.column_stack((arr, arr)) if was_mono else arr.copy()
+
+    nyq = 0.5 * float(sample_rate)
+    hi_hz = min(3800.0, 0.90 * nyq)
+    lo_hz = min(2400.0, hi_hz * 0.65)
+    core_hi = min(1800.0, lo_hz * 0.85)
+    core_lo = min(400.0, core_hi * 0.50)
+    if lo_hz <= 20.0 or hi_hz <= lo_hz + 50.0 or core_hi <= core_lo + 50.0:
+        return arr.copy()
+
+    # Design linked mono detector (100% phase/mono-safe gain reduction across L & R)
+    mid = 0.5 * (st[:, 0] + st[:, 1])
+    sos_harsh = butter(2, [lo_hz / nyq, hi_hz / nyq], btype="bandpass", output="sos")
+    sos_core = butter(2, [core_lo / nyq, core_hi / nyq], btype="bandpass", output="sos")
+    harsh_mid = sosfilt(sos_harsh, mid)
+    core_mid = sosfilt(sos_core, mid)
+
+    win = max(8, int(0.030 * sample_rate))
+    kernel = np.ones(win, dtype=np.float64) / float(win)
+    harsh_env = np.sqrt(np.maximum(fftconvolve(harsh_mid * harsh_mid, kernel, mode="same"), 1e-12))
+    core_env = np.sqrt(np.maximum(fftconvolve(core_mid * core_mid, kernel, mode="same"), 1e-12))
+
+    # Ratio above 0.42 triggers proportional gentle dynamic cut up to max_cut_db
+    ratio = harsh_env / (core_env + 1e-6)
+    excess = np.clip((ratio - 0.42) / 0.58, 0.0, 1.0)
+    cut_db = np.clip(excess * float(max_cut_db), 0.0, abs(float(max_cut_db)))
+    band_gain = 10.0 ** (-cut_db / 20.0)
+    sub_factor = 1.0 - band_gain  # amount of 2.4-3.8 kHz band to dynamically subtract
+
+    out = st.copy()
+    for ch in range(st.shape[1]):
+        ch_harsh = sosfilt(sos_harsh, st[:, ch])
+        out[:, ch] = st[:, ch] - sub_factor * ch_harsh
+
+    return out[:, 0] if was_mono else out
+
+
+def _resolve_v63_track_mode(track_mode: str) -> str:
+    """Resolve short aliases ('track_a', 'track_b', 'track_c') to canonical V63 track mode keys."""
+    key = (track_mode or "TRACK_A_PURE_ACAPELLA_LATMIYA").strip().upper()
+    alias_map = {
+        "TRACK_A": "TRACK_A_PURE_ACAPELLA_LATMIYA",
+        "A": "TRACK_A_PURE_ACAPELLA_LATMIYA",
+        "LATMIYA": "TRACK_A_PURE_ACAPELLA_LATMIYA",
+        "TRACK_B": "TRACK_B_DIGNIFIED_ORCHESTRAL_NASHEED",
+        "B": "TRACK_B_DIGNIFIED_ORCHESTRAL_NASHEED",
+        "ORCHESTRAL": "TRACK_B_DIGNIFIED_ORCHESTRAL_NASHEED",
+        "OPERETTA": "TRACK_B_DIGNIFIED_ORCHESTRAL_NASHEED",
+        "TRACK_C": "TRACK_C_TAWASHIH_IBTIHAL_MAWLID",
+        "C": "TRACK_C_TAWASHIH_IBTIHAL_MAWLID",
+        "TAWASHIH": "TRACK_C_TAWASHIH_IBTIHAL_MAWLID",
+        "MUWASHAH": "TRACK_C_TAWASHIH_IBTIHAL_MAWLID",
+    }
+    resolved = alias_map.get(key, key)
+    if resolved not in FIVE_BAND_SPECTRAL_OCCUPANCY_V63:
+        raise ValueError(f"Unsupported V63 track_mode: {track_mode}")
+    return resolved
+
+
+def build_v63_session_bootstrap_json(
+    track_mode: str = "TRACK_A_PURE_ACAPELLA_LATMIYA",
+    dialect: str = "bahrani",
+    target_duration: str = "05:30",
+    vocal_identity: str = None,
+) -> dict:
+    """V63.0 (NC38): Build Stage-0 Gemini Producer Session Bootstrap JSON (MASTER_STATE Lock)."""
+    mode_key = _resolve_v63_track_mode(track_mode)
+    spec = FIVE_BAND_SPECTRAL_OCCUPANCY_V63[mode_key]
+    dialect_map = {
+        "bahrani": "Strict authentic Bahraini Khaleeji phonetic delivery (No-MSA drift)",
+        "qatifi": "Strict authentic Eastern Arabian Qatifi-Hasawi phonetic delivery (NC35, No-MSA drift)",
+        "iraqi": "Strict authentic Iraqi Karbalaei/Southern phonetic delivery (No-MSA drift)",
+        "fusha": "Crystal-clear Classical Arabic Fusha with Tajweed-grade Shadda & Makharij (NC37)",
+        "iraqi_bahrani": "Dual-stage dialect lock: Fusha narrative intro + colloquial emotional chorus isolated in separate JSON stages",
+    }
+    default_vocal = (
+        "Consistent commanding male Radood Baritone timbre locked across all 4 Extend passes"
+        if mode_key == "TRACK_A_PURE_ACAPELLA_LATMIYA"
+        else "Consistent dignified resonant male Munshid Baritone timbre locked across all Extend passes"
+    )
+    return {
+        "session_bootstrap": {
+            "action": "INITIALIZE_AND_LOCK_STATE_ONLY_DO_NOT_GENERATE",
+            "confirmation_required": "Confirm locked MASTER_STATE rules in 3 concise bullet points and wait for Stage 1 JSON.",
+            "architecture_layer": "Layer 1 (Gemini Producer JSON Orchestration) -> Layer 2 (Lyria 3.5 Temporal Latent Diffusion)",
+            "track_mode": mode_key,
+            "master_state": {
+                "target_total_duration": target_duration,
+                "single_pass_ceiling": "03:00 (Lyria 3.5 Temporal Latent Window)",
+                "vocal_identity": vocal_identity or default_vocal,
+                "dialect_lock": dialect_map.get(dialect, dialect_map["bahrani"]),
+                "strict_constraints": {
+                    "exclude_instruments": spec.get("exclude_instruments", []),
+                    "exclude_styles": spec.get("exclude_styles", ["pop groove", "dance beat", "club rhythm"]),
+                    "allowed_percussion": spec["allowed_percussion"],
+                    "allowed_elements": spec["allowed_elements"],
+                    "anti_negative_prompt_inversion": "Always occupy all 5 spectral bands (40 Hz - 16 kHz) with positive acoustic replacements (NC39).",
+                },
+                "five_band_positive_occupancy": spec["bands"],
+                "stage_roadmap": [
+                    "Stage 1 (00:00-01:15): GENERATE_INITIAL — Intro/Na'i + Mustahal",
+                    "Stage 2 (01:15-02:45): EXTEND_SEAMLESSLY (inherit_master_state: true) — Verses 1 + Raddada",
+                    "Stage 3 (02:45-03:45): EXTEND_SEAMLESSLY (inherit_master_state: true) — Kaser/Melodic Break + Ahaat",
+                    "Stage 4 (03:45-05:15): EXTEND_AND_CONCLUDE (inherit_master_state: true) — Climax Nazla / Na'i Outro",
+                ],
+            },
+            "customize_producer_tips": {
+                "instructions": "Save master_state permanently under Flow Music > Customize Producer > Instructions for zero-drift sessions.",
+                "flows": "Save this Stage-0 JSON as a reusable /flow shortcut to bootstrap new Latmiya/Nasheed projects in 1 command.",
+                "memories": "Keep Memories enabled for stylistic consistency or start a fresh session when switching dialects/genres.",
+            },
+        }
+    }
+
+
+def validate_spectral_occupancy_v63(json_payload: dict) -> dict:
+    """V63.0 (NC39): Enforce 5-band (40 Hz - 16 kHz) positive spectral occupancy & block Negative-Prompt Inversion."""
+    if not isinstance(json_payload, dict):
+        raise ValueError("json_payload must be a dict")
+    constraints = {}
+    if "session_bootstrap" in json_payload:
+        ms = json_payload["session_bootstrap"].get("master_state", {})
+        constraints = ms.get("strict_constraints", {})
+        five_bands = ms.get("five_band_positive_occupancy", {})
+    elif "project_settings" in json_payload:
+        constraints = json_payload["project_settings"].get("strict_constraints", {})
+        five_bands = json_payload["project_settings"].get("five_band_positive_occupancy", {})
+    else:
+        constraints = json_payload.get("strict_constraints", json_payload)
+        five_bands = json_payload.get("five_band_positive_occupancy", {})
+
+    has_negative = bool(constraints.get("exclude_instruments") or constraints.get("exclude_styles"))
+    positive_pool = (
+        list(constraints.get("allowed_percussion", []))
+        + list(constraints.get("allowed_elements", []))
+        + ([constraints["articulation_lock"]] if constraints.get("articulation_lock") else [])
+    )
+    has_positive = len(positive_pool) >= 2
+    inversion_risk = bool(has_negative and not has_positive)
+
+    required_bands = (
+        "band_1_40_120hz",
+        "band_2_120_400hz",
+        "band_3_400_2000hz",
+        "band_4_2000_5000hz",
+        "band_5_5000_16000hz",
+    )
+    missing_bands = [b for b in required_bands if not str(five_bands.get(b, "")).strip()]
+
+    return {
+        "nc39_passed": (not inversion_risk) and len(missing_bands) == 0,
+        "has_negative_constraints": has_negative,
+        "has_positive_replacements": has_positive,
+        "negative_prompt_inversion_risk": inversion_risk,
+        "missing_spectral_bands": missing_bands,
+        "positive_elements_count": len(positive_pool),
+    }
+
+
+def plan_v63_five_minute_word_budget(
+    poem_text: str,
+    track_mode: str = "TRACK_A_PURE_ACAPELLA_LATMIYA",
+    dialect: str = "bahrani",
+    target_duration_sec: int = 315,
+    maqam_arc=None,
+) -> dict:
+    """V63.0 (NC38-NC40): Plan 5-minute staged word budget (280-350 net words, 12-16s/bayt) & full 5-step JSON."""
+    mode_key = _resolve_v63_track_mode(track_mode)
+    spec = FIVE_BAND_SPECTRAL_OCCUPANCY_V63[mode_key]
+    clean_lines = [
+        ln.strip()
+        for ln in poem_text.replace("\\n", "\n").splitlines()
+        if ln.strip() and not (ln.strip().startswith("[") and ln.strip().endswith("]"))
+    ]
+    all_words = []
+    for ln in clean_lines:
+        all_words.extend(re.findall(r"[\u0600-\u06FF]+", ln))
+    word_count = len(all_words)
+    bayt_count = max(1, math.ceil(len(clean_lines) / 2.0))
+
+    target_sec = max(120, int(target_duration_sec))
+    breathing_sec = 90 if target_sec >= 270 else int(round(target_sec * 0.28))
+    net_vocal_sec = max(60, target_sec - breathing_sec)
+    optimal_min_words = int(round((net_vocal_sec / 60.0) * 80.0))
+    optimal_max_words = int(round((net_vocal_sec / 60.0) * 100.0))
+    sec_per_bayt = round(net_vocal_sec / float(bayt_count), 2)
+    requires_extend = target_sec > 180
+
+    if not maqam_arc:
+        if mode_key == "TRACK_A_PURE_ACAPELLA_LATMIYA":
+            maqam_arc = ["saba", "bayati", "kurd", "hijaz"]
+        elif mode_key == "TRACK_B_DIGNIFIED_ORCHESTRAL_NASHEED":
+            maqam_arc = ["nahawand", "kurd", "ajam", "nahawand"]
+        else:
+            maqam_arc = ["rast", "sikah", "nahawand", "ajam"]
+
+    audio_ref_advisories = []
+    for mq in dict.fromkeys(maqam_arc):
+        info = MAQAM_LYRIA35_ADHERENCE_AND_AUDIO_REF_MATRIX_V63.get(mq)
+        if info and info["audio_reference_policy"] != "optional":
+            audio_ref_advisories.append({
+                "maqam": mq,
+                "adherence": info["lyria35_text_adherence"],
+                "policy": info["audio_reference_policy"],
+                "guidance": info["guidance"],
+            })
+
+    # Partition poem lines evenly across 4 stages (Stage 1..4)
+    n_lines = len(clean_lines)
+    chunks = [[], [], [], []]
+    for i, ln in enumerate(clean_lines):
+        bucket = min(3, int(i * 4 / max(1, n_lines)))
+        chunks[bucket].append(ln)
+
+    stage_meta = [
+        (1, "GENERATE_INITIAL", "[Stage 1: Intro / Na'i & Mustahal]", "00:00 - 01:15", maqam_arc[0], 0 if mode_key != "TRACK_B_DIGNIFIED_ORCHESTRAL_NASHEED" else 76, "Establish locked timbre, dialect, and 5-band positive acoustics"),
+        (2, "EXTEND_SEAMLESSLY", "[Stage 2: Verses 1 & Raddada]", "01:15 - 02:45", maqam_arc[min(1, len(maqam_arc) - 1)], 75 if mode_key == "TRACK_A_PURE_ACAPELLA_LATMIYA" else 82, f"Modulate smoothly from {maqam_arc[0]} to {maqam_arc[min(1, len(maqam_arc) - 1)]}"),
+        (3, "EXTEND_SEAMLESSLY", "[Stage 3: Kaser / Melodic Break & Ahaat]", "02:45 - 03:45", maqam_arc[min(2, len(maqam_arc) - 1)], 70 if mode_key == "TRACK_A_PURE_ACAPELLA_LATMIYA" else 78, "Drop percussion briefly for melodic Kaser / vocal Ahaat breathing space"),
+        (4, "EXTEND_AND_CONCLUDE", "[Stage 4: Climax Nazla / Outro]", "03:45 - 05:15", maqam_arc[min(3, len(maqam_arc) - 1)], 115 if mode_key == "TRACK_A_PURE_ACAPELLA_LATMIYA" else 86, "Build emotional climax then resolve naturally without abrupt cutoff"),
+    ]
+
+    bootstrap = build_v63_session_bootstrap_json(
+        track_mode=mode_key,
+        dialect=dialect,
+        target_duration=f"{target_sec // 60:02d}:{target_sec % 60:02d}",
+    )
+    stages = []
+    for sid, action, tag, trange, mq, bpm_val, trule in stage_meta:
+        stage_obj = {
+            "stage_id": sid,
+            "action": action,
+            "inherit_master_state": sid > 1,
+            "section_tag": tag,
+            "time_range": trange,
+            "transition_rule": trule,
+            "music_theory": {
+                "maqam": mq,
+                "tempo_bpm": bpm_val,
+                "nc36_orchestration": validate_maqam_orchestration_compatibility(
+                    mq, uses_western_12tet_chords=(mode_key == "TRACK_B_DIGNIFIED_ORCHESTRAL_NASHEED")
+                ),
+            },
+            "lyrics": "\n".join(chunks[sid - 1]),
+        }
+        stages.append(stage_obj)
+
+    nc39_check = validate_spectral_occupancy_v63(bootstrap)
+    nc37_check = audit_fusha_shadda_wasl_and_makharij_v62(poem_text)
+
+    if word_count < optimal_min_words:
+        budget_status = "under_budget_expand_or_shorten_target"
+    elif word_count > optimal_max_words:
+        budget_status = "over_budget_phoneme_compression_risk"
+    else:
+        budget_status = "optimal_nc40_word_budget"
+
+    return {
+        "track_mode": mode_key,
+        "dialect": dialect,
+        "target_duration_sec": target_sec,
+        "lyria35_single_pass_ceiling_sec": 180,
+        "requires_staged_extend": requires_extend,
+        "word_budget": {
+            "actual_arabic_words": word_count,
+            "bayt_count": bayt_count,
+            "breathing_allowance_sec": breathing_sec,
+            "net_vocal_sec": net_vocal_sec,
+            "optimal_word_range": [optimal_min_words, optimal_max_words],
+            "estimated_sec_per_bayt": sec_per_bayt,
+            "ideal_sec_per_bayt_range": [12.0, 16.0],
+            "status": budget_status,
+        },
+        "audio_reference_advisories": audio_ref_advisories,
+        "nc39_spectral_occupancy": nc39_check,
+        "nc37_orthoepy_preflight": {
+            "passed": nc37_check["nc37_preflight_passed"],
+            "total_issues": nc37_check["total_issues"],
+        },
+        "stage_0_bootstrap": bootstrap,
+        "stages_1_to_4": stages,
+        "hybrid_post_production_7_stages": [
+            "1. Flow Music Remix > Replace (8-18s surgical fix for any dialect/Shadda flaw)",
+            "2. Flow Music Stem Split + 48 kHz WAV Export (isolate Radood, Choir, Latm, Strings)",
+            "3. Melodyne Manual 24-EDO Correction (disable 12-TET snap on quarter-tone Maqams)",
+            "4. Dynamic EQ: HPF <80Hz, warm cut 200-400Hz, Lyria harshness tamer 2.4-3.8kHz (--tame-lyria-harshness)",
+            "5. Serial Compression (2:1-4:1) + De-Esser (5-8kHz on س/ص/ش/ز)",
+            "6. Mid-Side Reverb Clarity EQ + Sidechain Ducking 4:1-6:1 (2-4 dB)",
+            "7. Multi-Platform EBU R128 Master (-14/-16/-18/-23 LUFS, -1.0 dBTP) + Mono Check (SynthID preserved)",
+        ],
+        "five_band_positive_occupancy": spec["bands"],
+    }
+
+
 def parse_args(argv=None):
     """Parse CLI flags for V60.0 Multi-Maqam Diversity, NC27-C/NC32-NC34 Forensics & 20-Mode DSP."""
     parser = argparse.ArgumentParser(
@@ -8463,6 +8963,11 @@ def parse_args(argv=None):
         "--auto-trim-tail-loop",
         action="store_true",
         help="V60.0 (NC34): Automatically detect & trim trailing Remix > Extend restart loops",
+    )
+    parser.add_argument(
+        "--tame-lyria-harshness",
+        action="store_true",
+        help="V63.0 (NC41): Apply dynamic mono-safe 2.4-3.8 kHz neural vocoder harshness tamer for Lyria 3.5 exports",
     )
     parser.add_argument("--samples-dir", default=None, help="Optional directory of real WAV one-shots")
     parser.add_argument("--compile-lyrics", default=None, help="Shape & vocalize Arabic poem text")
@@ -8557,6 +9062,23 @@ def parse_args(argv=None):
         "--audit-orthoepy",
         default=None,
         help="V62.0 (NC37): Pre-flight Fusha Shadda, Wasl-Alif, comma-after-Sukun, inline-echo & rhyme-carryover audit",
+    )
+    parser.add_argument(
+        "--build-v63-bootstrap",
+        default=None,
+        choices=["track_a", "track_b", "track_c"],
+        help="V63.0 (NC38-NC39): Emit Stage-0 Gemini Producer MASTER_STATE Bootstrap JSON with 5-band positive spectral fill",
+    )
+    parser.add_argument(
+        "--plan-v63-workflow",
+        default=None,
+        help="V63.0 (NC38-NC40): Plan 5-minute staged word budget (280-350 net words) & full Stage 0..4 JSON workflow",
+    )
+    parser.add_argument(
+        "--check-maqam-ref",
+        default=None,
+        choices=list(MAQAM_FREQS.keys()),
+        help="V63.0: Check Lyria 3.5 text adherence tier & mandatory 30s Make-tracks-for-my-vocal Audio Reference policy for a Maqam",
     )
     parser.add_argument("--extract-profile", default=None, help="Reverse-engineer reference WAV/MP3 profile")
     parser.add_argument("--audit-audio", default=None, help="Audit WAV loudness, True Peak, gaps & tail cutoff/loops")
@@ -8703,6 +9225,47 @@ def main(argv=None):
         )
         return 0
 
+    if args.build_v63_bootstrap is not None:
+        print(
+            json.dumps(
+                build_v63_session_bootstrap_json(
+                    track_mode=args.build_v63_bootstrap,
+                    dialect=args.dialect,
+                ),
+                ensure_ascii=False,
+                indent=2,
+            )
+        )
+        return 0
+
+    if args.plan_v63_workflow is not None:
+        tm = "track_b" if args.genre in ("nasheed", "operetta") else ("track_c" if args.genre in ("tawashih", "ibtihalat", "muwashah", "jalwat") else "track_a")
+        print(
+            json.dumps(
+                plan_v63_five_minute_word_budget(
+                    poem_text=args.plan_v63_workflow,
+                    track_mode=tm,
+                    dialect=args.dialect,
+                ),
+                ensure_ascii=False,
+                indent=2,
+            )
+        )
+        return 0
+
+    if args.check_maqam_ref is not None:
+        print(
+            json.dumps(
+                {
+                    "maqam": args.check_maqam_ref,
+                    **MAQAM_LYRIA35_ADHERENCE_AND_AUDIO_REF_MATRIX_V63[args.check_maqam_ref],
+                },
+                ensure_ascii=False,
+                indent=2,
+            )
+        )
+        return 0
+
     if args.extract_profile is not None:
         print(json.dumps(extract_reference_audio_profile(args.extract_profile), ensure_ascii=False, indent=2))
         return 0
@@ -8736,6 +9299,7 @@ def main(argv=None):
             vocal_stacking=args.vocal_stacking,
             auto_trim_tail_loop=args.auto_trim_tail_loop,
             platform_target=args.platform_target,
+            tame_lyria_harshness=args.tame_lyria_harshness,
         )
         print(json.dumps(result, ensure_ascii=False, indent=2))
         return 0

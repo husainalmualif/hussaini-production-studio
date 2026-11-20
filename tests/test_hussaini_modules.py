@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # pylint: disable=wrong-import-position,too-many-lines,no-member,too-few-public-methods
-"""Comprehensive Unit & Integration Test Suite for Hussaini Production Studio (V62.0 OMNI-ARCHITECT)."""
+"""Comprehensive Unit & Integration Test Suite for Hussaini Production Studio (V63.0 OMNI-ARCHITECT)."""
 
 import os
 import re
@@ -56,8 +56,8 @@ import hussaini_dsp_montage as hds  # noqa: E402
 
 
 def test_single_source_version_and_v50_architecture():
-    """Verify V62.0 OMNI-ARCHITECT version lock, SKILL.md router budget, JSON constitution, and Module 76."""
-    assert hds.SKILL_VERSION == "V62.0 OMNI-ARCHITECT"
+    """Verify V63.0 OMNI-ARCHITECT version lock, SKILL.md router budget, JSON constitution, and Module 77."""
+    assert hds.SKILL_VERSION == "V63.0 OMNI-ARCHITECT"
     skill_md = os.path.join(ROOT_DIR, "SKILL.md")
     assert os.path.isfile(skill_md)
     assert os.path.getsize(skill_md) <= 10500
@@ -145,6 +145,12 @@ def test_single_source_version_and_v50_architecture():
         "modules",
         "module_76_v62_waqar_fiqh_orchestral_six_families_qarid_atwar_and_multi_platform_lufs.md",
     )
+    v63_module_doc = os.path.join(
+        ROOT_DIR,
+        "references",
+        "modules",
+        "module_77_v63_flow_music_two_layer_json_5band_spectrum_and_hybrid_stem_mastering.md",
+    )
     assert os.path.isfile(v50_module_doc)
     assert os.path.isfile(v51_module_doc)
     assert os.path.isfile(v52_module_doc)
@@ -157,13 +163,14 @@ def test_single_source_version_and_v50_architecture():
     assert os.path.isfile(v60_module_doc)
     assert os.path.isfile(v61_module_doc)
     assert os.path.isfile(v62_module_doc)
+    assert os.path.isfile(v63_module_doc)
 
     constitution = hds.load_v50_0_constitution()
     assert (
         constitution["protocol_metadata"]["protocol_name"]
         == "Hussaini_Production_Studio_OS_V50_0_OMNI_ARCHITECT"
     )
-    assert constitution["protocol_metadata"]["skill_version"] == "V62.0 OMNI-ARCHITECT"
+    assert constitution["protocol_metadata"]["skill_version"] == "V63.0 OMNI-ARCHITECT"
     assert len(constitution["5_master_sound_prompts_library_modules_36_44_46_48_52"]) == 25
     assert len(hds.MASTER_SOUND_PROMPTS_V50) == 25
     assert len(constitution["8_v50_empirical_175_corpus_and_9_schools_modules_54_65"]["unified_9_schools_architecture"]) == 9
@@ -1516,3 +1523,75 @@ def test_v62_nc37_fusha_shadda_wasl_orthoepy_linter_and_strict_score_ceiling():
     assert strict_pass["release_ready"] is True
 
     assert hds.main(["--audit-orthoepy", clean_exp32]) == 0
+
+
+def test_v63_two_layer_json_bootstrap_5band_spectrum_word_budget_and_harshness_tamer(tmp_path):
+    """Verify V63.0 Module 77: NC38 Stage-0 bootstrap, NC39 5-band spectrum, NC40 5-min budget & NC41 2.4-3.8kHz tamer."""
+    # 1. Verify all 15 Maqams have Lyria 3.5 adherence & 30s Audio-Ref policies
+    assert set(hds.MAQAM_LYRIA35_ADHERENCE_AND_AUDIO_REF_MATRIX_V63.keys()) == set(hds.MAQAM_FREQS.keys())
+    assert hds.MAQAM_LYRIA35_ADHERENCE_AND_AUDIO_REF_MATRIX_V63["saba"]["audio_reference_policy"] == "mandatory_30s_make_tracks_for_my_vocal"
+    assert hds.MAQAM_LYRIA35_ADHERENCE_AND_AUDIO_REF_MATRIX_V63["nahawand"]["lyria35_text_adherence"] == "high"
+
+    # 2. Verify NC38 Stage-0 Bootstrap & NC39 5-Band Anti-Negative-Prompt-Inversion Guard
+    boot_a = hds.build_v63_session_bootstrap_json("track_a", dialect="qatifi", target_duration="05:30")
+    assert boot_a["session_bootstrap"]["action"] == "INITIALIZE_AND_LOCK_STATE_ONLY_DO_NOT_GENERATE"
+    nc39_ok = hds.validate_spectral_occupancy_v63(boot_a)
+    assert nc39_ok["nc39_passed"] is True
+    assert nc39_ok["negative_prompt_inversion_risk"] is False
+    assert not nc39_ok["missing_spectral_bands"]
+
+    bad_neg_only = {"strict_constraints": {"exclude_instruments": ["oud", "piano", "pop drums"]}}
+    nc39_fail = hds.validate_spectral_occupancy_v63(bad_neg_only)
+    assert nc39_fail["nc39_passed"] is False
+    assert nc39_fail["negative_prompt_inversion_risk"] is True
+    assert len(nc39_fail["missing_spectral_bands"]) == 5
+
+    # 3. Verify NC40 5-Minute Staged Word Budget & 4-Stage Extend Planner (inherit_master_state=True on Stages 2-4)
+    sample_poem = "\n".join(
+        [
+            "يَا صَاحِبَ العَصْرِ يَا نُورَ الأَمَلْ بِكَ تَسْتَقِيمُ الحَيَاةُ وَالعَمَلْ",
+            "عَجِّلْ فَدَتْكَ نُفُوسُ المُخْلِصِينْ يَا وَعْدَ رَبِّي وَغَوْثَ العَالَمِينْ",
+        ]
+        * 17
+    )
+    plan = hds.plan_v63_five_minute_word_budget(sample_poem, track_mode="track_a", dialect="qatifi", target_duration_sec=315)
+    assert plan["requires_staged_extend"] is True
+    assert plan["word_budget"]["status"] == "optimal_nc40_word_budget"
+    assert len(plan["stages_1_to_4"]) == 4
+    assert plan["stages_1_to_4"][0]["inherit_master_state"] is False
+    assert all(st["inherit_master_state"] is True for st in plan["stages_1_to_4"][1:])
+    assert plan["nc39_spectral_occupancy"]["nc39_passed"] is True
+    assert any(adv["maqam"] == "saba" for adv in plan["audio_reference_advisories"])
+
+    # 4. Verify NC41 Dynamic 2.4-3.8 kHz Lyria Harshness Tamer reduces upper-mid spike while remaining mono-safe
+    sr = 48000
+    t_arr = np.linspace(0.0, 1.5, int(1.5 * sr), endpoint=False)
+    warm = 0.25 * np.sin(2.0 * np.pi * 800.0 * t_arr)
+    harsh = 0.25 * np.sin(2.0 * np.pi * 3100.0 * t_arr)
+    stereo_harsh = np.column_stack((warm + harsh, warm + harsh))
+    tamed = hds.apply_lyria_harshness_tamer_2_4khz(stereo_harsh, sr, max_cut_db=2.8)
+    assert tamed.shape == stereo_harsh.shape
+    fft_before = np.abs(np.fft.rfft(stereo_harsh[:, 0]))
+    fft_after = np.abs(np.fft.rfft(tamed[:, 0]))
+    freqs = np.fft.rfftfreq(len(t_arr), 1.0 / sr)
+    harsh_bin = int(np.argmin(np.abs(freqs - 3100.0)))
+    assert fft_after[harsh_bin] < fft_before[harsh_bin] * 0.85
+    assert hds.compute_mono_compatibility(tamed)["mono_safe"] is True
+
+    in_wav = tmp_path / "in_v63_harsh.wav"
+    out_wav = tmp_path / "out_v63_tamed.wav"
+    wavfile.write(str(in_wav), sr, (np.clip(stereo_harsh, -0.95, 0.95) * 32767).astype(np.int16))
+    res_tame = hds.process_audio_file(
+        str(in_wav),
+        str(out_wav),
+        mode="vocal_pure_master",
+        no_synth_rhythm=True,
+        tame_lyria_harshness=True,
+        platform_target="streaming",
+    )
+    assert res_tame["lyria_harshness_tamed_2_4khz"] is True
+    assert hds.audit_rendered_audio(str(out_wav), platform_target="streaming")["broadcast_compliant"] is True
+
+    assert hds.main(["--build-v63-bootstrap", "track_b", "--dialect", "fusha"]) == 0
+    assert hds.main(["--check-maqam-ref", "saba"]) == 0
+    assert hds.main(["--plan-v63-workflow", sample_poem[:200], "--genre", "operetta", "--dialect", "fusha"]) == 0
