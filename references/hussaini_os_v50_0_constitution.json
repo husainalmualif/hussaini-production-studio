@@ -2208,10 +2208,11 @@
     "supported_dialects": ["iraqi", "bahrani", "qatifi", "iraqi_bahrani", "fusha"],
     "supported_sacred_genres": ["latmiya", "nai", "nasheed", "jalwat", "ibtihalat", "tawashih", "muwashah"],
     "v61_live_experiments_lab": {
-      "experiments_executed": 2,
-      "total_cumulative_flow_experiments": 31,
-      "exp27_qatifi_bahrani_jalwat_mawlid": "Clip 40f3ef1e (2:34, Maqam Ajam->Rast->Suznak 98 BPM, 9.3/10, 0% chest latm, 0% weeping, 0% piano)",
-      "exp28_classical_muwashah_ibtihal_bitanah": "Clip 6f531049 (3:00, 0 BPM Husseini Rubato Ibtihal -> 74 BPM Suznak Muwashah + Male Bitanah, 9.9/10 ALL-TIME RECORD)"
+      "experiments_executed": 3,
+      "total_cumulative_flow_experiments": 32,
+      "exp27_qatifi_bahrani_jalwat_mawlid": "Clip 40f3ef1e (2:34, Maqam Ajam->Rast->Suznak 98 BPM, 9.3/10, 0% chest latm, 0% weeping, 0% piano, Mono Safe 0.924)",
+      "exp28_classical_muwashah_ibtihal_bitanah": "Clip 6f531049 (3:00, 0 BPM Husseini Rubato Ibtihal -> 74 BPM Suznak Muwashah + Male Bitanah, 9.9/10 ALL-TIME RECORD, Mono Safe 0.918)",
+      "exp29_qatifi_faezi_pure_axis1_lament": "Clip b7f0448a (3:01, Pure Axis 1 Qatifi-Hasawi Faezi Husseini->Saba 66 BPM, 9.4/10, 0% instruments, Mono Safe 0.912)"
     },
     "architecture_and_dsp_additions": [
       "5-Stage Dramatic Arc (code_artifact.html) + 4 Regional Schools incl. Qatifi/Hasawi Faezi",
@@ -2220,7 +2221,7 @@
       "compute_mono_compatibility (Mono Check L/R correlation & mono-sum retention in --audit-audio)"
     ],
     "permanent_negative_constraint_nc35": {
-      "NC35_qatifi_bahrani_orthoepy_locks": "In Qatifi-Bahrani clean Lyria 3.5 lyrics, place an explicit short vowel on ش before closed consonant clusters (چبدي->تشَبدي, چدي->تشِدِي, مچان->متشَان, چبير->تشِبير) to prevent 3-syllable splits (تَشَبْدي), write إهني without final Shadda, and write غَنَاتِي with explicit long Alif alongside لاويّه، هَداويش، عَفَر، أمبى، هالحَزّة، واجِد، إشحوالِش."
+      "NC35_qatifi_bahrani_orthoepy_locks": "In Qatifi-Bahrani clean Lyria 3.5 lyrics (verified Exp 27 & Exp 29), avoid Arabic prefix-ت verb homographs on چبدي/چدي (keep چَبْدي / چِذي instead of تشَبدي/تشِدِي which collide with تَشَدّي/تِشِدّي), place Sukun on هـ in إهْني (blocks أهنّي), write غَنَاتِي with explicit long Alif and بالرَّمْضى with open ى, alongside crisp لاويّه، هَداويش، عَفَر، أمبى، هالحَزّة، واجِد، إشحوالِش."
     }
   }
 }

@@ -202,7 +202,7 @@ def test_single_source_version_and_v50_architecture():
     v61_block = constitution["v61_0_module_75_upgrades"]
     assert v61_block["version"] == "V61.0 OMNI-ARCHITECT"
     assert v61_block["multi_maqam_melodic_fingerprint_count"] == 16
-    assert v61_block["v61_live_experiments_lab"]["total_cumulative_flow_experiments"] == 31
+    assert v61_block["v61_live_experiments_lab"]["total_cumulative_flow_experiments"] == 32
 
 
 def test_module_41_49_57_58_64_iraqi_prosthetic_clusters_and_v50_g2p_locks():
@@ -1328,7 +1328,7 @@ def test_v61_architecture_qatifi_jalwat_muwashah_reverb_clarity_and_mono_check(t
     assert "suznak" in hds.COMMON_JINS_GRAPH["rast"]
 
     # 2. Verify Qatifi dialect detection, shaping & NC35 clean Lyria 3.5 orthoepy locks + idempotency
-    qatifi_raw = "يا غناتي إهنيّ الفرح واجد .. خلف چبدي لاويه هداويش عفر شحوالش هالحزة چدي"
+    qatifi_raw = "يا غناتي إهنيّ الفرح واجد بالرمضا .. خلف چبدي لاويه هداويش عفر شحوالش هالحزة چدي"
     q_shaped = hds.detect_and_shape_dialect(qatifi_raw)
     assert q_shaped["detected_dialect"] == "qatifi"
     assert q_shaped["qatifi_score"] >= 5
@@ -1338,8 +1338,8 @@ def test_v61_architecture_qatifi_jalwat_muwashah_reverb_clarity_and_mono_check(t
     assert q_clean["detected_dialect"] == "qatifi"
     cl_q = q_clean["clean_lyria35_lyrics"]
     assert "غَنَاتِي" in cl_q
-    assert "إهني " in cl_q and "إهنيّ" not in cl_q
-    assert "تشَبدي" in cl_q and "تشِدِي" in cl_q
+    assert "إهْني " in cl_q and "إهنيّ" not in cl_q
+    assert "چَبْدي" in cl_q and "چِذي" in cl_q and "بالرَّمْضى" in cl_q
     assert "لاويّه" in cl_q and "هَداويش" in cl_q and "عَفَر" in cl_q and "إشحوالِش" in cl_q
     assert hds.format_clean_lyrics_for_lyria35(cl_q)["clean_lyria35_lyrics"] == cl_q
 

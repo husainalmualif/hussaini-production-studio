@@ -33,18 +33,23 @@
 | **Prosodic Intonation** | Calm, warm, intimate storytelling Faezi/Qatifi cadence | Crisp rhythmic Mawkib & Faujain dual-choir cadence | Deep heroic Qarar-to-Jawab Karbalaei vocal projection |
 | **Flow Music Declaration** | `authentic Eastern Arabian Qatifi-Bahrani Gulf dialect` | `authentic Bahrani colloquial dialect` | `authentic Iraqi colloquial dialect` |
 
-### `NC35` — Qatifi-Bahrani Clean `Lyria 3.5` Orthoepy Locks (Empirically Discovered in `Exp 27`)
-1. **Explicit Vowel on `ش` Before Closed Consonant Clusters (`چبدي -> تشَبدي`, `چدي -> تشِدِي`, `مچان -> متشَان`, `چبير -> تشِبير`):** In `Exp 27 c03`, writing bare `تشبدي` before closed `بْد` split into 3 syllables (`تَشَبْدي`). Putting an explicit short vowel on `ش` (`تشَبدي`) locks `/tʃab.diː/` cleanly!
-2. **No Final Shadda on `إهني` & Explicit Long Alif on `غَنَاتِي`:** In `Exp 27 c01`, `إهنيّ` shifted to `هَنِّيَّ` and `غَناتي` compressed to `غَنِّتي`. Always compile as **`إهني`** (no trailing Shadda) and **`غَنَاتِي`**, plus **`لاويّه`**, **`هَداويش`**, **`عَفَر`**, **`أمبى`**, **`هالحَزّة`**, **`واجِد`**, **`إشحوالِش`**.
+### `NC35` — Qatifi-Bahrani Clean `Lyria 3.5` Orthoepy Locks (Empirically Verified Across `Exp 27` & `Exp 29`)
+1. **Block Arabic `تَـ` Verb Homograph Collisions (`چبدي -> چَبْدي`, `چدي -> چِذي`, `مچان -> مَكان`):** In `Exp 27 c03` and `Exp 29 c00/c04`, converting `چبدي/چدي` to `تشَبدي/تشِدِي` collided with Arabic prefix-`ت` verbs (`تَشَدِّي` / `تِشِدِّي` = "you tighten"). Keep `تش` ONLY where it never mimics an Arabic `تَـ` verb (`تبتشي`, `الحَتْشِي`, `البَتْشِي`, `تشفوفك`, `تشنت`, `باتشر`, `تشِبير`), and preserve `چَبْدي` / `چِذي` on homograph traps!
+2. **Sukun on `هـ` in `إهْني` + Explicit Long Alif in `غَنَاتِي` + Open `ى` in `بالرَّمْضى`:**
+   - `غَنَاتِي` cured `Exp 27`'s `غَنِّتِي` 100% in `Exp 29 c00/c03/c06`!
+   - `إهني` without Sukun collided with Arabic `أهنّي` ("congratulate") in `Exp 29 c00/c04`; writing **`إهْني`** locks `/ɪh.niː/`!
+   - `بالرمضا` drifted toward `رمضان` in `Exp 29 c05`; writing **`بالرَّمْضى`** locks `/ram.dˤaː/`!
+   - Verified 100% crisp in `Exp 29`: **`لاويّه، هَداويش، عَفَر، إشحوالِش، گلبش، واجِد، تبتشي، گمر الصفا`**!
 
 ---
 
-## 3. Complete 4-Family Sacred Vocal Taxonomy & 2 New Live Flow Music Proofs (`Exp 27 & Exp 28` — 31 Cumulative Live Experiments)
+## 3. Complete 4-Family Sacred Vocal Taxonomy & 3 New Live Flow Music Proofs (`Exp 27, 28, 29` — 32 Cumulative Live Experiments)
 
 | Exp | Genre & Sacred Family | Maqam Arc & BPM | Clip UUID & Duration | Blind `20s` Audit Score | Empirical Verdict & Honest Notes |
 |---|---|---|---|---|---|
-| **Exp 27** | **Joyful Shia Mawlid Jalwat & Nasheed** (Qatifi-Bahrani dialect — «جلوة المولد الشريف») | **Ajam -> Rast -> Suznak** (`98 BPM`) | `40f3ef1e-bdb9-4d38-9103-e2358e848113` (`2:34`) | **`9.3 / 10`** | 100% joyous Khaleeji/Qatifi Mawlid Jalwat with Daf + clapping + choral `الله`, **0% chest latm, 0% weeping, 0% piano**, clean finale stop. Exposed `إهنيّ`/`تشبدي` -> codified permanently as **`NC35`**. |
-| **Exp 28** | **Classical Heritage Ibtihal + Religious Muwashah with Male Bitanah Choir** («ابتهال وموشح - يا نور طه») | **`0 BPM` Husseini Rubato -> `74 BPM` Suznak** (`المطلع/الدور/الخانة/التسليم`) | `6f531049-2ff0-4db2-9bbc-80a83eacda19` (`3:00`) | **`9.9 / 10`** *(ALL-TIME RECORD)* | **Spotless 0 BPM Rubato Maqam Husseini Ibtihal (`c00–c01`)** transitioning seamlessly into **74 BPM Maqam Suznak Muwashah with traditional male Bitanah choir & gentle Daf (`c02–c08`)**, authentic upper-5th Hijaz Khana modulation (`c05–c06`), 100% Classical Makharij, 0% latm, 0% piano, zero tail loop! |
+| **Exp 27** | **Joyful Shia Mawlid Jalwat & Nasheed** (Qatifi-Bahrani dialect — «جلوة المولد الشريف») | **Ajam -> Rast -> Suznak** (`98 BPM`) | `40f3ef1e-bdb9-4d38-9103-e2358e848113` (`2:34`) | **`9.3 / 10`** | 100% joyous Khaleeji/Qatifi Mawlid Jalwat with Daf + clapping + choral `الله`, **0% chest latm, 0% weeping, 0% piano**, clean finale stop, `Mono Safe (0.924)`. |
+| **Exp 28** | **Classical Heritage Ibtihal + Religious Muwashah with Male Bitanah Choir** («ابتهال وموشح - يا نور طه») | **`0 BPM` Husseini Rubato -> `74 BPM` Suznak** (`المطلع/الدور/الخانة/التسليم`) | `6f531049-2ff0-4db2-9bbc-80a83eacda19` (`3:00`) | **`9.9 / 10`** *(ALL-TIME RECORD)* | **Spotless 0 BPM Rubato Maqam Husseini Ibtihal (`c00–c01`)** transitioning seamlessly into **74 BPM Maqam Suznak Muwashah with traditional male Bitanah choir & gentle Daf (`c02–c08`)**, upper-5th Hijaz Khana modulation (`c05–c06`), 100% Classical Makharij, 0% latm, 0% piano, `Mono Safe (0.918)`, zero tail loop! |
+| **Exp 29** | **Pure Axis-1 Qatifi-Hasawi Heritage Faezi Lamentation** («طور فائزي قطيفي — يا غناتي يا حسين») | **Husseini -> Saba** (`66 BPM`) | `b7f0448a-da85-4c19-a7b8-a954d44bf2f9` (`3:01`) | **`9.4 / 10`** | **0.00% instruments, 0.00% piano**, authentic calm warm Qatif Husseiniya Faezi lament & bare chest latm, `Mono Safe (0.912)`, zero tail loop. Proved **`غَنَاتِي`, `لاويّه`, `هَداويش`, `عَفَر`, `إشحوالِش`, `گلبش`, `واجِد`, `تبتشي`** 100% crisp; refined **`NC35`** homograph locks (`إهْني`, `چَبْدي`, `چِذي`, `بالرَّمْضى`). |
 
 ### 4 New Fingerprints Added (`12 -> 16` in `MULTI_MAQAM_MELODIC_FINGERPRINT_LIBRARY_V60`)
 1. `v61_qatifi_faezi_husseini_saba_66bpm` (Qatifi/Hasawi Faezi lamentation, `66 BPM`, `Husseini -> Bayati -> Saba`, Pure Axis 1)
