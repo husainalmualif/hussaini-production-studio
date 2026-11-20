@@ -11,13 +11,30 @@
     "Sunofix / Kompozy / Mubert (Lyria 2-4kHz neural harshness mitigation, SynthID watermarking, commercial licensing)"
   ],
   "v63_upgrades": {
-    "new_negative_constraints": ["NC38", "NC39", "NC40", "NC41"],
+    "new_negative_constraints": ["NC38", "NC39", "NC40", "NC41", "NC42"],
     "stage_0_master_state_bootstrap": "build_v63_session_bootstrap_json() / --build-v63-bootstrap track_a|track_b|track_c",
     "five_band_spectral_occupancy_guard": "FIVE_BAND_SPECTRAL_OCCUPANCY_V63 & validate_spectral_occupancy_v63()",
     "five_minute_word_budget_planner": "plan_v63_five_minute_word_budget() / --plan-v63-workflow (280-350 net words, 12-16s/bayt, 4 Extend passes)",
     "maqam_audio_reference_matrix": "MAQAM_LYRIA35_ADHERENCE_AND_AUDIO_REF_MATRIX_V63 / --check-maqam-ref",
     "lyria_harshness_tamer_dsp": "apply_lyria_harshness_tamer_2_4khz() / --tame-lyria-harshness (mono-safe dynamic 2.4-3.8 kHz EQ)",
-    "cumulative_live_flow_experiments": 36,
+    "chained_surgical_replace_planner": "plan_chained_surgical_replace_v63() / --plan-chained-replace (Back-to-Front NC42)",
+    "cumulative_live_flow_experiments": 39,
+    "exp34_chained_3pass_surgical_replace": {
+      "parent_clip_uuid": "c7622fcc-9bc7-45fd-a0e5-3b550a7c9305",
+      "parent_strict_score_8s_zoom": 8.15,
+      "pass1_uuid": "c0eaa434-0b24-4d72-b69b-69f2763768d8",
+      "pass1_window": "1:10-1:20 (fixed وَنَرَاكَ كَهَاهُنَا -> وَنَرَاكَ هَاهُنَا; discovered -1.8s downstream shift -> NC42 Back-to-Front law)",
+      "pass2_uuid": "86b71050-0a8c-49d0-b93d-ce7d0e94f6c2",
+      "pass2_window": "2:37-2:47 (fixed outro عَجِي يَا -> crisp geminated عَجِّلْ يَا صَاحِبَ العَصْرِ وَالزَّمَانْ)",
+      "pass3_final_uuid": "6c5808e1-70d1-4916-89bc-3bbe4656aaeb",
+      "pass3_window": "0:10-0:20 (fixed intro مَنَارَارَاتُ -> crisp وَنَادَتْ مَنَارَاتُ كُلِّ الزَّمَانْ)",
+      "final_orthoepy_score_10": 9.5,
+      "final_music_score_10": 8.8,
+      "final_strict_overall_score_10": 9.19,
+      "final_verdict": "RELEASE_READY_STRICT_PASS",
+      "mono_phase_correlation": 0.948,
+      "multi_platform_masters_verified_lufs": [-14.0, -16.0, -18.0, -23.0]
+    },
     "exp33_stage0_track_a_live_audit": {
       "clip_uuid": "1e09a84e-29b6-4b35-9d85-1ff8e5bac5ad",
       "session_url": "https://www.flowmusic.app/session/84261b1f-b31a-4094-8c2c-83d2cd00b613?t=true",

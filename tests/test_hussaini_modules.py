@@ -1600,3 +1600,40 @@ def test_v63_two_layer_json_bootstrap_5band_spectrum_word_budget_and_harshness_t
     assert hds.main(["--build-v63-bootstrap", "track_b", "--dialect", "fusha"]) == 0
     assert hds.main(["--check-maqam-ref", "saba"]) == 0
     assert hds.main(["--plan-v63-workflow", sample_poem[:200], "--genre", "operetta", "--dialect", "fusha"]) == 0
+
+
+def test_v63_nc42_back_to_front_chained_surgical_replace_planner():
+    """Verify V63.0 NC42: Back-to-Front chained surgical Remix > Replace ordering & close-window merging."""
+    defects = [
+        {"start_sec": 10.0, "end_sec": 20.0, "old_line": "منارارات", "fixed_line": "منارات", "defect_note": "intro stutter"},
+        {"start_sec": 70.0, "end_sec": 80.0, "old_line": "ونراك كهاهنا", "fixed_line": "ونراك هاهنا", "defect_note": "verse stutter"},
+        {"start_sec": 157.0, "end_sec": 167.0, "old_line": "عجي يا", "fixed_line": "عجل يا", "defect_note": "outro dropped Lam"},
+    ]
+    plan = hds.plan_chained_surgical_replace_v63("c7622fcc-9bc7-45fd-a0e5-3b550a7c9305", defects)
+    assert plan["ordering_rule"].startswith("BACK_TO_FRONT")
+    assert plan["total_passes"] == 3
+    assert plan["merged_windows_count"] == 0
+    # Verify strict descending order (outro -> verse -> intro) so earlier timestamps never shift!
+    assert plan["passes"][0]["window_sec"] == [157.0, 167.0]
+    assert plan["passes"][1]["window_sec"] == [70.0, 80.0]
+    assert plan["passes"][2]["window_sec"] == [10.0, 20.0]
+    assert plan["passes"][0]["target_clip"] == "c7622fcc-9bc7-45fd-a0e5-3b550a7c9305"
+    assert plan["passes"][1]["target_clip"] == "<pass_1_replaced_uuid>"
+
+    # Verify close windows (< 4s gap) auto-merge cleanly into one pass
+    close_defects = [
+        {"start_sec": 10.0, "end_sec": 18.0, "old_line": "a", "fixed_line": "b"},
+        {"start_sec": 19.0, "end_sec": 26.0, "old_line": "c", "fixed_line": "d"},
+    ]
+    merged_plan = hds.plan_chained_surgical_replace_v63("c7622fcc-9bc7-45fd-a0e5-3b550a7c9305", close_defects)
+    assert merged_plan["total_passes"] == 1
+    assert merged_plan["merged_windows_count"] == 1
+    assert merged_plan["passes"][0]["window_sec"] == [10.0, 27.0]
+
+    assert hds.main(
+        [
+            "--plan-chained-replace",
+            "c7622fcc-9bc7-45fd-a0e5-3b550a7c9305",
+            "10-20:منارارات->منارات;157-167:عجي->عجل",
+        ]
+    ) == 0

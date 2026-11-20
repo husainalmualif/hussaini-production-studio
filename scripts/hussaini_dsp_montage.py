@@ -8915,6 +8915,89 @@ def plan_v63_five_minute_word_budget(
     }
 
 
+def plan_chained_surgical_replace_v63(
+    clip_uuid: str,
+    defect_windows: list,
+) -> dict:
+    """V63.0 (NC42): Plan Back-to-Front chained surgical Remix > Replace passes on Lyria 3.5.
+
+    Empirically discovered in Exp 34-A/B/C (c7622fcc -> c0eaa434 -> 86b71050 -> 6c5808e1):
+    - Replacing an earlier window can shift all downstream timestamps by +/-1-3s (-1.8s in Pass 1).
+    - Ordering passes strictly BACK-TO-FRONT (highest timestamp -> lowest timestamp) guarantees
+      earlier timestamps never shift between chained passes.
+    - Merges windows separated by < 4.0s and enforces 8-16s window bounds with mandatory
+      8s vocal-isolated + raw stereo seam verification after each pass.
+    """
+    if not defect_windows:
+        return {
+            "clip_uuid": clip_uuid,
+            "ordering_rule": "BACK_TO_FRONT_DESCENDING_TIMESTAMP (NC42)",
+            "total_passes": 0,
+            "merged_windows_count": 0,
+            "passes": [],
+        }
+
+    norm = []
+    for item in defect_windows:
+        s_sec = max(0.0, float(item["start_sec"]))
+        e_sec = max(s_sec + 8.0, float(item["end_sec"]))
+        if e_sec - s_sec > 18.0:
+            e_sec = s_sec + 18.0
+        norm.append({
+            "start_sec": round(s_sec, 2),
+            "end_sec": round(e_sec, 2),
+            "old_line": str(item.get("old_line", "")).strip(),
+            "fixed_line": str(item.get("fixed_line", "")).strip(),
+            "defect_note": str(item.get("defect_note", "")).strip(),
+        })
+
+    # Merge close/overlapping windows (<4s gap) in ascending order first
+    norm.sort(key=lambda w: w["start_sec"])
+    merged = []
+    merged_count = 0
+    for w in norm:
+        if merged and w["start_sec"] - merged[-1]["end_sec"] < 4.0 and (w["end_sec"] - merged[-1]["start_sec"]) <= 18.0:
+            prev = merged[-1]
+            prev["end_sec"] = max(prev["end_sec"], w["end_sec"])
+            prev["old_line"] = " / ".join(x for x in (prev["old_line"], w["old_line"]) if x)
+            prev["fixed_line"] = " / ".join(x for x in (prev["fixed_line"], w["fixed_line"]) if x)
+            prev["defect_note"] = " + ".join(x for x in (prev["defect_note"], w["defect_note"]) if x)
+            merged_count += 1
+        else:
+            merged.append(w)
+
+    # Reverse strictly to BACK-TO-FRONT (descending start_sec) so earlier timestamps never drift
+    merged.sort(key=lambda w: w["start_sec"], reverse=True)
+    passes = []
+    for idx, w in enumerate(merged, start=1):
+        plan_step = build_remix_replace_inpainting_plan(
+            clip_uuid=clip_uuid if idx == 1 else f"<output_clip_uuid_from_pass_{idx - 1}>",
+            start_sec=w["start_sec"],
+            end_sec=w["end_sec"],
+            old_lyric_line=w["old_line"] or "(localized vocal defect)",
+            fixed_lyric_line=w["fixed_line"] or "(clean articulated target lyric)",
+        )
+        passes.append({
+            "pass_number": idx,
+            "target_clip": clip_uuid if idx == 1 else f"<pass_{idx - 1}_replaced_uuid>",
+            "window_sec": [w["start_sec"], w["end_sec"]],
+            "defect_note": w["defect_note"],
+            "replace_plan": plan_step,
+            "mandatory_post_pass_verification": (
+                f"Download Pass {idx} clip, listen to full-stereo seam + 8s vocal-isolated zoom "
+                f"over {w['start_sec']:.0f}s-{w['end_sec']:.0f}s before launching Pass {idx + 1}."
+            ),
+        })
+
+    return {
+        "clip_uuid": clip_uuid,
+        "ordering_rule": "BACK_TO_FRONT_DESCENDING_TIMESTAMP (NC42)",
+        "total_passes": len(passes),
+        "merged_windows_count": merged_count,
+        "passes": passes,
+    }
+
+
 def parse_args(argv=None):
     """Parse CLI flags for V60.0 Multi-Maqam Diversity, NC27-C/NC32-NC34 Forensics & 20-Mode DSP."""
     parser = argparse.ArgumentParser(
@@ -9088,6 +9171,13 @@ def parse_args(argv=None):
         default=None,
         choices=list(MAQAM_FREQS.keys()),
         help="V63.0: Check Lyria 3.5 text adherence tier & mandatory 30s Make-tracks-for-my-vocal Audio Reference policy for a Maqam",
+    )
+    parser.add_argument(
+        "--plan-chained-replace",
+        nargs=2,
+        metavar=("CLIP_UUID", "WINDOWS_SPEC"),
+        default=None,
+        help="V63.0 (NC42): Plan Back-to-Front chained Remix > Replace passes (WINDOWS_SPEC: 'start-end:old->fixed;...')",
     )
     parser.add_argument("--extract-profile", default=None, help="Reverse-engineer reference WAV/MP3 profile")
     parser.add_argument("--audit-audio", default=None, help="Audit WAV loudness, True Peak, gaps & tail cutoff/loops")
@@ -9273,6 +9363,22 @@ def main(argv=None):
                 indent=2,
             )
         )
+        return 0
+
+    if args.plan_chained_replace is not None:
+        c_uuid, w_spec = args.plan_chained_replace
+        parsed_wins = []
+        for entry in [e.strip() for e in w_spec.split(";") if e.strip()]:
+            rng_part, _, txt_part = entry.partition(":")
+            s_str, _, e_str = rng_part.partition("-")
+            old_txt, _, fix_txt = txt_part.partition("->")
+            parsed_wins.append({
+                "start_sec": float(s_str),
+                "end_sec": float(e_str) if e_str else float(s_str) + 10.0,
+                "old_line": old_txt.strip(),
+                "fixed_line": fix_txt.strip(),
+            })
+        print(json.dumps(plan_chained_surgical_replace_v63(c_uuid, parsed_wins), ensure_ascii=False, indent=2))
         return 0
 
     if args.extract_profile is not None:
