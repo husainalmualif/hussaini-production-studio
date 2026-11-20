@@ -1,9 +1,9 @@
 {
   "protocol_metadata": {
     "protocol_name": "Hussaini_Production_Studio_OS_V50_0_OMNI_ARCHITECT",
-    "skill_version": "V58.0 OMNI-ARCHITECT",
-    "previous_baseline_version": "V57.0 OMNI-ARCHITECT & V50.0 OMNI-ARCHITECT",
-    "previous_baseline_commit_sha": "b339f4ae69773326a6049c1fbf04792fb024db1d",
+    "skill_version": "V60.0 OMNI-ARCHITECT",
+    "previous_baseline_version": "V58.0 OMNI-ARCHITECT & V50.0 OMNI-ARCHITECT",
+    "previous_baseline_commit_sha": "f80a67f73a6e34999f115bea8833083b8dd27a24",
     "canonical_repository": "https://github.com/husainalmualif/hussaini-production-studio",
     "primary_studio_url": "https://www.flowmusic.app/",
     "target_engines": [
@@ -2142,6 +2142,46 @@
       "NC27B_surgical_tsh_affricate_sukun": "Apply surgical Sukun on medial affricate تْش (الحَتْشِي, البَتْشِي) inside format_clean_lyrics_for_lyria35() so Lyria 3.5 never splits them into 3 syllables (ḥa-ta-shī / ba-ta-shī).",
       "NC30_combined_preconditioning_muwashah_json": "Never send standalone Pre-Conditioning JSON without Stage-1 lyrics; use --build-muwashah-json (build_v58_combined_muwashah_json) combining anti-piano/anti-pop pre-conditioning + English-only arrangement_sections[] + NC26/NC27 Clean Natural Arabic lyrics_register_verbatim.",
       "NC31_stage2_json_extend_and_tail_loop_trim": "Extend Stage 2 ONLY from a verified piano-free Stage-1 take via OVERWRITE_WITH_STAGE_2_ONLY, audit 20s blind chunks, and trim any accidental restart loop at the tail before EBU R128 mastering."
+    }
+  },
+  "v60_0_module_74_upgrades": {
+    "version": "V60.0 OMNI-ARCHITECT",
+    "module_reference": "references/modules/module_74_v60_multi_maqam_diversity_nc27c_inpainting_and_spectral_forensics.md",
+    "readiness_score_percent": 100,
+    "expanded_13_maqam_24edo_architecture": [
+      "bayati",
+      "bayati_shuri",
+      "saba",
+      "saba_zamzam",
+      "hijaz",
+      "hijaz_kar",
+      "lami",
+      "kurd",
+      "nahawand",
+      "nawa_athar",
+      "sikah",
+      "rast",
+      "ajam"
+    ],
+    "multi_maqam_melodic_fingerprint_count": 12,
+    "multi_school_9_experiment_v60_lab": {
+      "experiments_executed": 9,
+      "total_cumulative_flow_experiments": 29,
+      "exp21a_live_remix_replace_inpainting": "Clip 5172764b (2:39, 0:56-1:07 11s window, بلهيبه->بِلَهيبه, 9.7/10, invisible splice seam, zero piano)",
+      "exp21b_bahrani_stage2_extend": "Clip 4f987ba8 (3:45 -> 3:38.5 auto-trimmed, 9.2/10, 0% piano, exposed CVVC باتْشِر drop & 3:43 tail loop)",
+      "exp22_bahrani_cradle_nahawand_record": "Clip 3a1846ce (3:02, Maqam Nahawand->Kurd->Saba 64 BPM, 9.8/10 ALL-TIME RECORD, 0.00% piano, 0.00% pop snare)",
+      "exp23_epic_fusha_hijaz_kar_mawkib": "Clip 2bfdacc0 (2:56, Maqam Hijaz Kar 88->96 BPM Haidari gear jump, Axis 2 Dammam & Tasa, 9.2/10, 0% piano)",
+      "exp24a_pure_axis1_iraqi_saba_lami": "Clip 2af13afc (3:02, Maqam Saba Zamzam->Lami 58 BPM, 0.00% instruments, 9.7/10)",
+      "exp24b_pure_axis1_iraqi_4m25_extend": "Clip 9dc63acd (4:25 -> 4:18.5 auto-trimmed, 90s Extend headroom, Hijaz Jawab->Lami Kasra, 0.00% instruments, 9.4/10)",
+      "exp25_iraqi_rapid_shoor_124bpm": "Clip d5942c88 (2:36, Maqam Kurd & Bayati Shuri 124 BPM, 9.1/10, authentic Karbala Shoor crowd energy)",
+      "exp26a_minbar_rubato_0bpm_sikah_saba": "Clip bb6ce74e (2:59, strict 0 BPM unmetered Rubato Minbar Abudhiyah & Na'i, pure solo voice, 9.5/10)",
+      "exp26b_classical_tawashih_rast_ajam": "Clip 7a91ad46 (2:46, Maqam Rast->Ajam 86 BPM devotional Fusha choir + Daf, 0% latm, 0% piano, 9.5/10)"
+    },
+    "permanent_negative_constraints_nc27c_and_nc32_to_nc34": {
+      "NC27C_phonological_affricate_sukun_and_density_governor": "Apply Sukun تْش ONLY after a short vowel (الحَتْشِي, البَتْشِي); NEVER after long vowels ا/و/ي (باتشر), Sukun consonants بْ+تْ (يبتشي, تبتشي), or word-initially (تشنت, تشفوفك); lock elisions (بلهيبه->بِلَهيبه) and enforce <= 4.2 syl/s via audit_syllable_density_v60().",
+      "NC32_live_remix_replace_surgical_inpainting": "Never regenerate a 9.4+/10 take for 1-2 mispronounced words; use --plan-replace (build_remix_replace_inpainting_plan) with an 8-18s phrase window and 20s splice audit.",
+      "NC33_zero_piano_axis3_firewall_and_spectral_forensics": "Replace classical 'solo cello' with 'dark bowed bass cello drone, mournful reed ney, strictly percussive bare chest thuds, subtle acoustic desert wind, strictly zero piano, zero keyboard chords...' and run --detect-artifacts (detect_piano_and_pop_snare_transients).",
+      "NC34_extend_90s_headroom_auto_tail_trim_and_vocal_stacking": "Provide 90s headroom on Stage-2 Remix > Extend, auto-detect & trim trailing restart loops via --detect-tail-loop / --auto-trim-tail-loop (detect_extend_restart_loop), and apply mono-safe >180Hz Mid/Side Solo-vs-Choir Vocal Stacking (--vocal-stacking) & Al-Akraf Vintage Intro (--vintage-intro-sec)."
     }
   }
 }

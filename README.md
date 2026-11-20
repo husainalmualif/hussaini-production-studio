@@ -1,8 +1,21 @@
-# استوديو الإنتاج الحسيني الشامل — Hussaini Production Studio (V58.0 OMNI-ARCHITECT)
+# استوديو الإنتاج الحسيني الشامل — Hussaini Production Studio (V60.0 OMNI-ARCHITECT)
 
-منظومة هندسية متكاملة ومثبتة تجريبياً للتأليف الشعري الحسيني، وتلحين **القصائد الموشّحة ومتعددة الأوزان عبر التهيئة المدمجة بصيغة `JSON` (`--build-muwashah-json` — `Module 73 — V58.0`، القواعد `NC30–NC31`، وقوانين الإخراج الصوتي الـ 5 المستخلصة من مختبر الـ `177` لطمية وفلتر الأكرف التلفوني `300–2800 Hz`)**، وهندسة المقامات الميكروتونالية (`24-EDO`) والأطوار المنبرية والموكبية والاستوديوية الحديثة، وتوليد اللطميات والنواعي بالذكاء الاصطناعي (**Google Flow Music / Lyria 3.5, Suno, Udio**) بدقة نطق ومخارج حروف ولهجة عالية عبر **مصرّف الإملاء العربي النظيف الخاص بـ `Lyria 3.5` (`--compile-clean-lyria` — `Module 72 — V57.0`، القواعد `NC26–NC29`، تحويل `چ -> تش / تْش`، وقفل `گ` الصافي، وبوابة التدقيق السمعي بالشرائح `20s`)**، و**مختبر `20` تجربة حية على `Flow Music`**، و**المحقق التاريخي ذي الـ 11 قاعدة (`--verify-history`)**، و**محرك المونتاج ذي الـ 20 وضعاً (`scripts/hussaini_dsp_montage.py` — `-14.0 LUFS / -1.0 dBTP` EBU R128)**.
+منظومة هندسية متكاملة ومثبتة تجريبياً (`100% Production Readiness`) للتأليف الشعري الحسيني، وتنويع الألحان والمقامات عبر **مكتبة الـ `12` بصمة لحنية ومقامية لـ `9` مدارس و`13` مقاماً شرقياً (`MULTI_MAQAM_MELODIC_FINGERPRINT_LIBRARY_V60` — `Module 74 — V60.0`، `--list-fingerprints`، `--select-fingerprint`)**، وتلحين **القصائد الموشّحة ومتعددة الأوزان عبر التهيئة المدمجة بصيغة `JSON` (`--build-muwashah-json` — `NC30–NC31` ودرع صفر-بيانو `NC33`)**، والترميم الفونيمي الجراحي الحي عبر **`Remix > Replace` (`--plan-replace` — `NC32`)**، وتوليد اللطميات والنواعي والتواشيح بالذكاء الاصطناعي (**Google Flow Music / Lyria 3.5, Suno, Udio**) بدقة نطق ومخارج حروف ولهجة عالية عبر **مصرّف الإملاء العربي النظيف (`--compile-clean-lyria` — `NC26–NC29` وقانون تسكين `تْش` الصوتي وحارس كثافة المقاطع `<= 4.2 syl/s` `NC27-C`)**، و**مختبر `29` تجربة حية مدقَّقة عميانياً بشرائح `20s`**، و**مكشافا التلوث الطيفي وتكرار الذيل الآليان (`--detect-artifacts` و`--detect-tail-loop` — `NC33–NC34`)**، و**محرك المونتاج ذي الـ 20 وضعاً مع `--auto-trim-tail-loop` و`--vintage-intro-sec` و`--vocal-stacking` (`-14.0 LUFS / -1.0 dBTP` EBU R128)**.
 
 ---
+
+## أبرز ركائز الإصدار `V60.0 OMNI-ARCHITECT` (`Module 74` + `NC27-C` + `NC32–NC34` + `13` مقاماً و`12` بصمة لحنية)
+
+- **كسر رتابة الألحان بـ `12` بصمة لحنية عبر المدارس الـ `9` و`13` مقاماً (`MULTI_MAQAM_MELODIC_FINGERPRINT_LIBRARY_V60`):**
+  - توسعة `MAQAM_FREQS` و`COMMON_JINS_GRAPH` و`_MAQAM_24EDO_TEMPLATES` المطبّعة إلى **13 مقاماً** (`البيات، البيات شوري، الصبا، الصبا زمزم، الحجاز، الحجاز كار، اللامي، الكرد، النهاوند، النوى أثر، السيكاه، الرست، العجم`).
+  - إثبات `7` عوالم صوتية متباينة حياً على `Lyria 3.5` وتدقيقها بالكامل بشرائح `20s` (`Exp 21-A` إلى `Exp 26-B` — `29` تجربة تراكمية): المهد البحراني (`Exp 22`: **النهاوند ← الكرد ← الصبا `64 BPM`** بدرجة قياسية **`9.8/10`** و**`0.00%` بيانو**)، الموكب الفصيح الملحمي (`Exp 23`: **الحجاز كار `88->96 BPM`** `9.2/10`)، العراقي الكربلائي الخالص (`Exp 24-A/B`: **الصبا زمزم ← اللامي `58 BPM`** بطول `4:18` بلا أي آلة `9.7 / 9.4`), الشور العراقي السريع (`Exp 25`: **الكرد/البيات شوري `124 BPM`** `9.1/10`)، النعي والأبوذية المنبرية الحرة (`Exp 26-A`: **السيكاه ← الصبا `0 BPM`** `9.5/10`)، والتواشيح الدينية المشرقة (`Exp 26-B`: **الرست ← العجم `86 BPM`** `9.5/10`).
+- **قانون تسكين `تْش` الصوتي وحارس الكثافة `<= 4.2 syl/s` (`NC27-C`) والترميم الجراحي الحي (`NC32`):**
+  - تسكين `تْش` يُطبّق **حصراً بعد حركة قصيرة** (`الحَتْشِي`، `البَتْشِي`) ويُمنع بعد حروف المد (`ا/و/ي`) أو الساكن (`بْ+تْ`) أو في بداية الكلمة (`باتشر`، `يبتشي`، `تبتشي`، `تشنت`، `تشفوفك`) لمنع سقوط التاء؛ مع قفل `بلهيبه -> بِلَهيبه` وفحص الكثافة الصوتية (`audit_syllable_density_v60`).
+  - **`--plan-replace` (`build_remix_replace_inpainting_plan()` — `NC32`):** خطة ترميم جراحي لـ `Remix > Replace` على نافذة قصيرة (`8–18s`، مُثبتة في `Exp 21-A` بنافذة `11s` `0:56–1:07` بدرجة `9.7/10` بلا أي درز مسموع).
+- **درع صفر-بيانو في المحور الثالث ومكشاف التلوث الطيفي (`NC33`) وقص ذيل التمديد وتوسيع الكورال (`NC34`):**
+  - استبدال `"solo cello"` بـ `"dark bowed bass cello drone, mournful reed ney, strictly percussive bare chest thuds, subtle acoustic desert wind, strictly zero piano, zero keyboard chords..."` لمنع انزلاق `Lyria 3.5` للبيانو.
+  - **`--detect-artifacts` (`detect_piano_and_pop_snare_transients()`):** كاشف طيفي لفيزياء نغمات البيانو عديمة الاهتزاز وتردد سنير البوب.
+  - **`--detect-tail-loop` / `--auto-trim-tail-loop` (`detect_extend_restart_loop()`) + `--vocal-stacking` (`apply_mid_side_vocal_stacking_enhancer()`) + `--vintage-intro-sec`:** كشف وقص تلقائي لتكرار الذيل في التمديدات، وتنفيذ القانون الإخراجي الخامس (تباين الرادود بالمنتصف مقابل توسعة الكورال بالستيريو `Mid/Side >180 Hz` الآمن للمونو) وتأثير مقدمة الأكرف التلفونية مباشرة في خط الماسترنغ.
 
 ## أبرز ركائز الإصدار `V58.0 OMNI-ARCHITECT` (`Module 73` + `NC30–NC31` + محرك الموشّحات متعدد الأوزان)
 
@@ -84,16 +97,16 @@ pytest -v --cov=scripts --cov-fail-under=75 tests/test_hussaini_modules.py
 
 ---
 
-## ثالثاً: هيكل ملفات المهارة وبيئة الفحص الآلي (`Repository Structure — 33 Canonical Files`)
+## ثالثاً: هيكل ملفات المهارة وبيئة الفحص الآلي (`Repository Structure — 34 Canonical Files`)
 
 ```text
 hussaini-production-studio/
-├── VERSION                                                                  # مصدر الحقيقة الموحد للإصدار (V58.0 OMNI-ARCHITECT)
+├── VERSION                                                                  # مصدر الحقيقة الموحد للإصدار (V60.0 OMNI-ARCHITECT)
 ├── SKILL.md                                                                 # الموجّه المهيكل الرشيق (<= 10.5KB Router)
 ├── README.md                                                                # الدليل الشامل للاستخدام والمرجع السريع
 ├── requirements.txt                                                         # المتطلبات البرمجية الخفيفة (numpy, scipy, pylint, pytest, pytest-cov)
 ├── references/
-│   ├── hussaini_os_v50_0_constitution.json                                  # الدستور التجريبي الموحّد لـ V58.0 OMNI-ARCHITECT (9 Schools, 4 Axes, 39 Prompts, QC1–QC35, NC1–NC31)
+│   ├── hussaini_os_v50_0_constitution.json                                  # الدستور التجريبي الموحّد لـ V60.0 OMNI-ARCHITECT (9 Schools, 13 Maqams, 12 V60 Fingerprints, QC1–QC35, NC1–NC34)
 │   ├── atwar_maqamat_and_poetry_guide.md                                    # الموسوعة المرجعية الشاملة للأطوار والمقامات والعروض (Sections 1–19)
 │   ├── radoods_and_khutaba_encyclopedia.md                                  # موسوعة 20+ رادوداً (14 مدرسة) و8 من خطباء المنبر
 │   └── modules/
@@ -119,11 +132,12 @@ hussaini-production-studio/
 │       ├── module_70_v55_tabaa_al_bashar_7exp_lab_5stage_router_and_3poem_benchmark.md # بروتوكول V55.0: تجارب طبع البشر الـ 7 (NC18–NC22)، الموجه الخماسي، ومعيار القصائد الثلاث
 │       ├── module_71_v56_four_axes_modern_latmiya_pulse_locked_dsp_and_multi_method_lab.md # بروتوكول V56.0: المحاور الأربعة، تجارب البحراني والعراقي (NC23–NC25)، ومعادلة Golden Studio 60 BPM
 │       ├── module_72_v57_clean_lyria35_orthography_ch_digraph_and_20s_chunk_audit.md # بروتوكول V57.0: الإملاء النظيف لـ Lyria 3.5 (NC26–NC29)، تحويل چ->تش، وقفل 20s Chunk Audit
-│       └── module_73_v58_muwashah_multi_meter_combined_json_and_masterwork_direction.md # بروتوكول V58.0: الموشح متعدد الأوزان، JSON المدمج (NC30–NC31)، وهندسة إخراج الـ 177 لطمية
+│       ├── module_73_v58_muwashah_multi_meter_combined_json_and_masterwork_direction.md # بروتوكول V58.0: الموشح متعدد الأوزان، JSON المدمج (NC30–NC31)، وهندسة إخراج الـ 177 لطمية
+│       └── module_74_v60_multi_maqam_diversity_nc27c_inpainting_and_spectral_forensics.md # بروتوكول V60.0: الـ 12 بصمة لحنية و13 مقاماً، NC27-C، الترميم الحي NC32، والمكشاف الطيفي NC33–NC34
 ├── scripts/
-│   └── hussaini_dsp_montage.py                                              # المحرك المستقل للنطق الصوتي والـ 20-Mode Pure-Vocal / 5-Track DSP (EBU R128)
+│   └── hussaini_dsp_montage.py                                              # المحرك المستقل للنطق الصوتي والـ 20-Mode Pure-Vocal / 5-Track DSP (EBU R128) + مكاشيف V60
 ├── tests/
-│   └── test_hussaini_modules.py                                             # اختبارات الوحدات الشاملة لـ Modules 34–73 وQC1–QC35 وNC1–NC31 والـ DSP
+│   └── test_hussaini_modules.py                                             # اختبارات الوحدات الشاملة لـ Modules 34–74 وQC1–QC35 وNC1–NC34 والـ DSP
 └── .github/
     └── workflows/
         └── ci.yml                                                           # فحص GitHub Actions CI عبر Python 3.10, 3.11, 3.12

@@ -119,29 +119,37 @@ def get_skill_version():
 
 SKILL_VERSION = get_skill_version()
 
-# 24-EDO Maqam Drone Frequencies (Hz) — Section 4 of V50.0 Constitution
+# 24-EDO Maqam Drone Frequencies (Hz) — Section 4 of V50.0 Constitution + V60.0 13-Maqam Expansion
 MAQAM_FREQS = {
     "bayati": [146.83, 160.00, 174.61, 220.00],
+    "bayati_shuri": [146.83, 160.00, 174.61, 196.00, 207.65, 246.94],
     "saba": [146.83, 160.00, 174.61, 207.65],
     "saba_zamzam": [146.83, 155.56, 174.61, 207.65],
     "hijaz": [146.83, 155.56, 185.00, 220.00],
+    "hijaz_kar": [130.81, 138.59, 164.81, 174.61, 196.00, 207.65, 246.94],
     "lami": [146.83, 155.56, 174.61, 207.65],
     "kurd": [146.83, 155.56, 174.61, 220.00],
-    "rast": [130.81, 146.83, 160.00, 196.00],
     "nahawand": [146.83, 164.81, 174.61, 220.00],
+    "nawa_athar": [130.81, 146.83, 155.56, 185.00, 196.00, 207.65, 246.94],
     "sikah": [160.00, 174.61, 196.00, 220.00],
+    "rast": [130.81, 146.83, 160.00, 196.00],
+    "ajam": [130.81, 146.83, 164.81, 174.61, 196.00],
 }
 
 COMMON_JINS_GRAPH = {
-    "bayati": ["saba", "saba_zamzam", "kurd", "hijaz", "lami", "sikah", "nahawand"],
-    "saba": ["saba_zamzam", "bayati", "lami", "hijaz", "rast", "nahawand"],
+    "bayati": ["bayati_shuri", "saba", "saba_zamzam", "kurd", "hijaz", "lami", "sikah", "nahawand"],
+    "bayati_shuri": ["bayati", "hijaz", "hijaz_kar", "saba", "kurd", "nawa_athar"],
+    "saba": ["saba_zamzam", "bayati", "bayati_shuri", "lami", "hijaz", "rast", "nahawand"],
     "saba_zamzam": ["saba", "lami", "hijaz", "bayati", "kurd"],
-    "hijaz": ["saba_zamzam", "bayati", "saba", "kurd", "sikah", "nahawand"],
+    "hijaz": ["hijaz_kar", "bayati_shuri", "saba_zamzam", "bayati", "saba", "kurd", "sikah", "nahawand"],
+    "hijaz_kar": ["hijaz", "nawa_athar", "bayati_shuri", "nahawand", "kurd"],
     "lami": ["saba_zamzam", "saba", "bayati", "kurd"],
-    "kurd": ["bayati", "lami", "saba_zamzam", "hijaz", "nahawand"],
-    "rast": ["saba", "bayati", "hijaz", "sikah", "nahawand"],
-    "nahawand": ["kurd", "bayati", "saba", "hijaz", "rast"],
-    "sikah": ["bayati", "hijaz", "rast", "saba"],
+    "kurd": ["bayati", "bayati_shuri", "lami", "saba_zamzam", "hijaz", "nahawand"],
+    "nahawand": ["nawa_athar", "kurd", "bayati", "saba", "hijaz", "hijaz_kar", "rast"],
+    "nawa_athar": ["nahawand", "hijaz_kar", "hijaz", "kurd", "bayati_shuri"],
+    "sikah": ["bayati", "hijaz", "rast", "saba", "ajam"],
+    "rast": ["ajam", "saba", "bayati", "hijaz", "sikah", "nahawand"],
+    "ajam": ["rast", "nahawand", "sikah", "kurd"],
 }
 
 SUPPORTED_DSP_MODES = (
@@ -447,9 +455,9 @@ EXTENDED_ATWAR_PROMPTS_V52 = {
         "across poetic meters via cadential Qa'da rhythm drops, Maqam Bayati modulating via Common Jins to "
         "Hijaz and Saba, authentic Gulf Bahrani male Radood vocal with sharp crisp Arabic pharyngeal "
         "pronunciation and Qarar-to-Jawab emotional arc, powerful wide unison Bahrani male Matam choir "
-        "call-and-response, deep muffled bare chest thumping, mournful low solo cello and breathy sad Ney "
-        "flute only, sacred Bahraini Matam reverb, strictly no piano, no pop drums, no snare backbeat, "
-        "no dance beat, no Arabic pop singing"
+        "call-and-response, strictly percussive bare chest thuds, dark bowed bass cello drone, mournful "
+        "reed ney, subtle acoustic desert wind, sacred Bahraini Matam reverb, strictly no piano, zero "
+        "keyboard chords, no pop drums, no snare backbeat, no dance beat, no Arabic pop singing"
     ),
 }
 
@@ -537,6 +545,212 @@ MASTERWORK_DIRECTION_BLUEPRINTS_V58 = {
         "reference_masterwork": "باب الساعات (+6.22 dB), مات الماي (+5.12 dB), أذان العشق (+5.06 dB), جابر يا جابر (+3.84 dB)",
         "technique": "Contrast intimate center-mono solo Radood with wide stereo Bass/Baritone/Tenor unison & harmonic choir walls (+3.1 to +6.2 dB side expansion)",
         "empirical_range_db": [3.1, 6.2],
+        "dsp_function": "apply_mid_side_vocal_stacking_enhancer",
+    },
+}
+
+# Module 74 (V60.0): 12 Empirically Verified Multi-Maqam & 9-School Melodic Fingerprints (Break Melodic Monotony)
+MULTI_MAQAM_MELODIC_FINGERPRINT_LIBRARY_V60 = {
+    "v60_bahrani_cradle_nahawand_kurd_saba_64bpm": {
+        "school": "School 03 & 07 — Bahrani Modern Studio Muwashah (Al-Akraf / Bouhamad)",
+        "dialect": "bahrani",
+        "axis": "axis_3_zero_piano_hybrid",
+        "bpm": 64,
+        "maqam_arc": ["nahawand", "kurd", "saba"],
+        "dsp_mode": "vocal_pure_master",
+        "empirical_exp": "Exp 22 (3a1846ce, 9.8/10, 0.00% piano, 0.00% pop snare)",
+        "sound_prompt": (
+            "Intimate Bahraini Shia Husseini Multi-Meter Cradle Muwashah elegy, 64 BPM gentle swaying lament "
+            "with cadential Qa'da silence drops, Maqam Nahawand modulating via Common Jins to Kurd and heartbreaking "
+            "Saba, authentic Gulf Bahrani male Baritone Radood vocal with sharp crisp Arabic pharyngeal articulation, "
+            "warm resonant unison Bahrani male Matam choir on refrain only, strictly percussive bare chest thuds, "
+            "dark bowed bass cello drone, mournful reed ney, subtle acoustic desert wind, Bahraini Matam reverb, "
+            "strictly zero piano, zero keyboard chords, zero pop drums, zero rock snare backbeat, zero Arabic pop singing"
+        ),
+    },
+    "v60_bahrani_muwashah_bayati_hijaz_saba_72bpm": {
+        "school": "School 03 — Bahrani Multi-Meter Muwashah (Al-Akraf / Nader Al-Tattan)",
+        "dialect": "bahrani",
+        "axis": "axis_3_zero_piano_hybrid",
+        "bpm": 72,
+        "maqam_arc": ["bayati", "bayati_shuri", "hijaz", "saba"],
+        "dsp_mode": "vocal_pure_master",
+        "empirical_exp": "Exp 21-A (5172764b, 9.7/10 Replace) & Exp 21-B (4f987ba8, 3:38 Extend)",
+        "sound_prompt": (
+            "Authentic Bahraini Shia Husseini Multi-Meter Muwashah Studio Latmiya, 72 BPM shifting dynamically "
+            "across poetic meters via cadential Qa'da rhythm drops, Maqam Bayati modulating via Common Jins to "
+            "Hijaz and Saba, authentic Gulf Bahrani male Radood vocal with sharp crisp Arabic pharyngeal "
+            "pronunciation and Qarar-to-Jawab emotional arc, powerful wide unison Bahrani male Matam choir "
+            "call-and-response, strictly percussive bare chest thuds, dark bowed bass cello drone, mournful "
+            "reed ney, subtle acoustic desert wind, sacred Bahraini Matam reverb, strictly zero piano, zero "
+            "keyboard chords, zero pop drums, zero snare backbeat, zero dance beat, zero Arabic pop singing"
+        ),
+    },
+    "v60_epic_fusha_mawkib_hijaz_kar_88_to_96bpm": {
+        "school": "School 03 & 02 — Epic Fusha/Bahrani Ashura Mawkib & Haidari Gear-Up",
+        "dialect": "fusha",
+        "axis": "axis_2_mawkib_procession",
+        "bpm": 88,
+        "maqam_arc": ["hijaz_kar", "hijaz", "bayati_shuri"],
+        "dsp_mode": "zanjeel_bahrani",
+        "empirical_exp": "Exp 23 (2bfdacc0, 9.2/10, 88->96 BPM Haidari gear jump, 0% piano)",
+        "sound_prompt": (
+            "Epic Classical Arabic Shia Ashura Mawkib heroic march chant, Maqam Hijaz Kar with dramatic "
+            "augmented-second gravity shifting from 88 BPM dignified procession to 96 BPM fiery Haidari climax, "
+            "commanding deep resonant Bass-Baritone Radood vocal answered by massive thunderous unison male "
+            "Mawkib congregation choir, deep traditional Dammam procession drums, metallic brass Tasa cymbals, "
+            "strictly percussive bare chest strikes, cavernous courtyard acoustics, strictly zero piano, zero "
+            "keyboard chords, zero modern pop drums, zero upbeat dance rhythm"
+        ),
+    },
+    "v60_iraqi_karbalaei_pure_saba_zamzam_lami_58bpm": {
+        "school": "School 01 & 04 — Pure Iraqi Karbalaei Muthakkal & Nazla (Basim / Sayyid Salam)",
+        "dialect": "iraqi",
+        "axis": "axis_1_pure_acapella",
+        "bpm": 58,
+        "maqam_arc": ["saba_zamzam", "lami", "hijaz", "lami"],
+        "dsp_mode": "vocal_pure_master",
+        "empirical_exp": "Exp 24-A (2af13afc, 9.7/10) & Exp 24-B (9dc63acd, 4:18 Pure Axis 1 Extend, 9.4/10)",
+        "sound_prompt": (
+            "Traditional Iraqi Karbalaei Ashura Majlis Latmiya elegy, authentic Southern Iraqi Karbala dialect, "
+            "Maqam Saba Zamzam modulating to devastating Euphrates Maqam Lami with dramatic Qa'da silence drop, "
+            "slow heavy 58 BPM Muthakkal mourning pulse, commanding deep resonant Iraqi Karbalaei Baritone Radood "
+            "with authentic microtonal melisma and crisp pharyngeal pronunciation, massive unison Iraqi male "
+            "Raddada congregation choir with solemn human Ahaat backing, heavy muffled bare-palm chest thumping "
+            "only, cavernous Karbala shrine hall acoustics, strictly 100% pure human vocal acapella, zero musical "
+            "instruments, zero piano, zero strings, zero drums"
+        ),
+    },
+    "v60_iraqi_euphrates_nassari_lami_56bpm": {
+        "school": "School 04 & 08 — Southern Iraqi Euphrates Nassari & Basra Funeral Muthakkal",
+        "dialect": "iraqi",
+        "axis": "axis_1_pure_acapella",
+        "bpm": 56,
+        "maqam_arc": ["lami", "saba", "lami"],
+        "dsp_mode": "thaqeel_muwazza",
+        "empirical_exp": "175-MP3 School 04/08 Corpus (Sayyid Salam / Al-Kaabi) + Exp 24-B Lami Kasra",
+        "sound_prompt": (
+            "Mournful Southern Iraqi Euphrates Nassari and funeral Muthakkal Husseini Latmiya, slow 56 BPM "
+            "grave processional cadence, Maqam Lami and Saba microtonal weeping melisma, deep velvety Iraqi "
+            "Bass-Baritone Radood with prolonged aching vowel cadences, dark responsive unison male Husseiniya "
+            "congregation choir, slow heavy muffled bare-palm chest thumping only, grand Karbala dome reverb, "
+            "strictly 100% pure human vocal acapella, zero musical instruments, zero piano"
+        ),
+    },
+    "v60_iraqi_rapid_shoor_kurd_bayati_shuri_124bpm": {
+        "school": "School 05 — Iraqi Rapid Shoor & Haidari Majlis (Murtadha Harb / Faqid)",
+        "dialect": "iraqi",
+        "axis": "axis_1_pure_acapella",
+        "bpm": 124,
+        "maqam_arc": ["kurd", "bayati_shuri", "hijaz"],
+        "dsp_mode": "shoor",
+        "empirical_exp": "Exp 25 (d5942c88, 9.1/10, 124 BPM authentic Iraqi Shoor crowd thunder)",
+        "sound_prompt": (
+            "Intense Iraqi Karbalaei Rapid Shoor Husseini Latmiya, driving 124 BPM ecstatic mourning tempo, "
+            "Maqam Kurd and Bayati Shuri fiery melodic hook, passionate raspy Iraqi Baritone Radood leading "
+            "a thunderous unified Karbala Husseiniya male congregation chanting continuous rhythmic Hussain "
+            "ostinato and synchronized rapid bare-palm chest strikes, dramatic stop-time solo vocal finale, "
+            "tight live Husseiniya hall reverb, strictly zero piano, zero EDM synths, zero pop drum kit"
+        ),
+    },
+    "v60_minbar_rubato_abudhiyah_nai_sikah_saba_0bpm": {
+        "school": "Minbar Khutaba — Strict Unmetered Rubato Abudhiyah & Na'i (0 BPM)",
+        "dialect": "iraqi",
+        "axis": "axis_1_pure_solo_rubato",
+        "bpm": 0,
+        "maqam_arc": ["sikah", "saba", "lami"],
+        "dsp_mode": "nai",
+        "empirical_exp": "Exp 26-A (bb6ce74e, 9.5/10, true 0 BPM unmetered rubato pure solo voice)",
+        "sound_prompt": (
+            "Authentic Traditional Iraqi and Bahrani Minbar Abudhiyah and Na'i vocal lamentation, strict "
+            "0 BPM unmetered Rubato free tempo with zero rhythmic pulse and zero beat grid, Maqam Sikah "
+            "modulating into heartbroken microtonal Maqam Saba, devastating solo veteran Iraqi Khatib Baritone "
+            "voice with natural breath intakes, soulful prolonged microtonal melisma, dignified weeping cracks "
+            "on phrase endings only, hushed Karbala Husseiniya hall acoustics, strictly 100% pure solo human "
+            "voice acapella, zero percussion, zero chest latm, zero musical instruments, zero piano"
+        ),
+    },
+    "v60_classical_devotional_tawashih_rast_ajam_86bpm": {
+        "school": "Classical Devotional Tawashih & Madih — Radiant Fusha Choral (Non-Latmiya)",
+        "dialect": "fusha",
+        "axis": "axis_devotional_tawashih",
+        "bpm": 86,
+        "maqam_arc": ["rast", "ajam", "rast"],
+        "dsp_mode": "vocal_pure_master",
+        "empirical_exp": "Exp 26-B (7a91ad46, 9.5/10, radiant Maqam Rast -> Ajam devotional choir)",
+        "sound_prompt": (
+            "Classical Arabic Islamic devotional Tawashih and Madih choral anthem in luminous Maqam Rast "
+            "modulating to uplifting joyful Maqam Ajam, 86 BPM moderate majestic swaying rhythm, warm resonant "
+            "solo Arab Munshid leading a rich traditional male vocal choir in unison and octave harmonies, "
+            "gentle acoustic frame Daf drum pulse, warm stone mosque reverb, radiant spiritual devotion, "
+            "strictly zero chest latm, zero weeping, zero piano, zero pop drums, zero electric synths"
+        ),
+    },
+    "v60_bahrani_thulathi_bayati_shuri_nawa_athar_76bpm": {
+        "school": "School 03 & 07 — Bahrani Triple-Pulse Thulathi (76 BPM Triplet Swing)",
+        "dialect": "bahrani",
+        "axis": "axis_1_pure_acapella",
+        "bpm": 76,
+        "maqam_arc": ["bayati_shuri", "nawa_athar", "bayati"],
+        "dsp_mode": "bahrani_thulathi",
+        "empirical_exp": "175-MP3 School 03/07 Triplet Survey + V54 Thulathi 75 BPM Triplet Verification",
+        "sound_prompt": (
+            "Passionate Bahrani Hussaini Thulathi triple-pulse Latmiya lament, 76 BPM authentic 6/8 triple "
+            "Bahrani Matam cadence, Maqam Bayati Shuri modulating to dramatic Nawa Athar, commanding deep "
+            "Gulf Bahrani male Baritone Radood with crisp pharyngeal pronunciation and Faizi microtonal "
+            "vibrato, wide unison Bahrani male Matam choir response, synchronized triple-cadence bare-palm "
+            "chest thumping only, solemn Matam dome reverb, strictly pure human vocal acapella, zero piano, "
+            "zero musical instruments"
+        ),
+    },
+    "v60_ahsa_bujabara_qafila_nawa_athar_hijaz_60bpm": {
+        "school": "School 02 — Ahsa & Qatif Monumental Ashouri Qafila (Bujabara)",
+        "dialect": "bahrani",
+        "axis": "axis_3_zero_piano_hybrid",
+        "bpm": 60,
+        "maqam_arc": ["nawa_athar", "hijaz", "saba"],
+        "dsp_mode": "modern_studio_ney_strings",
+        "empirical_exp": "175-MP3 School 02 Anatomy (إعصار +7.9st arc, 8.2 dB stereo breathing)",
+        "sound_prompt": (
+            "Monumental Ahsa and Bahrani Ashouri Qafila Husseini Studio Latmiya, 60 BPM towering solemn "
+            "processional weight, dramatic Maqam Nawa Athar modulating via Common Jins to Hijaz and Saba, "
+            "commanding resonant Gulf Baritone Radood climbing from deep Qarar to soaring Jawab climax, "
+            "massive layered male Matam unison choir, strictly percussive heavy bare chest thuds, dark bowed "
+            "bass cello drone, mournful reed ney, subtle desert wind, strictly zero piano, zero keyboard chords, "
+            "zero pop drums, zero snare backbeat"
+        ),
+    },
+    "v60_najafi_dialogic_nazla_bayati_kurd_70bpm": {
+        "school": "School 06 — Iraqi Najafi Dialogic Melodic Nazla (Al-Janami / Haidar Al-Bayati)",
+        "dialect": "iraqi",
+        "axis": "axis_1_pure_acapella",
+        "bpm": 70,
+        "maqam_arc": ["bayati", "kurd", "hijaz"],
+        "dsp_mode": "latm",
+        "empirical_exp": "175-MP3 School 06 Survey (70 BPM dialogic Najafi cadence, 6.4 dB stereo contrast)",
+        "sound_prompt": (
+            "Passionate Iraqi Najafi and Karbalaei dialogic Nazla Husseini Latmiya, 70 BPM steady rhythmic "
+            "chest-latm stride, expressive Maqam Bayati modulating smoothly to Maqam Kurd and Hijaz, clear "
+            "commanding Iraqi Baritone Radood with crisp pharyngeal colloquial articulation in brisk call-and-response "
+            "with resonant unison Iraqi male Raddada choir, muffled bare-palm chest thumping only, authentic "
+            "Najaf Husseiniya hall acoustics, strictly pure human vocal acapella, zero musical instruments, zero piano"
+        ),
+    },
+    "v60_farsi_epic_zamineh_hijaz_kar_kurd_68bpm": {
+        "school": "School 09 — Epic Processional Zamineh & Heroic Elegy (Karimi / Rasoli / Taheri)",
+        "dialect": "iraqi",
+        "axis": "axis_4_cinematic_sub_foley",
+        "bpm": 68,
+        "maqam_arc": ["hijaz_kar", "kurd", "nahawand"],
+        "dsp_mode": "cinematic_foley_latmiya",
+        "empirical_exp": "175-MP3 School 09 Survey (68 BPM monumental Bass-Baritone Zamineh gravity)",
+        "sound_prompt": (
+            "Monumental Epic Processional Zamineh Husseini Elegy, 68 BPM thunderous heavy stride, dramatic "
+            "Maqam Hijaz Kar and Kurd gravity, commanding heroic Bass-Baritone lead vocal rising into massive "
+            "stadium-scale unison male congregation chants, deep dark atmospheric cello drone and subtle desert "
+            "battlefield wind textures, heavy synchronized bare-palm chest thuds, grand Husseiniya hall reverb, "
+            "strictly zero piano, zero pop drums, zero rock snare backbeat, zero dance beats"
+        ),
     },
 }
 
@@ -3513,8 +3727,51 @@ def detect_and_shape_dialect(text, enforce_iraqi_dhaa=None, use_tatweel=False):
     }
 
 
-def format_clean_lyrics_for_lyria35(raw_poem, dialect=None):
-    """Module 72 (V57.0): Compile Clean Natural Arabic + Surgical Vowels + NC27 (چ->تش & گ) for Lyria 3.5."""
+def audit_syllable_density_v60(lyrics_text, target_bpm=72.0, max_syl_per_sec=4.2):
+    """Module 74 (V60.0, NC27-C): Fast-Meter Syllable Density Governor (<= 4.2 syl/s prevents Lyria 3.5 garble)."""
+    bpm_eff = float(target_bpm) if target_bpm and float(target_bpm) > 0.0 else 72.0
+    # Empirical Lyria 3.5 bar window: ~4 beats per poetic line at <= 76 BPM, ~3 beats at faster 88-132 BPM meters
+    beats_per_line = 3.0 if bpm_eff >= 88.0 else 4.0
+    line_sec = max(1.6, (60.0 / bpm_eff) * beats_per_line)
+
+    dense_lines = []
+    max_rate = 0.0
+    for idx, raw_ln in enumerate(lyrics_text.splitlines(), start=1):
+        ln = raw_ln.strip()
+        if not ln or (ln.startswith("[") and ln.endswith("]")):
+            continue
+        clean = re.sub(r"[^\u0621-\u064A\u067E\u0686\u06AF\s]", "", ln).strip()
+        words = [w for w in clean.split() if w]
+        if not words:
+            continue
+        syl_est = sum(max(1, int(round(len(w) * 0.58))) for w in words)
+        # Lines split by '..' get extra bar phrasing budget
+        n_segs = max(1, len([p for p in ln.split("..") if p.strip()]))
+        eff_sec = line_sec * (1.0 + 0.55 * (n_segs - 1))
+        rate = round(float(syl_est) / eff_sec, 2)
+        max_rate = max(max_rate, rate)
+        if rate > float(max_syl_per_sec):
+            dense_lines.append(
+                {
+                    "line_number": idx,
+                    "estimated_syllables": syl_est,
+                    "estimated_syl_per_sec": rate,
+                    "suggestion": "Split line with '..' breath pause or trim 1-2 words to stay <= 4.2 syl/s (NC27-C).",
+                    "text": ln,
+                }
+            )
+    return {
+        "target_bpm": round(bpm_eff, 1),
+        "cap_syl_per_sec": float(max_syl_per_sec),
+        "max_syllables_per_sec": round(max_rate, 2),
+        "exceeds_4_2_syl_per_sec_cap": bool(dense_lines),
+        "dense_line_count": len(dense_lines),
+        "dense_lines": dense_lines,
+    }
+
+
+def format_clean_lyrics_for_lyria35(raw_poem, dialect=None, target_bpm=None):
+    """Module 72 & 74 (V57.0–V60.0): Compile Clean Natural Arabic + NC27-C Affricate Sukun Law + Density Governor."""
     sanitized = sanitize_poem_decorations(raw_poem.replace("\\n", "\n"))
     bahrani_hits, iraqi_hits = _count_dialect_markers(sanitized)
     if dialect in ("iraqi", "bahrani", "iraqi_bahrani", "fusha"):
@@ -3525,6 +3782,9 @@ def format_clean_lyrics_for_lyria35(raw_poem, dialect=None):
         detected = "iraqi"
     else:
         detected = "iraqi_bahrani"
+
+    # NC27-C: Detect & repair any illegal user-supplied Sukun on تْش before stripping heavy tashkeel
+    illegal_tsh_fixed = len(re.findall(r"(?:^|[\s(\[]|[اوي\u0652])تْش|بْ?تْش", sanitized))
 
     # NC26: Strip heavy diacritic clutter & terminal Sukun spam to prevent BPE token shattering in Lyria 3.5
     stripped = re.sub(r"[\u064B-\u0652\u0670]", "", sanitized)
@@ -3561,7 +3821,7 @@ def format_clean_lyrics_for_lyria35(raw_poem, dialect=None):
     cleaned = re.sub(r"(?<!\w)اوياك(?!\w)", "ويّاك", cleaned)
     cleaned = re.sub(r"(?<!\w)اوياهم(?!\w)", "ويّاهم", cleaned)
 
-    # NC27: Convert Iraqi/Bahrani چ -> تش digraph & colloquial ق -> گ on proven stems
+    # NC27 & NC27-C: Phonologically-exact affricate law (تْش ONLY after short vowel; plain تش after long vowel/Sukun/initial)
     token_map = {
         "تبچي": "تبتشي",
         "يبچي": "يبتشي",
@@ -3573,18 +3833,30 @@ def format_clean_lyrics_for_lyria35(raw_poem, dialect=None):
         "البتشي": "البَتْشِي",
         "الحتشي": "الحَتْشِي",
         "باچر": "باتشر",
+        "باتشر": "باتشر",
         "وچني": "وتشني",
         "چتف": "تشتف",
         "چم": "تشم",
         "چنت": "تشنت",
         "چنه": "تشنه",
         "چنها": "تشنها",
+        "چفوفك": "تشفوفك",
+        "چفوفه": "تشفوفه",
+        "چفوف": "تشفوف",
+        "چفي": "تشفي",
+        "چفك": "تشفك",
+        "يچوي": "يتشوي",
+        "مچوي": "متشوي",
         "حچي": "حَتشِي",
         "وحچي": "وحَتشِي",
         "حتشي": "حَتشِي",
         "وحتشي": "وحَتشِي",
         "ملچوم": "مَلتشوم",
         "ملتشوم": "مَلتشوم",
+        "بلهيبه": "بِلَهيبه",
+        "ولهيب": "ولَهيب",
+        "عشت": "عِشت",
+        "أذنت": "أذِنت",
         "وگلبه": "وگَلبه",
         "وقلبه": "وگَلبه",
         "گلبه": "گَلبه",
@@ -3651,6 +3923,9 @@ def format_clean_lyrics_for_lyria35(raw_poem, dialect=None):
         if detected == "bahrani"
         else "v57_iraqi_karbalaei_pure_majlis_60bpm_saba_lami"
     )
+    density_report = audit_syllable_density_v60(
+        final_lyrics, target_bpm=target_bpm if target_bpm is not None else 72.0
+    )
     return {
         "detected_dialect": detected,
         "clean_lyria35_lyrics": final_lyrics,
@@ -3658,6 +3933,9 @@ def format_clean_lyrics_for_lyria35(raw_poem, dialect=None):
         "recommended_v57_sound_prompt": EXTENDED_ATWAR_PROMPTS_V52[prompt_key],
         "nc26_anti_token_shattering_applied": True,
         "nc27_ch_to_tsh_digraph_count": ch_converted,
+        "nc27c_phonological_affricate_rule_applied": True,
+        "nc27c_illegal_tsh_sukun_repaired": illegal_tsh_fixed,
+        "syllable_density_report": density_report,
         "nc29_mandatory_chunk_audit_sec": 20,
     }
 
@@ -5380,19 +5658,139 @@ def analyze_multi_meter_muwashah_structure(poem_text):
     }
 
 
+def select_melodic_fingerprint_v60(fingerprint_key=None, poem_text=None, dialect=None, axis=None):
+    """Module 74 (V60.0): Select one of 12 diverse Multi-Maqam & 9-School Melodic Fingerprints."""
+    if fingerprint_key:
+        if fingerprint_key not in MULTI_MAQAM_MELODIC_FINGERPRINT_LIBRARY_V60:
+            raise ValueError(f"Unknown V60 melodic fingerprint: {fingerprint_key}")
+        entry = dict(MULTI_MAQAM_MELODIC_FINGERPRINT_LIBRARY_V60[fingerprint_key])
+        entry["fingerprint_key"] = fingerprint_key
+        return entry
+
+    text_norm = sanitize_poem_decorations((poem_text or "").replace("\\n", "\n"))
+    det_dialect = dialect
+    if not det_dialect and text_norm:
+        det_dialect = format_clean_lyrics_for_lyria35(text_norm)["detected_dialect"]
+    rec = recommend_tor_and_rhythm_for_poem(text_norm) if text_norm else {}
+    rec_mode = rec.get("recommended_dsp_mode", "latm")
+
+    if rec_mode == "nai" or (rec.get("recommended_bpm") == 0):
+        chosen = "v60_minbar_rubato_abudhiyah_nai_sikah_saba_0bpm"
+    elif rec_mode == "shoor" or (rec.get("recommended_bpm", 60) >= 115):
+        chosen = "v60_iraqi_rapid_shoor_kurd_bayati_shuri_124bpm"
+    elif any(k in text_norm for k in ("صلى الإله", "عرفنا خلقك", "سيد الرسل", "صلوا عليه", "بدر التمام")):
+        chosen = "v60_classical_devotional_tawashih_rast_ajam_86bpm"
+    elif axis == "axis_2_mawkib_procession" or rec_mode in ("zanjeel_bahrani", "zanjeel_iraqi"):
+        chosen = "v60_epic_fusha_mawkib_hijaz_kar_88_to_96bpm"
+    elif axis == "axis_4_cinematic_sub_foley" or rec_mode == "cinematic_foley_latmiya":
+        chosen = "v60_farsi_epic_zamineh_hijaz_kar_kurd_68bpm"
+    elif det_dialect == "bahrani":
+        if rec_mode == "bahrani_thulathi":
+            chosen = "v60_bahrani_thulathi_bayati_shuri_nawa_athar_76bpm"
+        elif any(k in text_norm for k in ("أشم", "خدك", "رضيع", "مهد", "رباب", "طفل")):
+            chosen = "v60_bahrani_cradle_nahawand_kurd_saba_64bpm"
+        else:
+            chosen = "v60_bahrani_muwashah_bayati_hijaz_saba_72bpm"
+    elif axis == "axis_3_zero_piano_hybrid":
+        chosen = "v60_ahsa_bujabara_qafila_nawa_athar_hijaz_60bpm"
+    elif rec.get("recommended_bpm", 60) >= 68:
+        chosen = "v60_najafi_dialogic_nazla_bayati_kurd_70bpm"
+    else:
+        chosen = "v60_iraqi_karbalaei_pure_saba_zamzam_lami_58bpm"
+
+    entry = dict(MULTI_MAQAM_MELODIC_FINGERPRINT_LIBRARY_V60[chosen])
+    entry["fingerprint_key"] = chosen
+    return entry
+
+
+def build_remix_replace_inpainting_plan(
+    clip_uuid,
+    start_sec,
+    end_sec,
+    old_lyric_line,
+    fixed_lyric_line,
+    axis_mode="hybrid_axis1_3",
+    dialect=None,
+):
+    """Module 74 (V60.0, NC32): Build exact Flow Music Remix > Replace surgical inpainting plan."""
+    t_start = max(0.0, float(start_sec))
+    t_end = max(t_start + 1.0, float(end_sec))
+    window_sec = round(t_end - t_start, 2)
+    clean_fix = format_clean_lyrics_for_lyria35(fixed_lyric_line, dialect=dialect)
+    fixed_clean = clean_fix["clean_lyria35_lyrics"].strip()
+
+    if axis_mode == "axis1_pure":
+        inst_lock = "strictly 100% pure human vocal acapella and muffled bare chest thuds only, zero musical instruments, zero piano"
+    else:
+        inst_lock = (
+            "preserve exact existing dark bowed bass cello drone, reed ney, and bare chest thuds only, "
+            "strictly zero piano, zero keyboard chords, zero pop drums, zero snare backbeat"
+        )
+
+    warnings = []
+    if window_sec < 8.0:
+        warnings.append("Replace window < 8s: expand slightly around full phrase boundaries (8-18s recommended).")
+    elif window_sec > 30.0:
+        warnings.append("Replace window > 30s: narrow to single mispronounced phrase so melody/voice stays locked.")
+
+    return {
+        "protocol_rule": "NC32_live_remix_replace_surgical_inpainting",
+        "skill_version": SKILL_VERSION,
+        "target_clip_uuid": str(clip_uuid),
+        "ui_workflow": [
+            "Open target clip -> click Remix > Replace.",
+            f"Open Settings -> set Start = {t_start:.1f}s and End = {t_end:.1f}s ({window_sec:.1f}s phrase window).",
+            "Open Edit Lyrics -> replace ONLY the flawed target line verbatim with 'fixed_lyric_clean'.",
+            "Paste 'instruction' into the Replace prompt box, ensure Model = Lyria 3.5, and Generate.",
+            "Slice output into 20s chunks (NC29) and audit splice boundaries and target Makharij.",
+        ],
+        "settings": {
+            "start_sec": round(t_start, 2),
+            "end_sec": round(t_end, 2),
+            "window_sec": window_sec,
+            "model_lock": "Lyria 3.5",
+        },
+        "edit_lyrics_diff": {
+            "old_lyric_line": str(old_lyric_line).strip(),
+            "fixed_lyric_clean": fixed_clean,
+        },
+        "instruction": (
+            "Surgically re-sing ONLY this short phrase in the exact same Radood singer voice, Maqam, "
+            f"tempo, and acoustics with crystal-clear Arabic pronunciation on '{fixed_clean}', seamless "
+            f"invisible splice boundaries, {inst_lock}."
+        ),
+        "window_warnings": warnings,
+        "nc32_verified_benchmark": "Exp 21-A (5172764b, 0:56-1:07, 11s window, بلهيبه->بِلَهيبه, 9.7/10)",
+    }
+
+
 def build_v58_combined_muwashah_json(
     poem_text,
     title="موشّح حسيني متعدد الأوزان",
     axis_mode="hybrid_axis1_3",
     stage_2_text=None,
+    fingerprint_key=None,
 ):
-    """Module 73 (V58.0, NC30–NC31): Build Combined Pre-Conditioning + Clean-Orthography Multi-Section Muwashah JSON."""
+    """Module 73 & 74 (V58.0–V60.0, NC30–NC33): Build Combined Pre-Conditioning + Clean-Orthography Muwashah JSON."""
     clean_stage1 = format_clean_lyrics_for_lyria35(poem_text)
     analysis = analyze_multi_meter_muwashah_structure(clean_stage1["clean_lyria35_lyrics"])
     dialect = clean_stage1["detected_dialect"]
     base_bpm = analysis["base_bpm"]
 
-    if axis_mode == "axis1_pure":
+    selected_fp = None
+    if fingerprint_key:
+        selected_fp = select_melodic_fingerprint_v60(fingerprint_key=fingerprint_key)
+        sound_prompt = selected_fp["sound_prompt"]
+        base_bpm = selected_fp["bpm"]
+        inst_rule = (
+            "Strictly pure human vocal acapella and muffled bare chest thumping only; zero musical instruments"
+            if "axis_1" in selected_fp["axis"]
+            else (
+                "Dark bowed bass cello drone, mournful reed ney, strictly percussive bare chest thuds, "
+                "subtle acoustic desert wind; strictly zero piano, zero keyboard chords, no pop drums, no snare backbeat"
+            )
+        )
+    elif axis_mode == "axis1_pure":
         sound_prompt = EXTENDED_ATWAR_PROMPTS_V52[
             "v57_bahrani_matam_pure_58bpm_saba_bayati"
             if dialect == "bahrani"
@@ -5403,7 +5801,10 @@ def build_v58_combined_muwashah_json(
         sound_prompt = EXTENDED_ATWAR_PROMPTS_V52["v58_bahrani_muwashah_hybrid_72bpm_bayati_hijaz_saba"]
         if dialect == "iraqi":
             sound_prompt = sound_prompt.replace("Bahraini", "Iraqi Karbalaei").replace("Gulf Bahrani", "Iraqi Karbalaei")
-        inst_rule = "Muffled bare chest thumping, mournful solo low cello and breathy Ney only; strictly no piano, no pop drums, no snare backbeat, no dance beat"
+        inst_rule = (
+            "Dark bowed bass cello drone, mournful reed ney, strictly percussive bare chest thuds, "
+            "subtle acoustic desert wind; strictly zero piano, zero keyboard chords, no pop drums, no snare backbeat, no dance beat"
+        )
 
     arrangement_sections = []
     verbatim_lines = []
@@ -5453,11 +5854,13 @@ def build_v58_combined_muwashah_json(
         "title": title,
         "global_bpm": base_bpm,
         "axis_mode": axis_mode,
+        "selected_melodic_fingerprint": selected_fp["fingerprint_key"] if selected_fp else None,
         "sound_description": sound_prompt,
+        "syllable_density_report": clean_stage1["syllable_density_report"],
         "muwashah_structure_summary": {
             "is_multi_meter_muwashah": analysis["is_multi_meter_muwashah"],
             "meter_diversity_count": analysis["meter_diversity_count"],
-            "recommended_maqam_arc": analysis["recommended_maqam_arc"],
+            "recommended_maqam_arc": selected_fp["maqam_arc"] if selected_fp else analysis["recommended_maqam_arc"],
             "recommended_bpm_gears": analysis["recommended_bpm_gears"],
         },
         "arrangement_sections": arrangement_sections,
@@ -5680,15 +6083,19 @@ def read_wav_any_depth(input_path, return_stereo=False):
 
 
 _MAQAM_24EDO_TEMPLATES = {
-    "bayati": {0: 1.8, 3: 1.7, 5: 1.2, 10: 1.6, 14: 1.2, 16: 0.9, 20: 0.9},
-    "saba": {0: 1.8, 3: 1.7, 5: 1.3, 8: 2.0, 14: 1.0, 16: 0.9, 20: 0.8},
-    "saba_zamzam": {0: 1.7, 2: 1.5, 5: 1.3, 8: 2.0, 14: 1.0, 16: 0.9, 20: 0.8},
-    "hijaz": {0: 1.8, 2: 1.6, 8: 1.8, 10: 1.4, 14: 1.2, 16: 0.9, 20: 0.8},
-    "lami": {0: 1.8, 2: 1.4, 6: 1.3, 10: 1.4, 12: 1.7, 16: 0.9, 20: 0.8},
-    "kurd": {0: 1.8, 2: 1.3, 6: 1.2, 10: 1.3, 14: 1.2, 16: 0.9, 20: 0.8},
-    "rast": {0: 1.8, 4: 1.2, 7: 1.7, 10: 1.3, 14: 1.2, 18: 1.0, 21: 1.3},
-    "nahawand": {0: 1.8, 4: 1.2, 6: 1.3, 10: 1.3, 14: 1.2, 16: 0.9, 22: 1.0},
-    "sikah": {0: 1.8, 3: 1.4, 7: 1.6, 10: 1.3, 13: 1.3, 17: 1.0, 20: 0.9},
+    "bayati": {0: 1.80, 3: 1.70, 5: 1.20, 10: 1.60, 14: 1.20, 16: 0.90, 20: 0.90},
+    "bayati_shuri": {0: 1.65, 3: 1.60, 5: 1.15, 10: 1.35, 12: 1.40, 18: 1.45, 20: 0.70},
+    "saba": {0: 1.80, 3: 1.70, 5: 1.30, 8: 2.00, 14: 1.00, 16: 0.90, 20: 0.80},
+    "saba_zamzam": {0: 1.70, 2: 1.50, 5: 1.30, 8: 2.00, 14: 1.00, 16: 0.90, 20: 0.80},
+    "hijaz": {0: 1.80, 2: 1.60, 8: 1.80, 10: 1.40, 14: 1.20, 16: 0.90, 20: 0.80},
+    "hijaz_kar": {0: 1.65, 2: 1.45, 8: 1.60, 10: 1.10, 14: 1.10, 16: 1.15, 22: 1.25},
+    "lami": {0: 1.80, 2: 1.40, 6: 1.30, 10: 1.40, 12: 1.70, 16: 0.90, 20: 0.80},
+    "kurd": {0: 1.80, 2: 1.30, 6: 1.20, 10: 1.30, 14: 1.20, 16: 0.90, 20: 0.80},
+    "nahawand": {0: 1.80, 4: 1.20, 6: 1.30, 10: 1.30, 14: 1.20, 16: 0.90, 22: 1.00},
+    "nawa_athar": {0: 1.65, 4: 1.10, 6: 1.20, 12: 1.65, 14: 1.15, 16: 1.20, 22: 1.35},
+    "sikah": {0: 1.80, 3: 1.40, 7: 1.60, 10: 1.30, 13: 1.30, 17: 1.00, 20: 0.90},
+    "rast": {0: 1.80, 4: 1.20, 7: 1.70, 10: 1.30, 14: 1.20, 18: 1.00, 21: 1.30},
+    "ajam": {0: 1.65, 4: 1.20, 8: 1.50, 10: 1.20, 14: 1.30, 18: 1.15, 22: 1.30},
 }
 
 
@@ -6614,6 +7021,304 @@ def apply_vintage_telephone_intro_fx(signal, sample_rate, intro_end_sec=10.0, cr
     return out
 
 
+def apply_mid_side_vocal_stacking_enhancer(
+    stereo,
+    sample_rate,
+    solo_side_atten_db=-1.5,
+    choir_side_boost_db=4.2,
+    low_mono_hz=180.0,
+):
+    """Module 74 (V60.0, NC34): 5th Masterwork Blueprint — Mono-safe Mid/Side Solo-vs-Choir Vocal Stacking."""
+    arr = np.asarray(stereo, dtype=np.float64)
+    if arr.ndim == 1:
+        arr = np.column_stack((arr, arr))
+    if arr.shape[0] < 64:
+        return arr.copy()
+
+    mid = 0.5 * (arr[:, 0] + arr[:, 1])
+    side = 0.5 * (arr[:, 0] - arr[:, 1])
+
+    # Keep sub/chest-latm (<180Hz) strictly mono-centered for punch & mono compatibility
+    side_hi = butter_filter(side, low_mono_hz, sample_rate, btype="high", order=2)
+    side_lo = side - side_hi
+
+    # If signal is pure mono (zero side), synthesize subtle decorrelated vocal choir air (>220Hz) for swells
+    side_rms = float(np.sqrt(np.mean(side_hi**2)))
+    mid_rms = float(np.sqrt(np.mean(mid**2)) + 1e-9)
+    if side_rms < 0.015 * mid_rms:
+        haas_n = max(1, int(0.011 * sample_rate))
+        mid_hi = butter_filter(mid, max(220.0, low_mono_hz), sample_rate, btype="high", order=2)
+        shifted = np.roll(mid_hi, haas_n)
+        shifted[:haas_n] = 0.0
+        side_hi = 0.22 * (mid_hi - shifted)
+
+    # Dynamic energy swell detector (0.5s RMS) separates intimate solo passages from wide choir walls
+    win = max(16, int(0.50 * sample_rate))
+    env = np.sqrt(np.maximum(_fast_boxcar_mean(mid**2, win), 1e-12))
+    pos_env = env[env > 1e-4]
+    med_env = float(np.median(pos_env)) if pos_env.size > 0 else float(np.median(env) + 1e-6)
+    swell_ratio = env / max(med_env, 1e-6)
+    # Smoothly map swell_ratio [0.75..1.45] -> [0.0..1.0] (0=solo center focus, 1=wide choir wall)
+    choir_weight = np.clip((swell_ratio - 0.75) / 0.70, 0.0, 1.0)
+    gain_db = float(solo_side_atten_db) + choir_weight * (float(choir_side_boost_db) - float(solo_side_atten_db))
+    side_gain = 10.0 ** (gain_db / 20.0)
+
+    side_out = side_lo * 0.75 + side_hi * side_gain
+    return np.column_stack((mid + side_out, mid - side_out))
+
+
+def _resolve_audio_input_mono(audio_path_or_mono, sample_rate=None):
+    """Load file path via read_wav_any_depth or wrap an in-memory 1D/2D NumPy array cleanly."""
+    if isinstance(audio_path_or_mono, (str, os.PathLike)):
+        sr, mono, _, _ = read_wav_any_depth(str(audio_path_or_mono), return_stereo=False)
+        return int(sr), np.asarray(mono, dtype=np.float64)
+    if sample_rate is None:
+        raise ValueError("sample_rate is required when passing an in-memory audio array.")
+    arr = np.asarray(audio_path_or_mono, dtype=np.float64)
+    if arr.ndim == 2:
+        arr = np.mean(arr, axis=1)
+    return int(sample_rate), arr
+
+
+def detect_piano_and_pop_snare_transients(audio_path_or_mono, sample_rate=None, chunk_sec=20.0):
+    """Module 74 (V60.0, NC33): Calibrated Zero-Vibrato Piano Hammer & Dual-Band Pop-Snare Forensic Detector."""
+    sr, mono = _resolve_audio_input_mono(audio_path_or_mono, sample_rate=sample_rate)
+    if mono.size < 256:
+        return {
+            "piano_leakage_detected": False,
+            "pop_snare_detected": False,
+            "passed_nc33_zero_artifact_gate": True,
+            "total_rigid_decay_notes": 0,
+            "max_chunk_piano_notes": 0,
+            "total_snare_hits": 0,
+            "max_snare_periodicity": 0.0,
+            "flagged_chunks": [],
+            "chunks": [],
+        }
+
+    # Anti-aliased integer decimation toward ~16 kHz for 10x speed & calibrated 3.9 Hz STFT resolution
+    work_sr = sr
+    work_mono = mono
+    if sr >= 28000:
+        decim = max(2, int(round(sr / 16000.0)))
+        work_mono = butter_filter(mono, 0.44 * (sr / float(decim)), sr, btype="low", order=4)[::decim]
+        work_sr = int(round(sr / float(decim)))
+
+    c_len = max(1024, int(float(chunk_sec) * work_sr))
+    n_chunks = max(1, int(math.ceil(len(work_mono) / float(c_len))))
+
+    nfft = 4096
+    frame = max(256, int(0.064 * work_sr))
+    hop = max(64, int(0.015 * work_sr))
+    win = np.hanning(frame)
+    freqs = np.fft.rfftfreq(nfft, d=1.0 / float(work_sr))
+    k_lo = int(np.searchsorted(freqs, 240.0))
+    k_hi = int(np.searchsorted(freqs, min(1800.0, 0.44 * work_sr)))
+
+    s_wire = (freqs >= 2400.0) & (freqs <= min(7200.0, 0.46 * work_sr))
+    s_body = (freqs >= 170.0) & (freqs <= 520.0)
+    s_sub = (freqs >= 45.0) & (freqs <= 155.0)
+
+    n_track = 16  # 240ms decay tracking separates rigid 12-TET piano strings from Arabic vocal vibrato
+    t_ax = np.arange(n_track, dtype=np.float64) * (hop / float(work_sr))
+    t_mean = float(np.mean(t_ax))
+    t_var = float(np.sum((t_ax - t_mean) ** 2)) + 1e-12
+    backbeat_lo = max(4, int(0.36 * work_sr / float(hop)))
+    backbeat_hi = max(backbeat_lo + 2, int(1.20 * work_sr / float(hop)))
+
+    chunks = []
+    flagged_chunks = []
+    for ci in range(n_chunks):
+        seg = work_mono[ci * c_len : min(len(work_mono), (ci + 1) * c_len)]
+        nf = (len(seg) - frame) // hop
+        if nf < n_track + 4:
+            continue
+        idx = np.arange(frame)[None, :] + (np.arange(nf) * hop)[:, None]
+        mag = np.abs(np.fft.rfft(seg[idx] * win[None, :], n=nfft, axis=1)) + 1e-12
+        log_m = 20.0 * np.log10(mag)
+
+        # 1) Zero-Vibrato 240ms 12-TET Parabolic Sub-Bin Exponential-Decay Piano Partial Detector
+        hit_frames = set()
+        for t_idx in range(2, nf - n_track - 1):
+            sl = log_m[t_idx, k_lo:k_hi]
+            if sl.size < 6:
+                continue
+            floor = float(np.median(sl))
+            for j in range(2, sl.size - 2):
+                if sl[j] < floor + 17.0 or not (sl[j] > sl[j - 1] and sl[j] >= sl[j + 1]):
+                    continue
+                k = k_lo + j
+                if sl[j] - float(np.mean(log_m[t_idx - 2 : t_idx, k])) < 11.0:
+                    continue
+                f_track = []
+                a_track = []
+                for dt in range(n_track):
+                    sub = log_m[t_idx + dt, k - 1 : k + 2]
+                    kk = k + int(np.argmax(sub)) - 1
+                    kk = max(1, min(log_m.shape[1] - 2, kk))
+                    y0, y1, y2 = log_m[t_idx + dt, kk - 1], log_m[t_idx + dt, kk], log_m[t_idx + dt, kk + 1]
+                    den = y0 - 2.0 * y1 + y2
+                    delta = float(np.clip(0.5 * (y0 - y2) / den, -0.5, 0.5)) if abs(den) > 1e-9 else 0.0
+                    f_track.append((kk + delta) * (work_sr / float(nfft)))
+                    a_track.append(y1)
+                f_arr = np.asarray(f_track, dtype=np.float64)
+                a_arr = np.asarray(a_track, dtype=np.float64)
+                if f_arr[0] <= 1.0:
+                    continue
+                f_std_cents = float(np.std(1200.0 * np.log2(np.maximum(f_arr, 1.0) / f_arr[0])))
+                med_hz = float(np.median(f_arr))
+                midi_f = 69.0 + 12.0 * math.log2(max(med_hz, 20.0) / 440.0)
+                tet_err_cents = abs(midi_f - round(midi_f)) * 100.0
+                a_mean = float(np.mean(a_arr))
+                slope = float(np.sum((t_ax - t_mean) * (a_arr - a_mean)) / t_var)
+                ss_tot = float(np.sum((a_arr - a_mean) ** 2)) + 1e-9
+                ss_res = float(np.sum((a_arr - (a_mean + slope * (t_ax - t_mean))) ** 2))
+                r2_val = 1.0 - ss_res / ss_tot
+                if f_std_cents < 5.0 and tet_err_cents < 20.0 and -75.0 <= slope <= -10.0 and r2_val >= 0.80:
+                    hit_frames.add(t_idx)
+                    break
+
+        clustered = []
+        for f_i in sorted(hit_frames):
+            if not clustered or (f_i - clustered[-1]) >= 10:
+                clustered.append(f_i)
+        rigid_notes = len(clustered)
+
+        # 2) Dual-Band Coincident Pop-Snare & Backbeat Periodicity Detector
+        snare_hits = 0
+        snare_ac = 0.0
+        if np.any(s_wire) and np.any(s_body):
+            sw = mag[:, s_wire]
+            sb = mag[:, s_body]
+            sm = mag[:, s_sub] if np.any(s_sub) else sb
+            ew = np.sqrt(np.mean(sw**2, axis=1))
+            eb = np.sqrt(np.mean(sb**2, axis=1))
+            es = np.sqrt(np.mean(sm**2, axis=1)) + 1e-10
+            flat_w = np.exp(np.mean(np.log(sw), axis=1)) / (np.mean(sw, axis=1) + 1e-10)
+            dw = np.maximum(0.0, np.diff(ew, prepend=ew[0]))
+            db = np.maximum(0.0, np.diff(eb, prepend=eb[0]))
+            dw_thr = float(np.median(dw)) + 2.8 * float(np.std(dw))
+            db_thr = float(np.median(db)) + 1.8 * float(np.std(db))
+            coinc = np.where((dw > dw_thr) & (db > db_thr) & (flat_w > 0.30) & (ew > 0.10 * es))[0]
+            deb = []
+            for si in coinc:
+                if not deb or (si - deb[-1]) >= 10:
+                    deb.append(si)
+            snare_hits = len(deb)
+            sn_env = dw * np.where(flat_w > 0.28, 1.0, 0.0)
+            sn_env -= np.mean(sn_env)
+            if float(np.std(sn_env)) > 1e-8 and len(sn_env) > backbeat_lo + 2:
+                ac = np.correlate(sn_env, sn_env, mode="full")[len(sn_env) - 1 :]
+                ac /= max(float(ac[0]), 1e-12)
+                hi_cap = min(backbeat_hi, len(ac) - 1)
+                if hi_cap > backbeat_lo:
+                    snare_ac = round(float(np.max(ac[backbeat_lo:hi_cap])), 3)
+
+        p_flag = rigid_notes >= 3
+        s_flag = (snare_hits >= 10) or (snare_hits >= 6 and snare_ac >= 0.32)
+        chunk_rec = {
+            "chunk_index": ci,
+            "start_sec": round(ci * float(chunk_sec), 1),
+            "rigid_decay_piano_notes": rigid_notes,
+            "coincident_snare_hits": snare_hits,
+            "snare_backbeat_periodicity": snare_ac,
+            "piano_flagged": p_flag,
+            "snare_flagged": s_flag,
+        }
+        chunks.append(chunk_rec)
+        if p_flag or s_flag:
+            flagged_chunks.append(chunk_rec)
+
+    tot_p = sum(c["rigid_decay_piano_notes"] for c in chunks)
+    max_p = max((c["rigid_decay_piano_notes"] for c in chunks), default=0)
+    opening_p = sum(c["rigid_decay_piano_notes"] for c in chunks[:3])
+    tot_s = sum(c["coincident_snare_hits"] for c in chunks)
+    max_ac = max((c["snare_backbeat_periodicity"] for c in chunks), default=0.0)
+    piano_det = (max_p >= 3) or (tot_p >= 5 and opening_p >= 3)
+    snare_det = any(c["snare_flagged"] for c in chunks) or (tot_s >= 55 and max_ac >= 0.30)
+    return {
+        "piano_leakage_detected": bool(piano_det),
+        "pop_snare_detected": bool(snare_det),
+        "passed_nc33_zero_artifact_gate": bool(not piano_det and not snare_det),
+        "total_rigid_decay_notes": int(tot_p),
+        "opening_60s_piano_notes": int(opening_p),
+        "max_chunk_piano_notes": int(max_p),
+        "total_snare_hits": int(tot_s),
+        "max_snare_periodicity": round(float(max_ac), 3),
+        "flagged_chunks": flagged_chunks,
+        "chunks": chunks,
+    }
+
+
+def detect_extend_restart_loop(audio_path_or_mono, sample_rate=None, tail_window_sec=10.5):
+    """Module 74 (V60.0, NC34): Detect accidental Remix > Extend trailing restart loop & compute clean trim timestamp."""
+    sr, mono = _resolve_audio_input_mono(audio_path_or_mono, sample_rate=sample_rate)
+    duration_sec = round(len(mono) / max(1.0, float(sr)), 3)
+    hop = max(1, int(0.5 * sr))
+    n_hops = len(mono) // hop
+    if n_hops < 16:
+        return {
+            "tail_loop_detected": False,
+            "duration_sec": duration_sec,
+            "valley_sec": None,
+            "valley_dbfs": None,
+            "reentry_sec": None,
+            "reentry_jump_db": 0.0,
+            "recommended_trim_sec": None,
+        }
+
+    rms_db = np.array(
+        [
+            20.0 * math.log10(float(np.sqrt(np.mean(mono[i * hop : (i + 1) * hop] ** 2)) + 1e-9))
+            for i in range(n_hops)
+        ],
+        dtype=np.float64,
+    )
+    tail_bins = min(n_hops - 10, max(6, int(round(float(tail_window_sec) / 0.5))))
+    start_bin = max(10, n_hops - tail_bins)
+
+    best_hit = None
+    for idx in range(start_bin, n_hops - 2):
+        val_db = float(rms_db[idx])
+        if val_db > -34.0:
+            continue
+        prev_slice = rms_db[max(0, idx - 10) : idx]
+        prev_active = float(np.percentile(prev_slice, 75)) if prev_slice.size > 0 else -18.0
+        if prev_active - val_db < 14.0:
+            continue
+        post_slice = rms_db[idx + 1 : min(n_hops, idx + 16)]
+        if post_slice.size == 0:
+            continue
+        post_peak_rel = int(np.argmax(post_slice))
+        post_peak_db = float(post_slice[post_peak_rel])
+        jump_db = post_peak_db - val_db
+        if jump_db >= 11.0 and post_peak_db > -28.0:
+            valley_sec = round(idx * 0.5, 2)
+            reentry_sec = round((idx + 1 + post_peak_rel) * 0.5, 2)
+            best_hit = {
+                "tail_loop_detected": True,
+                "duration_sec": duration_sec,
+                "valley_sec": valley_sec,
+                "valley_dbfs": round(val_db, 2),
+                "reentry_sec": reentry_sec,
+                "reentry_jump_db": round(jump_db, 2),
+                "recommended_trim_sec": round(max(1.0, valley_sec), 2),
+            }
+            break
+
+    if best_hit is not None:
+        return best_hit
+    return {
+        "tail_loop_detected": False,
+        "duration_sec": duration_sec,
+        "valley_sec": None,
+        "valley_dbfs": None,
+        "reentry_sec": None,
+        "reentry_jump_db": 0.0,
+        "recommended_trim_sec": None,
+    }
+
+
 def tape_saturate(signal, drive=1.25):
     """Apply gentle analog harmonic warmth via normalized hyperbolic tangent."""
     return np.tanh(signal * drive) / np.tanh(drive)
@@ -6796,6 +7501,7 @@ def audit_rendered_audio(wav_path):
     tail_samples = max(1, int(0.15 * sample_rate))
     tail_rms_db = 20.0 * np.log10(float(np.sqrt(np.mean(mono[-tail_samples:] ** 2)) + 1e-9)) if len(mono) else -90.0
     abrupt_tail_cutoff = bool(tail_rms_db > -24.0)
+    tail_loop = detect_extend_restart_loop(mono, sample_rate=sample_rate)
     broadcast_ok = bool(stats["true_peak_dbtp"] <= -0.9 and -15.5 <= stats["integrated_lufs"] <= -12.5)
     return {
         "wav_path": wav_path,
@@ -6809,6 +7515,8 @@ def audit_rendered_audio(wav_path):
         "max_low_energy_gap_sec": round(max_low_pad, 2),
         "tail_last_150ms_dbfs": round(tail_rms_db, 2),
         "abrupt_tail_cutoff_risk": abrupt_tail_cutoff,
+        "tail_loop_detected": tail_loop["tail_loop_detected"],
+        "recommended_trim_sec": tail_loop["recommended_trim_sec"],
         "broadcast_compliant": broadcast_ok,
     }
 
@@ -6827,14 +7535,28 @@ def process_audio_file(
     trim_end_sec=None,
     fade_out_sec=0.0,
     no_synth_rhythm=False,
+    vintage_intro_sec=0.0,
+    vocal_stacking=False,
+    auto_trim_tail_loop=False,
 ):
-    """Run complete 5-Track SOS/RMS/LUFS or Pure Vocal Husseiniya DSP montage."""
+    """Run complete 5-Track SOS/RMS/LUFS or Pure Vocal Husseiniya DSP montage (V60.0)."""
     if mode not in SUPPORTED_DSP_MODES:
         raise ValueError(f"Unsupported DSP mode: {mode}")
 
     sample_rate, mono, _, _ = read_wav_any_depth(input_path)
-    if trim_end_sec is not None and float(trim_end_sec) > 0.2:
-        max_samples = min(len(mono), int(float(trim_end_sec) * sample_rate))
+    auto_trimmed_at = None
+    effective_trim = trim_end_sec
+    effective_fade = float(fade_out_sec or 0.0)
+    if auto_trim_tail_loop and effective_trim is None:
+        loop_info = detect_extend_restart_loop(mono, sample_rate=sample_rate)
+        if loop_info["tail_loop_detected"] and loop_info["recommended_trim_sec"]:
+            effective_trim = loop_info["recommended_trim_sec"]
+            auto_trimmed_at = effective_trim
+            if effective_fade <= 0.0:
+                effective_fade = 2.0
+
+    if effective_trim is not None and float(effective_trim) > 0.2:
+        max_samples = min(len(mono), int(float(effective_trim) * sample_rate))
         mono = mono[:max_samples]
 
     pure_mode = mode == "vocal_pure_master" or bool(no_synth_rhythm)
@@ -6909,8 +7631,19 @@ def process_audio_file(
         stereo_sat = np.column_stack((tape_saturate(left_chan), tape_saturate(right_chan)))
         stereo_glued = apply_master_glue_compressor(stereo_sat)
 
-    if fade_out_sec and float(fade_out_sec) > 0.0 and stereo_glued.shape[0] > 8:
-        fade_len = min(stereo_glued.shape[0] // 2, int(float(fade_out_sec) * sample_rate))
+    if vintage_intro_sec and float(vintage_intro_sec) > 0.0:
+        stereo_glued = np.column_stack(
+            (
+                apply_vintage_telephone_intro_fx(stereo_glued[:, 0], sample_rate, intro_end_sec=float(vintage_intro_sec)),
+                apply_vintage_telephone_intro_fx(stereo_glued[:, 1], sample_rate, intro_end_sec=float(vintage_intro_sec)),
+            )
+        )
+
+    if vocal_stacking:
+        stereo_glued = apply_mid_side_vocal_stacking_enhancer(stereo_glued, sample_rate)
+
+    if effective_fade > 0.0 and stereo_glued.shape[0] > 8:
+        fade_len = min(stereo_glued.shape[0] // 2, int(effective_fade * sample_rate))
         if fade_len > 2:
             curve = 0.5 * (1.0 + np.cos(np.pi * np.linspace(0.0, 1.0, fade_len)))
             stereo_glued = stereo_glued.copy()
@@ -6933,6 +7666,9 @@ def process_audio_file(
         "bpm": bpm,
         "maqam_drone": maqam_drone,
         "replace_ai_percussion": bool(replace_ai_percussion and not pure_mode),
+        "vintage_intro_sec": round(float(vintage_intro_sec or 0.0), 2),
+        "vocal_stacking_applied": bool(vocal_stacking),
+        "auto_trimmed_tail_loop_sec": auto_trimmed_at,
         "integrated_lufs": out_stats["integrated_lufs"],
         "true_peak_dbtp": out_stats["true_peak_dbtp"],
         "lra_lu": out_stats["lra_lu"],
@@ -6940,12 +7676,12 @@ def process_audio_file(
 
 
 def parse_args(argv=None):
-    """Parse CLI flags for V52.0 Phonetics, History Firewall, Stage Planner & 18-Mode DSP."""
+    """Parse CLI flags for V60.0 Multi-Maqam Diversity, NC27-C/NC32-NC34 Forensics & 20-Mode DSP."""
     parser = argparse.ArgumentParser(
         description=f"Hussaini Production Studio DSP & Phonetics Engine ({SKILL_VERSION})"
     )
     parser.add_argument("--version", action="version", version=SKILL_VERSION)
-    parser.add_argument("--input", help="Input vocal WAV file (8/16/24/32-bit mono or stereo)")
+    parser.add_argument("--input", help="Input vocal WAV/MP3/M4A file (8/16/24/32-bit mono or stereo)")
     parser.add_argument("--output", help="Output mastered 16-bit stereo WAV file (-14 LUFS)")
     parser.add_argument(
         "--mode",
@@ -6958,7 +7694,7 @@ def parse_args(argv=None):
         "--maqam-drone",
         default="saba",
         choices=list(MAQAM_FREQS.keys()),
-        help="24-EDO Maqam formant Ahaat drone",
+        help="24-EDO Maqam formant Ahaat drone (13 Arabic/Hussaini Maqams)",
     )
     parser.add_argument("--swing", type=float, default=0.0, help="Mawkib/Bandari swing (0.0-0.45)")
     parser.add_argument(
@@ -6981,12 +7717,28 @@ def parse_args(argv=None):
     parser.add_argument("--no-synth-rhythm", action="store_true", help="Disable synthetic rhythm & Ahaat beds")
     parser.add_argument("--trim-end-sec", type=float, default=None, help="Trim input audio cleanly at timestamp (sec)")
     parser.add_argument("--fade-out-sec", type=float, default=0.0, help="Apply raised-cosine fade-out duration (sec)")
+    parser.add_argument(
+        "--vintage-intro-sec",
+        type=float,
+        default=0.0,
+        help="V60.0 (Al-Akraf Blueprint): Apply 300-2800Hz vintage telephone intro EQ up to N seconds",
+    )
+    parser.add_argument(
+        "--vocal-stacking",
+        action="store_true",
+        help="V60.0 (NC34 5th Blueprint): Apply mono-safe Mid/Side Solo-vs-Choir vocal stacking enhancer",
+    )
+    parser.add_argument(
+        "--auto-trim-tail-loop",
+        action="store_true",
+        help="V60.0 (NC34): Automatically detect & trim trailing Remix > Extend restart loops",
+    )
     parser.add_argument("--samples-dir", default=None, help="Optional directory of real WAV one-shots")
     parser.add_argument("--compile-lyrics", default=None, help="Shape & vocalize Arabic poem text")
     parser.add_argument(
         "--compile-clean-lyria",
         default=None,
-        help="V57.0 NC26/NC27: Compile clean natural Arabic + surgical vowels & چ->تش digraph for Lyria 3.5",
+        help="V60.0 NC26/NC27-C: Compile clean natural Arabic + affricate Sukun law + <=4.2 syl/s density audit",
     )
     parser.add_argument("--lint-poem", default=None, help="Run QC1-QC35 linter on poem text")
     parser.add_argument("--verify-history", default=None, help="Verify poem against Ahl al-Bayt historical narratives")
@@ -7004,7 +7756,34 @@ def parse_args(argv=None):
     parser.add_argument(
         "--build-muwashah-json",
         default=None,
-        help="V58.0 Module 73 (NC30): Analyze multi-meter Muwashah & build Combined Pre-Conditioning JSON",
+        help="V60.0 Module 73/74 (NC30/NC33): Analyze multi-meter Muwashah & build Zero-Piano Combined JSON",
+    )
+    parser.add_argument(
+        "--list-fingerprints",
+        action="store_true",
+        help="V60.0: List all 12 Multi-Maqam & 9-School Melodic Fingerprints",
+    )
+    parser.add_argument(
+        "--select-fingerprint",
+        default=None,
+        help="V60.0: Select specific melodic fingerprint key (or 'auto:<poem_text>')",
+    )
+    parser.add_argument(
+        "--plan-replace",
+        nargs=5,
+        metavar=("CLIP_UUID", "START_SEC", "END_SEC", "OLD_LINE", "FIXED_LINE"),
+        default=None,
+        help="V60.0 (NC32): Build exact Flow Music Remix > Replace surgical inpainting plan",
+    )
+    parser.add_argument(
+        "--detect-artifacts",
+        default=None,
+        help="V60.0 (NC33): Run calibrated Zero-Vibrato Piano Hammer & Dual-Band Pop-Snare forensic audit",
+    )
+    parser.add_argument(
+        "--detect-tail-loop",
+        default=None,
+        help="V60.0 (NC34): Detect trailing Remix > Extend restart loop & report clean trim timestamp",
     )
     parser.add_argument("--validate-abudhiyah", default=None, help="Validate 4-line Abudhiyah Jinas")
     parser.add_argument("--validate-zuhayri", default=None, help="Validate 7-line Zuhayri Mawal")
@@ -7026,17 +7805,61 @@ def parse_args(argv=None):
         choices=["latmiya", "nasheed", "ibtihalat", "tawashih"],
         help="Generate genre acoustic profile & Sound prompt",
     )
-    parser.add_argument("--extract-profile", default=None, help="Reverse-engineer reference WAV profile")
-    parser.add_argument("--audit-audio", default=None, help="Audit WAV loudness, True Peak, gaps & tail cutoff")
+    parser.add_argument("--extract-profile", default=None, help="Reverse-engineer reference WAV/MP3 profile")
+    parser.add_argument("--audit-audio", default=None, help="Audit WAV loudness, True Peak, gaps & tail cutoff/loops")
     return parser.parse_args(argv)
 
 
 def main(argv=None):
-    """CLI entrypoint for Hussaini Production Studio V52.0 OMNI-ARCHITECT."""
+    """CLI entrypoint for Hussaini Production Studio V60.0 OMNI-ARCHITECT."""
     args = parse_args(argv)
 
     if args.export_constitution:
         print(json.dumps(load_v48_5_constitution(), ensure_ascii=False, indent=2))
+        return 0
+
+    if args.list_fingerprints:
+        summary = {
+            k: {
+                "school": v["school"],
+                "dialect": v["dialect"],
+                "axis": v["axis"],
+                "bpm": v["bpm"],
+                "maqam_arc": v["maqam_arc"],
+                "empirical_exp": v["empirical_exp"],
+            }
+            for k, v in MULTI_MAQAM_MELODIC_FINGERPRINT_LIBRARY_V60.items()
+        }
+        print(json.dumps(summary, ensure_ascii=False, indent=2))
+        return 0
+
+    if args.select_fingerprint is not None:
+        raw_fp = args.select_fingerprint
+        if raw_fp.startswith("auto:"):
+            fp_obj = select_melodic_fingerprint_v60(poem_text=raw_fp[5:])
+        else:
+            fp_obj = select_melodic_fingerprint_v60(fingerprint_key=raw_fp)
+        print(json.dumps(fp_obj, ensure_ascii=False, indent=2))
+        return 0
+
+    if args.plan_replace is not None:
+        clip_id, s_sec, e_sec, old_ln, fix_ln = args.plan_replace
+        rep_plan = build_remix_replace_inpainting_plan(
+            clip_uuid=clip_id,
+            start_sec=float(s_sec),
+            end_sec=float(e_sec),
+            old_lyric_line=old_ln,
+            fixed_lyric_line=fix_ln,
+        )
+        print(json.dumps(rep_plan, ensure_ascii=False, indent=2))
+        return 0
+
+    if args.detect_artifacts is not None:
+        print(json.dumps(detect_piano_and_pop_snare_transients(args.detect_artifacts), ensure_ascii=False, indent=2))
+        return 0
+
+    if args.detect_tail_loop is not None:
+        print(json.dumps(detect_extend_restart_loop(args.detect_tail_loop), ensure_ascii=False, indent=2))
         return 0
 
     if args.stage_plan:
@@ -7066,7 +7889,7 @@ def main(argv=None):
         return 0
 
     if args.compile_clean_lyria is not None:
-        report = format_clean_lyrics_for_lyria35(args.compile_clean_lyria)
+        report = format_clean_lyrics_for_lyria35(args.compile_clean_lyria, target_bpm=args.bpm)
         print(json.dumps(report, ensure_ascii=False, indent=2))
         return 0
 
@@ -7124,6 +7947,9 @@ def main(argv=None):
             trim_end_sec=args.trim_end_sec,
             fade_out_sec=args.fade_out_sec,
             no_synth_rhythm=args.no_synth_rhythm,
+            vintage_intro_sec=args.vintage_intro_sec,
+            vocal_stacking=args.vocal_stacking,
+            auto_trim_tail_loop=args.auto_trim_tail_loop,
         )
         print(json.dumps(result, ensure_ascii=False, indent=2))
         return 0

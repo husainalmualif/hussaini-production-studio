@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # pylint: disable=wrong-import-position,too-many-lines,no-member,too-few-public-methods
-"""Comprehensive Unit & Integration Test Suite for Hussaini Production Studio (V58.0 OMNI-ARCHITECT)."""
+"""Comprehensive Unit & Integration Test Suite for Hussaini Production Studio (V60.0 OMNI-ARCHITECT)."""
 
 import os
 import re
@@ -56,8 +56,8 @@ import hussaini_dsp_montage as hds  # noqa: E402
 
 
 def test_single_source_version_and_v50_architecture():
-    """Verify V58.0 OMNI-ARCHITECT version lock, SKILL.md router budget, JSON constitution, and Module 73."""
-    assert hds.SKILL_VERSION == "V58.0 OMNI-ARCHITECT"
+    """Verify V60.0 OMNI-ARCHITECT version lock, SKILL.md router budget, JSON constitution, and Module 74."""
+    assert hds.SKILL_VERSION == "V60.0 OMNI-ARCHITECT"
     skill_md = os.path.join(ROOT_DIR, "SKILL.md")
     assert os.path.isfile(skill_md)
     assert os.path.getsize(skill_md) <= 10500
@@ -127,6 +127,12 @@ def test_single_source_version_and_v50_architecture():
         "modules",
         "module_73_v58_muwashah_multi_meter_combined_json_and_masterwork_direction.md",
     )
+    v60_module_doc = os.path.join(
+        ROOT_DIR,
+        "references",
+        "modules",
+        "module_74_v60_multi_maqam_diversity_nc27c_inpainting_and_spectral_forensics.md",
+    )
     assert os.path.isfile(v50_module_doc)
     assert os.path.isfile(v51_module_doc)
     assert os.path.isfile(v52_module_doc)
@@ -136,13 +142,14 @@ def test_single_source_version_and_v50_architecture():
     assert os.path.isfile(v56_module_doc)
     assert os.path.isfile(v57_module_doc)
     assert os.path.isfile(v58_module_doc)
+    assert os.path.isfile(v60_module_doc)
 
     constitution = hds.load_v50_0_constitution()
     assert (
         constitution["protocol_metadata"]["protocol_name"]
         == "Hussaini_Production_Studio_OS_V50_0_OMNI_ARCHITECT"
     )
-    assert constitution["protocol_metadata"]["skill_version"] == "V58.0 OMNI-ARCHITECT"
+    assert constitution["protocol_metadata"]["skill_version"] == "V60.0 OMNI-ARCHITECT"
     assert len(constitution["5_master_sound_prompts_library_modules_36_44_46_48_52"]) == 25
     assert len(hds.MASTER_SOUND_PROMPTS_V50) == 25
     assert len(constitution["8_v50_empirical_175_corpus_and_9_schools_modules_54_65"]["unified_9_schools_architecture"]) == 9
@@ -152,6 +159,8 @@ def test_single_source_version_and_v50_architecture():
     assert "modern_studio_ney_strings" in hds.SUPPORTED_DSP_MODES
     assert "cinematic_foley_latmiya" in hds.SUPPORTED_DSP_MODES
     assert len(hds.EXTENDED_ATWAR_PROMPTS_V52) == 14
+    assert len(hds.MULTI_MAQAM_MELODIC_FINGERPRINT_LIBRARY_V60) == 12
+    assert len(hds.MAQAM_FREQS) == 13
     v51_block = constitution["v51_0_protocol_negative_constraints_and_style_taxonomy"]
     assert v51_block["version"] == "V51.2 OMNI-ARCHITECT"
     assert len(v51_block["permanent_negative_constraints_nc1_to_nc17"]) >= 17
@@ -178,6 +187,11 @@ def test_single_source_version_and_v50_architecture():
     v58_block = constitution["v58_0_module_73_upgrades"]
     assert v58_block["version"] == "V58.0 OMNI-ARCHITECT"
     assert v58_block["bukaa_alwaraq_3method_head_to_head_lab"]["total_cumulative_flow_experiments"] == 20
+    v60_block = constitution["v60_0_module_74_upgrades"]
+    assert v60_block["version"] == "V60.0 OMNI-ARCHITECT"
+    assert v60_block["readiness_score_percent"] == 100
+    assert v60_block["multi_maqam_melodic_fingerprint_count"] == 12
+    assert v60_block["multi_school_9_experiment_v60_lab"]["total_cumulative_flow_experiments"] == 29
 
 
 def test_module_41_49_57_58_64_iraqi_prosthetic_clusters_and_v50_g2p_locks():
@@ -1142,3 +1156,154 @@ def test_v58_muwashah_analyzer_combined_json_and_telephone_intro_fx():
     assert np.allclose(fx_sig[int(1.1 * sr) :], full_sig[int(1.1 * sr) :])
 
     assert hds.main(["--build-muwashah-json", bukaa_stage1]) == 0
+
+
+def test_v60_multi_maqam_diversity_nc27c_replace_forensics_and_vocal_stacking(tmp_path):
+    """Verify V60.0 Module 74: 12 Fingerprints, 13 Maqams, NC27-C, NC32 Replace, NC33 Forensics & NC34 Auto-Trim/Stacking."""
+    # 1. Verify 12 Multi-Maqam Melodic Fingerprints, 13 Maqams & auto-selection breaking melodic monotony
+    assert len(hds.MULTI_MAQAM_MELODIC_FINGERPRINT_LIBRARY_V60) == 12
+    for fp_key, fp_val in hds.MULTI_MAQAM_MELODIC_FINGERPRINT_LIBRARY_V60.items():
+        assert "zero piano" in fp_val["sound_prompt"].lower()
+        assert all(m in hds.MAQAM_FREQS for m in fp_val["maqam_arc"]), fp_key
+
+    assert hds.select_melodic_fingerprint_v60(poem_text="أشم خدك يا طفلي الرضيع يا بويي")["fingerprint_key"] == "v60_bahrani_cradle_nahawand_kurd_saba_64bpm"
+    assert hds.select_melodic_fingerprint_v60(poem_text="صلى الإله على نور .. يا سيد الرسل")["fingerprint_key"] == "v60_classical_devotional_tawashih_rast_ajam_86bpm"
+    assert hds.select_melodic_fingerprint_v60(poem_text="عشگ مجنون\nحبيب حسين\nلأجلك ذوب\nياسر النور")["fingerprint_key"] == "v60_iraqi_rapid_shoor_kurd_bayati_shuri_124bpm"
+    assert hds.select_melodic_fingerprint_v60(poem_text="دمع عيني على الخدين جاري\nوطيفك بالليل ما فارگ جاري\nأنا المذبوح والمگطوع جاري\nعلى التربان مرمي بالغاضريه")["fingerprint_key"] == "v60_minbar_rubato_abudhiyah_nai_sikah_saba_0bpm"
+
+    comb_fp = hds.build_v58_combined_muwashah_json(
+        "[المستهل]\nأشم خدك يا رضيعي",
+        fingerprint_key="v60_bahrani_cradle_nahawand_kurd_saba_64bpm",
+    )
+    assert comb_fp["selected_melodic_fingerprint"] == "v60_bahrani_cradle_nahawand_kurd_saba_64bpm"
+    assert "dark bowed bass cello drone" in comb_fp["sound_description"].lower()
+    assert comb_fp["global_bpm"] == 64
+
+    # 2. Verify NC27-C Phonological Affricate Sukun Law, Elision Locks & <= 4.2 syl/s Density Governor
+    nc27c_in = "ليش الفجر قاسي بلهيبه .. باتْشِر يبتْشي وتْشنت تْشفوفك گطعت چفوفك قبل الحچي"
+    nc27c_res = hds.format_clean_lyrics_for_lyria35(nc27c_in, target_bpm=124.0)
+    cl_27c = nc27c_res["clean_lyria35_lyrics"]
+    assert nc27c_res["nc27c_phonological_affricate_rule_applied"] is True
+    assert nc27c_res["nc27c_illegal_tsh_sukun_repaired"] >= 3
+    assert "بِلَهيبه" in cl_27c
+    assert "باتشر" in cl_27c and "باتْشر" not in cl_27c
+    assert "يبتشي" in cl_27c and "يبتْشي" not in cl_27c
+    assert "تشفوفك" in cl_27c and "تْشفوفك" not in cl_27c
+    assert "الحَتْشِي" in cl_27c
+    assert hds.format_clean_lyrics_for_lyria35(cl_27c)["clean_lyria35_lyrics"] == cl_27c
+
+    dense_audit = hds.audit_syllable_density_v60(
+        "هذا سطر طويل جداً مزدحم بالكلمات المتلاحقة المتسارعة بلا أي توقف أو سكتة تنفسية",
+        target_bpm=124.0,
+    )
+    assert dense_audit["exceeds_4_2_syl_per_sec_cap"] is True
+    assert dense_audit["max_syllables_per_sec"] > 4.2
+
+    # 3. Verify NC32 Live Remix > Replace Surgical Inpainting Planner
+    rep_ok = hds.build_remix_replace_inpainting_plan(
+        "19afceef-e747-480f-ae7e-6e0955472c89", 56.0, 67.0, "ليش الفجر قاسي بلهيبه", "ليش الفجر قاسي بلهيبه"
+    )
+    assert rep_ok["settings"]["window_sec"] == 11.0
+    assert not rep_ok["window_warnings"]
+    assert "بِلَهيبه" in rep_ok["edit_lyrics_diff"]["fixed_lyric_clean"]
+    assert "dark bowed bass cello drone" in rep_ok["instruction"].lower()
+
+    rep_warn = hds.build_remix_replace_inpainting_plan(
+        "2af13afc", 10.0, 14.0, "old", "new", axis_mode="axis1_pure"
+    )
+    assert len(rep_warn["window_warnings"]) == 1
+    assert "zero musical instruments" in rep_warn["instruction"].lower()
+
+    # 4. Verify NC33 Zero-Vibrato 240ms 12-TET Piano Detector & Dual-Band Pop-Snare Detector
+    sr = 16000
+    dur = 6.0
+    t_arr = np.linspace(0.0, dur, int(sr * dur), endpoint=False)
+    # 4a) Synthetic 12-TET exponentially decaying piano chord strikes (A4=440Hz, C5=523.25Hz, E5=659.25Hz)
+    piano_sig = np.zeros_like(t_arr)
+    for strike_sec, f_note in ((0.4, 440.0), (1.3, 523.25), (2.2, 659.25), (3.1, 440.0), (4.0, 587.33)):
+        s_i = int(strike_sec * sr)
+        n_l = min(len(t_arr) - s_i, int(0.8 * sr))
+        tn = np.arange(n_l, dtype=np.float64) / float(sr)
+        env_p = np.exp(-5.0 * tn) * np.minimum(1.0, tn / 0.004)
+        piano_sig[s_i : s_i + n_l] += 0.35 * env_p * (
+            np.sin(2.0 * np.pi * f_note * tn) + 0.4 * np.sin(2.0 * np.pi * 2.0 * f_note * tn)
+        )
+    art_piano = hds.detect_piano_and_pop_snare_transients(piano_sig, sample_rate=sr)
+    assert art_piano["piano_leakage_detected"] is True
+    assert art_piano["total_rigid_decay_notes"] >= 3
+    assert art_piano["passed_nc33_zero_artifact_gate"] is False
+
+    # 4b) Clean vibrato Arabic vocal (5.5 Hz +/- 35 cents) + muffled 60 Hz chest thuds -> ZERO piano, ZERO snare
+    vib_phase = 2.0 * np.pi * np.cumsum(210.0 * (2.0 ** (0.35 * np.sin(2.0 * np.pi * 5.5 * t_arr) / 12.0))) / float(sr)
+    clean_vocal = 0.28 * np.sin(vib_phase) + 0.14 * np.sin(2.0 * vib_phase) + 0.15 * np.sin(2.0 * np.pi * 60.0 * t_arr)
+    art_clean = hds.detect_piano_and_pop_snare_transients(clean_vocal, sample_rate=sr)
+    assert art_clean["piano_leakage_detected"] is False
+    assert art_clean["pop_snare_detected"] is False
+    assert art_clean["passed_nc33_zero_artifact_gate"] is True
+
+    # 5. Verify NC34 Tail Restart Loop Detector + Auto-Trim + 5th Masterwork Blueprint (Mid/Side Vocal Stacking)
+    loop_dur = 22.0
+    tl = np.linspace(0.0, loop_dur, int(sr * loop_dur), endpoint=False)
+    loop_sig = 0.30 * np.sin(2.0 * np.pi * 195.0 * tl)
+    # Cadential silence valley at 16.0-18.0s followed by accidental restart jump at 18.5-21.5s!
+    loop_sig[int(16.0 * sr) : int(18.0 * sr)] *= 0.008
+    loop_sig[int(18.0 * sr) :] = 0.32 * np.sin(2.0 * np.pi * 220.0 * tl[int(18.0 * sr) :])
+    loop_det = hds.detect_extend_restart_loop(loop_sig, sample_rate=sr)
+    assert loop_det["tail_loop_detected"] is True
+    assert 15.5 <= loop_det["recommended_trim_sec"] <= 18.0
+
+    # Clean decaying track has no tail loop
+    clean_end = 0.30 * np.sin(2.0 * np.pi * 195.0 * tl)
+    clean_end[int(18.0 * sr) :] *= np.linspace(1.0, 0.0, len(tl) - int(18.0 * sr))
+    assert hds.detect_extend_restart_loop(clean_end, sample_rate=sr)["tail_loop_detected"] is False
+
+    # 5th Blueprint: Mid/Side Vocal Stacking preserves exact mono Mid while boosting choir Side vs solo Side
+    t_ms = np.linspace(0.0, 4.0, 4 * sr, endpoint=False)
+    solo_half = 0.12 * np.sin(2.0 * np.pi * 420.0 * t_ms[: 2 * sr])
+    choir_half = 0.48 * np.sin(2.0 * np.pi * 420.0 * t_ms[2 * sr :])
+    mid_in = np.concatenate([solo_half, choir_half])
+    side_in = 0.12 * np.concatenate([
+        0.12 * np.sin(2.0 * np.pi * 620.0 * t_ms[: 2 * sr]),
+        0.48 * np.sin(2.0 * np.pi * 620.0 * t_ms[2 * sr :]),
+    ])
+    st_in = np.column_stack((mid_in + side_in, mid_in - side_in))
+    st_out = hds.apply_mid_side_vocal_stacking_enhancer(st_in, sr)
+    assert np.allclose(0.5 * (st_out[:, 0] + st_out[:, 1]), mid_in, atol=1e-6)
+    out_side = 0.5 * (st_out[:, 0] - st_out[:, 1])
+    solo_ratio = float(np.sqrt(np.mean(out_side[int(0.4 * sr) : int(1.5 * sr)] ** 2))) / float(
+        np.sqrt(np.mean(mid_in[int(0.4 * sr) : int(1.5 * sr)] ** 2))
+    )
+    choir_ratio = float(np.sqrt(np.mean(out_side[int(2.4 * sr) : int(3.6 * sr)] ** 2))) / float(
+        np.sqrt(np.mean(mid_in[int(2.4 * sr) : int(3.6 * sr)] ** 2))
+    )
+    assert choir_ratio > solo_ratio * 1.45
+
+    # End-to-end process_audio_file with auto_trim_tail_loop + vintage_intro_sec + vocal_stacking + CLI smoke tests
+    in_loop = tmp_path / "in_v60_loop.wav"
+    out_v60 = tmp_path / "out_v60_master.wav"
+    wavfile.write(str(in_loop), sr, (loop_sig * 32767).astype(np.int16))
+    proc_v60 = hds.process_audio_file(
+        str(in_loop),
+        str(out_v60),
+        mode="vocal_pure_master",
+        bpm=64.0,
+        vintage_intro_sec=2.0,
+        vocal_stacking=True,
+        auto_trim_tail_loop=True,
+        no_synth_rhythm=True,
+    )
+    assert out_v60.is_file()
+    assert proc_v60["auto_trimmed_tail_loop_sec"] is not None
+    assert proc_v60["vocal_stacking_applied"] is True
+    assert proc_v60["vintage_intro_sec"] == 2.0
+    aud_v60 = hds.audit_rendered_audio(str(out_v60))
+    assert aud_v60["tail_loop_detected"] is False
+    assert aud_v60["duration_sec"] <= 18.5
+    assert aud_v60["broadcast_compliant"] is True
+
+    assert hds.main(["--list-fingerprints"]) == 0
+    assert hds.main(["--select-fingerprint", "v60_bahrani_cradle_nahawand_kurd_saba_64bpm"]) == 0
+    assert hds.main(["--select-fingerprint", "auto:أشم خدك يا رضيعي"]) == 0
+    assert hds.main(["--plan-replace", "19afceef", "56", "67", "بلهيبه", "بِلَهيبه"]) == 0
+    assert hds.main(["--detect-artifacts", str(in_loop)]) == 0
+    assert hds.main(["--detect-tail-loop", str(in_loop)]) == 0
