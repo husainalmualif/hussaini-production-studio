@@ -8197,6 +8197,215 @@ def process_audio_file(
     }
 
 
+def _nc37_strip_diacritics(text: str) -> str:
+    """Strip Arabic diacritics (U+064B..U+065F, U+0670) for structural comparison."""
+    return re.sub(r"[\u064B-\u065F\u0670]", "", text)
+
+
+def _nc37_levenshtein_1(word_a: str, word_b: str) -> bool:
+    """Return True if two distinct normalized Arabic stems are within edit distance 1."""
+    if word_a == word_b or abs(len(word_a) - len(word_b)) > 1:
+        return False
+    if len(word_a) == len(word_b):
+        return sum(ca != cb for ca, cb in zip(word_a, word_b)) == 1
+    short_w, long_w = (word_a, word_b) if len(word_a) < len(word_b) else (word_b, word_a)
+    for idx in range(len(long_w)):
+        if long_w[:idx] + long_w[idx + 1:] == short_w:
+            return True
+    return False
+
+
+def audit_fusha_shadda_wasl_and_makharij_v62(lyrics_text: str) -> dict:
+    """V62.0 (NC37): Pre-flight Fusha Orthoepy, Shadda, Wasl, Punctuation & Rhyme-Carryover Linter.
+
+    Empirically engineered from Exp 30 & Exp 31 vocal-isolated 10s micro-audits to prevent:
+    - NC37-A: Unanchored choir Shadda blur (e.g. عَجِّلْ -> عَاجِلْ, مَهْدِيَّ -> مَهْدِي)
+    - NC37-B: Comma-after-Sukun Tanween artifact (عَجِّلْ، -> عَجِّلُنْ) & single-word '..' drop
+    - NC37-C: Inline parenthetical echo '(...)' swallowing words of the next dense line
+    - NC37-D: 'الِا' Wasl-Alif misread as 'الأَ', half-vocalized medial consonants (جُمعةٍ),
+      and adjacent-section near-homophone rhyme contamination (أَجْمَلْ -> نُورَ الأَجْمَلْ)
+    """
+    raw_lines = [ln.strip() for ln in lyrics_text.replace("\\n", "\n").splitlines() if ln.strip()]
+    choir_shadda_risks = []
+    comma_after_sukun_traps = []
+    ellipses_drop_traps = []
+    inline_echo_swallow_traps = []
+    wasl_alif_traps = []
+    half_vocalized_words = []
+    rhyme_carryover_traps = []
+
+    diac_chars = set("\u064B\u064C\u064D\u064E\u064F\u0650\u0651\u0652\u0670")
+    skip_medial = set("اويىآأإؤئة")
+    lyric_entries = []
+    section_idx = 0
+
+    for ln in raw_lines:
+        if ln.startswith("[") and ln.endswith("]"):
+            section_idx += 1
+            continue
+        lyric_entries.append((section_idx, ln))
+
+        # NC37-A: Full-choir (...) line containing Shadda U+0651
+        if ln.startswith("(") and ln.endswith(")") and "\u0651" in ln:
+            shadda_words = [w for w in re.findall(r"[\u0600-\u06FF]+", ln) if "\u0651" in w]
+            choir_shadda_risks.append({
+                "line": ln,
+                "shadda_words": shadda_words,
+                "fix": "Anchor Shadda-bearing words with centered Solo Lead vocal (choir behind lead only) to prevent Lyria 3.5 gemination blur (NC37-A).",
+            })
+
+        # NC37-B1: Comma/punctuation immediately after Sukun
+        for match in re.finditer(r"([\u0600-\u06FF]+\u0652)([،,؛;])", ln):
+            comma_after_sukun_traps.append({
+                "token": match.group(0),
+                "fix": f"Remove punctuation '{match.group(2)}' after Sukun -> '{match.group(1)}' to prevent unwanted '-un' Tanween artifact (NC37-B).",
+            })
+
+        # NC37-B2: Single word before '..' break (outro/pause omission risk, including inside '(...)')
+        ln_unwrapped = ln[1:-1].strip() if ln.startswith("(") and ln.endswith(")") else ln
+        ell_m = re.match(r"^([\u0600-\u06FF]+)\s*\.\.\s+(.+)$", ln_unwrapped)
+        if ell_m:
+            ellipses_drop_traps.append({
+                "line": ln,
+                "at_risk_word": ell_m.group(1),
+                "fix": f"Remove '..' after '{ell_m.group(1)}' -> '{ell_m.group(1)} {ell_m.group(2)}' so Lyria 3.5 does not omit it (NC37-B).",
+            })
+
+        # NC37-D1: Graphic 'الِا' / 'الْا' Wasl-Alif misread as 'الأَ'
+        for w in re.findall(r"[\u0600-\u06FF]+", ln):
+            if re.search(r"ال[\u0650\u0652]ا", w):
+                wasl_alif_traps.append({
+                    "word": w,
+                    "fix": re.sub(r"ال[\u0650\u0652]ا", "الإِ", w),
+                })
+
+        # NC37-D2: Half-vocalized medial consonant inside a partially diacritized word
+        for w in re.findall(r"[\u0600-\u06FF]+", ln):
+            if not any(ch in diac_chars for ch in w):
+                continue
+            pairs = []
+            for ch in w:
+                if ch in diac_chars:
+                    if pairs:
+                        pairs[-1] = (pairs[-1][0], True)
+                else:
+                    pairs.append((ch, False))
+            start_i = 2 if len(pairs) >= 4 and pairs[0][0] == "ا" and pairs[1][0] == "ل" else 0
+            if len(pairs) >= 5 and pairs[0][0] in "بلوفك" and pairs[1][0] == "ا" and pairs[2][0] == "ل":
+                start_i = 3
+            missing_letters = []
+            for idx in range(start_i + 1, max(start_i + 1, len(pairs) - 1)):
+                base_ch, has_d = pairs[idx]
+                next_ch = pairs[idx + 1][0] if idx + 1 < len(pairs) else ""
+                if not has_d and base_ch not in skip_medial and next_ch != "ا":
+                    missing_letters.append(base_ch)
+            if missing_letters:
+                half_vocalized_words.append({
+                    "word": w,
+                    "missing_medial_consonants": missing_letters,
+                    "fix": "Fully vocalize every medial consonant (e.g. جُمعةٍ -> جُمُعَةٍ) to prevent vowel guesswork (NC37-D).",
+                })
+
+    # NC37-C & NC37-D3: Cross-line & cross-section checks
+    for idx in range(len(lyric_entries) - 1):
+        sec_a, ln_a = lyric_entries[idx]
+        sec_b, ln_b = lyric_entries[idx + 1]
+        if re.search(r"\([^)]+\)\s*$", ln_a) and not ln_a.startswith("("):
+            next_words = re.findall(r"[\u0600-\u06FF]+", re.sub(r"\([^)]*\)", "", ln_b))
+            if len(next_words) >= 4:
+                inline_echo_swallow_traps.append({
+                    "echo_line": ln_a,
+                    "next_dense_line": ln_b,
+                    "fix": "Move inline echo '(...)' to its own line or remove it before a >=4-word line to prevent swallowing opening words (NC37-C).",
+                })
+        if sec_a != sec_b:
+            clean_a = ln_a[1:-1] if ln_a.startswith("(") and ln_a.endswith(")") else re.sub(r"\([^)]*\)", "", ln_a)
+            clean_b = ln_b[1:-1] if ln_b.startswith("(") and ln_b.endswith(")") else re.sub(r"\([^)]*\)", "", ln_b)
+            words_a = re.findall(r"[\u0600-\u06FF]+", clean_a)
+            words_b = re.findall(r"[\u0600-\u06FF]+", clean_b)
+            if words_a and words_b:
+                stem_a = re.sub(r"^ال", "", _nc37_strip_diacritics(words_a[-1])).replace("أ", "ا").replace("إ", "ا")
+                stem_b = re.sub(r"^ال", "", _nc37_strip_diacritics(words_b[-1])).replace("أ", "ا").replace("إ", "ا")
+                if len(stem_a) >= 3 and len(stem_b) >= 3 and _nc37_levenshtein_1(stem_a, stem_b):
+                    rhyme_carryover_traps.append({
+                        "prev_section_end_word": words_a[-1],
+                        "next_section_end_word": words_b[-1],
+                        "fix": f"Replace near-homophone '{words_a[-1]}' before reprise ending in '{words_b[-1]}' to prevent rhyme contamination (NC37-D).",
+                    })
+
+    total_issues = (
+        len(choir_shadda_risks)
+        + len(comma_after_sukun_traps)
+        + len(ellipses_drop_traps)
+        + len(inline_echo_swallow_traps)
+        + len(wasl_alif_traps)
+        + len(half_vocalized_words)
+        + len(rhyme_carryover_traps)
+    )
+    return {
+        "nc37_preflight_passed": total_issues == 0,
+        "total_issues": total_issues,
+        "choir_shadda_blur_risks": choir_shadda_risks,
+        "comma_after_sukun_traps": comma_after_sukun_traps,
+        "ellipses_drop_traps": ellipses_drop_traps,
+        "inline_echo_swallow_traps": inline_echo_swallow_traps,
+        "wasl_alif_traps": wasl_alif_traps,
+        "half_vocalized_words": half_vocalized_words,
+        "rhyme_carryover_traps": rhyme_carryover_traps,
+    }
+
+
+def compute_strict_production_score_v62(
+    music_score: float,
+    orthoepy_score: float,
+    critical_verbal_defects: int = 0,
+    major_verbal_defects: int = 0,
+) -> dict:
+    """V62.0 (NC37-E): Zero-Flattery Strict Production Score Ceiling (Eliminates Orchestral Halo Inflation).
+
+    Any critical verbal defect (dropped Shadda like عَجِّلْ->عَاجِلْ, added Tanween عَجِّلُنْ,
+    omitted word, or word mutation الأَمَلْ->الأَجْمَلْ) caps overall score strictly <= 7.9
+    and forces release_ready=False until surgically repaired or re-generated.
+    """
+    m_sc = max(0.0, min(10.0, float(music_score)))
+    o_sc = max(0.0, min(10.0, float(orthoepy_score)))
+    crit = max(0, int(critical_verbal_defects))
+    maj = max(0, int(major_verbal_defects))
+
+    weighted = 0.45 * m_sc + 0.55 * o_sc
+    capped = min(weighted, o_sc + 1.2)
+    cap_reason = "orthoepy_halo_cap" if capped < weighted else "none"
+
+    if crit >= 1:
+        capped = min(capped, 7.9)
+        cap_reason = f"critical_verbal_defects_cap ({crit} critical)"
+        release_ready = False
+        verdict = "NEEDS_FIX_NOT_RELEASE_READY"
+    elif maj >= 2:
+        capped = min(capped, 8.4)
+        cap_reason = f"major_verbal_defects_cap ({maj} major)"
+        release_ready = False
+        verdict = "NEEDS_POLISH_BEFORE_RELEASE"
+    else:
+        release_ready = bool(o_sc >= 8.8 and capped >= 8.8)
+        verdict = "RELEASE_READY_STRICT_PASS" if release_ready else "BELOW_RELEASE_THRESHOLD"
+
+    return {
+        "music_score": round(m_sc, 2),
+        "orthoepy_score": round(o_sc, 2),
+        "critical_verbal_defects": crit,
+        "major_verbal_defects": maj,
+        "strict_overall_score": round(capped, 2),
+        "release_ready": release_ready,
+        "verdict": verdict,
+        "cap_reason": cap_reason,
+        "mandatory_audit_ffmpeg_filter": (
+            "pan=mono|c0=0.5*c0+0.5*c1,highpass=f=140,"
+            "equalizer=f=2600:t=q:w=1.2:g=4,equalizer=f=5500:t=q:w=1.5:g=2"
+        ),
+    }
+
+
 def parse_args(argv=None):
     """Parse CLI flags for V60.0 Multi-Maqam Diversity, NC27-C/NC32-NC34 Forensics & 20-Mode DSP."""
     parser = argparse.ArgumentParser(
@@ -8344,6 +8553,11 @@ def parse_args(argv=None):
         default=None,
         help="V62.0 (NC36): Check Quarter-Tone vs. 12-TET orchestral compatibility for a Maqam (append ':12tet' to test Western chord clash)",
     )
+    parser.add_argument(
+        "--audit-orthoepy",
+        default=None,
+        help="V62.0 (NC37): Pre-flight Fusha Shadda, Wasl-Alif, comma-after-Sukun, inline-echo & rhyme-carryover audit",
+    )
     parser.add_argument("--extract-profile", default=None, help="Reverse-engineer reference WAV/MP3 profile")
     parser.add_argument("--audit-audio", default=None, help="Audit WAV loudness, True Peak, gaps & tail cutoff/loops")
     return parser.parse_args(argv)
@@ -8473,6 +8687,16 @@ def main(argv=None):
         print(
             json.dumps(
                 validate_maqam_orchestration_compatibility(mq_part, uses_western_12tet_chords=use_12),
+                ensure_ascii=False,
+                indent=2,
+            )
+        )
+        return 0
+
+    if args.audit_orthoepy is not None:
+        print(
+            json.dumps(
+                audit_fusha_shadda_wasl_and_makharij_v62(args.audit_orthoepy),
                 ensure_ascii=False,
                 indent=2,
             )

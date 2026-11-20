@@ -1453,3 +1453,66 @@ def test_v62_waqar_nc36_orchestral_six_families_qarid_and_multi_platform_lufs(tm
     assert hds.main(["--check-orchestration", "saba:12tet"]) == 0
     assert hds.main(["--check-orchestration", "nahawand:12tet"]) == 0
     assert hds.main(["--genre", "operetta", "--maqam-drone", "hijaz", "--bpm", "84"]) == 0
+
+
+def test_v62_nc37_fusha_shadda_wasl_orthoepy_linter_and_strict_score_ceiling():
+    """Verify V62.0 NC37: Pre-flight Fusha Shadda/Wasl/Punctuation/Echo linter & zero-flattery score cap."""
+    bad_exp30 = (
+        "[التمهيد]\n"
+        "مَتَى يَا إِمَامَ الهُدَى الِانْبِعَاثْ\n"
+        "[اللازمة]\n"
+        "(عَجِّلْ فَدَتْكَ نُفُوسُ المُخْلِصِينْ)\n"
+        "[الدور]\n"
+        "فِي كُلِّ جُمعةٍ نَرْفَعُ الأَكُفَّ بِالدُّعَاءْ\n"
+        "[الذروة]\n"
+        "(فَإِنَّ الصَّبَاحَ بِنُورِكَ أَجْمَلْ)\n"
+        "[الخاتمة]\n"
+        "(يَا صَاحِبَ العَصْرِ يَا نُورَ الأَمَلْ)\n"
+        "(عَجِّلْ .. يَا صَاحِبَ العَصْرِ وَالزَّمَانْ)"
+    )
+    res30 = hds.audit_fusha_shadda_wasl_and_makharij_v62(bad_exp30)
+    assert res30["nc37_preflight_passed"] is False
+    assert len(res30["choir_shadda_blur_risks"]) >= 3
+    assert len(res30["wasl_alif_traps"]) == 1
+    assert len(res30["half_vocalized_words"]) == 1
+    assert len(res30["ellipses_drop_traps"]) == 1
+    assert len(res30["rhyme_carryover_traps"]) == 1
+
+    bad_exp31 = (
+        "[اللازمة]\n"
+        "عَجِّلْ، فَدَتْكَ نُفُوسُ المُخْلِصِينْ\n"
+        "[الذروة]\n"
+        "وَنَحْمِلُ رَايَةَ خَيْرِ الأَنَامْ (خَيْرِ الأَنَامْ)\n"
+        "يَا مَهْدِيَّ آلِ مُحَمَّدٍ أَقْبِلْ (يَا مَهْدِيُّ أَقْبِلْ)"
+    )
+    res31 = hds.audit_fusha_shadda_wasl_and_makharij_v62(bad_exp31)
+    assert res31["nc37_preflight_passed"] is False
+    assert len(res31["comma_after_sukun_traps"]) == 1
+    assert len(res31["inline_echo_swallow_traps"]) == 1
+
+    clean_exp32 = (
+        "[التمهيد]\n"
+        "مَتَى يَا إِمَامَ الهُدَى الإِنْبِعَاثْ\n"
+        "[اللازمة]\n"
+        "عَجِّلْ فَدَتْكَ نُفُوسُ المُخْلِصِينْ\n"
+        "[الدور]\n"
+        "فِي كُلِّ جُمُعَةٍ نَرْفَعُ الأَكُفَّ بِالدُّعَاءْ\n"
+        "[الذروة]\n"
+        "فَإِنَّ الظَّلَامَ بِنُورِكَ يَرْحَلْ\n"
+        "[الخاتمة]\n"
+        "يَا صَاحِبَ العَصْرِ يَا نُورَ الأَمَلْ\n"
+        "عَجِّلْ يَا صَاحِبَ العَصْرِ وَالزَّمَانْ"
+    )
+    res32 = hds.audit_fusha_shadda_wasl_and_makharij_v62(clean_exp32)
+    assert res32["nc37_preflight_passed"] is True
+    assert res32["total_issues"] == 0
+
+    strict_fail = hds.compute_strict_production_score_v62(9.5, 6.2, critical_verbal_defects=4, major_verbal_defects=2)
+    assert strict_fail["strict_overall_score"] <= 7.4
+    assert strict_fail["release_ready"] is False
+
+    strict_pass = hds.compute_strict_production_score_v62(9.2, 9.0, critical_verbal_defects=0, major_verbal_defects=1)
+    assert strict_pass["strict_overall_score"] >= 9.0
+    assert strict_pass["release_ready"] is True
+
+    assert hds.main(["--audit-orthoepy", clean_exp32]) == 0

@@ -60,18 +60,19 @@ Absorbed from `موسيقى الوقار والشجن` (`code_artifact (1).html`
 
 ---
 
-## 6. Live Empirical Proof: `Exp 30` (33rd Cumulative Flow Music Lab Experiment — `9.6 / 10`)
+## 6. Live Empirical Proof & `NC37` Ruthless Vocal-Isolated Forensics (`Exp 30 -> Exp 31 -> Exp 32`, `35` Cumulative Flow Music Experiments)
 
-- **Track:** `يا صاحب العصر` (`2:46`, `165.664s`) — Model: **`Lyria 3.5`**
-- **Session URL:** `https://www.flowmusic.app/session/e565c7f3-da43-4d59-bb18-9aeed2ef9d7c?t=true`
-- **Clip UUID:** `13cc0a13-6ac8-47f9-bca0-31073c4454c0`
-- **Genre & Axis:** `Axis 5` Dignified Non-Lahwi Orchestral Shia Mahdawi Anthem & Spiritual Operetta (`v62_orchestral_mahdawi_anthem_nahawand_kurd_78bpm`)
-- **Spectral & Acoustic Forensics:**
-  - **BPM:** `75 BPM` (Target `78 BPM` dignified march) | **Quarter-Tone Energy Ratio:** `0.13` (zero 50-cent quarter-tone clash — `NC36` PASS)
-  - **Detected 12-TET-Safe Maqams:** `ajam (0.969)`, `lami (0.942)`, `kurd (0.923)` following `Nahawand -> Kurd -> Ajam` arc
-  - **NC33 Zero-Artifact Gate:** `passed_nc33_zero_artifact_gate: true` (`0` opening piano notes, `0` pop snare flags, `0` flagged chunks)
-  - **Tail Integrity & Mono Check:** `tail_loop_detected: false`, `abrupt_tail_cutoff_risk: false`, natural solo oboe decay to `-85.59 dBFS`, **`lr_phase_correlation: 0.947`**, `mono_energy_retention_db: -0.12 dB` (`mono_safe: true`)
-  - **Multi-Platform EBU R128 Masters (All `broadcast_compliant: true`):** `streaming -14.0 LUFS (-2.08 dBTP)`, `apple_music -16.0 LUFS (-4.08 dBTP)`, `hires_qobuz -18.0 LUFS (-6.08 dBTP)`, `broadcast_tv -23.0 LUFS (-11.08 dBTP)`
-- **Mandatory `NC29` Full 9-Chunk (`20s`) Blind Auditory Audit (`9.6 / 10`):**
-  - **Strengths:** Sweeping legato strings, weeping solo oboe, warm bassoon, delicate acoustic guitar arpeggios, solemn timpani/Bendir, live call-and-response operetta climax (`نبني السلام / خير الأنام / نورك أجمل`), pristine Fusha orthoepy, authentic live modulation (`Nahawand -> Kurd -> Ajam`), serene oboe outro.
-  - **Honest Micro-Findings:** `-0.25` for one choir rhyme carryover (`يا نور الأجمل` at `2:12`, self-corrected to `يا نور الأمل` at `2:17`, trivially fixable via `Remix > Replace` `2:08–2:15`); `-0.15` for a mildly glottal `الِانْبِعَاث` at `0:49`.
+Following strict user-enforced zero-flattery auditory forensics, we upgraded the audit pipeline from full-mix `20s` slices to **Vocal-Isolated Mid-Channel `10s` Overlapping Micro-Slices (`step 8s`)** (`pan=mono|c0=0.5*c0+0.5*c1,highpass=f=140,equalizer=f=2600:t=q:w=1.2:g=4,equalizer=f=5500:t=q:w=1.5:g=2`) and discovered **5 permanent `Lyria 3.5` Fusha Shadda & Makharij laws (`NC37-A..E`)**, now programmatically enforced by `audit_fusha_shadda_wasl_and_makharij_v62()` (`--audit-orthoepy`) and `compute_strict_production_score_v62()`:
+
+| Exp | Clip UUID | `NC37` Pre-Flight Traps | Vocal-Isolated `10s` Forensic Findings (Zero Flattery) | Music | Orthoepy | Strict Score | Verdict |
+|---|---|---|---|---:|---:|---:|---|
+| **`Exp 30`** | `13cc0a13` (`2:46`) | `7` traps | **Orchestral Halo Failure Exposed:** `0/5` choir Shadda (`1:03 عَجِّلْ->عَاجِلْ`, `1:56 مَهْدِيَّ->مَهْدِي`, weakened `رَبِّي/فَإِنَّ`), `0:49 الِانْبِعَاثْ->الأَنْبِعَاثْ`, `1:19 جُمعةٍ->جُمَعَةٍ`, `2:12 الأَمَلْ->الأَجْمَلْ`, `2:25` dropped `عَجِّلْ` after `..`. Proved solo Shadda (`7/8`) vs choir blur (`0/5`). | `9.5` | `6.2` | **`7.40`** | `NOT RELEASE-READY` |
+| **`Exp 31`** | `03e81717` (`2:38`) | `2` traps | **8/8 Shadda & Makharij Fixed** (`عَجِّلْ، الإِنْبِعَاثْ، رَبِّي، جُمُعَةٍ، الأَكُفَّ، حَاضِراً، العَهْدِ، وَنَحْمِلُ، فَإِنَّ، الأَمَلْ`), BUT exposed `0:58 عَجِّلْ، -> عَجِّلُنْ` (comma after Sukun!), `1:56` inline `(خَيْرِ الأَنَامْ)` swallowing `يَا مَهْدِيَّ آلِ`, and `1:49 رَايَتَتَ` stutter. | `9.4` | `8.0` | **`7.90`** | `NOT RELEASE-READY` |
+| **`Exp 32`** | `c7622fcc` (`2:57`) | **`0` traps (`PASS`)** | **`3/3` Crisp Geminated `عَجِّلْ`** (`0:39`, `2:22`, `2:41`), `2/2` crisp `رَبِّي/غَوْثَ`, `0:22 الإِنْبِعَاثْ`, `0:53 جُمُعَةٍ/الأَكُفَّ`, `1:44 العَهْدِ/وَنَحْمِلُ لِوَاءَ`, `1:55 يَا مَهْدِيَّ آلِ مُحَمَّدٍ أَقْبِلْ` (zero dropped words), `2:10–2:38 الأَمَلْ` (`0% الأَجْمَلْ`), `0` critical defects. Only `1` major stutter (`1:15 وَنَرَاكَ كَهَاهُنَا` — surgical `Remix > Replace` `1:10–1:20`). | `9.2` | **`9.0`** | **`9.09`** | **`RELEASE_READY_STRICT_PASS`** |
+
+### Permanent `NC37` Arabic Fusha Orthoepy & Zero-Flattery Audit Laws
+1. **`NC37-A` (Choir Shadda Blur Law):** Anchor every Shadda-heavy (`عَجِّلْ، رَبِّي، مَهْدِيَّ، مُحَمَّدٍ، فَإِنَّ، الأَكُفَّ`) and pharyngeal (`ح/ع/ه`) line with the centered **Solo Lead** vocal; never isolate Shadda lines inside reverberant `(...)` choir-only bars.
+2. **`NC37-B` (No Comma After Sukun / No Single-Word `..` Drop):** Never write `،` right after Sukun (`عَجِّلْ، -> عَجِّلُنْ`); never put `..` after a single lead word (`عَجِّلْ .. يَا` drops `عَجِّلْ`).
+3. **`NC37-C` (No Inline Echo Before Dense Lines):** Never trail an inline `(...)` echo at the end of a climax line before a `>= 4`-word line.
+4. **`NC37-D` (Full Medial Tashkeel, `الِا -> الإِ` & Anti-Rhyme-Carryover):** Vocalize all medial consonants (`جُمُعَةٍ`), replace `الِا` with `الإِ` (`الإِنْبِعَاثْ`), and block near-homophones across section boundaries (`أَجْمَلْ` before `الأَمَلْ` -> `يَرْحَلْ`).
+5. **`NC37-E` (Mandatory Vocal-Isolated `10s` Audit & Strict Score Ceiling):** NEVER grade Arabic orthoepy from full-mix `20s` chunks; ANY critical verbal defect caps overall score strictly `<= 7.9` (`release_ready=False`).
