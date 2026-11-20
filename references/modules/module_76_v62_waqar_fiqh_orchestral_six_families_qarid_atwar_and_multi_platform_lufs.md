@@ -57,3 +57,21 @@ Absorbed from `موسيقى الوقار والشجن` (`code_artifact (1).html`
 1. `v62_orchestral_mahdawi_anthem_nahawand_kurd_78bpm` (`Axis 5` Orchestral Mahdawi/Social Anthem — `Nahawand -> Kurd -> Ajam`, `78 BPM`, `NC36` 12-TET-safe)
 2. `v62_qarid_hadi_qazwini_caravan_sikah_bayati_68bpm` (Classical Qarid `Al-Hadi / Al-Qazwini / Al-Rukbani` — `Sikah -> Bayati -> Saba`, `68 BPM`, Quarter-Tone Pure)
 3. `v62_dialect_hybrid_epic_operetta_hijaz_nahawand_84bpm` (Modern Shia Historical Epic Operetta — Fusha Narrative + Colloquial Climax — `Hijaz -> Nahawand -> Ajam`, `84 BPM`)
+
+---
+
+## 6. Live Empirical Proof: `Exp 30` (33rd Cumulative Flow Music Lab Experiment — `9.6 / 10`)
+
+- **Track:** `يا صاحب العصر` (`2:46`, `165.664s`) — Model: **`Lyria 3.5`**
+- **Session URL:** `https://www.flowmusic.app/session/e565c7f3-da43-4d59-bb18-9aeed2ef9d7c?t=true`
+- **Clip UUID:** `13cc0a13-6ac8-47f9-bca0-31073c4454c0`
+- **Genre & Axis:** `Axis 5` Dignified Non-Lahwi Orchestral Shia Mahdawi Anthem & Spiritual Operetta (`v62_orchestral_mahdawi_anthem_nahawand_kurd_78bpm`)
+- **Spectral & Acoustic Forensics:**
+  - **BPM:** `75 BPM` (Target `78 BPM` dignified march) | **Quarter-Tone Energy Ratio:** `0.13` (zero 50-cent quarter-tone clash — `NC36` PASS)
+  - **Detected 12-TET-Safe Maqams:** `ajam (0.969)`, `lami (0.942)`, `kurd (0.923)` following `Nahawand -> Kurd -> Ajam` arc
+  - **NC33 Zero-Artifact Gate:** `passed_nc33_zero_artifact_gate: true` (`0` opening piano notes, `0` pop snare flags, `0` flagged chunks)
+  - **Tail Integrity & Mono Check:** `tail_loop_detected: false`, `abrupt_tail_cutoff_risk: false`, natural solo oboe decay to `-85.59 dBFS`, **`lr_phase_correlation: 0.947`**, `mono_energy_retention_db: -0.12 dB` (`mono_safe: true`)
+  - **Multi-Platform EBU R128 Masters (All `broadcast_compliant: true`):** `streaming -14.0 LUFS (-2.08 dBTP)`, `apple_music -16.0 LUFS (-4.08 dBTP)`, `hires_qobuz -18.0 LUFS (-6.08 dBTP)`, `broadcast_tv -23.0 LUFS (-11.08 dBTP)`
+- **Mandatory `NC29` Full 9-Chunk (`20s`) Blind Auditory Audit (`9.6 / 10`):**
+  - **Strengths:** Sweeping legato strings, weeping solo oboe, warm bassoon, delicate acoustic guitar arpeggios, solemn timpani/Bendir, live call-and-response operetta climax (`نبني السلام / خير الأنام / نورك أجمل`), pristine Fusha orthoepy, authentic live modulation (`Nahawand -> Kurd -> Ajam`), serene oboe outro.
+  - **Honest Micro-Findings:** `-0.25` for one choir rhyme carryover (`يا نور الأجمل` at `2:12`, self-corrected to `يا نور الأمل` at `2:17`, trivially fixable via `Remix > Replace` `2:08–2:15`); `-0.15` for a mildly glottal `الِانْبِعَاث` at `0:49`.

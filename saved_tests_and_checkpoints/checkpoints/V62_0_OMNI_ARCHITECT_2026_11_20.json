@@ -28,7 +28,20 @@
       "hires_qobuz": -18.0,
       "broadcast_tv": -23.0
     },
-    "cumulative_live_flow_experiments": 32,
+    "cumulative_live_flow_experiments": 33,
+    "exp30_live_verification": {
+      "title": "يا صاحب العصر",
+      "clip_uuid": "13cc0a13-6ac8-47f9-bca0-31073c4454c0",
+      "session_url": "https://www.flowmusic.app/session/e565c7f3-da43-4d59-bb18-9aeed2ef9d7c?t=true",
+      "model": "Lyria 3.5",
+      "duration_sec": 165.664,
+      "estimated_bpm": 75,
+      "blind_audit_score_10": 9.6,
+      "nc33_zero_artifact_passed": true,
+      "nc36_quarter_tone_clash_free": true,
+      "mono_phase_correlation": 0.947,
+      "multi_platform_masters_verified_lufs": [-14.0, -16.0, -18.0, -23.0]
+    },
     "new_module_doc": "references/modules/module_76_v62_waqar_fiqh_orchestral_six_families_qarid_atwar_and_multi_platform_lufs.md"
   }
 }
