@@ -1808,3 +1808,37 @@ def test_v65_six_pillar_evaluation_vocal_stability_veto_and_4layer_symphony(tmp_
     assert ev_ok["allow_credit_spending_on_replace_or_extend"] is True
     assert ev_ok["verdict"] == "RELEASE_READY_SIX_PILLAR_PASS"
     assert hds.main(["--audit-six-pillars", str(wav_steady), "--maqam-drone", "bayati", "--bpm", "60"]) == 0
+
+    # 4. Verify NC51: Single-pass full-poem cramming is HARD BLOCKED; --build-multipart-package splits cleanly into parts!
+    crammed_full_poem = (
+        "[المستهل]\n"
+        "(صوت أم البنين يصيح يبن حذلم)\n"
+        "[النزلة الأولى]\n"
+        "لمن رد ابن حذلم .. ينعى ويصرخ بصوته\n"
+        "إجته أم الگمر وتصيح .. يا هالناعي بسكوته\n"
+        "تگله يبن حذلم گول .. عن حسين وإخوته\n"
+        "[الكسرة الأولى]\n"
+        "أريد أنشد ردت نشده .. رد لدياره لو بعده\n"
+        "دليلي انگسم نصين .. وراهم طايحه بشده\n"
+        "[النزلة الثانية]\n"
+        "يگلها عظم الله أجرچ .. عبدالله وگع بالبر\n"
+        "ومن بعده ترى عثمان .. ظل على الثرى موذر\n"
+        "يالحره وترى الثالث .. أخبرچ وگع جعفر\n"
+        "[الكسرة الثانية]\n"
+        "صاحت والدمع بادي .. بشر گطعت إفادي\n"
+        "ما أنشدك على أولادي .. على حسين النشد كله\n"
+    )
+    ov_bad = hds.audit_single_pass_poem_overload_v65(crammed_full_poem, stage_role="stage_1_root")
+    assert ov_bad["single_pass_overload_blocked"] is True
+    assert ov_bad["nazla_section_count"] == 2
+    assert hds.audit_iraqi_latmiya_preflight_v64(crammed_full_poem)["v64_iraqi_preflight_passed"] is False
+
+    pkg = hds.build_multipart_json_and_compose_package_v65(
+        crammed_full_poem, title="صوت أم البنين يصيح", dialect="iraqi", maqam="saba", bpm=58
+    )
+    assert pkg["part_1_stage1_root_stanza1_only"]["anti_cramming_verification"]["single_pass_overload_blocked"] is False
+    assert len(pkg["parts_2_to_n_isolated_3line_extends"]) >= 2
+    for ext_p in pkg["parts_2_to_n_isolated_3line_extends"]:
+        assert ext_p["nc16_three_line_verification"]["single_pass_overload_blocked"] is False
+        assert ext_p["method_2_primary_extend_json"]["lyrics_panel_action"] == "OVERWRITE_AND_CLEAR_ALL_PREVIOUS_STAGE_LYRICS"
+    assert hds.main(["--build-multipart-package", crammed_full_poem, "--dialect", "iraqi", "--maqam-drone", "saba", "--bpm", "58"]) == 0

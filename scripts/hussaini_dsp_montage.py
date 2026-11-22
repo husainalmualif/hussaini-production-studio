@@ -9146,6 +9146,7 @@ def audit_iraqi_latmiya_preflight_v64(poem_text: str, target_bpm: float = 62.0) 
                 broken_stanza_rhymes.append({"section": hdr, "rhyme_tails": tails})
 
     _ = target_bpm
+    overload_chk = audit_single_pass_poem_overload_v65(poem_text, stage_role="stage_1_root")
     passed = (
         not verbose_headers
         and not missing_mustahal_choir
@@ -9154,6 +9155,7 @@ def audit_iraqi_latmiya_preflight_v64(poem_text: str, target_bpm: float = 62.0) 
         and not overlong_lines
         and not broken_stanza_rhymes
         and not heavy_sukun_spam
+        and not overload_chk["single_pass_overload_blocked"]
     )
     return {
         "v64_iraqi_preflight_passed": passed,
@@ -9166,6 +9168,7 @@ def audit_iraqi_latmiya_preflight_v64(poem_text: str, target_bpm: float = 62.0) 
         "overlong_unsplit_lines": overlong_lines,
         "stanza_syllable_spread_violations": stanza_spread_violations,
         "broken_stanza_rhymes": broken_stanza_rhymes,
+        "nc51_single_pass_overload": overload_chk,
     }
 
 
@@ -9558,6 +9561,233 @@ def evaluate_six_pillars_hussaini_work_v65(
     }
 
 
+def audit_single_pass_poem_overload_v65(lyrics_text: str, stage_role: str = "stage_1_root") -> dict:
+    """V65.0 (NC51): Block single-pass full-poem cramming; enforce Multi-Part Stage Partitioning.
+
+    Feeding an entire multi-stanza poem into Stage 1 at once forces Lyria 3.5 to double-time rush the
+    melody, swallow Maddat, and collide the Raddada choir over the solo Radood (as seen in Exp 35 & Exp 36).
+    - `stage_1_root` cap: max 1 Nazla stanza, max 12 vertical sung lines, max 85 Arabic words (~70-95s).
+    - `extend_part` cap (NC16 + V50.4 Kasra Isolation): max 3 vertical sung lines (~21.5s) isolated per part.
+    """
+    raw_lines = [ln.strip() for ln in (lyrics_text or "").replace("\\n", "\n").splitlines() if ln.strip()]
+    headers = [ln for ln in raw_lines if ln.startswith("[") and ln.endswith("]")]
+    sung_lines = [ln for ln in raw_lines if not (ln.startswith("[") and ln.endswith("]"))]
+    words = re.findall(r"[\u0621-\u064A\u067E\u0686\u06AF]+", "\n".join(sung_lines))
+
+    nazla_or_verse_headers = [
+        h for h in headers
+        if any(kw in h for kw in ("نزلة", "النزلة", "مقطع", "المقطع", "كوبليه", "الدور", "دور"))
+    ]
+    role = (stage_role or "stage_1_root").strip().lower()
+    reasons = []
+    if role == "extend_part":
+        if len(sung_lines) > 3:
+            reasons.append(
+                f"extend_part_exceeds_3_vertical_lines ({len(sung_lines)} > 3; NC16 requires <=3 vertical lines ~21.5s per Extend part)"
+            )
+        if len(headers) > 1:
+            reasons.append(
+                f"extend_part_mixes_multiple_sections ({headers}; V50.4 isolates [النزلة] in Part XA and [الكسرة] in Part XB)"
+            )
+    else:
+        if len(nazla_or_verse_headers) > 1:
+            reasons.append(
+                f"multi_stanza_cramming_in_stage1 ({nazla_or_verse_headers}; Stage 1 Root may contain ONLY Stanza 1 — move Stanzas 2..N to isolated Extend parts)"
+            )
+        if len(sung_lines) > 12:
+            reasons.append(
+                f"stage1_line_overload ({len(sung_lines)} > 12 vertical lines; causes frantic rushed melody & choir collision)"
+            )
+        if len(words) > 85:
+            reasons.append(
+                f"stage1_word_overload ({len(words)} > 85 Arabic words in single pass; partition poem via --build-multipart-package)"
+            )
+
+    return {
+        "stage_role": role,
+        "vertical_sung_lines": len(sung_lines),
+        "arabic_word_count": len(words),
+        "nazla_section_count": len(nazla_or_verse_headers),
+        "single_pass_overload_blocked": len(reasons) > 0,
+        "violation_reasons": reasons,
+        "remediation": (
+            "Partition poem into parts via --build-multipart-package: Part 0 Pre-Conditioning -> "
+            "Part 1 Stage-1 Root (Mustahal + Stanza 1 ONLY + Trim) -> Isolated 3-line Extend Parts (2A, 2B...) "
+            "with NC17 Lyrics Clear -> Final Grand Mustahal Part."
+        ),
+    }
+
+
+def build_multipart_json_and_compose_package_v65(
+    poem_text: str,
+    title: str = "قصيدة حسينية",
+    dialect: str = "iraqi",
+    maqam: str = "saba",
+    bpm: int = 58,
+) -> dict:
+    """V65.0 (NC49-NC51): Partition full poem into Multi-Part Production Package (Method 2 JSON + Method 1 Compose).
+
+    Eliminates full-poem single-pass cramming by splitting any multi-stanza poem into:
+    - Part 0: Session Pre-Conditioning MASTER_STATE JSON in Producer Chat (`DO_NOT_GENERATE`)
+    - Part 1: Stage 1 Root Foundation (Mustahal + Nazla 1 [3 lines] + Kasra 1 [<=3 lines] + Mustahal ONLY)
+      followed by mandatory 6-Pillar Audit + `Remix > Trim` before extending
+    - Parts 2A..NB: Isolated 3-vertical-line Extend parts (`Step XA` = Nazla alone, `Step XB` = Kasra alone)
+      with mandatory `OVERWRITE_AND_CLEAR_ALL_PREVIOUS_STAGE_LYRICS` (NC17)
+    - Part Final: Dedicated Grand Finale `[المستهل]` Extend part (~20s)
+    """
+    base_plan = plan_poem_extend_stages(poem_text, target_method="both", bpm=bpm)
+    clean_estehlal = [
+        format_clean_lyrics_for_lyria35(ln, target_bpm=float(bpm))["clean_lyria35_lyrics"].strip()
+        for ln in base_plan["stage_1_estehlal"]
+        if ln.strip()
+    ]
+    all_blocks = base_plan["extend_stages"]
+    part1_blocks = all_blocks[:2] if len(all_blocks) >= 2 and "B" in all_blocks[1]["stage_code"] else all_blocks[:1]
+    remaining_blocks = all_blocks[len(part1_blocks) :]
+
+    bootstrap = build_v63_session_bootstrap_json("track_a", dialect=dialect)
+    sound_master = (
+        f"Traditional {dialect.capitalize()} Hussaini Studio Latmiya, solemn Muthakkal and Nazla style, "
+        f"Maqam {maqam.replace('_', ' ').title()}, {int(bpm)} BPM locked pulse, authentic {dialect} dialect, "
+        "commanding deep resonant Baritone Radood with studio-recorded pure vocal clarity and steady "
+        "diaphragmatic pitch control, strictly no high-pitched screaming, 4-layer human vocal symphony "
+        "(human bass tonic drone, warm Zannah pad, clean human Ahaat swells, cohesive unison Al-Raddada "
+        "congregation response on parenthesized lines), deep bare-chest thumping, sacred Husseiniya dome "
+        "reverb, Pure Acapella No Instruments"
+    )
+
+    p1_sections = [
+        {
+            "section_tag": "[المستهل الأول]",
+            "performer": "100% Cohesive Unison Male Al-Raddada Choir",
+            "tor_and_maqam": f"Locked Single Maqam {maqam} — {int(bpm)} BPM Qarar/Jawab Unison",
+            "lyrics_arabic": [ln for ln in clean_estehlal if not ln.startswith("[")],
+        }
+    ]
+    p1_compose_lines = ["[المستهل الأول]"] + [ln for ln in clean_estehlal if not ln.startswith("[")]
+
+    for idx_b, blk in enumerate(part1_blocks):
+        clean_blk_lines = [
+            format_clean_lyrics_for_lyria35(ln, target_bpm=float(bpm))["clean_lyria35_lyrics"].strip()
+            for ln in blk["vertical_lines"]
+        ]
+        sec_tag = "[النزلة الأولى]" if idx_b == 0 else "[الكسرة الأولى]"
+        p1_sections.append({
+            "section_tag": sec_tag,
+            "performer": "Solo Commanding Jawhari Baritone Radood (studio-recorded pure vocal clarity)",
+            "tor_and_maqam": f"Locked Single Maqam {maqam} — {int(bpm)} BPM Steady Delivery",
+            "lyrics_arabic": clean_blk_lines,
+        })
+        p1_compose_lines.extend(["", sec_tag] + clean_blk_lines)
+
+    p1_sections.append({
+        "section_tag": "[المستهل الثاني]",
+        "performer": "100% Cohesive Unison Male Al-Raddada Choir",
+        "tor_and_maqam": f"Return to Qarar Tonic in Maqam {maqam} — {int(bpm)} BPM",
+        "lyrics_arabic": [ln for ln in clean_estehlal if not ln.startswith("[")],
+    })
+    p1_compose_lines.extend(["", "[المستهل الثاني]"] + [ln for ln in clean_estehlal if not ln.startswith("[")])
+
+    part_1_root = {
+        "part_id": "Part_1_Stage_1_Root_Stanza_1_Only",
+        "anti_cramming_verification": audit_single_pass_poem_overload_v65(
+            "\n".join(p1_compose_lines), stage_role="stage_1_root"
+        ),
+        "method_2_primary_stage_json": {
+            "stage_id": "stage_1_root",
+            "execution_command": (
+                "Execute Stage 1 Root (Stanza 1 ONLY) with Instrumental OFF. Lock ONE Maqam and explicit BPM. "
+                "Register ONLY Arabic section_tag headers and lyrics_arabic lines."
+            ),
+            "title": title,
+            "global_bpm": int(bpm),
+            "primary_maqam_lock": maqam,
+            "sound_description": sound_master,
+            "lyrics_register_verbatim": "\n".join(p1_compose_lines),
+            "sections": p1_sections,
+        },
+        "method_1_secondary_compose": {
+            "title": title,
+            "bpm": int(bpm),
+            "sound": sound_master,
+            "lyrics": "\n".join(p1_compose_lines),
+        },
+        "mandatory_post_part1_gate": (
+            "STOP after Part 1: (1) Run --audit-six-pillars (verify held_note_wobble <= 28c & all 6 pillars >= 8.0; "
+            "if rejected, DO NOT spend credits on Replace/Extend!); (2) Apply Remix > Trim at exact end of "
+            "[المستهل الثاني] (~1:25-1:40) before running Part 2A."
+        ),
+    }
+
+    isolated_extend_parts = []
+    for blk in remaining_blocks:
+        clean_blk_lines = [
+            format_clean_lyrics_for_lyria35(ln, target_bpm=float(bpm))["clean_lyria35_lyrics"].strip()
+            for ln in blk["vertical_lines"]
+        ]
+        hdr_clean = re.sub(r"[\u064B-\u0652]", "", blk["section_header"])
+        compose_txt = "\n".join([hdr_clean] + clean_blk_lines)
+        isolated_extend_parts.append({
+            "part_id": f"Part_{blk['stage_code']}_Isolated_Extend",
+            "nc16_three_line_verification": audit_single_pass_poem_overload_v65(compose_txt, stage_role="extend_part"),
+            "nc17_mandatory_ui_rule": "DELETE ALL PREVIOUS LYRICS in Lyrics box (Ctrl+A -> Delete) before pasting ONLY these <=3 lines!",
+            "method_2_primary_extend_json": {
+                "stage_id": f"extend_{blk['stage_code'].lower()}",
+                "inherit_master_state": True,
+                "lyrics_panel_action": "OVERWRITE_AND_CLEAR_ALL_PREVIOUS_STAGE_LYRICS",
+                "global_bpm": int(bpm),
+                "lyrics_register_verbatim": compose_txt,
+                "sections": [
+                    {
+                        "section_tag": hdr_clean,
+                        "performer": "Solo Commanding Jawhari Baritone Radood",
+                        "vertical_line_count": len(clean_blk_lines),
+                        "lyrics_arabic": clean_blk_lines,
+                    }
+                ],
+            },
+            "method_1_secondary_compose_extend": {
+                "clear_previous_lyrics_first": True,
+                "lyrics": compose_txt,
+            },
+        })
+
+    finale_lines = [ln for ln in clean_estehlal if not ln.startswith("[")]
+    finale_txt = "\n".join(["[المستهل الختامي]"] + finale_lines)
+    part_finale = {
+        "part_id": "Part_Final_Isolated_Grand_Mustahal",
+        "nc17_mandatory_ui_rule": "DELETE ALL PREVIOUS LYRICS before registering ONLY the closing [المستهل الختامي]!",
+        "method_2_primary_finale_json": {
+            "stage_id": "extend_grand_finale_mustahal",
+            "inherit_master_state": True,
+            "lyrics_panel_action": "OVERWRITE_AND_CLEAR_ALL_PREVIOUS_STAGE_LYRICS",
+            "global_bpm": int(bpm),
+            "lyrics_register_verbatim": finale_txt,
+            "sections": [
+                {
+                    "section_tag": "[المستهل الختامي]",
+                    "performer": "100% Cohesive Unison Male Al-Raddada Choir (Qarar Tonic Resolution & Fade)",
+                    "lyrics_arabic": finale_lines,
+                }
+            ],
+        },
+        "method_1_secondary_compose_extend": {
+            "clear_previous_lyrics_first": True,
+            "lyrics": finale_txt,
+        },
+    }
+
+    return {
+        "skill_version": SKILL_VERSION,
+        "architecture_law": "NC49_NC51_MULTI_PART_PRECONDITIONING_AND_ISOLATED_STAGE_GENERATION",
+        "total_generation_parts": 2 + len(isolated_extend_parts),
+        "part_0_session_preconditioning_json": bootstrap,
+        "part_1_stage1_root_stanza1_only": part_1_root,
+        "parts_2_to_n_isolated_3line_extends": isolated_extend_parts,
+        "part_final_isolated_grand_mustahal": part_finale,
+    }
+
+
 def parse_args(argv=None):
     """Parse CLI flags for V60.0 Multi-Maqam Diversity, NC27-C/NC32-NC34 Forensics & 20-Mode DSP."""
     parser = argparse.ArgumentParser(
@@ -9753,6 +9983,11 @@ def parse_args(argv=None):
         "--audit-six-pillars",
         default=None,
         help="V65.0 (NC48-NC50): Comprehensive 6-Pillar Hussaini Evaluation with Single-Pillar Veto & Credit Gate",
+    )
+    parser.add_argument(
+        "--build-multipart-package",
+        default=None,
+        help="V65.0 (NC49-NC51): Partition full poem into Part 0 Pre-Conditioning + Part 1 Stanza-1 Root + Isolated 3-Line Extends (JSON & Compose)",
     )
     parser.add_argument("--extract-profile", default=None, help="Reverse-engineer reference WAV/MP3 profile")
     parser.add_argument("--audit-audio", default=None, help="Audit WAV loudness, True Peak, gaps & tail cutoff/loops")
@@ -9987,6 +10222,21 @@ def main(argv=None):
                     args.audit_six_pillars,
                     expected_maqam=args.maqam_drone,
                     target_bpm=args.bpm,
+                ),
+                ensure_ascii=False,
+                indent=2,
+            )
+        )
+        return 0
+
+    if args.build_multipart_package is not None:
+        print(
+            json.dumps(
+                build_multipart_json_and_compose_package_v65(
+                    args.build_multipart_package,
+                    dialect=args.dialect,
+                    maqam=args.maqam_drone,
+                    bpm=int(round(args.bpm)),
                 ),
                 ensure_ascii=False,
                 indent=2,

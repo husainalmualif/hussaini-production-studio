@@ -1,6 +1,6 @@
 ---
 name: hussaini-production-studio
-description: Comprehensive Hussaini & Shia sacred audio production (V65.0 OMNI-ARCHITECT): Latmiya (Lament/Epic), Minbar Na'i/Dashti/Qarid, Joyful Mawlid Jalwat & Shia Nasheed, Classical Muwashah & Ibtihal + Bitanah, Dignified Non-Lahwi Orchestral Operettas (Axis 5); Mandatory Stage-0 Pre-Conditioning + Two-Method Generation (Primary Method 2 Stage/Section JSON & Secondary Method 1 Compose), 6-Pillar Comprehensive Hussaini Evaluation & Single-Pillar Veto (--audit-six-pillars, NC48-NC50, <=28c Vocal Pitch Stability & Zero-Credit-Waste Gate), 4-Layer Studio Human Vocal Symphony (Bass/Zannah/24-EDO Harmony/Ahaat), 15 Maqams, 19 Fingerprints, Qatifi/Bahrani/Iraqi/Fusha Orthoepy (NC26-NC50), & Multi-Platform EBU R128 DSP (-14/-16/-18/-23 LUFS).
+description: Comprehensive Hussaini & Shia sacred audio production (V65.0 OMNI-ARCHITECT): Latmiya (Lament/Epic), Minbar Na'i/Dashti/Qarid, Joyful Mawlid Jalwat & Shia Nasheed, Classical Muwashah & Ibtihal + Bitanah, Dignified Non-Lahwi Orchestral Operettas (Axis 5); Mandatory Stage-0 Pre-Conditioning + Multi-Part Partitioning (--build-multipart-package, NC51) + Two-Method Generation (Primary Method 2 Stage/Section JSON & Secondary Method 1 Compose), 6-Pillar Evaluation & Veto (--audit-six-pillars, NC48-NC51, <=28c Vocal Stability & Zero-Credit-Waste Gate), 4-Layer Studio Vocal Symphony, 15 Maqams, 19 Fingerprints, Orthoepy (NC26-NC51), & Multi-Platform EBU R128 DSP.
 ---
 # Hussaini Production Studio (V65.0 OMNI-ARCHITECT)
 
@@ -12,9 +12,12 @@ End-to-end **Super-Algorithmic Shia Sacred Vocal Production Agent** covering all
    - **Strictly FORBIDDEN** to generate audio or spend Flow Music credits before consulting the user on: (1) **Genre & Axis (`Axis 1` 4-Layer Human Vocal Symphony, `Axis 2` Mawkib, `Axis 3` Ney/Cello, `Axis 4` Foley/Sub, `Axis 5` 6-Family Waqar Orchestral)**; (2) **Dialect & School (`عراقي، بحراني، قطيفي، فصيح`)**; (3) **Single Root Maqam & Locked BPM (`58–60` Thaqeel, `72–95` Wast/Muwashah, `115–140` Shoor)**; and (4) **Generation Method (`Method 2 JSON` [Recommended Primary] vs. `Method 1 Compose`)**.
 2. **Step 1 — Mandatory Session Pre-Conditioning (`التهيئة المسبقة الإلزامية في Producer Chat`):**
    - Open `New session` and lock the session constitution first (`Stage-0 MASTER_STATE` / `Pre-Conditioning JSON`, `NC38/NC49`).
-3. **Step 2 — Choice of Two Generation Methods (Primary: `Method 2 JSON`):**
-   - **Method 2 (Primary & Most Important — `طريقة جيسون للمراحل والأقسام`):** Send structured `Stage & Section JSON` in `Producer Chat` (`sections[]` + `lyrics_register_verbatim` + **1 single primary Maqam** + **explicit locked BPM** + `studio-recorded pure vocal clarity` + 4-layer human vocal foundation).
-   - **Method 1 (Secondary Manual Option — `لوحة Compose > Lyrics`):** After Step-1 Pre-Conditioning, enter pure English `Sound` + pure clean Arabic `Lyrics` (`(...)` around `[المستهل]`).
+3. **Step 2 — Mandatory Multi-Part Partitioning (`تقسيم التوليد إلى أجزاء — NC51`) & Two Methods (Primary: `Method 2 JSON`):**
+   - **HARD BAN on Full-Poem Cramming (`NC51`):** **NEVER** put all stanzas of a poem into a single generation pass (causes frantic rushed melody, swallowed Maddat, and choir-over-solo collision!). Always split via `--build-multipart-package`:
+     - **`Part 1 (Stage 1 Root)`:** ONLY `[المستهل الأول]` + `[النزلة الأولى]` (`3` lines) + `[الكسرة الأولى]` (`<=3` lines) + `[المستهل الثاني]` (`<=12` lines / `<=85` words, `~75–95s`), followed by **`--audit-six-pillars` + `Remix > Trim`** at the end of `[المستهل الثاني]`.
+     - **`Parts 2A..NB (Isolated Extends)`:** Strictly **`<=3` vertical lines (`~21.5s`) per part** (`Part XA` = `[النزلة X]` alone; `Part XB` = `[الكسرة X]` alone; `Part Final` = `[المستهل الختامي]` alone), **clearing ALL previous lyrics (`NC17`: `OVERWRITE_AND_CLEAR_ALL_PREVIOUS_STAGE_LYRICS`)** before every part!
+   - **Method 2 (Primary — `طريقة جيسون للمراحل والأقسام`):** Send structured `Stage & Section JSON` per part in `Producer Chat` (**1 locked Maqam** + **explicit BPM** + `studio-recorded pure vocal clarity` + 4-layer human vocal foundation).
+   - **Method 1 (Secondary — `لوحة Compose > Lyrics`):** After Step-1 Pre-Conditioning, enter each isolated part cleanly in `Compose`.
 4. **Step 3 — Mandatory 6-Pillar Zero-Flattery Audit & Root Veto Gate (`--audit-six-pillars`, `NC48–NC50`):**
    - Evaluate EVERY generated track across all **6 Canonical Pillars**: **(1) النص والشعر، (2) اللحن والمقامات، (3) الأداء الصوتي وثبات حنجرة الرادود (`held_note_wobble <= 28c`)، (4) الإيقاع واللطم، (5) التوزيع والكورال والآهات والمؤثرات، (6) الهندسة الصوتية والمكساج والماسترينغ**.
    - **Single-Pillar Veto & Zero-Credit-Waste Law:** If ANY pillar scores `< 7.0/10` (or Melody/Vocal `< 8.0`), **REJECT `Stage 1` IMMEDIATELY** — **NEVER** spend credits running `Remix > Replace` or `Extend` on a melodically or vocally flawed root!
@@ -28,16 +31,16 @@ End-to-end **Super-Algorithmic Shia Sacred Vocal Production Agent** covering all
 
 1. **`NC1–NC37`:** Zero *lahwi*/pop beats; `Lyria 3.5` lock; single-dialect purity; `--compile-clean-lyria` & `تْش` rule (`NC26–NC27-C`); Crying Isolation (`Module 50`: ban `weeping, grief-stricken, heartbreaking, aching, raw unaccompanied, wailing` in rhythmic Latmiyas — they choke the throat and cause `37c` pitch wobble!); Qatifi `NC35`; Quarter-Tone vs. 12-TET lock (`NC36`); Shadda/Wasl/Tatweel linter (`NC37`).
 2. **`NC38–NC46`:** Stage-0 `MASTER_STATE` (`NC38`); 5-Band 4-Layer Human Vocal Symphony (`NC39`); `280–350` word 5-min budget (`NC40`); `--tame-lyria-harshness` (`NC41`); Back-to-Front Replace ONLY on `>=8.5` approved roots (`NC42`); Cadence-Locked `24-EDO` Maqam Classifier (`NC43`); Iraqi `(...)` & prosody/G2P pre-flight (`--audit-iraqi-preflight`, `NC44–NC45`); Ground-Truth Gate (`NC46`).
-3. **`NC48–NC50` (`V65.0` Vocal Stability, Restored JSON Workflow & 6-Pillar Veto):**
+3. **`NC48–NC51` (`V65.0` Vocal Stability, Multi-Part Partitioning, Restored JSON & 6-Pillar Veto):**
    - **`NC48`:** Enforce `held_note_wobble_cents <= 28.0c` (`measure_vocal_stability_and_throat_quality_v65()`); never mistake shaky off-key vocal wobble for microtonal quarter-tones.
    - **`NC49`:** Always run `Stage-0 Pre-Conditioning` first, prioritize **Method 2 (`Stage & Section JSON`)** with **1 locked Maqam + explicit BPM + 4-layer studio vocal foundation**, and ban field-shouting prompts.
    - **`NC50`:** Enforce `--audit-six-pillars` Single-Pillar Veto (`any pillar < 7.0 -> REJECTED_DO_NOT_REPLACE_OR_EXTEND`, zero wasted credits).
+   - **`NC51` (`--build-multipart-package`):** NEVER dump an entire multi-stanza poem into one pass (`audit_single_pass_poem_overload_v65()` blocks `>1` Nazla or `>12` lines in `Stage 1`, and enforces `<=3` isolated lines + `NC17` clear on every `Extend` part).
 
 ## Core Workflows
 
 ```bash
-python3 scripts/hussaini_dsp_montage.py --build-v63-bootstrap track_a --dialect iraqi
-python3 scripts/hussaini_dsp_montage.py --build-stage-json "<poem>" --bpm 58
-python3 scripts/hussaini_dsp_montage.py --audit-iraqi-preflight "<iraqi_lyrics>" --bpm 58
-python3 scripts/hussaini_dsp_montage.py --audit-six-pillars "<track.wav>" --maqam-drone saba --bpm 58
+python3 scripts/hussaini_dsp_montage.py --build-multipart-package "<full_poem>" --dialect iraqi --maqam-drone saba --bpm 58
+python3 scripts/hussaini_dsp_montage.py --audit-iraqi-preflight "<stage1_stanza1_only>" --bpm 58
+python3 scripts/hussaini_dsp_montage.py --audit-six-pillars "<stage1_root.wav>" --maqam-drone saba --bpm 58
 ```

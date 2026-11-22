@@ -2319,7 +2319,8 @@
     "permanent_negative_constraints_nc48_to_nc50": {
       "NC48_vocal_pitch_stability_and_throat_gate": "Enforce held_note_wobble_cents <= 28.0c (calibrated on Al-Akraf 7.87c & Basim 23.23c vs failed Exp 36 37.08c) via measure_vocal_stability_and_throat_quality_v65().",
       "NC49_restored_preconditioning_json_and_4layer_vocal_symphony": "Restore Stage-0 Pre-Conditioning + Primary Method-2 JSON + 4-Layer Studio Human Vocal Symphony (Human Bass, Zannah, 24-EDO Harmony/Raddada, Clean Human Ahaat) + studio-recorded pure vocal clarity; ban field-wailing adjectives.",
-      "NC50_six_pillar_single_veto_and_credit_protection": "Enforce evaluate_six_pillars_hussaini_work_v65() (--audit-six-pillars): any pillar < 7.0 triggers immediate REJECTED_DO_NOT_REPLACE_OR_EXTEND and blocks credit waste."
+      "NC50_six_pillar_single_veto_and_credit_protection": "Enforce evaluate_six_pillars_hussaini_work_v65() (--audit-six-pillars): any pillar < 7.0 triggers immediate REJECTED_DO_NOT_REPLACE_OR_EXTEND and blocks credit waste.",
+      "NC51_anti_single_pass_overload_and_multipart_partitioning": "NEVER dump all stanzas of a poem into one pass (causes rushed frantic melody & choir collision); enforce audit_single_pass_poem_overload_v65() and partition via --build-multipart-package (Part 0 Pre-Conditioning -> Part 1 Stanza-1 Root + Trim -> Isolated <=3-line Extend Parts 2A/2B with NC17 Lyrics Clear -> Final Grand Mustahal Part)."
     }
   }
 }
