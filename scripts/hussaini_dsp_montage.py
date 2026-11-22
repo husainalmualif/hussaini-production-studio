@@ -1,19 +1,19 @@
 #!/usr/bin/env python3
 # pylint: disable=too-many-lines,too-many-return-statements,too-many-branches,too-many-locals,too-many-statements,too-many-arguments,too-many-positional-arguments,no-member,chained-comparison
-"""Hussaini Audio Omni-Architect DSP, 5-Track DAW & Phonetics Compiler (V64.0 OMNI-ARCHITECT).
+"""Hussaini Audio Omni-Architect DSP, 5-Track DAW & Phonetics Compiler (V65.0 OMNI-ARCHITECT).
 
 Standalone empirical production engine implementing Hussaini_Production_Studio_OS_V50_0_OMNI_ARCHITECT
-and V52.0–V64.0 field & 177-track empirical upgrades:
+and V52.0–V65.0 field & 177-track empirical upgrades:
 - Single-Source Version Management via root VERSION file & JSON constitution
 - Pure-Python WAV I/O (with transparent FFmpeg MP3/M4A/OGG decoding) + ITU-R BS.1770-4 / EBU R128
   K-Weighted Gated Loudness + 4x True-Peak Limiter
-- Module 67–78 (V52.0–V64.0): Iraqi & Basim Al-Karbalai Acoustic/Phonetic Ground-Truth Engine
-  (NC43 Cadence-Locked 24-EDO Maqam Classifier, NC44–NC45 Iraqi Prosody & G2P Landmine Pre-Flight
-  --audit-iraqi-preflight, NC46–NC47 Audio Ground-Truth Gate --audit-ground-truth), Stage-0 MASTER_STATE
-  Bootstrap & Chained Back-to-Front Replace (--build-v63-bootstrap, --plan-chained-replace, NC38–NC42),
-  Waqar 6-Family Orchestral & Shadda/Wasl Orthoepy (--check-orchestration, --audit-orthoepy, NC36–NC37),
-  Qatifi/Bahrani/Iraqi Clean Lyria 3.5 Orthography (--compile-clean-lyria, NC26–NC35), Multi-Meter
-  Muwashah JSON, 15 Maqams, 19 Fingerprints, and 20-Mode Multi-Platform EBU R128 DSP (-14/-16/-18/-23 LUFS)
+- Module 67–79 (V52.0–V65.0): Six-Pillar Comprehensive Hussaini Evaluation & Single-Pillar Veto Engine
+  (--audit-six-pillars, NC48–NC50: Vocal Pitch Stability <=28c Held-Note Wobble Gate, Restored Stage-0
+  Pre-Conditioning + Primary Method-2 Stage/Section JSON Architecture, Restored 4-Layer Studio Human
+  Vocal Symphony: Bass/Zannah/Quarter-Tone Harmony/Ahaat, Zero-Credit-Waste Root Gate), Iraqi/Basim
+  5-Cent Cadence Maqam Classifier (NC43) & Prosody/G2P Pre-Flight (--audit-iraqi-preflight, NC44–NC45),
+  Audio Ground-Truth Gate (--audit-ground-truth, NC46), Back-to-Front Replace (NC42), Waqar 6-Family
+  Orchestral & Shadda/Wasl Orthoepy (NC36–NC37), 15 Maqams, 19 Fingerprints, and 20-Mode EBU R128 DSP
 """
 
 import argparse
@@ -8448,23 +8448,23 @@ def compute_strict_production_score_v62(
 FIVE_BAND_SPECTRAL_OCCUPANCY_V63 = {
     "TRACK_A_PURE_ACAPELLA_LATMIYA": {
         "track_alias": "track_a",
-        "title_ar": "المسار الأول: اللطمية الحسينية الخالصة (أكابيلا وموكب بلا معازف ولا تآلفات غربية)",
-        "commercial_prior_rule": "Occupy all 5 bands positively with monophonic Husseiniya body percussion & strictly unison octave Raddada response; keep vocal texture 100% monophonic/octave with zero Western 12-TET minor triads (NC39/NC46).",
+        "title_ar": "المسار الأول: اللطمية الحسينية الخالصة (سيمفونية الصوت البشري ذات الطبقات الأربع وإيقاع الصدور)",
+        "commercial_prior_rule": "Occupy all 5 bands positively with studio-recorded pure vocal clarity, 4-layer human vocal symphony (Human Bass, Zannah tonic pad, 24-EDO microtonal Raddada harmony, clean human Ahaat), and synchronized chest Latm; lock ONE single Maqam and explicit BPM in Stage 1 and ban field-wailing/choked-throat triggers (NC39/NC48/NC49).",
         "exclude_instruments": ["oud", "violin", "guitar", "piano", "synthesizer", "pop drums", "rock snare"],
         "allowed_percussion": ["synchronized bare-chest Latm thumping", "heavy Bahraini Dammam drum", "Iraqi Zanjeel"],
         "allowed_elements": [
-            "deep resonant bare-chest Latm low-end pulse",
-            "warm monophonic Radood chest-to-Mayan modal delivery",
-            "unison Al-Raddada male congregation call-and-response (strictly monophonic, zero Western triads)",
-            "articulate Iraqi/Bahrani/Qatifi Arabic diction",
-            "natural cavernous Husseiniya hall dome reflections",
+            "human bass vocal tonic drone & deep resonant bare-chest Latm low-end pulse",
+            "warm sustained Zannah tonic vocal bed & steady diaphragmatic Radood Qarar-to-Jawab delivery",
+            "clean studio-recorded layered human Ahaat & cohesive Al-Raddada congregation harmony (24-EDO Maqam-locked)",
+            "studio-recorded pure vocal clarity with rock-steady pitch control & crisp Arabic Makharij",
+            "sacred Husseiniya dome reverb with clean 25-45ms pre-delay & sidechain ducking",
         ],
         "bands": {
-            "band_1_40_120hz": "Deep resonant bare-chest Latm thumping + heavy Bahraini Dammam sub-fundamental",
-            "band_2_120_400hz": "Warm monophonic Radood Qarar chest resonance + congregation chest-strike body",
-            "band_3_400_2000hz": "Stepwise modal Radood lament + strictly unison Al-Raddada congregation response",
-            "band_4_2000_5000hz": "Centered Solo Radood articulate Arabic Makharij & weeping Iraqi Wanna inflection",
-            "band_5_5000_16000hz": "Natural cavernous Husseiniya dome reflections + organic congregation breath air",
+            "band_1_40_120hz": "Human bass vocal tonic foundation + deep resonant bare-chest Latm thumping (53-68 Hz)",
+            "band_2_120_400hz": "Warm sustained Zannah tonic vocal pad + steady Radood Qarar chest resonance",
+            "band_3_400_2000hz": "Clean studio-recorded human Ahaat swells + cohesive Al-Raddada congregation response",
+            "band_4_2000_5000hz": "Centered Solo Radood studio vocal clarity, steady diaphragmatic control & crisp Makharij",
+            "band_5_5000_16000hz": "Sacred Husseiniya dome spatial reverb + clean breath air (zero noisy crowd shouting)",
         },
     },
     "TRACK_B_DIGNIFIED_ORCHESTRAL_NASHEED": {
@@ -9275,6 +9275,19 @@ def audit_latmiya_audio_ground_truth_v64(
 
     ceiling = 9.8
     reasons = []
+    stab = measure_vocal_stability_and_throat_quality_v65(wav_path)
+    wobble_cents = float(stab["held_note_wobble_cents"])
+    vocal_wobble_unstable = bool(stab["vocal_pitch_unstable"])
+    if vocal_wobble_unstable:
+        ceiling = min(ceiling, 3.5)
+        reasons.append(
+            f"unstable_vocal_pitch_and_throat_wobble (held_note_wobble_cents={wobble_cents}c > 28.0c — off-key wobble must never be counted as quarter-tones)"
+        )
+    if stab["strained_throat_harshness"]:
+        ceiling = min(ceiling, 4.0)
+        reasons.append(
+            f"strained_harsh_throat_timbre (harsh_vs_warm_db={stab['throat_harshness_vs_warmth_db']} dB > -4.5 dB)"
+        )
     if western_12tet_collapse:
         ceiling = min(ceiling, 4.2)
         reasons.append(f"western_12tet_diatonic_collapse (detected={detected_mq}, within_20c={within_20c_pct}%)")
@@ -9297,6 +9310,9 @@ def audit_latmiya_audio_ground_truth_v64(
         "maqam_top3_candidates": top3,
         "within_20c_of_12tet_pct": within_20c_pct,
         "quarter_tone_30_to_50c_pct": qt_30_50c_pct,
+        "held_note_wobble_cents": wobble_cents,
+        "vocal_pitch_unstable_detected": vocal_wobble_unstable,
+        "throat_harshness_vs_warmth_db": stab["throat_harshness_vs_warmth_db"],
         "max_15s_onsets_per_sec": max_win_onsets_per_sec,
         "sub_chest_strikes_per_min": sub_chest_strikes_per_min,
         "estimated_bpm": est_bpm,
@@ -9308,6 +9324,237 @@ def audit_latmiya_audio_ground_truth_v64(
         "audio_music_ceiling_10": round(ceiling, 2),
         "ground_truth_gate_passed": len(reasons) == 0,
         "failure_reasons": reasons,
+    }
+
+
+SIX_PILLAR_HUSSAINI_EVALUATION_RUBRIC_V65 = {
+    "pillar_1_poetry_and_doctrine": {
+        "title_ar": "1. النص والشعر (الركيزة الأساسية)",
+        "weight": 0.18,
+        "criteria": [
+            "المضمون والعقيدة: سلامة المعاني تاريخياً وعقائدياً وعمق الرسالة الحسينية",
+            "البناء الشعري: قوة السبك وسلامة الوزن والقافية وتجنب الحشو أو التكرار الممل",
+            "الصور الفنية والعاطفية: تحريك المشاعر عبر التشبيهات والصور البلاغية الحية",
+            "الترابط الدرامي: تسلسل الأفكار من المستهل وحتى الخاتمة",
+        ],
+    },
+    "pillar_2_melody_and_maqamat": {
+        "title_ar": "2. اللحن والمقامات الموسيقية",
+        "weight": 0.20,
+        "criteria": [
+            "ملاءمة المقام للنص: اختيار مقام واحد مناسب لجو القصيدة في التأسيس",
+            "الانتقالات المقامية (التصوير): سلاسة الانتقال بالجنس المشترك دون نشاز أو إرباك",
+            "الابتكار والهوية: تجنب الاستهلاك وصناعة جملة لحنية مميزة (هوك) تعلق في الذهن",
+            "الطبقة الصوتية (المساحة): توافق اللحن مع مساحة صوت الرادود قراراً وجواباً دون إجهاد",
+        ],
+    },
+    "pillar_3_radood_vocal_performance": {
+        "title_ar": "3. الأداء الصوتي (الرادود)",
+        "weight": 0.22,
+        "criteria": [
+            "الإحساس والتقمص: صدق العاطفة والتفاعل الروحي الوقور (الرادود لا المغني ولا الصارخ)",
+            "مخارج الحروف والوضوح: نطق الكلمات بوضوح تام في المقاطع السريعة والطبقات العالية",
+            "التحكم بالنفس والعُرب وثبات الصوت: أداء القفلات والعُرب بثبات واتزان دون انقطاع نفس أو اهتزاز غير مرغوب (<= 28 سنت)",
+        ],
+    },
+    "pillar_4_rhythm_and_latm": {
+        "title_ar": "4. الإيقاع واللطم (الهوية الحسينية)",
+        "weight": 0.14,
+        "criteria": [
+            "توظيف الإيقاع: اختيار الوزن الإيقاعي المناسب (ثقيل / متوسط / شور) لحالة القصيدة",
+            "التناغم مع حركة اللطم: سهولة وانسيابية تفاعل المعزين مع الإيقاع دون تعقيد يشتت الجمهور",
+            "التنويع الإيقاعي: التغيير المدروس في الإيقاع بين المستهل والأبيات والنزلة/الكعدة",
+        ],
+    },
+    "pillar_5_choral_ahaat_and_sfx": {
+        "title_ar": "5. التوزيع والمؤثرات الصوتية (الكورال والآهات)",
+        "weight": 0.13,
+        "criteria": [
+            "أداء الكورال (الردّادة): قوة التناغم (الهارموني) مع الرادود ونظافة طبقاتهم الصوتية",
+            "الآهات والخلفيات البشرية: توظيف الأصوات البشرية والهمهمات النظيفة لملء الفراغات وزيادة الشحنة العاطفية",
+            "المؤثرات الدرامية (SFX): الاستخدام المتزن للمؤثرات بحيث تخدم الجو العام ولا تطغى على الرادود",
+        ],
+    },
+    "pillar_6_mixing_and_mastering": {
+        "title_ar": "6. الهندسة الصوتية (المكساج والماسترينغ)",
+        "weight": 0.13,
+        "criteria": [
+            "التوازن (Balance): وضوح صوت الرادود في المقدمة وتوزيع الكورال والمؤثرات في الخلفية بنسب مدروسة",
+            "نقاء الصوت (EQ & Compression): خلو التسجيل من الترددات المزعجة والحدة الزائدة والتشويش",
+            "العمق المكاني (Reverb & Delay): صدى يبعث الهيبة والروحانية دون ضياع وضوح الكلمات",
+            "اختبار السماعات (الماسترينغ): ثبات الجودة عبر الهواتف والسماعات ومكبرات المواكب (Mono Check & EBU R128)",
+        ],
+    },
+}
+
+
+def measure_vocal_stability_and_throat_quality_v65(wav_path: str) -> dict:
+    """V65.0 (NC48): Measure held-note pitch stability (wobble in cents), HNR clarity & laryngeal harshness.
+
+    Prevents unstable, shaky, choked AI vocals (e.g. Exp 36 841ef870 = 37.1c wobble) from ever being
+    misclassified as 'microtonal quarter-tones' or approved for Remix > Replace credit spending.
+    Calibrated on studio masterworks: Al-Akraf (8.7c), Basim 'Arid Ansak' (23.4c) -> threshold <= 28.0c.
+    """
+    sr, stereo, _, _ = read_wav_any_depth(wav_path, return_stereo=True)
+    mid = 0.5 * (stereo[:, 0] + stereo[:, 1]) if stereo.ndim == 2 else stereo.astype(np.float64)
+    mid = mid[: min(len(mid), int(90.0 * sr))]
+    voc = butter_filter(mid, [110.0, min(3200.0, 0.44 * sr)], sr, btype="band", order=3)
+    win = max(128, int(0.05 * sr))
+    hop = max(64, int(0.02 * sr))
+    nf = max(0, (len(voc) - win) // hop)
+    rms = np.array([float(np.sqrt(np.mean(voc[i * hop : i * hop + win] ** 2))) for i in range(nf)]) if nf > 0 else np.zeros(1)
+    gate = max(1e-5, 0.35 * float(np.percentile(rms, 90))) if nf > 0 else 1e-5
+
+    f0s = []
+    hnrs = []
+    hann = np.hanning(win)
+    lo_l = max(1, int(sr / 450.0))
+    hi_l = max(lo_l + 1, int(sr / 95.0))
+    for i in range(nf):
+        if rms[i] < gate:
+            f0s.append(np.nan)
+            continue
+        fr = voc[i * hop : i * hop + win] * hann
+        ac = np.correlate(fr, fr, mode="full")[win - 1 :]
+        if len(ac) <= hi_l or ac[0] <= 1e-9:
+            f0s.append(np.nan)
+            continue
+        ac = ac / float(ac[0])
+        pk = lo_l + int(np.argmax(ac[lo_l:hi_l]))
+        r_pk = float(ac[pk])
+        if r_pk < 0.45:
+            f0s.append(np.nan)
+            continue
+        f0s.append(sr / float(pk))
+        hnrs.append(10.0 * math.log10(max(r_pk, 1e-4) / max(1.0 - r_pk, 1e-4)))
+
+    f0_arr = np.array(f0s, dtype=np.float64)
+    note_stds = []
+    for i in range(0, max(0, len(f0_arr) - 12), 6):
+        seg = f0_arr[i : i + 12]
+        if np.all(np.isfinite(seg)):
+            med = float(np.median(seg))
+            if med > 0.0:
+                cents = 1200.0 * np.log2(seg / med)
+                if float(np.max(np.abs(cents))) < 180.0:
+                    note_stds.append(float(np.std(cents)))
+
+    wobble_c = round(float(np.median(note_stds)), 2) if note_stds else 0.0
+    hnr_db = round(float(np.median(hnrs)), 2) if hnrs else 0.0
+    warm_rms = float(np.sqrt(np.mean(butter_filter(mid, [180.0, min(700.0, 0.42 * sr)], sr, btype="band") ** 2))) + 1e-9
+    harsh_rms = float(np.sqrt(np.mean(butter_filter(mid, [min(2200.0, 0.35 * sr), min(4200.0, 0.45 * sr)], sr, btype="band") ** 2))) + 1e-9
+    harsh_db = round(20.0 * math.log10(harsh_rms / warm_rms), 2)
+
+    unstable = wobble_c > 28.0
+    strained = harsh_db > -4.5
+    ceiling = 9.8
+    if unstable:
+        ceiling = min(ceiling, 3.5)
+    if strained:
+        ceiling = min(ceiling, 4.0)
+    return {
+        "held_note_wobble_cents": wobble_c,
+        "hnr_clarity_db": hnr_db,
+        "throat_harshness_vs_warmth_db": harsh_db,
+        "vocal_pitch_unstable": unstable,
+        "strained_throat_harshness": strained,
+        "vocal_performance_ceiling_10": round(ceiling, 2),
+        "stability_passed": (not unstable) and (not strained),
+    }
+
+
+def evaluate_six_pillars_hussaini_work_v65(
+    wav_path: str,
+    poem_text: str = "",
+    expected_maqam: str = "saba",
+    target_bpm: float = 60.0,
+    pillar_ear_scores=None,
+) -> dict:
+    """V65.0 (NC48-NC50): Comprehensive 6-Pillar Hussaini Evaluation with Single-Pillar Veto & Credit Gate.
+
+    Evaluates all 6 canonical pillars (1. Poetry & Doctrine, 2. Melody & Maqamat, 3. Radood Vocal
+    Performance & Stability, 4. Rhythm & Latm, 5. Choral/Ahaat & SFX, 6. Mixing & Mastering), applies
+    objective DSP ceilings (vocal stability, Maqam ground-truth, NC33 piano/pop artifacts, mono & LUFS),
+    and enforces the Single-Pillar Veto: if ANY pillar < 7.0/10, the track is IMMEDIATELY REJECTED and
+    `allow_credit_spending_on_replace_or_extend` is locked to False!
+    """
+    gt = audit_latmiya_audio_ground_truth_v64(wav_path, expected_maqam=expected_maqam, target_bpm=target_bpm)
+    stab = measure_vocal_stability_and_throat_quality_v65(wav_path)
+    art = detect_piano_and_pop_snare_transients(wav_path)
+    aud = audit_rendered_audio(wav_path)
+
+    p1_ceil = 9.8
+    if poem_text and poem_text.strip():
+        hist = verify_historical_narratives(poem_text)
+        if not hist["is_historically_clean"]:
+            p1_ceil = min(p1_ceil, 4.5)
+        iq_pf = audit_iraqi_latmiya_preflight_v64(poem_text, target_bpm=target_bpm)
+        if not iq_pf["v64_iraqi_preflight_passed"]:
+            p1_ceil = min(p1_ceil, 5.5)
+
+    p2_ceil = float(gt["audio_music_ceiling_10"])
+    if not art["passed_nc33_zero_artifact_gate"]:
+        p2_ceil = min(p2_ceil, 4.0)
+    p3_ceil = float(stab["vocal_performance_ceiling_10"])
+    p4_ceil = 4.5 if (gt["patter_rush_detected"] or gt["double_time_tempo_drift_detected"]) else 9.6
+    p5_ceil = 4.5 if not art["passed_nc33_zero_artifact_gate"] else 9.6
+    p6_ceil = 9.8
+    if (
+        aud["mono_compatibility"]["lr_phase_correlation"] < -0.15
+        or aud["mono_compatibility"]["mono_energy_retention_db"] < -5.0
+        or aud["true_peak_dbtp"] > 0.3
+    ):
+        p6_ceil = min(p6_ceil, 5.5)
+
+    ceilings = {
+        "pillar_1_poetry_and_doctrine": round(p1_ceil, 2),
+        "pillar_2_melody_and_maqamat": round(p2_ceil, 2),
+        "pillar_3_radood_vocal_performance": round(p3_ceil, 2),
+        "pillar_4_rhythm_and_latm": round(p4_ceil, 2),
+        "pillar_5_choral_ahaat_and_sfx": round(p5_ceil, 2),
+        "pillar_6_mixing_and_mastering": round(p6_ceil, 2),
+    }
+
+    ear_in = pillar_ear_scores or {}
+    final_pillars = {}
+    for pk, meta in SIX_PILLAR_HUSSAINI_EVALUATION_RUBRIC_V65.items():
+        raw_sc = float(ear_in.get(pk, ceilings[pk]))
+        bounded = round(min(max(0.0, raw_sc), ceilings[pk]), 2)
+        final_pillars[pk] = {
+            "title_ar": meta["title_ar"],
+            "weight": meta["weight"],
+            "dsp_ceiling_10": ceilings[pk],
+            "score_10": bounded,
+            "passed_7_0_minimum": bounded >= 7.0,
+        }
+
+    weighted_sum = sum(
+        final_pillars[pk]["score_10"] * meta["weight"]
+        for pk, meta in SIX_PILLAR_HUSSAINI_EVALUATION_RUBRIC_V65.items()
+    )
+    min_pillar_score = min(v["score_10"] for v in final_pillars.values())
+    failed_pillars = [pk for pk, v in final_pillars.items() if not v["passed_7_0_minimum"]]
+    veto = len(failed_pillars) > 0
+    overall = round(min(weighted_sum, min_pillar_score + 0.5) if veto else weighted_sum, 2)
+    release_ok = (not veto) and overall >= 8.5
+
+    return {
+        "wav_path": wav_path,
+        "overall_six_pillar_score_10": overall,
+        "single_pillar_veto_triggered": veto,
+        "failed_pillars": failed_pillars,
+        "allow_credit_spending_on_replace_or_extend": (not veto) and (
+            final_pillars["pillar_2_melody_and_maqamat"]["score_10"] >= 8.0
+            and final_pillars["pillar_3_radood_vocal_performance"]["score_10"] >= 8.0
+        ),
+        "verdict": (
+            "RELEASE_READY_SIX_PILLAR_PASS"
+            if release_ok
+            else ("REJECTED_DO_NOT_REPLACE_OR_EXTEND" if veto else "NEEDS_MINOR_POLISH")
+        ),
+        "pillars": final_pillars,
+        "vocal_stability_telemetry": stab,
+        "ground_truth_telemetry": gt,
     }
 
 
@@ -9500,7 +9747,12 @@ def parse_args(argv=None):
     parser.add_argument(
         "--audit-ground-truth",
         default=None,
-        help="V64.0 (NC46-NC47): Audio-driven ground-truth Maqam, 12-TET collapse, quarter-tone & patter-rush gate",
+        help="V64.0-V65.0 (NC46/NC48): Audio-driven Maqam, vocal pitch stability, 12-TET collapse & patter-rush gate",
+    )
+    parser.add_argument(
+        "--audit-six-pillars",
+        default=None,
+        help="V65.0 (NC48-NC50): Comprehensive 6-Pillar Hussaini Evaluation with Single-Pillar Veto & Credit Gate",
     )
     parser.add_argument("--extract-profile", default=None, help="Reverse-engineer reference WAV/MP3 profile")
     parser.add_argument("--audit-audio", default=None, help="Audit WAV loudness, True Peak, gaps & tail cutoff/loops")
@@ -9719,6 +9971,20 @@ def main(argv=None):
             json.dumps(
                 audit_latmiya_audio_ground_truth_v64(
                     args.audit_ground_truth,
+                    expected_maqam=args.maqam_drone,
+                    target_bpm=args.bpm,
+                ),
+                ensure_ascii=False,
+                indent=2,
+            )
+        )
+        return 0
+
+    if args.audit_six_pillars is not None:
+        print(
+            json.dumps(
+                evaluate_six_pillars_hussaini_work_v65(
+                    args.audit_six_pillars,
                     expected_maqam=args.maqam_drone,
                     target_bpm=args.bpm,
                 ),

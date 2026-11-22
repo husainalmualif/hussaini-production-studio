@@ -1,0 +1,27 @@
+{
+  "checkpoint_id": "V65_0_OMNI_ARCHITECT_2026_11_22",
+  "skill_version": "V65.0 OMNI-ARCHITECT",
+  "readiness_score_percent": 100,
+  "previous_version": "V64.0 OMNI-ARCHITECT",
+  "previous_commit_sha": "9a8f98ffc069615ea97309ae524adaa40f465314",
+  "sources_verified": [
+    "C:/Users/husai/Desktop/معمارية اللطمية الحسينية/code_artifact.html (413 lines)",
+    "C:/Users/husai/Desktop/موسيقى الوقار والشجن/code_artifact (1).html (278 lines)",
+    "C:/Users/husai/Desktop/New folder/لطميات (177 studio & majlis MP3s)",
+    "User Canonical 6-Pillar Hussaini Evaluation Standard (21 Sub-Criteria)"
+  ],
+  "v65_upgrades": {
+    "new_negative_constraints": ["NC48", "NC49", "NC50"],
+    "vocal_stability_and_throat_gate": "measure_vocal_stability_and_throat_quality_v65() — enforces held_note_wobble_cents <= 28.0c (Al-Akraf=7.87c, Basim=23.23c vs failed Exp 36=37.08c)",
+    "six_pillar_evaluator": "evaluate_six_pillars_hussaini_work_v65() / --audit-six-pillars (Single-Pillar Veto <7.0 & Zero-Credit-Waste Gate)",
+    "restored_core_workflow": "Step 0 Consultation -> Step 1 Stage-0 Pre-Conditioning JSON -> Step 2 Primary Method-2 Stage/Section JSON (or Secondary Method-1 Compose) + 4-Layer Studio Human Vocal Symphony",
+    "exp36_honest_retraction": {
+      "uuid": "841ef870-0bad-46cd-8a87-dea8351294ec",
+      "retracted_false_score": 9.04,
+      "true_strict_score": 2.2,
+      "held_note_wobble_cents": 37.08,
+      "verdict": "REJECTED_DO_NOT_REPLACE_OR_EXTEND"
+    },
+    "new_module_doc": "references/modules/module_79_v65_six_pillar_evaluation_preconditioning_json_restoration_and_vocal_stability.md"
+  }
+}

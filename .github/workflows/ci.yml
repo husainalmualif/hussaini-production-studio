@@ -1,4 +1,4 @@
-name: Hussaini Production Studio CI (V64.0 OMNI-ARCHITECT Validation)
+name: Hussaini Production Studio CI (V65.0 OMNI-ARCHITECT Validation)
 
 on:
   push:
@@ -9,7 +9,7 @@ on:
 
 jobs:
   validate-skill-and-dsp:
-    name: Validate V64.0 Docs, Pylint, Unit Tests & 20-Mode DSP (Py ${{ matrix.python-version }})
+    name: Validate V65.0 Docs, Pylint, Unit Tests & 20-Mode DSP (Py ${{ matrix.python-version }})
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -67,6 +67,7 @@ jobs:
           test -f references/modules/module_76_v62_waqar_fiqh_orchestral_six_families_qarid_atwar_and_multi_platform_lufs.md
           test -f references/modules/module_77_v63_flow_music_two_layer_json_5band_spectrum_and_hybrid_stem_mastering.md
           test -f references/modules/module_78_v64_iraqi_ground_truth_cadence_maqam_orthoepy_and_exp36_repair.md
+          test -f references/modules/module_79_v65_six_pillar_evaluation_preconditioning_json_restoration_and_vocal_stability.md
           test -f scripts/hussaini_dsp_montage.py
           test -f tests/test_hussaini_modules.py
           ! test -f references/hussaini_os_v48_5_constitution.json
@@ -75,7 +76,7 @@ jobs:
           ! test -f references/modules/module_50_melody_composition_and_24edo_guide_synth.md
           ! test -f references/modules/module_51_6dialects_g2p_and_25_atwar_encyclopedia.md
           ! test -f references/modules/module_52_pro_dsp_dynamic_ahaat_and_multi_ai_router.md
-          python -c "import json, pathlib; assert pathlib.Path('VERSION').read_text(encoding='utf-8').strip() == 'V64.0 OMNI-ARCHITECT'; assert pathlib.Path('SKILL.md').stat().st_size <= 10500; data = json.loads(pathlib.Path('references/hussaini_os_v50_0_constitution.json').read_text(encoding='utf-8')); assert data['protocol_metadata']['protocol_name'] == 'Hussaini_Production_Studio_OS_V50_0_OMNI_ARCHITECT'; assert data['protocol_metadata']['skill_version'] == 'V64.0 OMNI-ARCHITECT'"
+          python -c "import json, pathlib; assert pathlib.Path('VERSION').read_text(encoding='utf-8').strip() == 'V65.0 OMNI-ARCHITECT'; assert pathlib.Path('SKILL.md').stat().st_size <= 10500; data = json.loads(pathlib.Path('references/hussaini_os_v50_0_constitution.json').read_text(encoding='utf-8')); assert data['protocol_metadata']['protocol_name'] == 'Hussaini_Production_Studio_OS_V50_0_OMNI_ARCHITECT'; assert data['protocol_metadata']['skill_version'] == 'V65.0 OMNI-ARCHITECT'"
 
       - name: Run Pylint Static Analysis
         run: |
@@ -117,6 +118,7 @@ jobs:
           python -c "import numpy as np; from scipy.io import wavfile; [wavfile.write(f'/tmp/in_{sr}.wav', sr, (0.4*np.sin(2*np.pi*180.0*np.linspace(0, 1.0, sr, endpoint=False))*32767).astype(np.int16)) for sr in (8000, 16000, 44100, 48000)]; sig = (0.4*np.sin(2*np.pi*180.0*np.linspace(0, 1.0, 44100, endpoint=False))*32767).astype(np.int16); wavfile.write('/tmp/in_stereo.wav', 44100, np.column_stack((sig, sig)))"
           python scripts/hussaini_dsp_montage.py --extract-profile /tmp/in_16000.wav
           python scripts/hussaini_dsp_montage.py --audit-ground-truth /tmp/in_16000.wav --maqam-drone lami --bpm 62
+          python scripts/hussaini_dsp_montage.py --audit-six-pillars /tmp/in_16000.wav --maqam-drone lami --bpm 62
           python scripts/hussaini_dsp_montage.py --detect-artifacts /tmp/in_16000.wav
           python scripts/hussaini_dsp_montage.py --detect-tail-loop /tmp/in_16000.wav
           for sr in 8000 16000 44100 48000; do

@@ -1,9 +1,9 @@
 {
   "protocol_metadata": {
     "protocol_name": "Hussaini_Production_Studio_OS_V50_0_OMNI_ARCHITECT",
-    "skill_version": "V64.0 OMNI-ARCHITECT",
-    "previous_baseline_version": "V63.0 OMNI-ARCHITECT & V62.0 OMNI-ARCHITECT",
-    "previous_baseline_commit_sha": "6565f94b94ea7370020b789f7ef8b9473a6e77f4",
+    "skill_version": "V65.0 OMNI-ARCHITECT",
+    "previous_baseline_version": "V64.0 OMNI-ARCHITECT & V63.0 OMNI-ARCHITECT",
+    "previous_baseline_commit_sha": "9a8f98ffc069615ea97309ae524adaa40f465314",
     "canonical_repository": "https://github.com/husainalmualif/hussaini-production-studio",
     "primary_studio_url": "https://www.flowmusic.app/",
     "target_engines": [
@@ -2279,23 +2279,47 @@
       "NC43_cadence_locked_24edo_maqam_classifier": "Lock tonic selection to phrase-final cadences in _extract_24edo_maqam_profile(), fix minor-3rd bin 5->6 (300c) on bayati/saba, and keep distinct saba_zamzam vs lami frequencies.",
       "NC44_iraqi_sparsity_raddada_and_anti_triad_hum": "Wrap all [المستهل]/[الخاتمة] lines in (...), use pure short Arabic headers, enforce iso-syllabic AAAB stanzas, and ban 'Zannah humming pads' / 'choir harmonies' in Track A.",
       "NC45_iraqi_preflight_orthoepy_and_g2p_landmine_linter": "Run --audit-iraqi-preflight (audit_iraqi_latmiya_preflight_v64) to block Sukun spam (>0.38), Fusha leaks, un-shadda'd دَلَالِي, and Persian گ/چ cluster landmines; keep Module 49 heavy diacritics strictly archival.",
-      "NC46_audio_driven_ground_truth_gate": "Run --audit-ground-truth (audit_latmiya_audio_ground_truth_v64) measuring cadence Maqam, 12-TET collapse, 30-50c quarter-tones, vowel-onset rate, and 45-105Hz chest-latm strikes/min, capping music score <= 4.2-5.2 on failure.",
-      "NC47_direct_compose_and_account_owned_audio_ref": "Use Direct Compose panel (zero Gemini Producer rewrite) or account-owned Flow-generated audio uploads for quarter-tone anchoring; never upload commercial copyrighted artist MP3s."
+      "NC46_audio_driven_ground_truth_gate": "Run --audit-ground-truth (audit_latmiya_audio_ground_truth_v64) measuring cadence Maqam, <=28c vocal pitch stability, 12-TET collapse, 30-50c quarter-tones, vowel-onset rate, and 45-105Hz chest-latm strikes/min.",
+      "NC47_account_owned_audio_ref_policy": "Never upload commercial copyrighted artist MP3s; superseded on generation routing by NC49 (restoring Stage-0 Pre-Conditioning + Primary Method-2 JSON)."
     },
-    "exp36_verified_iraqi_karbalaei_benchmark": {
+    "exp36_honest_postmortem_retraction": {
       "title": "دمع زينب على التربان",
-      "session_url": "https://www.flowmusic.app/session/99893e97-6efa-4595-80ab-bcda52c6b465",
       "root_clip_uuid": "5db375e4-609a-4d9a-bde3-1192b503eb5f",
-      "final_repaired_uuid": "841ef870-0bad-46cd-8a87-dea8351294ec",
-      "song_url": "https://www.flowmusic.app/song/841ef870-0bad-46cd-8a87-dea8351294ec",
-      "detected_maqam_cadence_locked": "saba_zamzam (1.114) / nawa_athar (0.990) / hijaz (0.924)",
-      "quarter_tone_30_to_50c_pct": 17.79,
-      "ground_truth_gate_passed": true,
-      "nc33_zero_artifact_passed": true,
-      "music_score_10": 9.3,
-      "orthoepy_score_10": 9.1,
-      "strict_overall_score_10": 9.04,
-      "verdict": "RELEASE_READY_STRICT_PASS"
+      "retracted_clip_uuid": "841ef870-0bad-46cd-8a87-dea8351294ec",
+      "retracted_false_score": 9.04,
+      "true_strict_score": 2.2,
+      "held_note_wobble_cents": 37.08,
+      "verdict": "REJECTED_DO_NOT_REPLACE_OR_EXTEND",
+      "root_causes": [
+        "Bypassed Stage-0 Pre-Conditioning and Method-2 JSON, feeding raw Compose with 'Raw unaccompanied... heartbreaking... Grief-stricken... aching' + 3 mixed Maqams + Auto BPM",
+        "Removed 4-layer human vocal foundation (Bass/Zannah/Ahaat), losing harmonic pitch floor and causing 37.08c vocal wobble & choked throat with noisy crowd shouting",
+        "Naive 30-50c counter mistook 37.08c off-key vocal wobble for microtonal quarter-tones, wasting 6 Replace passes on a flawed root"
+      ]
+    }
+  },
+  "v65_0_module_79_upgrades": {
+    "version": "V65.0 OMNI-ARCHITECT",
+    "module_reference": "references/modules/module_79_v65_six_pillar_evaluation_preconditioning_json_restoration_and_vocal_stability.md",
+    "restored_core_architecture": {
+      "step_0_consultation_and_credit_protection": "Mandatory user consultation before spending any Flow Music credits; zero Replace/Extend passes on flawed Stage-1 roots.",
+      "step_1_session_preconditioning": "Mandatory Stage-0 Pre-Conditioning / MASTER_STATE JSON in Producer Chat at session start.",
+      "step_2_two_generation_methods": {
+        "primary_method_2_json": "Per-Stage & Per-Section JSON Orchestration in Producer Chat (sections[] + lyrics_register_verbatim + 1 locked Maqam + explicit BPM + 4-layer studio human vocal symphony).",
+        "secondary_method_1_compose": "Compose > Lyrics manual fallback after Stage-0 Pre-Conditioning."
+      }
+    },
+    "six_pillar_evaluation_standard": [
+      "1. النص والشعر (المضمون والعقيدة، البناء الشعري، الصور الفنية والعاطفية، الترابط الدرامي)",
+      "2. اللحن والمقامات الموسيقية (ملاءمة المقام، الانتقالات المقامية، الابتكار والهوك، الطبقة الصوتية دون إجهاد)",
+      "3. الأداء الصوتي للرادود (الإحساس والتقمص، مخارج الحروف، التحكم بالنفس والعُرب وثبات الصوت <=28c)",
+      "4. الإيقاع واللطم (توظيف الإيقاع، التناغم مع حركة اللطم، التنويع الإيقاعي)",
+      "5. التوزيع والمؤثرات الصوتية (تناغم ونظافة الردّادة، الآهات والخلفيات البشرية، المؤثرات الدرامية المتزنة)",
+      "6. الهندسة الصوتية والمكساج والماسترينغ (التوازن، نقاء EQ/Comp، العمق المكاني، اختبار السماعات وMono Check)"
+    ],
+    "permanent_negative_constraints_nc48_to_nc50": {
+      "NC48_vocal_pitch_stability_and_throat_gate": "Enforce held_note_wobble_cents <= 28.0c (calibrated on Al-Akraf 7.87c & Basim 23.23c vs failed Exp 36 37.08c) via measure_vocal_stability_and_throat_quality_v65().",
+      "NC49_restored_preconditioning_json_and_4layer_vocal_symphony": "Restore Stage-0 Pre-Conditioning + Primary Method-2 JSON + 4-Layer Studio Human Vocal Symphony (Human Bass, Zannah, 24-EDO Harmony/Raddada, Clean Human Ahaat) + studio-recorded pure vocal clarity; ban field-wailing adjectives.",
+      "NC50_six_pillar_single_veto_and_credit_protection": "Enforce evaluate_six_pillars_hussaini_work_v65() (--audit-six-pillars): any pillar < 7.0 triggers immediate REJECTED_DO_NOT_REPLACE_OR_EXTEND and blocks credit waste."
     }
   }
 }

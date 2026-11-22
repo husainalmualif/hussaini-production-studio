@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # pylint: disable=wrong-import-position,too-many-lines,no-member,too-few-public-methods
-"""Comprehensive Unit & Integration Test Suite for Hussaini Production Studio (V64.0 OMNI-ARCHITECT)."""
+"""Comprehensive Unit & Integration Test Suite for Hussaini Production Studio (V65.0 OMNI-ARCHITECT)."""
 
 import os
 import re
@@ -56,8 +56,8 @@ import hussaini_dsp_montage as hds  # noqa: E402
 
 
 def test_single_source_version_and_v50_architecture():
-    """Verify V64.0 OMNI-ARCHITECT version lock, SKILL.md router budget, JSON constitution, and Module 78."""
-    assert hds.SKILL_VERSION == "V64.0 OMNI-ARCHITECT"
+    """Verify V65.0 OMNI-ARCHITECT version lock, SKILL.md router budget, JSON constitution, and Module 79."""
+    assert hds.SKILL_VERSION == "V65.0 OMNI-ARCHITECT"
     skill_md = os.path.join(ROOT_DIR, "SKILL.md")
     assert os.path.isfile(skill_md)
     assert os.path.getsize(skill_md) <= 10500
@@ -157,6 +157,12 @@ def test_single_source_version_and_v50_architecture():
         "modules",
         "module_78_v64_iraqi_ground_truth_cadence_maqam_orthoepy_and_exp36_repair.md",
     )
+    v65_module_doc = os.path.join(
+        ROOT_DIR,
+        "references",
+        "modules",
+        "module_79_v65_six_pillar_evaluation_preconditioning_json_restoration_and_vocal_stability.md",
+    )
     assert os.path.isfile(v50_module_doc)
     assert os.path.isfile(v51_module_doc)
     assert os.path.isfile(v52_module_doc)
@@ -171,13 +177,14 @@ def test_single_source_version_and_v50_architecture():
     assert os.path.isfile(v62_module_doc)
     assert os.path.isfile(v63_module_doc)
     assert os.path.isfile(v64_module_doc)
+    assert os.path.isfile(v65_module_doc)
 
     constitution = hds.load_v50_0_constitution()
     assert (
         constitution["protocol_metadata"]["protocol_name"]
         == "Hussaini_Production_Studio_OS_V50_0_OMNI_ARCHITECT"
     )
-    assert constitution["protocol_metadata"]["skill_version"] == "V64.0 OMNI-ARCHITECT"
+    assert constitution["protocol_metadata"]["skill_version"] == "V65.0 OMNI-ARCHITECT"
     assert len(constitution["5_master_sound_prompts_library_modules_36_44_46_48_52"]) == 25
     assert len(hds.MASTER_SOUND_PROMPTS_V50) == 25
     assert len(constitution["8_v50_empirical_175_corpus_and_9_schools_modules_54_65"]["unified_9_schools_architecture"]) == 9
@@ -1741,3 +1748,63 @@ def test_v64_cadence_maqam_iraqi_preflight_and_audio_ground_truth_gate(tmp_path)
 
     assert hds.main(["--audit-iraqi-preflight", clean_exp36, "--bpm", "62"]) == 0
     assert hds.main(["--audit-ground-truth", str(wav_ok), "--maqam-drone", "bayati", "--bpm", "60"]) == 0
+
+
+def test_v65_six_pillar_evaluation_vocal_stability_veto_and_4layer_symphony(tmp_path):
+    """Verify V65.0 Module 79: 6-Pillar Rubric, <=28c Vocal Stability Gate, Single-Pillar Veto & 4-Layer Symphony."""
+    # 1. Verify 6-Pillar Rubric weights sum to 1.00 and 4-layer human vocal symphony is restored in Track A
+    assert len(hds.SIX_PILLAR_HUSSAINI_EVALUATION_RUBRIC_V65) == 6
+    total_w = sum(v["weight"] for v in hds.SIX_PILLAR_HUSSAINI_EVALUATION_RUBRIC_V65.values())
+    assert abs(total_w - 1.0) < 1e-6
+    track_a = str(hds.FIVE_BAND_SPECTRAL_OCCUPANCY_V63["TRACK_A_PURE_ACAPELLA_LATMIYA"]).lower()
+    assert "zannah" in track_a and "ahaat" in track_a and "studio-recorded pure vocal clarity" in track_a
+    assert "grief-stricken" not in track_a and "raw unaccompanied" not in track_a
+
+    # 2. Shaky unstable vocal (>28c held-note wobble, like failed Exp 36 = 37.1c) MUST trigger veto & block credit waste!
+    sr = 16000
+    dur = 6.0
+    t_arr = np.linspace(0.0, dur, int(sr * dur), endpoint=False)
+    # 55-cent wild pitch wobble at 6.5 Hz -> held_note_wobble_cents ~ 38c (> 28c!)
+    inst_f0 = 196.0 * (2.0 ** ((55.0 * np.sin(2.0 * np.pi * 6.5 * t_arr)) / 1200.0))
+    phase_wobble = 2.0 * np.pi * np.cumsum(inst_f0) / float(sr)
+    sig_shaky = 0.32 * (np.sin(phase_wobble) + 0.45 * np.sin(2.0 * phase_wobble))
+    wav_shaky = tmp_path / "shaky_unstable_throat.wav"
+    wavfile.write(str(wav_shaky), sr, (sig_shaky * 32767).astype(np.int16))
+
+    stab_bad = hds.measure_vocal_stability_and_throat_quality_v65(str(wav_shaky))
+    assert stab_bad["held_note_wobble_cents"] > 28.0
+    assert stab_bad["vocal_pitch_unstable"] is True
+    assert stab_bad["stability_passed"] is False
+
+    ev_bad = hds.evaluate_six_pillars_hussaini_work_v65(str(wav_shaky), expected_maqam="saba_zamzam", target_bpm=60.0)
+    assert ev_bad["single_pillar_veto_triggered"] is True
+    assert "pillar_3_radood_vocal_performance" in ev_bad["failed_pillars"]
+    assert ev_bad["allow_credit_spending_on_replace_or_extend"] is False
+    assert ev_bad["verdict"] == "REJECTED_DO_NOT_REPLACE_OR_EXTEND"
+    assert ev_bad["overall_six_pillar_score_10"] <= 4.0
+
+    # 3. Rock-steady studio Bayati vocal (wobble ~ 8c <= 28c) PASSES all 6 pillars cleanly
+    tonic = 146.83
+    notes_steady = [
+        tonic * (2.0 ** (3.0 / 24.0)),
+        tonic * (2.0 ** (6.0 / 24.0)),
+        tonic * (2.0 ** (3.0 / 24.0)),
+        tonic,
+    ]
+    seg_n = len(t_arr) // len(notes_steady)
+    sig_steady = np.zeros_like(t_arr)
+    for idx_s, fn in enumerate(notes_steady):
+        sl = slice(idx_s * seg_n, (idx_s + 1) * seg_n)
+        tv = t_arr[sl] - t_arr[sl.start]
+        gentle_vib = fn * (2.0 ** ((8.0 * np.sin(2.0 * np.pi * 5.2 * tv)) / 1200.0))
+        ph = 2.0 * np.pi * np.cumsum(gentle_vib) / float(sr)
+        sig_steady[sl] = 0.32 * (np.sin(ph) + 0.5 * np.sin(2.0 * ph))
+    wav_steady = tmp_path / "steady_studio_bayati.wav"
+    wavfile.write(str(wav_steady), sr, (sig_steady * 32767).astype(np.int16))
+
+    ev_ok = hds.evaluate_six_pillars_hussaini_work_v65(str(wav_steady), expected_maqam="bayati", target_bpm=60.0)
+    assert ev_ok["vocal_stability_telemetry"]["held_note_wobble_cents"] <= 28.0
+    assert ev_ok["single_pillar_veto_triggered"] is False
+    assert ev_ok["allow_credit_spending_on_replace_or_extend"] is True
+    assert ev_ok["verdict"] == "RELEASE_READY_SIX_PILLAR_PASS"
+    assert hds.main(["--audit-six-pillars", str(wav_steady), "--maqam-drone", "bayati", "--bpm", "60"]) == 0
