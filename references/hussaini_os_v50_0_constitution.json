@@ -1,9 +1,9 @@
 {
   "protocol_metadata": {
     "protocol_name": "Hussaini_Production_Studio_OS_V50_0_OMNI_ARCHITECT",
-    "skill_version": "V63.0 OMNI-ARCHITECT",
-    "previous_baseline_version": "V62.0 OMNI-ARCHITECT & V50.0 OMNI-ARCHITECT",
-    "previous_baseline_commit_sha": "f8961fe0c450aa7f477abb53d087cf33405221ac",
+    "skill_version": "V64.0 OMNI-ARCHITECT",
+    "previous_baseline_version": "V63.0 OMNI-ARCHITECT & V62.0 OMNI-ARCHITECT",
+    "previous_baseline_commit_sha": "6565f94b94ea7370020b789f7ef8b9473a6e77f4",
     "canonical_repository": "https://github.com/husainalmualif/hussaini-production-studio",
     "primary_studio_url": "https://www.flowmusic.app/",
     "target_engines": [
@@ -2239,6 +2239,63 @@
     },
     "permanent_negative_constraint_nc36": {
       "NC36_quarter_tone_vs_12tet_orchestral_firewall": "NEVER pair Quarter-Tone Eastern Maqams (saba, bayati, bayati_shuri, husseini, sikah, rast, suznak) with Western 12-TET piano/guitar chord progressions (50-cent clash); reserve 12-TET chordal orchestration for 12-TET-safe Maqams (nahawand, kurd, hijaz, hijaz_kar, nawa_athar, lami, saba_zamzam, ajam) and enforce via validate_maqam_orchestration_compatibility (--check-orchestration)."
+    }
+  },
+  "v63_0_module_77_upgrades": {
+    "version": "V63.0 OMNI-ARCHITECT",
+    "module_reference": "references/modules/module_77_v63_flow_music_two_layer_json_5band_spectrum_and_hybrid_stem_mastering.md",
+    "permanent_negative_constraints_nc38_to_nc42": {
+      "NC38_stage0_master_state_bootstrap": "Initialize Gemini Producer via INITIALIZE_AND_LOCK_STATE_ONLY_DO_NOT_GENERATE (--build-v63-bootstrap) before Stage 1 when using JSON workflow.",
+      "NC39_five_band_positive_spectral_fill": "Cover all 5 spectral bands positively without triggering Western chordal humming pads in Track A.",
+      "NC40_five_minute_staged_word_budget": "Budget 280-350 net sung words across 4 Extend passes (--plan-v63-workflow).",
+      "NC41_lyria_harshness_tamer_2_4khz": "Apply mono-safe dynamic 2.4-3.8 kHz harshness tamer (--tame-lyria-harshness) during mastering.",
+      "NC42_back_to_front_chained_replace": "Execute multi-window Remix > Replace strictly BACK-TO-FRONT (descending timestamp, --plan-chained-replace) and verify every seam by ear."
+    }
+  },
+  "v64_0_module_78_upgrades": {
+    "version": "V64.0 OMNI-ARCHITECT",
+    "module_reference": "references/modules/module_78_v64_iraqi_ground_truth_cadence_maqam_orthoepy_and_exp36_repair.md",
+    "exp35_honest_postmortem_retraction": {
+      "clip_uuid": "f60b364d-16ab-4c9b-930e-811f2272065b",
+      "retracted_false_score": 9.66,
+      "true_strict_score": 2.8,
+      "root_causes": [
+        "Gemini Producer injected 'Zannah humming pads' + Auto BPM -> Western 12-TET Bb Minor / Gb Major triad ballad at 120 BPM",
+        "Old _extract_24edo_maqam_profile rotated Western diatonic scale to Locrian (F) falsely claiming lami (0.932 vs ajam 0.931) and had bin 5 (250c) instead of 6 (300c) on bayati/saba",
+        "0.718 Sukun/diacritic ratio + 16 Persian گ occurrences shattered Lyria 3.5 BPE subwords (وگفت->وتفت, گلبي->كلبي) plus Fusha leaks (طَاحَ, أَدْرِكِ, لَا وَلِيَّ, اعْلَه) and missing Shadda on دَلَّالِي"
+      ]
+    },
+    "iraqi_basim_10track_5cent_ground_truth": {
+      "tracks_analyzed": 10,
+      "stepwise_conjunct_motion_pct_range": [58.9, 81.4],
+      "microtonal_non_12tet_pct_range": [16.8, 30.1],
+      "mandatory_iraqi_phonetics": [
+        "100% merged emphatic interdental [ðˤ] (ظ) for both ض and ظ",
+        "Majhul monophthongs [ē/ī] and [ō] (حْسِين، زِينَب، وِين، لِيل، اليُوم)",
+        "CVCiC/CVCuC epenthesis (دَمِع، جَمُر، حِزِن، صَبُر، گُمَر) and geminated دَلَّالِي"
+      ]
+    },
+    "permanent_negative_constraints_nc43_to_nc47": {
+      "NC43_cadence_locked_24edo_maqam_classifier": "Lock tonic selection to phrase-final cadences in _extract_24edo_maqam_profile(), fix minor-3rd bin 5->6 (300c) on bayati/saba, and keep distinct saba_zamzam vs lami frequencies.",
+      "NC44_iraqi_sparsity_raddada_and_anti_triad_hum": "Wrap all [المستهل]/[الخاتمة] lines in (...), use pure short Arabic headers, enforce iso-syllabic AAAB stanzas, and ban 'Zannah humming pads' / 'choir harmonies' in Track A.",
+      "NC45_iraqi_preflight_orthoepy_and_g2p_landmine_linter": "Run --audit-iraqi-preflight (audit_iraqi_latmiya_preflight_v64) to block Sukun spam (>0.38), Fusha leaks, un-shadda'd دَلَالِي, and Persian گ/چ cluster landmines; keep Module 49 heavy diacritics strictly archival.",
+      "NC46_audio_driven_ground_truth_gate": "Run --audit-ground-truth (audit_latmiya_audio_ground_truth_v64) measuring cadence Maqam, 12-TET collapse, 30-50c quarter-tones, vowel-onset rate, and 45-105Hz chest-latm strikes/min, capping music score <= 4.2-5.2 on failure.",
+      "NC47_direct_compose_and_account_owned_audio_ref": "Use Direct Compose panel (zero Gemini Producer rewrite) or account-owned Flow-generated audio uploads for quarter-tone anchoring; never upload commercial copyrighted artist MP3s."
+    },
+    "exp36_verified_iraqi_karbalaei_benchmark": {
+      "title": "دمع زينب على التربان",
+      "session_url": "https://www.flowmusic.app/session/99893e97-6efa-4595-80ab-bcda52c6b465",
+      "root_clip_uuid": "5db375e4-609a-4d9a-bde3-1192b503eb5f",
+      "final_repaired_uuid": "841ef870-0bad-46cd-8a87-dea8351294ec",
+      "song_url": "https://www.flowmusic.app/song/841ef870-0bad-46cd-8a87-dea8351294ec",
+      "detected_maqam_cadence_locked": "saba_zamzam (1.114) / nawa_athar (0.990) / hijaz (0.924)",
+      "quarter_tone_30_to_50c_pct": 17.79,
+      "ground_truth_gate_passed": true,
+      "nc33_zero_artifact_passed": true,
+      "music_score_10": 9.3,
+      "orthoepy_score_10": 9.1,
+      "strict_overall_score_10": 9.04,
+      "verdict": "RELEASE_READY_STRICT_PASS"
     }
   }
 }

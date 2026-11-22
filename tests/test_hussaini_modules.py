@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # pylint: disable=wrong-import-position,too-many-lines,no-member,too-few-public-methods
-"""Comprehensive Unit & Integration Test Suite for Hussaini Production Studio (V63.0 OMNI-ARCHITECT)."""
+"""Comprehensive Unit & Integration Test Suite for Hussaini Production Studio (V64.0 OMNI-ARCHITECT)."""
 
 import os
 import re
@@ -56,8 +56,8 @@ import hussaini_dsp_montage as hds  # noqa: E402
 
 
 def test_single_source_version_and_v50_architecture():
-    """Verify V63.0 OMNI-ARCHITECT version lock, SKILL.md router budget, JSON constitution, and Module 77."""
-    assert hds.SKILL_VERSION == "V63.0 OMNI-ARCHITECT"
+    """Verify V64.0 OMNI-ARCHITECT version lock, SKILL.md router budget, JSON constitution, and Module 78."""
+    assert hds.SKILL_VERSION == "V64.0 OMNI-ARCHITECT"
     skill_md = os.path.join(ROOT_DIR, "SKILL.md")
     assert os.path.isfile(skill_md)
     assert os.path.getsize(skill_md) <= 10500
@@ -151,6 +151,12 @@ def test_single_source_version_and_v50_architecture():
         "modules",
         "module_77_v63_flow_music_two_layer_json_5band_spectrum_and_hybrid_stem_mastering.md",
     )
+    v64_module_doc = os.path.join(
+        ROOT_DIR,
+        "references",
+        "modules",
+        "module_78_v64_iraqi_ground_truth_cadence_maqam_orthoepy_and_exp36_repair.md",
+    )
     assert os.path.isfile(v50_module_doc)
     assert os.path.isfile(v51_module_doc)
     assert os.path.isfile(v52_module_doc)
@@ -164,13 +170,14 @@ def test_single_source_version_and_v50_architecture():
     assert os.path.isfile(v61_module_doc)
     assert os.path.isfile(v62_module_doc)
     assert os.path.isfile(v63_module_doc)
+    assert os.path.isfile(v64_module_doc)
 
     constitution = hds.load_v50_0_constitution()
     assert (
         constitution["protocol_metadata"]["protocol_name"]
         == "Hussaini_Production_Studio_OS_V50_0_OMNI_ARCHITECT"
     )
-    assert constitution["protocol_metadata"]["skill_version"] == "V63.0 OMNI-ARCHITECT"
+    assert constitution["protocol_metadata"]["skill_version"] == "V64.0 OMNI-ARCHITECT"
     assert len(constitution["5_master_sound_prompts_library_modules_36_44_46_48_52"]) == 25
     assert len(hds.MASTER_SOUND_PROMPTS_V50) == 25
     assert len(constitution["8_v50_empirical_175_corpus_and_9_schools_modules_54_65"]["unified_9_schools_architecture"]) == 9
@@ -1637,3 +1644,100 @@ def test_v63_nc42_back_to_front_chained_surgical_replace_planner():
             "10-20:منارارات->منارات;157-167:عجي->عجل",
         ]
     ) == 0
+
+
+def test_v64_cadence_maqam_iraqi_preflight_and_audio_ground_truth_gate(tmp_path):
+    """Verify V64.0 Module 78: NC43 cadence Maqam lock, NC44-NC45 Iraqi preflight & NC46-NC47 ground-truth gate."""
+    # 1. Verify NC43: distinct saba_zamzam vs lami frequencies, 300c minor-3rd bin 6 on bayati/saba, & zero triad hums in Track A
+    assert hds.MAQAM_FREQS["saba_zamzam"] != hds.MAQAM_FREQS["lami"]
+    for mq_k in ("bayati", "bayati_shuri", "husseini", "saba", "saba_zamzam"):
+        assert 6 in hds._MAQAM_24EDO_TEMPLATES[mq_k]  # pylint: disable=protected-access
+    track_a_occ = str(hds.FIVE_BAND_SPECTRAL_OCCUPANCY_V63["TRACK_A_PURE_ACAPELLA_LATMIYA"]).lower()
+    assert "humming pads" not in track_a_occ and "choir harmonies" not in track_a_occ
+
+    # 2. Verify NC44-NC45: Exp 35's broken input fails every pre-flight check; Exp 36's clean poem passes 100%
+    broken_exp35 = (
+        "[الموال والنعي الحر — 0 BPM — Maqam Saba]\n"
+        "يَا خُويَه يَا حْسَينْ گَلْبِي انْكَسَرْ عِگِبْ عَينَكْ\n"
+        "[المستهل]\n"
+        "يَا خُويَه يَا حْسَينْ طَاحَ العَلَمْ وَالخِدِرْ ضَاعْ\n"
+        "زَينَبْ تِصِيحْ اعْلَه التَّلْ گُومْ أَدْرِكِ الحَالْ\n"
+        "[النزلة الأولى]\n"
+        "وِگْفَتْ زَينَبْ تِنْظُرْ لَا وَلِيَّ وَلَا صِيوَانْ وَالدَّمِعْ يِجْرِي سَلَّابَه\n"
+        "مُرْتَابَه\n"
+        "تِجَاوِبْهَا\n"
+        "تِگَطِّعْ دَلَالِي\n"
+    )
+    pf_bad = hds.audit_iraqi_latmiya_preflight_v64(broken_exp35, target_bpm=62.0)
+    assert pf_bad["v64_iraqi_preflight_passed"] is False
+    assert pf_bad["verbose_or_latin_headers"]
+    assert pf_bad["missing_mustahal_raddada_parentheses"]
+    assert len(pf_bad["fusha_grammar_leaks"]) >= 4
+    assert any("دلالي" in lm for lm in pf_bad["lyria_g2p_cluster_landmines"])
+    assert any("وگفت" in lm or "گلبي" in lm for lm in pf_bad["lyria_g2p_cluster_landmines"])
+    assert pf_bad["heavy_sukun_token_shattering_spam"] is True
+    assert pf_bad["broken_stanza_rhymes"]
+
+    clean_exp36 = (
+        "[المستهل]\n"
+        "(دمع زينب على التربان .. جمر يجري بلا صيوان)\n"
+        "(يا بو السجّاد حزني زاد ياذيني)\n"
+        "(سواد الليل هدّ الحيل دلّيني)\n"
+        "[النزلة الأولى]\n"
+        "يا خويه حسين .. ما ظلّت خيم بليّاك\n"
+        "غريبه بكربلا .. ودمعي يهلّ ذكراك\n"
+        "خلص صبري .. بعد خدري .. وجيت أنخاك\n"
+        "أنادي وين .. يا ضيّ العين واسيني\n"
+    )
+    pf_ok = hds.audit_iraqi_latmiya_preflight_v64(clean_exp36, target_bpm=62.0)
+    assert pf_ok["v64_iraqi_preflight_passed"] is True
+    assert not pf_ok["fusha_grammar_leaks"]
+    assert not pf_ok["lyria_g2p_cluster_landmines"]
+
+    # 3. Verify NC46-NC47: Audio-Driven Ground-Truth Gate catches 12-TET Western collapse & passes slow Bayati microtonal lament
+    sr = 16000
+    # 3a) Synthetic Western C-Major 12-TET rushed triad arpeggio -> must FAIL ground-truth gate
+    dur_bad = 8.0
+    t_bad = np.linspace(0.0, dur_bad, int(sr * dur_bad), endpoint=False)
+    c_notes = [261.63, 329.63, 392.00, 349.23, 392.00, 329.63, 293.66, 261.63] * 5
+    seg_b = len(t_bad) // len(c_notes)
+    sig_bad = np.zeros_like(t_bad)
+    for idx_b, fn in enumerate(c_notes):
+        sl = slice(idx_b * seg_b, (idx_b + 1) * seg_b)
+        tv = t_bad[sl] - t_bad[sl.start]
+        env_b = np.sin(np.pi * np.linspace(0.0, 1.0, len(tv))) ** 0.5
+        sig_bad[sl] = 0.32 * env_b * (np.sin(2 * np.pi * fn * tv) + 0.45 * np.sin(4 * np.pi * fn * tv))
+    wav_bad = tmp_path / "western_12tet_rushed.wav"
+    wavfile.write(str(wav_bad), sr, (sig_bad * 32767).astype(np.int16))
+    gt_bad = hds.audit_latmiya_audio_ground_truth_v64(str(wav_bad), expected_maqam="bayati", target_bpm=60.0)
+    assert gt_bad["ground_truth_gate_passed"] is False
+    assert gt_bad["audio_music_ceiling_10"] <= 5.0
+
+    # 3b) Synthetic slow cadential Bayati lament (D3=146.83Hz, E-half-flat=+150c, F=+300c, G=+500c -> D3 cadence) -> PASSES
+    dur_ok = 9.0
+    t_ok = np.linspace(0.0, dur_ok, int(sr * dur_ok), endpoint=False)
+    tonic = 146.83
+    b_notes = [
+        tonic * (2.0 ** (3.0 / 24.0)),   # +150c Bayati neutral 2nd
+        tonic * (2.0 ** (6.0 / 24.0)),   # +300c minor 3rd
+        tonic * (2.0 ** (3.0 / 24.0)),   # +150c Bayati neutral 2nd
+        tonic,                           # 0c Qarar cadence
+        tonic * (2.0 ** (3.0 / 24.0)),   # +150c Bayati neutral 2nd
+        tonic,                           # 0c Qarar cadence
+    ]
+    seg_o = len(t_ok) // len(b_notes)
+    sig_ok = np.zeros_like(t_ok)
+    for idx_o, fn in enumerate(b_notes):
+        sl = slice(idx_o * seg_o, (idx_o + 1) * seg_o)
+        tv = t_ok[sl] - t_ok[sl.start]
+        sig_ok[sl] = 0.30 * (np.sin(2 * np.pi * fn * tv) + 0.5 * np.sin(4 * np.pi * fn * tv))
+    wav_ok = tmp_path / "authentic_bayati_slow.wav"
+    wavfile.write(str(wav_ok), sr, (sig_ok * 32767).astype(np.int16))
+    gt_ok = hds.audit_latmiya_audio_ground_truth_v64(str(wav_ok), expected_maqam="bayati", target_bpm=60.0)
+    assert gt_ok["detected_maqam_cadence_locked"] in ("bayati", "bayati_shuri", "husseini", "saba")
+    assert gt_ok["quarter_tone_30_to_50c_pct"] >= 20.0
+    assert gt_ok["ground_truth_gate_passed"] is True
+    assert gt_ok["audio_music_ceiling_10"] >= 9.5
+
+    assert hds.main(["--audit-iraqi-preflight", clean_exp36, "--bpm", "62"]) == 0
+    assert hds.main(["--audit-ground-truth", str(wav_ok), "--maqam-drone", "bayati", "--bpm", "60"]) == 0

@@ -1,0 +1,52 @@
+{
+  "checkpoint_id": "V64_0_OMNI_ARCHITECT_2026_11_22",
+  "skill_version": "V64.0 OMNI-ARCHITECT",
+  "readiness_score_percent": 100,
+  "previous_version": "V63.0 OMNI-ARCHITECT",
+  "previous_commit_sha": "6565f94b94ea7370020b789f7ef8b9473a6e77f4",
+  "sources_absorbed": [
+    "c:/Users/husai/Desktop/New folder/لطميات (175 Iraqi & Bahrani MP3 corpus)",
+    "c:/Users/husai/Desktop/New folder/لطميات/وجود لوجودي/أم البنين - باسم الكربلائي.mp3",
+    "10-Track 5-Cent YIN F0 & Formant Ground-Truth Corpus Audit (Basim Al-Karbalai, Murtada Harb, Sayyid Salam, Mujtaba Al-Kaabi)",
+    "152-Token Word-by-Word Forensic Post-Mortem of Failed Exp 35 (f60b364d & 6c5be3ad)"
+  ],
+  "v64_upgrades": {
+    "new_negative_constraints": ["NC43", "NC44", "NC45", "NC46", "NC47"],
+    "cadence_locked_24edo_maqam_classifier": "_extract_24edo_maqam_profile() — locks tonic to phrase-final cadences, fixes minor 3rd 5->6 (300c) on bayati/saba, separates saba_zamzam vs lami frequencies",
+    "iraqi_preflight_linter": "audit_iraqi_latmiya_preflight_v64() / --audit-iraqi-preflight",
+    "audio_ground_truth_gate": "audit_latmiya_audio_ground_truth_v64() / --audit-ground-truth",
+    "exp35_honest_retraction": {
+      "uuid": "f60b364d-16ab-4c9b-930e-811f2272065b",
+      "retracted_score": 9.66,
+      "true_strict_score": 2.8,
+      "verdict": "REJECTED_WESTERN_12TET_AND_G2P_FAILURE"
+    },
+    "exp36_karbalaei_verified_benchmark": {
+      "title": "دمع زينب على التربان",
+      "session_url": "https://www.flowmusic.app/session/99893e97-6efa-4595-80ab-bcda52c6b465",
+      "root_uuid": "5db375e4-609a-4d9a-bde3-1192b503eb5f",
+      "surgical_chain_uuids": [
+        "8432b95c-0988-41c1-bdf0-7f95d199c1ae",
+        "3ecd4eb5-e21d-4d6f-9464-67ea86ca3dd0",
+        "44395765-d6e8-4c96-b8fe-9afa04faae79",
+        "93a729b6-1ead-48bb-9ebb-087a8c1f9728",
+        "841ef870-0bad-46cd-8a87-dea8351294ec"
+      ],
+      "final_winner_uuid": "841ef870-0bad-46cd-8a87-dea8351294ec",
+      "song_url": "https://www.flowmusic.app/song/841ef870-0bad-46cd-8a87-dea8351294ec",
+      "duration_sec": 174.016,
+      "detected_maqam_cadence_locked": "saba_zamzam (1.114) / nawa_athar (0.990) / hijaz (0.924)",
+      "quarter_tone_30_to_50c_pct": 17.79,
+      "within_20c_of_12tet_pct": 49.92,
+      "nc33_zero_artifact_passed": true,
+      "ground_truth_gate_passed": true,
+      "music_score_10": 9.3,
+      "orthoepy_score_10": 9.1,
+      "strict_overall_score_10": 9.04,
+      "mono_phase_correlation": 0.89,
+      "multi_platform_masters_verified_lufs": [-14.0, -16.0, -18.0, -23.0],
+      "verdict": "RELEASE_READY_STRICT_PASS"
+    },
+    "new_module_doc": "references/modules/module_78_v64_iraqi_ground_truth_cadence_maqam_orthoepy_and_exp36_repair.md"
+  }
+}

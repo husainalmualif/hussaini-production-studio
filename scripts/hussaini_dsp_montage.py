@@ -1,18 +1,19 @@
 #!/usr/bin/env python3
 # pylint: disable=too-many-lines,too-many-return-statements,too-many-branches,too-many-locals,too-many-statements,too-many-arguments,too-many-positional-arguments,no-member,chained-comparison
-"""Hussaini Audio Omni-Architect DSP, 5-Track DAW & Phonetics Compiler (V58.0 OMNI-ARCHITECT).
+"""Hussaini Audio Omni-Architect DSP, 5-Track DAW & Phonetics Compiler (V64.0 OMNI-ARCHITECT).
 
 Standalone empirical production engine implementing Hussaini_Production_Studio_OS_V50_0_OMNI_ARCHITECT
-and V52.0–V58.0 field & 177-track empirical upgrades:
+and V52.0–V64.0 field & 177-track empirical upgrades:
 - Single-Source Version Management via root VERSION file & JSON constitution
 - Pure-Python WAV I/O (with transparent FFmpeg MP3/M4A/OGG decoding) + ITU-R BS.1770-4 / EBU R128
   K-Weighted Gated Loudness + 4x True-Peak Limiter
-- Module 67–73 (V52.0–V58.0): Multi-Meter Muwashah Composition Engine & Combined Pre-Conditioning JSON
-  Orchestration (--build-muwashah-json, NC30–NC31, 177-MP3 Masterwork Direction Blueprints, Al-Akraf
-  300–2800Hz Vintage Telephone Intro FX), Clean Natural Arabic Lyria 3.5 Orthography Compiler
-  (--compile-clean-lyria, NC26–NC29, چ->تش/تْش & clean گ), 4-Axis Modern Latmiya Architecture,
-  Singer-Tonic-Locked f0 Pad, Vocal-Pulse-Locked (<460Hz) Latm, 24-EDO Maqam/Rubato Profiler,
-  9-School 5-Stage Prosodic Tor Router, and 20-Mode Studio EBU R128 DSP
+- Module 67–78 (V52.0–V64.0): Iraqi & Basim Al-Karbalai Acoustic/Phonetic Ground-Truth Engine
+  (NC43 Cadence-Locked 24-EDO Maqam Classifier, NC44–NC45 Iraqi Prosody & G2P Landmine Pre-Flight
+  --audit-iraqi-preflight, NC46–NC47 Audio Ground-Truth Gate --audit-ground-truth), Stage-0 MASTER_STATE
+  Bootstrap & Chained Back-to-Front Replace (--build-v63-bootstrap, --plan-chained-replace, NC38–NC42),
+  Waqar 6-Family Orchestral & Shadda/Wasl Orthoepy (--check-orchestration, --audit-orthoepy, NC36–NC37),
+  Qatifi/Bahrani/Iraqi Clean Lyria 3.5 Orthography (--compile-clean-lyria, NC26–NC35), Multi-Meter
+  Muwashah JSON, 15 Maqams, 19 Fingerprints, and 20-Mode Multi-Platform EBU R128 DSP (-14/-16/-18/-23 LUFS)
 """
 
 import argparse
@@ -125,10 +126,10 @@ MAQAM_FREQS = {
     "bayati_shuri": [146.83, 160.00, 174.61, 196.00, 207.65, 246.94],
     "husseini": [146.83, 160.00, 174.61, 196.00, 220.00, 240.00],
     "saba": [146.83, 160.00, 174.61, 207.65],
-    "saba_zamzam": [146.83, 155.56, 174.61, 207.65],
+    "saba_zamzam": [146.83, 155.56, 174.61, 185.00, 220.00],
     "hijaz": [146.83, 155.56, 185.00, 220.00],
     "hijaz_kar": [130.81, 138.59, 164.81, 174.61, 196.00, 207.65, 246.94],
-    "lami": [146.83, 155.56, 174.61, 207.65],
+    "lami": [146.83, 155.56, 174.61, 196.00, 207.65],
     "kurd": [146.83, 155.56, 174.61, 220.00],
     "nahawand": [146.83, 164.81, 174.61, 220.00],
     "nawa_athar": [130.81, 146.83, 155.56, 185.00, 196.00, 207.65, 246.94],
@@ -4134,6 +4135,10 @@ def format_clean_lyrics_for_lyria35(raw_poem, dialect=None, target_bpm=None):
     cleaned = re.sub(r"(?<!\w)اوياي(?!\w)", "ويّاي", cleaned)
     cleaned = re.sub(r"(?<!\w)اوياك(?!\w)", "ويّاك", cleaned)
     cleaned = re.sub(r"(?<!\w)اوياهم(?!\w)", "ويّاهم", cleaned)
+    cleaned = re.sub(r"(?<!\w)[إا]حسين(?!\w)", "حسين", cleaned)
+    cleaned = re.sub(r"(?<!\w)[إا]ب(?=[گقكجچتثدذرزسشصضطظعغفقكلمنهوي])", "ب", cleaned)
+    cleaned = re.sub(r"(?<!\w)[إا]عيون", "عيون", cleaned)
+    cleaned = cleaned.replace("فاظل", "فاضل")
 
     # NC27 & NC27-C: Phonologically-exact affricate law (تْش ONLY after short vowel; plain تش after long vowel/Sukun/initial)
     token_map = {
@@ -4242,7 +4247,10 @@ def format_clean_lyrics_for_lyria35(raw_poem, dialect=None, target_bpm=None):
     out_lines = []
     for line in cleaned.splitlines():
         if line.strip().startswith("[") and line.strip().endswith("]"):
-            out_lines.append(line.strip())
+            hdr_inner = line.strip()[1:-1].strip()
+            hdr_head = re.split(r"\s*[—\-:|/]\s*", hdr_inner)[0].strip()
+            hdr_ar = re.sub(r"[A-Za-z0-9_]+", "", hdr_head).strip()
+            out_lines.append(f"[{hdr_ar or 'المقطع'}]")
             continue
         words = line.split(" ")
         new_words = []
@@ -6550,26 +6558,27 @@ def read_wav_any_depth(input_path, return_stereo=False):
 
 
 _MAQAM_24EDO_TEMPLATES = {
-    "bayati": {0: 1.80, 3: 1.70, 5: 1.20, 10: 1.60, 14: 1.20, 16: 0.90, 20: 0.90},
-    "bayati_shuri": {0: 1.65, 3: 1.60, 5: 1.15, 10: 1.35, 12: 1.40, 18: 1.45, 20: 0.70},
-    "husseini": {0: 1.65, 3: 1.55, 5: 1.10, 10: 1.35, 14: 1.65, 17: 1.25, 20: 0.75},
-    "saba": {0: 1.80, 3: 1.70, 5: 1.30, 8: 2.00, 14: 1.00, 16: 0.90, 20: 0.80},
-    "saba_zamzam": {0: 1.70, 2: 1.50, 5: 1.30, 8: 2.00, 14: 1.00, 16: 0.90, 20: 0.80},
-    "hijaz": {0: 1.80, 2: 1.60, 8: 1.80, 10: 1.40, 14: 1.20, 16: 0.90, 20: 0.80},
-    "hijaz_kar": {0: 1.65, 2: 1.45, 8: 1.60, 10: 1.10, 14: 1.10, 16: 1.15, 22: 1.25},
-    "lami": {0: 1.80, 2: 1.40, 6: 1.30, 10: 1.40, 12: 1.70, 16: 0.90, 20: 0.80},
-    "kurd": {0: 1.80, 2: 1.30, 6: 1.20, 10: 1.30, 14: 1.20, 16: 0.90, 20: 0.80},
-    "nahawand": {0: 1.80, 4: 1.20, 6: 1.30, 10: 1.30, 14: 1.20, 16: 0.90, 22: 1.00},
-    "nawa_athar": {0: 1.65, 4: 1.10, 6: 1.20, 12: 1.65, 14: 1.15, 16: 1.20, 22: 1.35},
-    "sikah": {0: 1.80, 3: 1.40, 7: 1.60, 10: 1.30, 13: 1.30, 17: 1.00, 20: 0.90},
-    "rast": {0: 1.80, 4: 1.20, 7: 1.70, 10: 1.30, 14: 1.20, 18: 1.00, 21: 1.30},
-    "suznak": {0: 1.65, 4: 1.10, 7: 1.50, 10: 1.10, 14: 1.30, 16: 1.30, 22: 1.35},
-    "ajam": {0: 1.65, 4: 1.20, 8: 1.50, 10: 1.20, 14: 1.30, 18: 1.15, 22: 1.30},
+    "bayati": {0: 1.85, 3: 1.75, 5: 0.45, 6: 1.35, 10: 1.55, 14: 1.20, 16: 0.85, 20: 0.90},
+    "bayati_shuri": {0: 1.70, 3: 1.65, 5: 0.40, 6: 1.25, 10: 1.35, 12: 1.45, 18: 1.40, 20: 0.70},
+    "husseini": {0: 1.70, 3: 1.60, 5: 0.40, 6: 1.20, 10: 1.35, 14: 1.65, 17: 1.25, 20: 0.75},
+    "saba": {0: 1.85, 3: 1.75, 5: 0.75, 6: 1.25, 8: 2.00, 14: 0.90, 16: 0.80, 20: 0.60},
+    "saba_zamzam": {0: 1.80, 2: 1.55, 6: 1.35, 8: 2.05, 14: 1.15, 16: 1.05, 20: 0.95},
+    "hijaz": {0: 1.85, 2: 1.65, 8: 1.85, 10: 1.45, 14: 1.25, 16: 1.00, 20: 0.85},
+    "hijaz_kar": {0: 1.75, 2: 1.55, 8: 1.70, 10: 1.20, 14: 1.20, 16: 1.20, 22: 1.30},
+    "lami": {0: 1.85, 2: 1.45, 6: 1.35, 10: 1.45, 12: 1.75, 16: 1.10, 20: 0.95},
+    "kurd": {0: 1.85, 2: 1.45, 6: 1.35, 10: 1.45, 14: 1.40, 16: 1.20, 20: 1.20},
+    "nahawand": {0: 1.85, 4: 1.30, 6: 1.40, 10: 1.35, 14: 1.35, 16: 1.05, 20: 0.90, 22: 0.70},
+    "nawa_athar": {0: 1.75, 4: 1.20, 6: 1.30, 12: 1.75, 14: 1.20, 16: 1.25, 22: 1.45},
+    "sikah": {0: 1.85, 3: 1.50, 7: 1.70, 10: 1.40, 13: 1.35, 17: 1.10, 20: 1.00},
+    "rast": {0: 1.85, 4: 1.25, 7: 1.75, 10: 1.35, 14: 1.25, 18: 1.10, 21: 1.35},
+    "suznak": {0: 1.75, 4: 1.20, 7: 1.60, 10: 1.20, 14: 1.40, 16: 1.35, 22: 1.40},
+    "ajam": {0: 1.80, 4: 1.30, 8: 1.60, 10: 1.30, 14: 1.40, 18: 1.20, 22: 1.30},
 }
+_QUARTER_TONE_MAQAM_SET = {"bayati", "bayati_shuri", "husseini", "saba", "sikah", "rast", "suznak"}
 
 
 def _extract_24edo_maqam_profile(mono, sample_rate):
-    """Module 69 (V54.0): Singer-relative 12-cent anchor 24-EDO chroma & Saba/Bayati Maqam classifier."""
+    """Module 69 & 78 (V64.0 NC43): Cadence-locked 24-EDO chroma & Maqam classifier (blocks Locrian rotation)."""
     if len(mono) < 512:
         return "bayati", 146.83, 0.0, [("bayati", 1.0)]
     voc = butter_filter(mono, [90.0, min(3200.0, 0.45 * sample_rate)], sample_rate, btype="band", order=3)
@@ -6609,7 +6618,8 @@ def _extract_24edo_maqam_profile(mono, sample_rate):
             f0 = max(60.0, (k + dk) * (sample_rate / float(nfft)))
         else:
             f0 = max(60.0, float(freqs[k]))
-        cad = 2.0 if (i + 2 < nf and rms[i + 2] < 0.65 * rms[i]) else 1.0
+        is_phrase_end = (i + 2 < nf and rms[i + 2] < 0.60 * rms[i]) or (i >= nf - 3)
+        cad = 4.5 if is_phrase_end else 1.0
         obs.append((24.0 * math.log2(f0 / 440.0), f0, rms[i], cad))
 
     if not obs:
@@ -6617,11 +6627,16 @@ def _extract_24edo_maqam_profile(mono, sample_rate):
 
     med_f0 = float(np.median([item[1] for item in obs]))
     h120 = np.zeros(120, dtype=np.float64)
+    cad24_global = np.zeros(24, dtype=np.float64)
     for qt_val, _, r_val, cad_val in obs:
         h120[int(round(qt_val * 5.0)) % 120] += r_val * cad_val
+        if cad_val > 1.5:
+            cad24_global[int(round(qt_val)) % 24] += r_val * cad_val
+    cad24_sum = float(cad24_global.sum())
 
+    # NC43: Anchor tonic strictly to top-4 cadentially supported pitch centers (prevents Locrian/Lami rotation on Western minor)
     seen = {}
-    for a120 in np.argsort(h120)[::-1][:10]:
+    for a120 in np.argsort(h120)[::-1][:6]:
         if h120[a120] <= 0.0:
             continue
         ch24 = np.zeros(24, dtype=np.float64)
@@ -6629,20 +6644,31 @@ def _extract_24edo_maqam_profile(mono, sample_rate):
         for qt_val, _, r_val, _ in obs:
             ch24[int(round(qt_val - a_qt)) % 24] += r_val
         ch24 /= float(ch24.sum()) + 1e-9
-        if ch24[0] < 0.07:
+        if ch24[0] < 0.09:
             continue
+        if cad24_sum > 1e-9:
+            a24 = int(round(a_qt)) % 24
+            cad_share = float(cad24_global[a24] + 0.5 * cad24_global[(a24 - 1) % 24] + 0.5 * cad24_global[(a24 + 1) % 24]) / cad24_sum
+            if cad_share < 0.10:
+                continue
+        else:
+            cad_share = float(ch24[0])
         odd_qt = float(ch24[1::2].sum())
         for mn, prof in _MAQAM_24EDO_TEMPLATES.items():
-            pos = sum(ch24[d] * w for d, w in prof.items())
+            w_norm = float(sum(prof.values())) / 9.90
+            pos = sum(ch24[d] * (w / w_norm) for d, w in prof.items())
             non_sc = sum(ch24[d] for d in range(24) if d not in prof)
-            has_qt = any(d % 2 == 1 for d in prof)
+            has_qt = mn in _QUARTER_TONE_MAQAM_SET
             qt_bonus = 0.25 * odd_qt if has_qt else -0.25 * max(0.0, odd_qt - 0.12)
             razor = 0.0
             if mn == "saba":
                 razor = 0.45 * (ch24[8] - 0.5 * ch24[10])
             elif mn == "bayati":
                 razor = 0.30 * (ch24[10] - ch24[8])
-            sc = pos - 0.6 * non_sc + qt_bonus + razor
+            elif mn == "lami":
+                # Real Iraqi Lami requires tonic Finalis prominence + diminished-5th (bin 12) without major-3rd (bin 8)
+                razor = 0.15 * cad_share - 0.35 * ch24[8]
+            sc = pos - 0.6 * non_sc + qt_bonus + razor + 0.12 * cad_share
             if mn not in seen or sc > seen[mn][0]:
                 seen[mn] = (sc, odd_qt)
 
@@ -8422,23 +8448,23 @@ def compute_strict_production_score_v62(
 FIVE_BAND_SPECTRAL_OCCUPANCY_V63 = {
     "TRACK_A_PURE_ACAPELLA_LATMIYA": {
         "track_alias": "track_a",
-        "title_ar": "المسار الأول: اللطمية الحسينية الخالصة (أكابيلا وموكب بلا معازف)",
-        "commercial_prior_rule": "Never leave any band empty when banning instruments or Lyria 3.5 injects oud/pop drums via Negative-Prompt Inversion (NC39).",
+        "title_ar": "المسار الأول: اللطمية الحسينية الخالصة (أكابيلا وموكب بلا معازف ولا تآلفات غربية)",
+        "commercial_prior_rule": "Occupy all 5 bands positively with monophonic Husseiniya body percussion & strictly unison octave Raddada response; keep vocal texture 100% monophonic/octave with zero Western 12-TET minor triads (NC39/NC46).",
         "exclude_instruments": ["oud", "violin", "guitar", "piano", "synthesizer", "pop drums", "rock snare"],
         "allowed_percussion": ["synchronized bare-chest Latm thumping", "heavy Bahraini Dammam drum", "Iraqi Zanjeel"],
         "allowed_elements": [
-            "human vocal bass drone",
-            "male vocal humming pads (Zannah)",
-            "layered human Ahaat & quarter-tone choir harmonies",
-            "commanding Solo Radood Arabic diction",
-            "large Hussaini hall natural reverb",
+            "deep resonant bare-chest Latm low-end pulse",
+            "warm monophonic Radood chest-to-Mayan modal delivery",
+            "unison Al-Raddada male congregation call-and-response (strictly monophonic, zero Western triads)",
+            "articulate Iraqi/Bahrani/Qatifi Arabic diction",
+            "natural cavernous Husseiniya hall dome reflections",
         ],
         "bands": {
-            "band_1_40_120hz": "Human vocal bass drone + synchronized bare-chest Latm + heavy Bahraini Dammam",
-            "band_2_120_400hz": "Male vocal humming pads (Zannah) + deep Baritone Radood chest resonance",
-            "band_3_400_2000hz": "Layered human Ahaat + unison Al-Raddada congregation choir + quarter-tone vocal harmonies",
-            "band_4_2000_5000hz": "Centered Solo Radood articulate Arabic diction & crisp Makharij presence",
-            "band_5_5000_16000hz": "Large Hussaini hall natural reverb + human breath air + subtle Iraqi Zanjeel shimmer",
+            "band_1_40_120hz": "Deep resonant bare-chest Latm thumping + heavy Bahraini Dammam sub-fundamental",
+            "band_2_120_400hz": "Warm monophonic Radood Qarar chest resonance + congregation chest-strike body",
+            "band_3_400_2000hz": "Stepwise modal Radood lament + strictly unison Al-Raddada congregation response",
+            "band_4_2000_5000hz": "Centered Solo Radood articulate Arabic Makharij & weeping Iraqi Wanna inflection",
+            "band_5_5000_16000hz": "Natural cavernous Husseiniya dome reflections + organic congregation breath air",
         },
     },
     "TRACK_B_DIGNIFIED_ORCHESTRAL_NASHEED": {
@@ -8574,11 +8600,11 @@ MAQAM_LYRIA35_ADHERENCE_AND_AUDIO_REF_MATRIX_V63 = {
     },
     "lami": {
         "quarter_tone": False,
-        "lyria35_text_adherence": "high",
-        "audio_reference_policy": "optional",
-        "atwar": ["المثكل الجنوبي", "الرثاء الفراتي", "السيد سلام"],
-        "modulation_targets": ["kurd", "saba_zamzam", "nahawand"],
-        "guidance": "High text adherence via JSON (proven in Exp 24-A/B); zero quarter-tones in primary scale.",
+        "lyria35_text_adherence": "low_without_audio_ref",
+        "audio_reference_policy": "mandatory_30s_iraqi_audio_ref",
+        "atwar": ["المثكل الجنوبي", "الرثاء الفراتي", "السيد سلام", "النزلة الكربلائية الباسمية"],
+        "modulation_targets": ["kurd", "saba_zamzam", "bayati"],
+        "guidance": "V64.0 Ground-Truth Correction (Exp 35 Post-Mortem): Text-only 'Maqam Lami' collapses to Western 12-TET Bb-minor/Gb-major in Lyria 3.5; ALWAYS upload a clean 30-85s Iraqi vocal+Latm reference via '+ -> Upload > Audio' (Cover -> Extend).",
     },
     "nawa_athar": {
         "quarter_tone": False,
@@ -8590,11 +8616,11 @@ MAQAM_LYRIA35_ADHERENCE_AND_AUDIO_REF_MATRIX_V63 = {
     },
     "saba_zamzam": {
         "quarter_tone": False,
-        "lyria35_text_adherence": "high",
-        "audio_reference_policy": "optional",
+        "lyria35_text_adherence": "low_without_audio_ref",
+        "audio_reference_policy": "mandatory_30s_iraqi_audio_ref",
         "atwar": ["النزلة الكربلائية الحزينة", "بديل الصبا الخالي من الربع تون"],
         "modulation_targets": ["lami", "kurd", "hijaz"],
-        "guidance": "High text adherence via JSON (proven in Exp 24-A/B, 9.7/10); 12-TET-safe lament alternative to quarter-tone Saba.",
+        "guidance": "V64.0 Ground-Truth Correction (Exp 35 Post-Mortem): Text-only 'Saba Zamzam' collapses to Western 12-TET natural minor; upload an authentic Iraqi vocal+Latm reference via '+ -> Upload > Audio' to lock diminished-4th modal cadences.",
     },
     "ajam": {
         "quarter_tone": False,
@@ -8837,10 +8863,10 @@ def plan_v63_five_minute_word_budget(
         chunks[bucket].append(ln)
 
     stage_meta = [
-        (1, "GENERATE_INITIAL", "[Stage 1: Intro / Na'i & Mustahal]", "00:00 - 01:15", maqam_arc[0], 0 if mode_key != "TRACK_B_DIGNIFIED_ORCHESTRAL_NASHEED" else 76, "Establish locked timbre, dialect, and 5-band positive acoustics"),
-        (2, "EXTEND_SEAMLESSLY", "[Stage 2: Verses 1 & Raddada]", "01:15 - 02:45", maqam_arc[min(1, len(maqam_arc) - 1)], 75 if mode_key == "TRACK_A_PURE_ACAPELLA_LATMIYA" else 82, f"Modulate smoothly from {maqam_arc[0]} to {maqam_arc[min(1, len(maqam_arc) - 1)]}"),
-        (3, "EXTEND_SEAMLESSLY", "[Stage 3: Kaser / Melodic Break & Ahaat]", "02:45 - 03:45", maqam_arc[min(2, len(maqam_arc) - 1)], 70 if mode_key == "TRACK_A_PURE_ACAPELLA_LATMIYA" else 78, "Drop percussion briefly for melodic Kaser / vocal Ahaat breathing space"),
-        (4, "EXTEND_AND_CONCLUDE", "[Stage 4: Climax Nazla / Outro]", "03:45 - 05:15", maqam_arc[min(3, len(maqam_arc) - 1)], 115 if mode_key == "TRACK_A_PURE_ACAPELLA_LATMIYA" else 86, "Build emotional climax then resolve naturally without abrupt cutoff"),
+        (1, "GENERATE_INITIAL", "[المستهل]", "00:00 - 01:15", maqam_arc[0], 60 if mode_key == "TRACK_A_PURE_ACAPELLA_LATMIYA" else 76, "Establish locked timbre, dialect, and 5-band positive acoustics"),
+        (2, "EXTEND_SEAMLESSLY", "[النزلة الأولى]", "01:15 - 02:45", maqam_arc[min(1, len(maqam_arc) - 1)], 62 if mode_key == "TRACK_A_PURE_ACAPELLA_LATMIYA" else 82, f"Modulate smoothly from {maqam_arc[0]} to {maqam_arc[min(1, len(maqam_arc) - 1)]}"),
+        (3, "EXTEND_SEAMLESSLY", "[الكسر]", "02:45 - 03:45", maqam_arc[min(2, len(maqam_arc) - 1)], 60 if mode_key == "TRACK_A_PURE_ACAPELLA_LATMIYA" else 78, "Drop percussion briefly for melodic Kaser breathing space"),
+        (4, "EXTEND_AND_CONCLUDE", "[الخاتمة]", "03:45 - 05:15", maqam_arc[min(3, len(maqam_arc) - 1)], 62 if mode_key == "TRACK_A_PURE_ACAPELLA_LATMIYA" else 86, "Return to collective Mustahal refrain and resolve naturally on modal Qarar"),
     ]
 
     bootstrap = build_v63_session_bootstrap_json(
@@ -8995,6 +9021,293 @@ def plan_chained_surgical_replace_v63(
         "total_passes": len(passes),
         "merged_windows_count": merged_count,
         "passes": passes,
+    }
+
+
+def _estimate_arabic_vocalic_syllables_v64(line_text: str) -> int:
+    """Estimate sung Arabic vocalic nuclei count on clean or vocalized text for Karbalaei prosody checks."""
+    clean = re.sub(r"\([^)]*\)", lambda m: m.group(0)[1:-1], line_text)
+    clean = re.sub(r"[^\u0621-\u064A\u067E\u0686\u06AF\s]", "", clean)
+    words = [w for w in clean.split() if w]
+    total = 0
+    for w in words:
+        core = re.sub(r"^ال", "ل", w)
+        long_v = len(re.findall(r"[اويىآ]", core))
+        cons = max(0, len(core) - long_v)
+        est = max(1, long_v + int(math.ceil(max(0, cons - long_v) * 0.55)))
+        total += min(est, max(1, len(core) - 1) if len(core) > 1 else 1)
+    return total
+
+
+def _extract_rhyme_tail_v64(line_text: str) -> str:
+    """Extract normalized 2-letter rhyme tail of a poetic line for AAAB Iraqi stanza verification."""
+    clean = line_text.strip()
+    if clean.startswith("(") and clean.endswith(")"):
+        clean = clean[1:-1].strip()
+    clean = re.sub(r"[\u064B-\u0652\u0670]", "", clean)
+    words = re.findall(r"[\u0621-\u064A\u067E\u0686\u06AF]+", clean)
+    if not words:
+        return ""
+    last = words[-1].replace("ة", "ه").replace("ى", "ا").replace("أ", "ا").replace("إ", "ا").replace("آ", "ا")
+    return last[-2:] if len(last) >= 2 else last
+
+
+def audit_iraqi_latmiya_preflight_v64(poem_text: str, target_bpm: float = 62.0) -> dict:
+    """V64.0 (NC44-NC45): Pre-flight Iraqi Karbalaei Prosody, Raddada, Fusha-Leak & G2P Landmine Gate.
+
+    Engineered from the ruthless Exp 35 Post-Mortem (f60b364d & 6c5be3ad vs. Basim Al-Karbalai's
+    أم البنين, ألم وعتاب, ساعة الذبح) to block all 7 failure modes before calling Lyria 3.5:
+    1. Verbose/Latin '[...]' headers (e.g. '[المستهل — 62 BPM — ...]')
+    2. Missing collective '(...)' Raddada unison tags in '[المستهل]'
+    3. Fusha case/mood grammar leaks inside Iraqi dialect ('طَاحَ', 'وِضَاعَ', 'أَدْرِكِ', 'لَا وَلِيَّ', 'اعْلَه')
+    4. Persian 'گ/چ' consonant-cluster BPE shattering landmines ('وگفت->وتفت', 'گلبي->كلبي', 'ملچوم->ملتشوم', ungeminated 'دلالي')
+    5. Over-stuffed >=15-syllable lines lacking ' .. ' breath pauses
+    6. Stanza prosodic syllable spread > 3 or broken 'A-A-X-Y' stanza rhyme (e.g. 'سلابه/مرتابه/تجاوبها/دلالي')
+    7. Heavy Sukun/Harakat token-shattering spam (> 35% diacritics-to-letters ratio)
+    """
+    raw_lines = [ln.strip() for ln in poem_text.replace("\\n", "\n").splitlines() if ln.strip()]
+    verbose_headers = []
+    fusha_leaks = []
+    g2p_landmines = []
+    overlong_lines = []
+    broken_stanza_rhymes = []
+
+    sections = []
+    cur_header = "[عام]"
+    cur_lines = []
+    for ln in raw_lines:
+        if ln.startswith("[") and ln.endswith("]"):
+            if cur_lines:
+                sections.append((cur_header, cur_lines))
+                cur_lines = []
+            cur_header = ln
+            inner = ln[1:-1].strip()
+            if re.search(r"[A-Za-z0-9]", inner) or len(inner.split()) > 3 or "—" in inner:
+                verbose_headers.append(ln)
+        else:
+            cur_lines.append(ln)
+    if cur_lines:
+        sections.append((cur_header, cur_lines))
+
+    # Check Mustahal collective (...) Raddada wrapping
+    missing_mustahal_choir = False
+    for hdr, s_lines in sections:
+        if "مستهل" in hdr or "لازمة" in hdr:
+            if s_lines and not any("(" in x and ")" in x for x in s_lines):
+                missing_mustahal_choir = True
+
+    # Check Fusha leaks, G2P cluster landmines & diacritic spam
+    all_lyric_text = "\n".join(ln for _, s_lines in sections for ln in s_lines)
+    diac_count = len(re.findall(r"[\u064B-\u0652\u0670]", all_lyric_text))
+    letter_count = max(1, len(re.findall(r"[\u0621-\u064A\u067E\u0686\u06AF]", all_lyric_text)))
+    diacritic_ratio = round(diac_count / float(letter_count), 3)
+    heavy_sukun_spam = diacritic_ratio > 0.38
+
+    fusha_patterns = [
+        (r"طَاحَ\s+ال", "طَاحَ -> طاح (Fusha past Fatha in Iraqi dialect)"),
+        (r"ضَاعَ\s+ال", "ضَاعَ -> ضاع (Fusha past Fatha in Iraqi dialect)"),
+        (r"أَدْرِكِ\s+ال", "أَدْرِكِ -> أدرك / ادرك (Fusha Kasra Wasl in Iraqi dialect)"),
+        (r"لَا\s+وَلِيَّ", "لَا وَلِيَّ -> لا حامي / لا والي (Fusha لا النافية للجنس misread as وِلِيَّه)"),
+        (r"(?<!\w)اعْلَه(?!\w)|(?<!\w)اعله(?!\w)", "اعله -> على (unvocalized Alif misread as Fusha أَعْلَى)"),
+    ]
+    for pat, msg in fusha_patterns:
+        if re.search(pat, all_lyric_text):
+            fusha_leaks.append(msg)
+
+    bare_tokens = re.findall(r"[\u0621-\u064A\u067E\u0686\u06AF\u0651]+", re.sub(r"[\u064B-\u0650\u0652\u0670]", "", all_lyric_text))
+    cluster_gaf_traps = {"وگفت", "گطعة", "گطعه", "گطعت", "گطّعت", "إبگلبي", "ابگلبي", "گلبي", "تگعد", "تگطع", "تگطّع", "عگب", "ملچوم", "ملتشوم", "حچي", "حتشي", "چبدي", "تشبدي"}
+    for tok in bare_tokens:
+        plain = tok.replace("\u0651", "")
+        if plain in cluster_gaf_traps:
+            g2p_landmines.append(f"{tok}: high-risk Lyria 3.5 G2P cluster/devoicing trap (e.g. وگفت->وتفت, گلبي->كلبي)")
+        if plain == "دلالي" and "\u0651" not in tok:
+            g2p_landmines.append("دلالي missing Shadda -> write دَلَّالي (otherwise sung da-lā-lī 'my pampering')")
+
+    # Prosodic syllable density & stanza AAAB rhyme audit
+    stanza_spread_violations = []
+    for hdr, s_lines in sections:
+        syls = [_estimate_arabic_vocalic_syllables_v64(ln) for ln in s_lines]
+        for ln, sy in zip(s_lines, syls):
+            if sy >= 15 and ".." not in ln:
+                overlong_lines.append({"section": hdr, "line": ln, "estimated_syllables": sy})
+        if len(syls) >= 3 and "موال" not in hdr and "نعي" not in hdr:
+            non_refrain_syls = [sy for ln, sy in zip(s_lines, syls) if not (ln.startswith("(") and ln.endswith(")"))]
+            if len(non_refrain_syls) >= 3 and (max(non_refrain_syls) - min(non_refrain_syls)) > 4:
+                stanza_spread_violations.append({
+                    "section": hdr,
+                    "syllables": non_refrain_syls,
+                    "spread": max(non_refrain_syls) - min(non_refrain_syls),
+                })
+        # Check 4-line stanza rhyme (first 3 lines must share rhyme tail AAA, or AABB/AAAA)
+        verse_only = [ln for ln in s_lines if not (ln.startswith("(") and ln.endswith(")"))]
+        if len(verse_only) == 4 and "مستهل" not in hdr and "خاتمة" not in hdr:
+            tails = [_extract_rhyme_tail_v64(ln) for ln in verse_only]
+            if len(set(tails[:3])) > 1 and not (tails[0] == tails[1] and tails[2] == tails[3]):
+                broken_stanza_rhymes.append({"section": hdr, "rhyme_tails": tails})
+
+    _ = target_bpm
+    passed = (
+        not verbose_headers
+        and not missing_mustahal_choir
+        and not fusha_leaks
+        and not g2p_landmines
+        and not overlong_lines
+        and not broken_stanza_rhymes
+        and not heavy_sukun_spam
+    )
+    return {
+        "v64_iraqi_preflight_passed": passed,
+        "verbose_or_latin_headers": verbose_headers,
+        "missing_mustahal_raddada_parentheses": missing_mustahal_choir,
+        "fusha_grammar_leaks": fusha_leaks,
+        "lyria_g2p_cluster_landmines": sorted(set(g2p_landmines)),
+        "heavy_sukun_token_shattering_spam": heavy_sukun_spam,
+        "diacritic_to_letter_ratio": diacritic_ratio,
+        "overlong_unsplit_lines": overlong_lines,
+        "stanza_syllable_spread_violations": stanza_spread_violations,
+        "broken_stanza_rhymes": broken_stanza_rhymes,
+    }
+
+
+def audit_latmiya_audio_ground_truth_v64(
+    wav_path: str,
+    expected_maqam: str = "lami",
+    target_bpm: float = 62.0,
+) -> dict:
+    """V64.0 (NC46-NC47): Audio-Driven Ground-Truth Gate for Iraqi/Bahrani Latmiyas.
+
+    Eliminates self-congratulatory confirmation bias (which falsely scored Exp 35 f60b364d at 9.66/10)
+    by computing objective acoustic gates directly from the rendered waveform:
+    1. Cadence-locked Maqam match vs. 12-TET Western Major/Minor Diatonic Collapse
+    2. Microtonal 30-50c quarter-tone presence when expected_maqam is a quarter-tone Maqam
+    3. Peak syllabic onset rate ('patter_rush_detected' if max 15s window > 3.85 onsets/sec on slow <=70 BPM lament)
+    4. Double-time stadium march tempo drift (estimated_bpm > 1.55 * target_bpm)
+    5. Objective 'audio_music_ceiling_10' bounding compute_strict_production_score_v62()
+    """
+    sr, stereo, _, _ = read_wav_any_depth(wav_path, return_stereo=True)
+    mono = np.mean(stereo, axis=1) if stereo.ndim == 2 else stereo.astype(np.float64)
+    prof = extract_reference_audio_profile(wav_path)
+    detected_mq = prof["closest_maqam"]
+    top3 = prof.get("maqam_top3_candidates", [])
+    est_bpm = float(prof.get("estimated_bpm", target_bpm))
+
+    # Measure 12-TET lock percentage & quarter-tone 30-50c percentage on voiced vocal frames
+    voc = butter_filter(mono, [95.0, min(3000.0, 0.45 * sr)], sr, btype="band", order=3)
+    win = max(256, int(0.08 * sr))
+    hop = max(128, int(0.04 * sr))
+    nfft = 8192
+    freqs = np.fft.rfftfreq(nfft, d=1.0 / sr)
+    lo_k = int(np.searchsorted(freqs, 95.0))
+    hi_k = int(np.searchsorted(freqs, min(420.0, 0.42 * sr)))
+    hann = np.hanning(win)
+    nf = max(0, (len(voc) - win) // hop + 1)
+    rms = np.array([float(np.sqrt(np.mean(voc[i * hop : i * hop + win] ** 2))) for i in range(nf)]) if nf > 0 else np.zeros(1)
+    gate = max(1e-4, 0.28 * float(np.percentile(rms, 90))) if nf > 0 else 1e-4
+
+    cents_devs = []
+    for i in range(nf):
+        if rms[i] < gate or hi_k <= lo_k:
+            continue
+        spec = np.abs(np.fft.rfft(voc[i * hop : i * hop + win] * hann, n=nfft))
+        k = lo_k + int(np.argmax(spec[lo_k:hi_k]))
+        f0 = max(65.0, float(freqs[k]))
+        semi = 12.0 * math.log2(f0 / 440.0)
+        cents_devs.append(abs(semi - round(semi)) * 100.0)
+
+    within_20c_pct = round(100.0 * sum(1 for c in cents_devs if c <= 20.0) / max(1, len(cents_devs)), 2)
+    qt_30_50c_pct = round(100.0 * sum(1 for c in cents_devs if 30.0 <= c <= 50.0) / max(1, len(cents_devs)), 2)
+
+    # Measure peak syllabic vowel-nucleus density (240-1350 Hz F1/F2 band, excluding chest thuds & breath hiss)
+    vow_band = butter_filter(mono, [240.0, min(1350.0, 0.42 * sr)], sr, btype="band", order=3)
+    env_hop = max(64, int(0.025 * sr))
+    n_env = max(1, len(vow_band) // env_hop)
+    env = np.array([float(np.sqrt(np.mean(vow_band[i * env_hop : (i + 1) * env_hop] ** 2))) for i in range(n_env)])
+    env_p90 = float(np.percentile(env, 90)) if len(env) > 0 else 1e-4
+    diff_env = np.maximum(0.0, np.diff(env, prepend=env[0]))
+    onset_thr = max(1e-4, 0.22 * env_p90)
+    onset_idx = []
+    min_gap = max(1, int(0.18 / 0.025))
+    for i in range(1, len(diff_env) - 1):
+        if env[i] > 0.25 * env_p90 and diff_env[i] > onset_thr and diff_env[i] >= diff_env[i - 1] and diff_env[i] >= diff_env[i + 1]:
+            if not onset_idx or (i - onset_idx[-1]) >= min_gap:
+                onset_idx.append(i)
+    onset_times = np.array(onset_idx, dtype=np.float64) * (env_hop / float(sr))
+    dur_sec = len(mono) / float(sr)
+    max_win_onsets_per_sec = 0.0
+    w_sec = min(18.0, max(4.0, dur_sec))
+    t_cur = 0.0
+    while t_cur + w_sec <= dur_sec + 0.01:
+        cnt = int(np.sum((onset_times >= t_cur) & (onset_times < t_cur + w_sec)))
+        max_win_onsets_per_sec = max(max_win_onsets_per_sec, cnt / w_sec)
+        t_cur += 5.0
+    max_win_onsets_per_sec = round(max_win_onsets_per_sec, 2)
+
+    # Measure physical 45-105 Hz sub-bass chest-latm strike rate (separates 60 BPM chest-latm + off-beat 'Shaheed' breath from 108+ BPM stadium march)
+    sub_band = butter_filter(mono, [45.0, 105.0], sr, btype="band", order=3)
+    sub_hop = max(64, int(0.04 * sr))
+    n_sub = max(1, len(sub_band) // sub_hop)
+    sub_env = np.array([float(np.sqrt(np.mean(sub_band[i * sub_hop : (i + 1) * sub_hop] ** 2))) for i in range(n_sub)])
+    sub_p90 = float(np.percentile(sub_env, 90)) + 1e-8
+    sub_diff = np.maximum(0.0, np.diff(sub_env, prepend=sub_env[0]))
+    sub_min_gap = max(1, int(0.42 / 0.04))
+    sub_hits = []
+    for i in range(1, n_sub - 1):
+        if sub_env[i] > 0.35 * sub_p90 and sub_diff[i] > 0.20 * sub_p90 and sub_diff[i] >= sub_diff[i - 1] and sub_diff[i] >= sub_diff[i + 1]:
+            if not sub_hits or (i - sub_hits[-1]) >= sub_min_gap:
+                sub_hits.append(i)
+    sub_chest_strikes_per_min = round(len(sub_hits) * 60.0 / max(1.0, dur_sec), 1)
+
+    exp_mq = (expected_maqam or "lami").strip().lower()
+    top3_dict = {item[0]: float(item[1]) for item in top3}
+    top_sc = float(top3[0][1]) if top3 else 0.0
+    ajam_near_tie = ("ajam" in top3_dict) and (top3_dict["ajam"] >= top_sc - 0.05) and (top3_dict["ajam"] >= 0.95)
+    western_12tet_collapse = bool(
+        exp_mq in ("lami", "saba", "saba_zamzam", "bayati", "bayati_shuri", "husseini", "sikah")
+        and (ajam_near_tie or (within_20c_pct >= 73.0 and detected_mq == "ajam"))
+    )
+    missing_quarter_tone = bool(exp_mq in _QUARTER_TONE_MAQAM_SET and qt_30_50c_pct < 13.5)
+    patter_rush = bool(target_bpm <= 72.0 and max_win_onsets_per_sec > 3.35)
+    double_time_drift = bool(
+        0.0 < target_bpm <= 72.0
+        and est_bpm > 1.55 * target_bpm
+        and (sub_chest_strikes_per_min > 1.48 * target_bpm or max_win_onsets_per_sec > 3.10)
+    )
+
+    ceiling = 9.8
+    reasons = []
+    if western_12tet_collapse:
+        ceiling = min(ceiling, 4.2)
+        reasons.append(f"western_12tet_diatonic_collapse (detected={detected_mq}, within_20c={within_20c_pct}%)")
+    if missing_quarter_tone:
+        ceiling = min(ceiling, 5.0)
+        reasons.append(f"missing_quarter_tone_microtonality (qt_30_50c={qt_30_50c_pct}% < 13.5% for {exp_mq})")
+    if patter_rush:
+        ceiling = min(ceiling, 4.5)
+        reasons.append(f"syllabic_patter_rush (max_15s_onsets_per_sec={max_win_onsets_per_sec} > 3.35)")
+    if double_time_drift:
+        ceiling = min(ceiling, 5.2)
+        reasons.append(
+            f"double_time_tempo_drift (estimated_bpm={est_bpm}, chest_strikes_per_min={sub_chest_strikes_per_min} vs target={target_bpm})"
+        )
+
+    return {
+        "wav_path": wav_path,
+        "expected_maqam": exp_mq,
+        "detected_maqam_cadence_locked": detected_mq,
+        "maqam_top3_candidates": top3,
+        "within_20c_of_12tet_pct": within_20c_pct,
+        "quarter_tone_30_to_50c_pct": qt_30_50c_pct,
+        "max_15s_onsets_per_sec": max_win_onsets_per_sec,
+        "sub_chest_strikes_per_min": sub_chest_strikes_per_min,
+        "estimated_bpm": est_bpm,
+        "target_bpm": target_bpm,
+        "western_12tet_collapse_detected": western_12tet_collapse,
+        "missing_quarter_tone_detected": missing_quarter_tone,
+        "patter_rush_detected": patter_rush,
+        "double_time_tempo_drift_detected": double_time_drift,
+        "audio_music_ceiling_10": round(ceiling, 2),
+        "ground_truth_gate_passed": len(reasons) == 0,
+        "failure_reasons": reasons,
     }
 
 
@@ -9178,6 +9491,16 @@ def parse_args(argv=None):
         metavar=("CLIP_UUID", "WINDOWS_SPEC"),
         default=None,
         help="V63.0 (NC42): Plan Back-to-Front chained Remix > Replace passes (WINDOWS_SPEC: 'start-end:old->fixed;...')",
+    )
+    parser.add_argument(
+        "--audit-iraqi-preflight",
+        default=None,
+        help="V64.0 (NC44-NC45): Audit Iraqi Karbalaei prosody, Raddada (...), Fusha leaks & G2P cluster landmines",
+    )
+    parser.add_argument(
+        "--audit-ground-truth",
+        default=None,
+        help="V64.0 (NC46-NC47): Audio-driven ground-truth Maqam, 12-TET collapse, quarter-tone & patter-rush gate",
     )
     parser.add_argument("--extract-profile", default=None, help="Reverse-engineer reference WAV/MP3 profile")
     parser.add_argument("--audit-audio", default=None, help="Audit WAV loudness, True Peak, gaps & tail cutoff/loops")
@@ -9379,6 +9702,30 @@ def main(argv=None):
                 "fixed_line": fix_txt.strip(),
             })
         print(json.dumps(plan_chained_surgical_replace_v63(c_uuid, parsed_wins), ensure_ascii=False, indent=2))
+        return 0
+
+    if args.audit_iraqi_preflight is not None:
+        print(
+            json.dumps(
+                audit_iraqi_latmiya_preflight_v64(args.audit_iraqi_preflight, target_bpm=args.bpm),
+                ensure_ascii=False,
+                indent=2,
+            )
+        )
+        return 0
+
+    if args.audit_ground_truth is not None:
+        print(
+            json.dumps(
+                audit_latmiya_audio_ground_truth_v64(
+                    args.audit_ground_truth,
+                    expected_maqam=args.maqam_drone,
+                    target_bpm=args.bpm,
+                ),
+                ensure_ascii=False,
+                indent=2,
+            )
+        )
         return 0
 
     if args.extract_profile is not None:
